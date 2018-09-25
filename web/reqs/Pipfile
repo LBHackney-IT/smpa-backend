@@ -17,6 +17,7 @@ pony = "*"
 envkey = "*"
 sqlalchemy-utils = "*"
 alembic = "*"
+python-jsonschema-objects = "*"
 
 [dev-packages]
 pdbpp = "*"

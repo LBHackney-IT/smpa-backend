@@ -22,5 +22,14 @@ class User(BaseModel):
     def __str__(self):
         return f'<User: {self.first_name} {self.last_name}>'
 
-    def __repr__(self):
-        return self.__str__()
+
+class PersonName(BaseModel):
+    __tablename__ = 'person_name'
+
+    title = Column(Unicode(255))
+    given_name = Column(Unicode(255))
+    family_name = Column(Unicode(255))
+
+    def __str__(self):
+        return f'<{self.__class__.__name__}: {self.title} {self.given_name} {self.family_name}>'
+

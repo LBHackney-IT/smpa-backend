@@ -14,7 +14,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import mapper, class_mapper, backref, relation
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.ext.associationproxy import association_proxy as ass_proxy
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
 
 from ..helpers.database import MyUUID
@@ -31,6 +31,20 @@ class BaseModel(Base):
 
     created_at = Column(types.DateTime, default=func.now())
     updated_at = Column(types.DateTime, default=func.now(), onupdate=func.now())
+
+    def __str__(self):
+        identifier = self.id
+        if self.id is None:
+            identifier = 'unsaved'
+        if hasattr(self, 'slug'):
+            identifier = self.slug
+        elif hasattr(self, 'name'):
+            identifier = self.name
+
+        return f'<{self.__class__.__name__}: {identifier}>'
+
+    def __repr__(self):
+        return self.__str__()
 
 
 ####################################################################################################
