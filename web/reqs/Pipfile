@@ -1,0 +1,31 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+falcon = "*"
+jsonschema = "*"
+msgpack-python = "*"
+gunicorn = "*"
+ipython = "*"
+fakeredis = "*"
+SQLAlchemy = "*"
+slugify = "*"
+pony = "*"
+"psycopg2" = "*"
+envkey = "*"
+sqlalchemy-utils = "*"
+alembic = "*"
+
+[dev-packages]
+pdbpp = "*"
+ipdb = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-falcon = "*"
+pytest-sugar = "*"
+pytest-variables = {version = "*", extras = ["hjson"]}
+
+[requires]
+python_version = "3.6"

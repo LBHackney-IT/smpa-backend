@@ -1,0 +1,33 @@
+.env
+
+# Hactar's Fabfile
+fabfile/**/*
+
+# Venv packages
+web/reqs/.venv
+
+
+# Misc files
+*.scssc
+*.pyc
+.DS_Store
+*.sublime-workspace
+.vscode/**/*
+**/__pycache__/**/*
+
+
+# Tests
+web/smpa/app/tests/.cache/**/*
+
+
+# Docs & Guide
+docs/build/**/*
+
+
+# Postgres Data folder
+data/**/*
+
+
+# Redis data folder
+redis/**/*
+
