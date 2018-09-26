@@ -1,11 +1,12 @@
 site_name: Submit my Planning Application
 repo_url: https://code.hactar.is/projects/hackney-planning/repositories/smpa/
 repo_name: Codebase
-edit_uri: /projects/hackney-planning/repositories/smpa/blob/master/docs/
+edit_uri: /projects/hackney-planning/repositories/smpa/tree/master/docs/docs
 site_dir: build/html
 use_directory_urls: true
 dev_addr: 127.0.0.1:8008
 
-# nav:
-# - 'pages.md'
-# - 'blocks.md'
+nav:
+- 'index.md'
+- 'about.md'
+- 'contributing/index.md'

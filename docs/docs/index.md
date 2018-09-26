@@ -8,9 +8,14 @@ This is a work in progress application that is working towards three goals...
 
 ## Getting Started
 
+Read the [Python style guide](contributing/python.md) and then the [setup instructions](contributing/setup.md).
 
 
 ## Docs
+
+To view these docs in your browser
+
+    cd smpa/docs && mkdocs serve
 
 For full documentation visit [mkdocs.org](https://mkdocs.org).
 
