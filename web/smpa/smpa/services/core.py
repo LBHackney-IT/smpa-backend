@@ -8,11 +8,13 @@
 
 from typing import List, Any, Optional, Iterable  # NOQA
 
+import sqlalchemy as sa
 from sqlalchemy import inspect
 from slugify import slugify
 
-from .core import BaseModel
-from q import db
+from smpa.models.core import BaseModel
+from smpa.helpers.database import MyUUID
+from smpa.helpers.console import console
 
 
 class Service(object):
@@ -36,7 +38,7 @@ class Service(object):
     def make_slug(
             self, instance: BaseModel,
             field: Optional[str] = None,
-            fields: Optional[list[str]] = None) -> str:
+            fields: Optional[List[str]] = None) -> str:
         """
         Make a slug for ``instance`` using ``field`` as the input, or optionally ``fields``,
         useful for when you want to slug on two or more fields like firstname-lastname.
@@ -230,12 +232,12 @@ class Service(object):
         """
         return self.q.order_by(self.__model__.created_at.desc()).filter_by(**kwargs).first()
 
-    def get_or_404(self, id: Any[int, uuid]) -> BaseModel:
+    def get_or_404(self, id: MyUUID) -> BaseModel:
         """Returns an instance of the service's model with the specified id or
         raises an 404 error if an instance with the specified id does not exist.
 
         Args:
-            id (int, uuid): the instance id
+            id (int, MyUUID): the instance id
 
         Returns:
             BaseModel: A model instance
@@ -265,6 +267,7 @@ class Service(object):
         Returns:
             BaseModel: A new _saved_ instance of the service's model class
         """
+        console.info(kwargs)
         return self.save(self.new(**kwargs))
 
     def update(self, model, **kwargs: dict) -> BaseModel:
@@ -307,5 +310,5 @@ class Service(object):
             model (BaseModel): the model instance to delete
         """
         self._isinstance(model)
-        db.session.delete(model)
-        db.session.commit()
+        sa.session.delete(model)
+        sa.session.commit()

@@ -6,6 +6,10 @@
     User services.
 """
 
+from ..models import User
+
+from .core import Service
+
 
 class UserService(Service):
     __model__ = User

@@ -16,9 +16,9 @@ db_pass = os.environ.get('POSTGRES_PASSWORD')
 db_name = os.environ.get('POSTGRES_DB')
 db_host = os.environ.get('POSTGRES_HOST')
 
-conn = f"postgresql+psycopg2://{ db_user }:{ db_pass }@{ db_host }/{ db_name }"
+dsn = f"postgresql+psycopg2://{ db_user }:{ db_pass }@{ db_host }/{ db_name }"
 
-db = create_engine(conn)
+db = create_engine(dsn)
 
 DBSession = sessionmaker(bind=db)
 session = DBSession()

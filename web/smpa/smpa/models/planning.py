@@ -14,27 +14,15 @@ import sqlalchemy as sa
 from .core import BaseModel
 
 
-class VolumeUnit(BaseModel):
-
-    """Used for providing a predefined list of avaliable volume units.
-
-    Attributes:
-        unit (Unicode): The unit, eg: cubic meters
-    """
-
-    __tablename__ = 'volume_unit'
-
-    unit = sa.Column(sa.Unicode(50))
-
-
 class MaxAnnualOperationalThroughput(BaseModel):
-    __tablename__ = 'max_annual_operational_throughput'
+    __tablename__ = 'max_annual_operational_throughputs'
 
-    volume_unit = sa.Column(sa.Integer, sa.ForeignKey('volume_unit.id'))
+    volume_unit = sa.Column(Unicode(255))
 
 
 class InertLandfill(BaseModel):
-    __tablename__ = 'inter_landfill'
+    __tablename__ = 'inter_landfills'
 
-    total_void_capacity
-    max_annual_operational_throughput
+    total_void_capacity =
+    max_annual_operational_throughput = sa.Column(
+        sa.Integer, sa.ForeignKey('max_annual_operational_throughput.id'))

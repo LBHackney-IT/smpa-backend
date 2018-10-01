@@ -16,6 +16,12 @@ We use a 100 character maximum line length because the standard 80 can make code
 
 MyPy and type hinting are extremely useful in a lot of cases, it can make it much easier to reason with your own code, let alone someone else's. Use them wherever you think it's helpful, but in cases where it simply gets in the way, try to leave appropriate comments instead.
 
+## Service classes
+
+Models in code should be little more than a python representation of your database - as much as possible keep business logic out of your models. For this reason we provide a base service class which can be subclassed for each of your models. It provides a consistent set of methods that can remain consistent even if the ORM is swapped out.
+
+If you ever find yourself writing business logic on a model, try to re-think the problem so that this logic can work on the service instead.
+
 ## The little things
 
 * No trailing spaces

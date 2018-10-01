@@ -18,6 +18,11 @@ envkey = "*"
 sqlalchemy-utils = "*"
 alembic = "*"
 python-jsonschema-objects = "*"
+mixer = "*"
+arrow = "*"
+molten = "*"
+invoke = "*"
+wsgicors = "*"
 
 [dev-packages]
 pdbpp = "*"

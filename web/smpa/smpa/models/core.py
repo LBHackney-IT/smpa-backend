@@ -8,10 +8,12 @@
 
 from __future__ import absolute_import, unicode_literals
 
+import arrow
 import sqlalchemy.sql.sqltypes as types
 from sqlalchemy import (
     Column, Table, func
 )
+from sqlalchemy_utils import ArrowType
 from sqlalchemy.orm import mapper, class_mapper, backref, relation
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -24,13 +26,23 @@ Base = declarative_base()
 
 
 class BaseModel(Base):
+
+    """Abstract base model providing a UUID primary key, created_at and
+    updated_at timestamps.
+
+    Attributes:
+        id (MyUUID): Description
+        created_at (Arrow): Description
+        updated_at (Arrow): Description
+    """
+
     __abstract__ = True
     __table_args__ = {'extend_existing': True}
 
     id = Column(MyUUID(), server_default=func.uuid_generate_v4(), primary_key=True)
 
-    created_at = Column(types.DateTime, default=func.now())
-    updated_at = Column(types.DateTime, default=func.now(), onupdate=func.now())
+    created_at = Column(ArrowType, default=func.now())
+    updated_at = Column(ArrowType, default=func.now(), onupdate=func.now())
 
     def __str__(self):
         identifier = self.id
