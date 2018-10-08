@@ -1,11 +1,12 @@
+import attr
 from molten import field, schema
 from typing import Optional
 from inspect import Parameter
 
-from ..services.address import AddressService, _addresses
+from ..services.address import AddressService, SiteAddressService
 from ..helpers.console import console
 
-from .core import BaseResource
+from .core import BaseResource, BaseManager, BaseComponent, BaseHandler
 
 
 @schema
@@ -19,17 +20,39 @@ class Address(BaseResource):
     postcode: Optional[str]
 
 
-class AddressManagerComponent:
-    is_cacheable = True
-    is_singleton = True
-
-    def can_handle_parameter(self, parameter: Parameter) -> bool:
-        return parameter.annotation is AddressService
-
-    def resolve(self) -> AddressService:
-        return _addresses
+@schema
+class SiteAddress(Address):
+    postcode: str
+    easting: Optional[str]
+    northing: Optional[str]
+    description: Optional[str]
 
 
-def create_address(address: Address, address_manager: AddressService) -> Address:
-    console.info(address)
-    return address_manager.create(address)
+class AddressManager(BaseManager):
+    pass
+
+
+class SiteAddressManager(BaseManager):
+    pass
+
+
+class AddressManagerComponent(BaseComponent):
+    __manager__ = AddressManager
+    __service__ = AddressService
+
+
+class SiteAddressManagerComponent(BaseComponent):
+    __manager__ = SiteAddressManager
+    __service__ = SiteAddressService
+
+
+class AddressHandler(BaseHandler):
+    __resource__ = Address
+    __manager__ = AddressManager
+    __namespace__ = 'addresses'
+
+
+class SiteAddressHandler(BaseHandler):
+    __resource__ = SiteAddress
+    __manager__ = SiteAddressManager
+    __namespace__ = 'site_addresses'

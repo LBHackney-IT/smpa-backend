@@ -6,7 +6,7 @@
     Address services.
 """
 
-from ..models.address import Address
+from ..models.address import Address, SiteAddress
 
 from .core import Service
 
@@ -16,3 +16,10 @@ class AddressService(Service):
 
 
 _addresses = AddressService()
+
+
+class SiteAddressService(Service):
+    __model__ = SiteAddress
+
+
+_site_addresses = SiteAddressService()

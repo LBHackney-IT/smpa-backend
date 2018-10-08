@@ -10,6 +10,10 @@
     ``gunicorn --reload smpa.app:app -b 0.0.0.0:5000``
 
     http POST 0.0.0.0:5000/todos Authorization:"Bearer secret" description="Todo description"
+
+    Get the schema
+
+    http 0.0.0.0:5000/_schema
 """
 
 from .factory import create_app

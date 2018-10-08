@@ -12,7 +12,7 @@ import os
 # 3rd party
 from molten import (
     App, Route, JSONParser, JSONRenderer, MultiPartParser, SettingsComponent, URLEncodingParser,
-    ResponseRendererMiddleware
+    ResponseRendererMiddleware, Include
 )
 from wsgicors import CORS
 from molten.openapi import Metadata, OpenAPIHandler, OpenAPIUIHandler, HTTPSecurityScheme
@@ -25,7 +25,9 @@ from molten.contrib.sqlalchemy import (
 from .settings.base import EnvSettings
 from .helpers.sqlite import DBComponent
 from .resources.todo import TodoManagerComponent, create_todo
-from .resources.address import AddressManagerComponent, create_address
+from .resources.address import (
+    AddressManagerComponent, AddressHandler, SiteAddressHandler, SiteAddressManagerComponent
+)
 from .middleware.auth import AuthorizationMiddleware
 
 
@@ -53,8 +55,8 @@ def create_app() -> App:
     app = App(
         components=[
             DBComponent(),
-            TodoManagerComponent(),
             AddressManagerComponent(),
+            SiteAddressManagerComponent(),
             SQLAlchemyEngineComponent(),
             SQLAlchemySessionComponent(),
             SettingsComponent(settings),
@@ -66,7 +68,8 @@ def create_app() -> App:
         ],
         routes=[
             Route("/todos", create_todo, method="POST"),
-            Route("/address", create_address, method="POST"),
+            AddressHandler.routes(),
+            SiteAddressHandler.routes(),
             Route("/_docs", get_docs),
             Route("/_schema", get_schema),
             Route("/_debugger", debugger),
