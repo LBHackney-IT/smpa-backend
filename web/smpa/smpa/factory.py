@@ -23,10 +23,11 @@ from molten.contrib.sqlalchemy import (
 # Module
 # Application
 from .settings.base import EnvSettings
-from .helpers.sqlite import DBComponent
-from .resources.todo import TodoManagerComponent, create_todo
 from .resources.address import (
     AddressManagerComponent, AddressHandler, SiteAddressHandler, SiteAddressManagerComponent
+)
+from .resources.application import (
+    PlanningApplicationManagerComponent, PlanningApplicationHandler
 )
 from .middleware.auth import AuthorizationMiddleware
 
@@ -39,9 +40,22 @@ get_schema = OpenAPIHandler(
         description="An API for managing planning applications.",
         version="0.0.1",
     ),
-    security_schemes=[HTTPSecurityScheme("default", "bearer")],
-    default_security_scheme="default",
+    # security_schemes=[HTTPSecurityScheme("default", "bearer")],
+    # default_security_scheme="default",
 )
+
+
+def debug_schema():
+    import ipdb; ipdb.set_trace()
+    return OpenAPIHandler(
+        metadata=Metadata(
+            title="Submit my Planning Application",
+            description="An API for managing planning applications.",
+            version="0.0.1",
+        ),
+        security_schemes=[HTTPSecurityScheme("default", "bearer")],
+        default_security_scheme="default",
+    )
 
 
 def debugger():
@@ -54,12 +68,12 @@ def create_app() -> App:
 
     app = App(
         components=[
-            DBComponent(),
-            AddressManagerComponent(),
-            SiteAddressManagerComponent(),
             SQLAlchemyEngineComponent(),
             SQLAlchemySessionComponent(),
             SettingsComponent(settings),
+            AddressManagerComponent(),
+            SiteAddressManagerComponent(),
+            PlanningApplicationManagerComponent(),
         ],
         middleware=[
             ResponseRendererMiddleware(),
@@ -67,9 +81,9 @@ def create_app() -> App:
             SQLAlchemyMiddleware(),
         ],
         routes=[
-            Route("/todos", create_todo, method="POST"),
-            AddressHandler.routes(),
             SiteAddressHandler.routes(),
+            AddressHandler.routes(),
+            PlanningApplicationHandler.routes(),
             Route("/_docs", get_docs),
             Route("/_schema", get_schema),
             Route("/_debugger", debugger),

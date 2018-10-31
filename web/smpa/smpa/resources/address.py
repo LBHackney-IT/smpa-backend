@@ -1,16 +1,18 @@
 import attr
 from molten import field, schema
-from typing import Optional
+from typing import Optional, Type
 from inspect import Parameter
 
 from ..services.address import AddressService, SiteAddressService
 from ..helpers.console import console
 
-from .core import BaseResource, BaseManager, BaseComponent, BaseHandler
+from .core import (
+    BaseResource, BaseManager, BaseComponent, make_base_handler, MetaHandler, handler, Handler
+)
 
 
 @schema
-class Address(BaseResource):
+class Address:
     number: Optional[str]
     property_name: Optional[str]
     address_line_1: Optional[str]
@@ -39,20 +41,50 @@ class SiteAddressManager(BaseManager):
 class AddressManagerComponent(BaseComponent):
     __manager__ = AddressManager
     __service__ = AddressService
+    __resource__: Address
 
 
 class SiteAddressManagerComponent(BaseComponent):
     __manager__ = SiteAddressManager
     __service__ = SiteAddressService
+    __resource__: SiteAddress
 
 
-class AddressHandler(BaseHandler):
-    __resource__ = Address
-    __manager__ = AddressManager
-    __namespace__ = 'addresses'
+class AddressHandler(metaclass=MetaHandler):
+    resource: Type[Address] = Address
+    manager: Type[AddressManager] = AddressManager
+    namespace: str = 'addresses'
 
 
-class SiteAddressHandler(BaseHandler):
-    __resource__ = SiteAddress
-    __manager__ = SiteAddressManager
-    __namespace__ = 'site_addresses'
+class SiteAddressHandler(metaclass=MetaHandler):
+    resource: Type[SiteAddress] = SiteAddress
+    manager: Type[SiteAddressManager] = SiteAddressManager
+    namespace: str = 'site_addresses'
+
+
+# @handler(Address, AddressManager, 'addresses')
+# class AddressHandler:
+#     pass
+
+
+# @handler(SiteAddress, SiteAddressManager, 'site_addresses')
+# class SiteAddressHandler:
+#     pass
+
+
+# @Handler(Address, AddressManager, 'addresses')
+# class AddressHandler:
+#     pass
+
+
+# @Handler(SiteAddress, SiteAddressManager, 'site_addresses')
+# class SiteAddressHandler:
+#     pass
+
+
+# class AddressHandler(make_base_handler(Address, AddressManager, 'addresses')):
+#     pass
+
+
+# class SiteAddressHandler(make_base_handler(SiteAddress, SiteAddressManager, 'site_addresses')):
+#     pass

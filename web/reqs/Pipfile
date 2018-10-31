@@ -23,6 +23,7 @@ arrow = "*"
 molten = "*"
 invoke = "*"
 wsgicors = "*"
+waitress = "*"
 
 [dev-packages]
 pdbpp = "*"
