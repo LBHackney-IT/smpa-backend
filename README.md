@@ -1,5 +1,7 @@
 # Submit my Planning Application
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8895ca51468e42448335a85cff559f92)](https://www.codacy.com/app/Hactar/smpa-backend?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LBHackney-IT/smpa-backend&amp;utm_campaign=Badge_Grade)
+
 ## Secrets management
 
 The project uses EnvKey to manage secrets. For local development you should generate a developer key and store it in a `.env` file at the root of the project.
