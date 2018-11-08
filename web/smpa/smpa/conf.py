@@ -11,7 +11,7 @@
 import os
 
 # 3rd party
-from molten.contrib.prometheus import expose_metrics, prometheus_middleware
+from molten.contrib.prometheus import expose_metrics, prometheus_middleware  # NOQA
 from molten import (
     Route, JSONParser, MultiPartParser, SettingsComponent, URLEncodingParser,
     ResponseRendererMiddleware
@@ -24,6 +24,9 @@ from molten.contrib.sqlalchemy import (
 from .core.routes import get_docs, get_schema, debug_schema, debugger  # NOQA
 from .resources.address import (
     AddressManagerComponent, AddressHandler, SiteAddressHandler, SiteAddressManagerComponent
+)
+from .resources.user import (
+    AgentManagerComponent, AgentHandler, ApplicantHandler, ApplicantManagerComponent
 )
 from .resources.application import (
     PlanningApplicationManagerComponent, PlanningApplicationHandler
@@ -42,6 +45,8 @@ COMPONENTS = [
     SettingsComponent(settings),
     AddressManagerComponent(),
     SiteAddressManagerComponent(),
+    AgentManagerComponent(),
+    ApplicantManagerComponent(),
     PlanningApplicationManagerComponent(),
 ]
 
@@ -54,6 +59,8 @@ MIDDLEWARE = [
 ROUTES = [
     SiteAddressHandler.routes(),
     AddressHandler.routes(),
+    AgentHandler.routes(),
+    ApplicantHandler.routes(),
     PlanningApplicationHandler.routes(),
     Route("/_docs", get_docs),
     Route("/_schema", get_schema),

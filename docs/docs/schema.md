@@ -1,5 +1,7 @@
 # Generated Schema
 
+This is the generated OpenAPI schema doc. It's currently missing the details in the `components.schemas` section. This is a bug.
+
     {
       "openapi": "3.0.1",
       "info": {
@@ -120,6 +122,95 @@
           "delete": {
             "tags": [],
             "operationId": "addresses:delete",
+            "description": "",
+            "parameters": [
+              {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "deprecated": false,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            ],
+            "deprecated": false,
+            "responses": {
+              "200": {
+                "description": "A successful response.",
+                "content": {}
+              }
+            }
+          }
+        },
+        "/applicants/": {
+          "get": {
+            "tags": [],
+            "operationId": "applicants:index",
+            "description": "",
+            "parameters": [],
+            "deprecated": false,
+            "responses": {
+              "200": {
+                "description": "A successful response.",
+                "content": {}
+              }
+            }
+          },
+          "post": {
+            "tags": [],
+            "operationId": "applicants:create",
+            "description": "",
+            "parameters": [],
+            "deprecated": false,
+            "responses": {
+              "200": {
+                "description": "A successful response.",
+                "content": {}
+              }
+            }
+          }
+        },
+        "/applicants/{id}": {
+          "get": {
+            "tags": [],
+            "operationId": "applicants:fetch",
+            "description": "",
+            "parameters": [
+              {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "deprecated": false,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            ],
+            "deprecated": false,
+            "responses": {
+              "200": {
+                "description": "A successful response.",
+                "content": {}
+              }
+            }
+          },
+          "post": {
+            "tags": [],
+            "operationId": "applicants:update",
+            "description": "",
+            "parameters": [],
+            "deprecated": false,
+            "responses": {
+              "200": {
+                "description": "A successful response.",
+                "content": {}
+              }
+            }
+          },
+          "delete": {
+            "tags": [],
+            "operationId": "applicants:delete",
             "description": "",
             "parameters": [
               {
