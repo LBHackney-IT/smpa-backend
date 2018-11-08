@@ -28,6 +28,12 @@ services:
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
 
+  # Prometheus
+  prometheus:
+    restart: always
+    image: quay.io/prometheus/prometheus:latest
+    ports:
+      - "9090:9090"
 
   # Application
   web:

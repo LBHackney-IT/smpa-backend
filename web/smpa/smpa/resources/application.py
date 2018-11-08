@@ -40,24 +40,16 @@ class PlanningApplication:
 
 
 class PlanningApplicationManager(BaseManager):
-    pass
+    _service = PlanningApplicationService
 
 
 class PlanningApplicationManagerComponent(BaseComponent):
     __manager__ = PlanningApplicationManager
     __service__ = PlanningApplicationService
-    __resource__: PlanningApplication
+    __resource__ = PlanningApplication
 
 
-# class PlanningApplicationHandler(metaclass=MetaHandler):
-#     resource: Type[PlanningApplication] = PlanningApplication
-#     manager: Type[PlanningApplicationManager] = PlanningApplicationManager
-#     namespace: str = 'planning_applications'
-
-
-class PlanningApplicationHandler(
-        make_base_handler(
-            PlanningApplication,
-            PlanningApplicationManager,
-            'planning_applications')):
-    pass
+class PlanningApplicationHandler(metaclass=MetaHandler):
+    resource: Type[PlanningApplication] = PlanningApplication
+    manager: Type[PlanningApplicationManager] = PlanningApplicationManager
+    namespace: str = 'planning_applications'

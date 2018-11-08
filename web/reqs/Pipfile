@@ -24,6 +24,7 @@ molten = "*"
 invoke = "*"
 wsgicors = "*"
 waitress = "*"
+prometheus-client = "*"
 
 [dev-packages]
 pdbpp = "*"

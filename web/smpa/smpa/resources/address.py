@@ -31,11 +31,11 @@ class SiteAddress(Address):
 
 
 class AddressManager(BaseManager):
-    pass
+    _service: AddressService
 
 
 class SiteAddressManager(BaseManager):
-    pass
+    _service: SiteAddressService
 
 
 class AddressManagerComponent(BaseComponent):

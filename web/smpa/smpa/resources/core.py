@@ -1,5 +1,7 @@
+
 import functools
-from molten import field, Include, Route, schema
+
+from molten import field, Include, Route, schema, Response
 from typing import Optional, Any, Type
 from inspect import Parameter
 
@@ -39,13 +41,35 @@ class Address2:
 
 class BaseManager:
 
-    def __init__(self, service: Service) -> None:
-        self.service = service()
+    _service: Optional[Service]
+
+    def __init__(self, service: Optional[Service] = None) -> None:
+        if service is not None:
+            self.service = service()
+
+        if hasattr(self, '_service'):
+            if self._service is not None:
+                self.service = self._service()
+
+        if hasattr(self, 'service'):
+            if self.service is None:
+                raise ValueError('Cannot init a manager without a service')
 
     def index(self):
-        pass
+        """Return a list of this manager's resource type
+        """
+        console.info('BaseManager.index')
+        return {}
 
-    def create(self, resource: Any):
+    def create(self, resource: Any) -> BaseResource:
+        """Create an instance of this manager's resource type.
+
+        Args:
+            resource (Any): The resource that we're creating
+
+        Returns:
+            BaseResource: A saved instance of this manager's resource
+        """
         data = {}
         for key, value in resource.__dict__.items():
             if value is not None:
@@ -57,13 +81,41 @@ class BaseManager:
         return resource
 
     def fetch(self, id: MyUUID) -> BaseResource:
-        pass
+        """Return a single instance of this manager's resource type with
+        the specified ID.
+
+        Args:
+            id (MyUUID): UUID primary key ID of the resource requested
+
+        Returns:
+            BaseResource: An instance of the resource with the specified ID
+        """
+        console.info('BaseManager.fetch')
+        return BaseResource()  #TODO
 
     def update(self, resource: BaseResource) -> BaseResource:
-        pass
+        """Update a resource
+
+        Args:
+            resource (BaseResource): The resource we're updating
+
+        Returns:
+            BaseResource: The updated resource.
+        """
+        console.info('BaseManager.update')
+        return BaseResource()  #TODO
 
     def delete(self, id: MyUUID) -> bool:
-        pass
+        """Delete a resource.
+
+        Args:
+            id (MyUUID): The UUID primary key ID
+
+        Returns:
+            bool: True if delete was successful
+        """
+        console.info('BaseManager.delete')
+        return True  #TODO
 
 
 class BaseComponent:
@@ -89,7 +141,7 @@ class MetaHandler(type):
     def __new__(cls, name, bases, dct):
         x = super().__new__(cls, name, bases, dct)
         x._resource = dct.get('resource')
-        x._manager = dct.get('manager')
+        x._manager = dct.get('manager')()
         x._namespace = dct.get('namespace')
         return x
 
