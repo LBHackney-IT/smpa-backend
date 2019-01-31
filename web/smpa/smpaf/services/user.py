@@ -1,28 +1,28 @@
-# # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
-# """
-#     services.user
-#     ~~~~~~~~~~~~~
-#     User services.
-# """
+"""
+    services.user
+    ~~~~~~~~~~~~~
+    User services.
+"""
 
-# from ..models import User, Agent, Applicant
+from ..models.user import User, Agent, Applicant
 
-# from .core import Service
-
-
-# class UserService(Service):
-#     __model__ = User
+from .rethink import RService
 
 
-# class AgentService(Service):
-#     __model__ = Agent
+class UserService(RService):
+    __model__ = User
 
 
-# class ApplicantService(Service):
-#     __model__ = Applicant
+class AgentService(RService):
+    __model__ = Agent
 
 
-# _users = UserService()
-# _agents = AgentService()
-# _applicants = ApplicantService()
+class ApplicantService(RService):
+    __model__ = Applicant
+
+
+_users = UserService()
+_agents = AgentService()
+_applicants = ApplicantService()

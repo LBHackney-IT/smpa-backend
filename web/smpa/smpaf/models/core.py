@@ -9,7 +9,7 @@
 import datetime
 from schematics.models import Model, ModelMeta
 from inflection import tableize
-from schematics.types.base import (
+from schematics.types import (
     StringType, BooleanType, DateTimeType, IntType, UUIDType
 )
 

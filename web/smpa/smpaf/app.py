@@ -21,6 +21,7 @@ from .resources.test import TestResource
 from .resources.images import ImageResource
 from .resources.things import ThingsResource
 from .resources.unit import AreaUnitResource, LinearUnitResource
+from .resources.user import UserResource, AgentResource, ApplicantResource
 
 
 # Create the Falcon app
@@ -39,6 +40,9 @@ def create_app():
     tests = TestResource()
     area_units = AreaUnitResource()
     linear_units = LinearUnitResource()
+    users = UserResource()
+    agents = AgentResource()
+    applicants = ApplicantResource()
 
     # Routes
     api.add_route('/tests', tests)
@@ -49,6 +53,15 @@ def create_app():
 
     api.add_route('/linear-units', linear_units)
     api.add_route('/linear-units/{id}', linear_units)
+
+    api.add_route('/users', users)
+    api.add_route('/users/{id}', users)
+
+    api.add_route('/agents', agents)
+    api.add_route('/agents/{id}', agents)
+
+    api.add_route('/applicants', applicants)
+    api.add_route('/applicants/{id}', applicants)
 
 
 create_app()

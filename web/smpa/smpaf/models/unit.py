@@ -7,7 +7,7 @@
 """
 
 from .core import BaseModel, ORMMeta
-from schematics.types.base import (  # NOQA
+from schematics.types import (  # NOQA
     StringType, BooleanType, DateTimeType, IntType, UUIDType
 )
 
