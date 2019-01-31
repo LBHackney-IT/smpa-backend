@@ -79,11 +79,12 @@ class RService(object):
             __model__ or list: Single model instance or list of them.
         """
         with rconnect() as conn:
-            query = self.q.get(id).update(json)
+            query = self.q.get(id).update(json, return_changes=True)
             rv = query.run(conn)
-            import ipdb; ipdb.set_trace()
             if len(rv['changes']):
-                return self.__model__(rv['changes']['new_val'])
+                return self.__model__(rv['changes'][0]['new_val'])
+            else:
+                return self.get(id)
 
     def all(self, **kwargs):
         with rconnect() as conn:
