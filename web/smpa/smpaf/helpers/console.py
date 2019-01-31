@@ -10,13 +10,30 @@ from __future__ import absolute_import, unicode_literals
 
 import inspect
 import os
+import sys
+import math
 
 import arrow
 
-from .colours import blue, cyan, green, magenta, orange, red, yellow  # NOQA
+from .colours import bg_blue, blue, cyan, green, magenta, orange, red, yellow  # NOQA
+
+
+CLEAR = '\033[K'
+HIDE_CURSOR = '\033[?25l'
+SHOW_CURSOR = '\033[?25h'
 
 
 class Logger(object):
+
+    def __init__(self):
+        self.spinning = False
+        self.terminal = sys.stdout
+        self.writing_progress = False
+
+    def reset(self):
+        self.writing_progress = False
+        self.terminal.write('\r\n{}'.format(SHOW_CURSOR))
+        self.terminal.flush()
 
     def _get_code_position(self, curframe):
         frame = inspect.getouterframes(curframe, 0)
@@ -96,6 +113,18 @@ class Logger(object):
         pos = self._get_code_position(curframe)
         prefix = '{} - {} - {}'.format(self._ts(), green('SUCCESS'), pos)
         self._output(prefix, msg, extra)
+
+    def progress(self, msg='', perc=0, demo=False):
+        message = blue(msg)
+        self.terminal.write('\r{}'.format(CLEAR))
+        self.terminal.flush()
+        blocks = math.floor(perc / 5)
+        spaces = math.ceil((100 - perc) / 5)
+        self.terminal.write(
+            ' [{}{}] {}% {}\r'.format(bg_blue(' ') * blocks, ' ' * spaces, perc, message)
+        )
+        self.terminal.flush()
+        self.writing_progress = True
 
 
 console = Logger()  # NOQA

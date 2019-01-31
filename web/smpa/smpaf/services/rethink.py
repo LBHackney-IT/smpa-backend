@@ -68,6 +68,23 @@ class RService(object):
 
             return self.__model__(data[0])
 
+    def update(self, id, json):
+        """updates a record from the json data
+
+        Args:
+            id (uuid): Description
+            json (json): The data
+
+        Returns:
+            __model__ or list: Single model instance or list of them.
+        """
+        with rconnect() as conn:
+            query = self.q.get(id).update(json)
+            rv = query.run(conn)
+            import ipdb; ipdb.set_trace()
+            if len(rv['changes']):
+                return self.__model__(rv['changes']['new_val'])
+
     def all(self, **kwargs):
         with rconnect() as conn:
             query = self.q

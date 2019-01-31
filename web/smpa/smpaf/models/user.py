@@ -4,33 +4,21 @@
     models.user
     ~~~~~~~~~~~
     User models.
+
+    {"name": {"title": "Mr", "given_name": "Andy", "family_name": "Beaumont"}}
+
+    {"email_addresses":
+        [
+            {"email_address": "andy@hactar.is"},
+            {"email_address": "andy@andybeaumont.com"}
+        ]
+    }
 """
 
 from .core import BaseModel, ORMMeta
 from schematics.types import (  # NOQA
-    StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType
+    StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, ModelType
 )
-
-
-class User(BaseModel, metaclass=ORMMeta):
-
-    """A User object.
-
-    Attributes:
-        family_name (Unicode): proxy to PersonName.family_name
-        given_name (Unicode): proxy to PersonName.given_name
-        person_name (PersonName): The PersonName instance for this user
-        title (Unicode): proxy to PersonName.title
-    """
-
-    # Relationships
-    person_name_id = UUIDType()
-    preferred_contact_method_id = UUIDType()
-    primary_email_id = UUIDType()
-    primary_phone_id = UUIDType()
-
-    def __str__(self):
-        return f'<User: {self.first_name} {self.last_name}>'
 
 
 class PersonName(BaseModel, metaclass=ORMMeta):
@@ -51,6 +39,16 @@ class PersonName(BaseModel, metaclass=ORMMeta):
         return f'<{self.__class__.__name__}: {self.title} {self.given_name} {self.family_name}>'
 
 
+class ContactMethod(BaseModel, metaclass=ORMMeta):
+
+    """The preferred contact method for a user. ie: SMS, fax, phone, post
+
+    Attributes:
+        name (Unicode): The name of the preferred contact method
+    """
+    name = StringType(max_length=100, required=True)
+
+
 class Email(BaseModel, metaclass=ORMMeta):
 
     """An email address. Allows us to store a list of email addresses against
@@ -67,6 +65,27 @@ class Email(BaseModel, metaclass=ORMMeta):
 
     # TODO: Relationships
     # user = relationship('User', backref=backref('email_addresses', uselist=True))
+
+
+class User(BaseModel, metaclass=ORMMeta):
+
+    """A User object.
+
+    Attributes:
+        family_name (Unicode): proxy to PersonName.family_name
+        given_name (Unicode): proxy to PersonName.given_name
+        person_name (PersonName): The PersonName instance for this user
+        title (Unicode): proxy to PersonName.title
+    """
+
+    name = ModelType(PersonName)
+    preferred_contact_method = ModelType(ContactMethod)
+    email_addresses = ListType(ModelType(Email))
+    primary_email_id = UUIDType()
+    primary_phone_id = UUIDType()
+
+    def __str__(self):
+        return f'<User: {self.first_name} {self.last_name}>'
 
 
 class TelephoneNumber(BaseModel, metaclass=ORMMeta):
@@ -87,16 +106,6 @@ class TelephoneNumberType(BaseModel, metaclass=ORMMeta):
 
     Attributes:
         name (Unicode): The name of this type
-    """
-    name = StringType(max_length=100, required=True)
-
-
-class ContactMethod(BaseModel, metaclass=ORMMeta):
-
-    """The preferred contact method for a user. ie: SMS, fax, phone, post
-
-    Attributes:
-        name (Unicode): The name of the preferred contact method
     """
     name = StringType(max_length=100, required=True)
 

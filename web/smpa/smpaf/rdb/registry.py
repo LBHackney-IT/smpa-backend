@@ -22,7 +22,7 @@ class ModelRegistry(object):
         self._initialsed = False
 
     def add(self, name, model, meta):
-        console.info(f'Registering {name} (initialised: {self._initialsed})')
+        # console.info(f'Registering {name} (initialised: {self._initialsed})')
 
         if name in self._models:
             return
@@ -50,10 +50,16 @@ class ModelRegistry(object):
         return True
 
     def init(self):
-        console.info('registry init')
+        total = len(self._models)
+        count = 0
         for name, model in self._models.items():
+            count += 1
+            progress = count / total * 100
+            console.progress('Registering models', progress)
             self._init_model(name, model)
         self._initialsed = True
+        console.reset()
+        console.success('READY')
 
     def _init_model(self, name, model):
         model._model = model
@@ -63,13 +69,14 @@ class ModelRegistry(object):
     def _create_table(self, name, model):
         if name not in self._tables:
             try:
-                console.info('create {} table for {}'.format(model._table, name))
+                # console.info('create {} table for {}'.format(model._table, name))
                 with rconnect() as conn:
                     query = r.db(model._db).table_create(model._table)
-                    console.info(query)
+                    # console.info(query)
                     query.run(conn)
             except ReqlOpFailedError as e:
-                console.info('{} table probably already exists'.format(model._table))
+                pass
+                # console.info('{} table probably already exists'.format(model._table))
             except Exception as e:
                 log.warn(e)
                 raise

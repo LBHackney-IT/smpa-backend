@@ -23,7 +23,7 @@ connections = []
 
 class rconnect(object):
     def __enter__(self):
-        console.info('CONNECT ENTER - {}:{}/{}'.format(RDB_HOST, RDB_PORT, RDB_DB))
+        # console.info('CONNECT ENTER - {}:{}/{}'.format(RDB_HOST, RDB_PORT, RDB_DB))
         try:
             self.conn = r.connect(
                 host=RDB_HOST,
@@ -39,7 +39,7 @@ class rconnect(object):
             return self.conn
 
     def __exit__(self, type, value, traceback):
-        console.info('CONNECT EXIT')
+        # console.info('CONNECT EXIT')
         connections.remove(self.conn)
         self.conn.close()
 

@@ -6,26 +6,18 @@
     Document related models.
 """
 
-# 3rd party
-import sqlalchemy as sa
-from sqlalchemy.ext.associationproxy import association_proxy  # NOQA
-
-# Project
-from ..helpers.database import MyUUID
-
-# Module
-from .core import BaseModel
+from .core import BaseModel, ORMMeta
+from schematics.types import (  # NOQA
+    StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, FloatType
+)
 
 
-class DocumentSize(BaseModel):
+class DocumentSize(BaseModel, metaclass=ORMMeta):
 
     """For storing document sizes. Although why anyone would need to do this
-    in 2018 remains to be seen.
+    in 2019 remains to be seen.
 
     Attributes:
         name (Unicode): The size, ie: A4, A3 etc.
     """
-
-    __tablename__ = 'document_sizes'
-
-    name = sa.Column(sa.Unicode(20), nullable=False)
+    name = StringType(max_length=20, required=True)

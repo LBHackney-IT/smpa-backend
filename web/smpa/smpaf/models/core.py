@@ -24,7 +24,7 @@ class ORMMeta(ModelMeta):
     instance = None
 
     def __new__(cls, name, bases, dct):
-        console.info('ORMMeta {}'.format(name))
+        # console.info('ORMMeta {}'.format(name))
         if name != "BaseModel":
             # We have a model class
             cls._table = tableize(name)

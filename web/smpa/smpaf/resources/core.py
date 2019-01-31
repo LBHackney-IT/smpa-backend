@@ -44,7 +44,10 @@ class Resource(object):
 
         try:
             result = json.loads(raw_json, encoding='utf-8')
-            rv = self._service.create(result)
+            if id is None:
+                rv = self._service.create(result)
+            else:
+                rv = self._service.update(id, result)
 
             if not isinstance(rv, list):
                 resp.body = json.dumps(rv.to_primitive())

@@ -6,19 +6,13 @@
     Planning site related models.
 """
 
-
-# 3rd party
-import sqlalchemy as sa
-from sqlalchemy.ext.associationproxy import association_proxy
-
-# Project
-from ..helpers.database import MyUUID
-
-# Module
-from .core import BaseModel
+from .core import BaseModel, ORMMeta
+from schematics.types import (  # NOQA
+    StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, FloatType
+)
 
 
-class SiteArea(BaseModel):
+class SiteArea(BaseModel, metaclass=ORMMeta):
 
     """Holds info about the area of a site.
 
@@ -29,8 +23,5 @@ class SiteArea(BaseModel):
         area (float): The number, eg: 20.4
         unit (AreaUnit): The unit that the ``area`` refers to, eg: hactares
     """
-
-    __tablename__ = 'site_areas'
-
-    area = sa.Column(sa.Float(), nullable=False)
-    unit = sa.Column(MyUUID, sa.ForeignKey('area_units.id'))
+    area = FloatType(required=True)
+    unit = UUIDType(required=True)  # rel: AreaUnit

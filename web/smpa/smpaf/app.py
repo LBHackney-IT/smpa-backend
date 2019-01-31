@@ -18,10 +18,13 @@ from .rdb.connection import RethinkDB
 from .rdb.registry import model_registry
 from .middleware.db import SQLAlchemySessionManager
 from .resources.test import TestResource
-from .resources.images import ImageResource
-from .resources.things import ThingsResource
 from .resources.unit import AreaUnitResource, LinearUnitResource
 from .resources.user import UserResource, AgentResource, ApplicantResource
+from .resources.address import (
+    AddressResource, SiteAddressResource, BS7666AddressResource, ExternalAddressResource,
+    InternationalAddressResource
+)
+from .resources.document import DocumentSizeResource
 
 
 # Create the Falcon app
@@ -35,14 +38,18 @@ def create_app():
     model_registry.init()
 
     # Resources
-    things = ThingsResource()
-    images = ImageResource()
     tests = TestResource()
     area_units = AreaUnitResource()
     linear_units = LinearUnitResource()
     users = UserResource()
     agents = AgentResource()
     applicants = ApplicantResource()
+    addresses = AddressResource()
+    siteaddresses = SiteAddressResource()
+    bs7666addresses = BS7666AddressResource()
+    externaladdresses = ExternalAddressResource()
+    internationaladdresses = InternationalAddressResource()
+    documentsizes = DocumentSizeResource()
 
     # Routes
     api.add_route('/tests', tests)
@@ -60,8 +67,26 @@ def create_app():
     api.add_route('/agents', agents)
     api.add_route('/agents/{id}', agents)
 
-    api.add_route('/applicants', applicants)
-    api.add_route('/applicants/{id}', applicants)
+    api.add_route('/addresses', addresses)
+    api.add_route('/addresses/{id}', addresses)
+
+    api.add_route('/site-addresses', siteaddresses)
+    api.add_route('/site-addresses/{id}', siteaddresses)
+
+    api.add_route('/bs7666-addresses', bs7666addresses)
+    api.add_route('/bs7666-addresses/{id}', bs7666addresses)
+
+    api.add_route('/external-addresses', externaladdresses)
+    api.add_route('/external-addresses/{id}', externaladdresses)
+
+    api.add_route('/external-addresses', externaladdresses)
+    api.add_route('/external-addresses/{id}', externaladdresses)
+
+    api.add_route('/international-addresses', internationaladdresses)
+    api.add_route('/international-addresses/{id}', internationaladdresses)
+
+    api.add_route('/document-sizes', documentsizes)
+    api.add_route('/document-sizes/{id}', documentsizes)
 
 
 create_app()

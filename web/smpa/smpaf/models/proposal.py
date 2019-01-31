@@ -6,22 +6,22 @@
     Models for describing a planning proposal.
 """
 
-
-# 3rd party
-import sqlalchemy as sa
-from sqlalchemy_utils import ArrowType
-from sqlalchemy.ext.associationproxy import association_proxy
-
-# Project
-from ..helpers.database import MyUUID
-
-# Module
-from .core import BaseModel
+from .core import BaseModel, ORMMeta
+from schematics.types import (  # NOQA
+    StringType, BooleanType, DateType, IntType, UUIDType, ListType, FloatType
+)
 
 
-class BaseProposal(BaseModel):
-    __abstract__ = True
+class BaseProposal(BaseModel, metaclass=ORMMeta):
 
-    site_area = sa.Column(MyUUID, sa.ForeignKey('site_areas.id'))
-    already_completed = sa.Column(sa.Boolean(), default=False)
-    date_completed = sa.Column(ArrowType)
+    """The base proposal.
+
+    Attributes:
+        site_area_id (UUID): Relationship to SiteArea
+        already_completed (bool): Has the project already been completed
+        date_completed (TYPE): If so, on what date?
+    """
+
+    site_area_id = UUIDType(required=True)
+    already_completed = BooleanType(default=False)
+    date_completed = DateType()
