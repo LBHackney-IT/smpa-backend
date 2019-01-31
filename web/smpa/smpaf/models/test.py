@@ -13,7 +13,7 @@ from schematics.types.base import (  # NOQA
 
 class Test(BaseModel, metaclass=ORMMeta):
 
-    """
+    """This is a test model, for testing things with.
     """
 
     name = StringType(required=True)

@@ -45,10 +45,12 @@ class Resource(object):
         try:
             result = json.loads(raw_json, encoding='utf-8')
             rv = self._service.create(result)
-            resp.body = str({
-                "success": True,
-                "id": rv['generated_keys'][0]
-            })
+
+            if not isinstance(rv, list):
+                resp.body = json.dumps(rv.to_primitive())
+            else:
+                resp.body = json.dumps([_.to_primitive() for _ in rv])
+
         except ValueError:
             raise falcon.HTTPError(
                 falcon.HTTP_400,

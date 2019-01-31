@@ -20,6 +20,7 @@ from .middleware.db import SQLAlchemySessionManager
 from .resources.test import TestResource
 from .resources.images import ImageResource
 from .resources.things import ThingsResource
+from .resources.unit import AreaUnitResource, LinearUnitResource
 
 
 # Create the Falcon app
@@ -36,12 +37,18 @@ def create_app():
     things = ThingsResource()
     images = ImageResource()
     tests = TestResource()
+    area_units = AreaUnitResource()
+    linear_units = LinearUnitResource()
 
     # Routes
-    api.add_route('/things', things)
-    api.add_route('/images', images)
     api.add_route('/tests', tests)
     api.add_route('/tests/{id}', tests)
+
+    api.add_route('/area-units', area_units)
+    api.add_route('/area-units/{id}', area_units)
+
+    api.add_route('/linear-units', linear_units)
+    api.add_route('/linear-units/{id}', linear_units)
 
 
 create_app()

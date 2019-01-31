@@ -48,10 +48,25 @@ class RService(object):
             return None
 
     def create(self, json):
+        """Creates one or more records from the json data
+
+        Args:
+            json (json): The data
+
+        Returns:
+            __model__ or list: Single model instance or list of them.
+        """
         with rconnect() as conn:
             query = self.q.insert(json)
             rv = query.run(conn)
-            return self.__model__(rv)
+            data = []
+            for _ in rv['generated_keys']:
+                data.append(self.get(_))
+
+            if len(data) > 2:
+                return [self.__model__(_) for _ in rv]
+
+            return self.__model__(data[0])
 
     def all(self, **kwargs):
         with rconnect() as conn:
