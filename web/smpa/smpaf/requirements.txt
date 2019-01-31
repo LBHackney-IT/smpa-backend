@@ -1,0 +1,6 @@
+falcon
+ujson
+uwsgi
+gunicorn
+httpie
+rethinkdb

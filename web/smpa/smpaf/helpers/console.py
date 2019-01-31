@@ -47,7 +47,7 @@ class Logger(object):
         self._output(prefix, msg, extra)
 
     def debug(self, msg, extra=None):
-        self.info(msg, extra)
+        return self.info(msg, extra)
 
     def log(self, msg, extra=None):
         """Output a message in the LOG style

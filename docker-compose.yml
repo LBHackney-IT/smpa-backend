@@ -17,6 +17,15 @@ services:
       - ./data/:/var/lib/postgresql/data
     # command: psql -v -U ${POSTGRES_USER} '\c ${POSTGRES_DB}; CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology; CREATE EXTENSION "uuid-ossp"'
 
+  rethink:
+    image: rethinkdb:2.3
+    restart: always
+    ports:
+      - "8080:8080"
+      - "28015:28015"
+      - "29015:29015"
+    command: ["rethinkdb", "--initial-password", "${RDB_PASSWORD}", "--bind", "all"]
+
   # Redis
   redis:
     restart: always
@@ -28,12 +37,12 @@ services:
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
 
-  # Prometheus
-  prometheus:
-    restart: always
-    image: quay.io/prometheus/prometheus:latest
-    ports:
-      - "9090:9090"
+  # # Prometheus
+  # prometheus:
+  #   restart: always
+  #   image: quay.io/prometheus/prometheus:latest
+  #   ports:
+  #     - "9090:9090"
 
   # Application
   web:
