@@ -16,4 +16,3 @@ class DocumentSizeService(RService):
 
 
 _document_sizes = DocumentSizeService()
-

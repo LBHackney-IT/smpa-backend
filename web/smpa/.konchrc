@@ -1,0 +1,31 @@
+# vi: set ft=python :
+
+import os
+import sys
+import konch
+from pathlib import Path
+from smpaf import app
+
+
+konch.config({
+    "banner": "<<<< SmPA >>>>",
+    "context": [
+        sys,
+        os,
+        app,
+    ],
+    "ipy_extensions": ["autoreload", ],
+    "ipy_autoreload": True,
+})
+
+
+def setup():
+    pass
+
+
+def teardown():
+    pass
+
+
+if Path(".konchrc.local").exists():
+    konch.use_file(".konchrc.local", trust=True)

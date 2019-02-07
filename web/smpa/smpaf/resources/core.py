@@ -1,9 +1,21 @@
 import json
 import falcon
 
+from ..helpers.console import console
+
 
 class Resource(object):
     """Base Resource class for making stuff extensible."""
+
+    def _json_or_404(self, data):
+        if data is None:
+            raise falcon.HTTPError(falcon.HTTP_404, 'Object not found')
+        try:
+            j = json.dumps(data.to_primitive())
+        except Exception as e:
+            raise falcon.HTTPError(falcon.HTTP_400, 'Error', e.message)
+        else:
+            return j
 
     def on_get(self, req, resp, id=None):
         """Handles GET requests.
@@ -18,10 +30,10 @@ class Resource(object):
         """
         if id:
             rv = self._service.get(id)
-            resp.body = json.dumps(rv.to_primitive())
+            resp.body = self._json_or_404(rv)
         else:
             rv = self._service.all()
-            resp.body = json.dumps([_.to_primitive() for _ in rv])
+            resp.body = self._json_or_404([_ for _ in rv])
 
     def on_post(self, req, resp, id=None):
         """Handles POST requests.
@@ -39,20 +51,21 @@ class Resource(object):
         """
         try:
             raw_json = req.stream.read()
-        except Exception as ex:
-            raise falcon.HTTPError(falcon.HTTP_400,'Error',ex.message)
+        except Exception as e:
+            raise falcon.HTTPError(falcon.HTTP_400, 'Error', e.message)
 
         try:
             result = json.loads(raw_json, encoding='utf-8')
+            console.info(result)
             if id is None:
                 rv = self._service.create(result)
             else:
                 rv = self._service.update(id, result)
 
             if not isinstance(rv, list):
-                resp.body = json.dumps(rv.to_primitive())
+                resp.body = self._json_or_404(rv)
             else:
-                resp.body = json.dumps([_.to_primitive() for _ in rv])
+                resp.body = self._json_or_404([_ for _ in rv])
 
         except ValueError:
             raise falcon.HTTPError(

@@ -1,6 +1,8 @@
 falcon
-ujson
-uwsgi
 gunicorn
 httpie
+konch
 rethinkdb
+schematics
+ujson
+uwsgi

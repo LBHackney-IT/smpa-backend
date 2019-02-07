@@ -10,25 +10,30 @@
     ``gunicorn --reload smpaf.app -b 0.0.0.0:5000``
 """
 
+__version__ = "0.2.2"
+
 # 3rd party
 import falcon
 
 # Module
 from .rdb.connection import RethinkDB
 from .rdb.registry import model_registry
-from .middleware.db import SQLAlchemySessionManager
-from .resources.test import TestResource
-from .resources.unit import AreaUnitResource, LinearUnitResource
-from .resources.user import UserResource, AgentResource, ApplicantResource
-from .resources.address import (
+from .resources import (
+    TestResource,
+    AreaUnitResource, LinearUnitResource,
+    UserResource, AgentResource, ApplicantResource,
     AddressResource, SiteAddressResource, BS7666AddressResource, ExternalAddressResource,
-    InternationalAddressResource
+    InternationalAddressResource,
+    DocumentSizeResource
 )
-from .resources.document import DocumentSizeResource
-
 
 # Create the Falcon app
 api = application = falcon.API()
+
+
+def init_route(path, resource):
+    prefix = '/api/v1'
+    api.add_route(f'{prefix}{path}', resource)
 
 
 def create_app():
@@ -52,41 +57,44 @@ def create_app():
     documentsizes = DocumentSizeResource()
 
     # Routes
-    api.add_route('/tests', tests)
-    api.add_route('/tests/{id}', tests)
+    init_route('/tests', tests)
+    init_route('/tests/{id}', tests)
 
-    api.add_route('/area-units', area_units)
-    api.add_route('/area-units/{id}', area_units)
+    init_route('/area-units', area_units)
+    init_route('/area-units/{id}', area_units)
 
-    api.add_route('/linear-units', linear_units)
-    api.add_route('/linear-units/{id}', linear_units)
+    init_route('/linear-units', linear_units)
+    init_route('/linear-units/{id}', linear_units)
 
-    api.add_route('/users', users)
-    api.add_route('/users/{id}', users)
+    init_route('/users', users)
+    init_route('/users/{id}', users)
 
-    api.add_route('/agents', agents)
-    api.add_route('/agents/{id}', agents)
+    init_route('/agents', agents)
+    init_route('/agents/{id}', agents)
 
-    api.add_route('/addresses', addresses)
-    api.add_route('/addresses/{id}', addresses)
+    init_route('/applicants', applicants)
+    init_route('/applicants/{id}', applicants)
 
-    api.add_route('/site-addresses', siteaddresses)
-    api.add_route('/site-addresses/{id}', siteaddresses)
+    init_route('/addresses', addresses)
+    init_route('/addresses/{id}', addresses)
 
-    api.add_route('/bs7666-addresses', bs7666addresses)
-    api.add_route('/bs7666-addresses/{id}', bs7666addresses)
+    init_route('/site-addresses', siteaddresses)
+    init_route('/site-addresses/{id}', siteaddresses)
 
-    api.add_route('/external-addresses', externaladdresses)
-    api.add_route('/external-addresses/{id}', externaladdresses)
+    init_route('/bs7666-addresses', bs7666addresses)
+    init_route('/bs7666-addresses/{id}', bs7666addresses)
 
-    api.add_route('/external-addresses', externaladdresses)
-    api.add_route('/external-addresses/{id}', externaladdresses)
+    init_route('/external-addresses', externaladdresses)
+    init_route('/external-addresses/{id}', externaladdresses)
 
-    api.add_route('/international-addresses', internationaladdresses)
-    api.add_route('/international-addresses/{id}', internationaladdresses)
+    init_route('/external-addresses', externaladdresses)
+    init_route('/external-addresses/{id}', externaladdresses)
 
-    api.add_route('/document-sizes', documentsizes)
-    api.add_route('/document-sizes/{id}', documentsizes)
+    init_route('/international-addresses', internationaladdresses)
+    init_route('/international-addresses/{id}', internationaladdresses)
+
+    init_route('/document-sizes', documentsizes)
+    init_route('/document-sizes/{id}', documentsizes)
 
 
 create_app()

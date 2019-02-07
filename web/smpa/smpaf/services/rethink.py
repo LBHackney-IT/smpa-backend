@@ -1,15 +1,16 @@
-import os
+
 import uuid
 import rethinkdb as r
 from rethinkdb.errors import RqlRuntimeError, RqlDriverError, ReqlOpFailedError
 from ..helpers.console import console
 from ..rdb.connection import rconnect, RDB_DB
+from ..models.core import BaseModel
 
 
 class RService(object):
     """A service that operates on a RethinkDB database."""
 
-    __model__ = None
+    __model__ = BaseModel
 
     @property
     def q(self):
@@ -24,7 +25,7 @@ class RService(object):
         """
         return r.db(RDB_DB).table(self.__model__._table)
 
-    def get(self, id:str):
+    def get(self, id: str):
         with rconnect() as conn:
             if id is None:
                 raise ValueError
@@ -43,9 +44,9 @@ class RService(object):
                 console.warn(e)
                 raise
             else:
-                return self.__model__(rv)
-
-            return None
+                if rv is not None:
+                    return self.__model__(rv)
+        return None
 
     def create(self, json):
         """Creates one or more records from the json data
