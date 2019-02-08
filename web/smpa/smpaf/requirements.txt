@@ -1,8 +1,11 @@
 falcon
+falcon-apispec
+falcon-auth[backend-hawk,backend-jwt]
 gunicorn
 httpie
 konch
 rethinkdb
 schematics
+schematics-apispec
 ujson
 uwsgi

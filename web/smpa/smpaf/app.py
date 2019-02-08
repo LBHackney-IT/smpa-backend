@@ -20,6 +20,14 @@ from .rdb.connection import RethinkDB
 from .rdb.registry import model_registry
 from .routes import init_routes
 
+from falcon_auth import FalconAuthMiddleware, BasicAuthBackend
+
+
+# auth_backend = BasicAuthBackend(user_loader)
+# auth_middleware = FalconAuthMiddleware(auth_backend,
+#                     exempt_routes=['/exempt'], exempt_methods=['HEAD'])
+# api = falcon.API(middleware=[auth_middleware])
+
 # Create the Falcon app
 api = application = falcon.API()
 
