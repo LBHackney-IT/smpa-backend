@@ -1,0 +1,21 @@
+# -*- coding: utf-8 -*-
+# vi: set ft=python :
+
+import konch
+
+konch.config({
+    'context': {
+
+    },
+    'banner': "Submit my Planning Application",
+    'shell': 'ipython',
+    'ipy_autoreload': True,
+    'ipy_colors': 'linux',
+    'ipy_highlighting_style': 'monokai',
+})
+
+def setup():
+    pass
+
+def teardown():
+    pass
