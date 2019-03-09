@@ -8,6 +8,8 @@ The project uses EnvKey to manage secrets. For local development you should gene
 
     ENVKEY={YOURENVKEY}
 
+@TODO: Support other methods of environment injection
+
 ### Required Environment Variables
 
     POSTGRES_USER

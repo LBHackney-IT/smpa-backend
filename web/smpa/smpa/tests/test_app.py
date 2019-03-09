@@ -9,9 +9,14 @@ def client():
     return testing.TestClient(app)
 
 
-def test_can_create_todos(client):
+def test_app_factory(client):
+    assert hasattr(app, 'reverse_uri')
+
+
+def test_can_create_address(client):
     response = client.post(
-        app.reverse_uri("create_todo"),
+        '/addresses/create',
+        # app.reverse_uri("create_address"),
         json={"description": "example"},
     )
     assert response.status_code == 200

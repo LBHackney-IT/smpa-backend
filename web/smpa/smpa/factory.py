@@ -30,4 +30,6 @@ def create_app() -> App:
 
     app.settings = settings
 
-    return CORS(app, headers="*", methods="*", origin="*", maxage="86400")
+    cors_app = CORS(app, headers="*", methods="*", origin="*", maxage="86400")
+
+    return cors_app.application
