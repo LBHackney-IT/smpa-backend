@@ -21,6 +21,13 @@ from schematics.types import (  # NOQA
 )
 
 
+class Role(BaseModel, metaclass=ORMMeta):
+
+    """User roles. Like Admin etc.
+    """
+    name = StringType(max_length=100, required=True)
+
+
 class PersonName(BaseModel, metaclass=ORMMeta):
 
     """A Person's name
@@ -67,7 +74,7 @@ class Email(BaseModel, metaclass=ORMMeta):
     # user = relationship('User', backref=backref('email_addresses', uselist=True))
 
 
-class User(BaseModel, metaclass=ORMMeta):
+class UserProfile(BaseModel, metaclass=ORMMeta):
 
     """A User object.
 
@@ -83,9 +90,6 @@ class User(BaseModel, metaclass=ORMMeta):
     email_addresses = ListType(ModelType(Email))
     primary_email_id = UUIDType()
     primary_phone_id = UUIDType()
-
-    def __str__(self):
-        return f'<User: {self.first_name} {self.last_name}>'
 
 
 class TelephoneNumber(BaseModel, metaclass=ORMMeta):
@@ -137,3 +141,28 @@ class Applicant(BasePerson, metaclass=ORMMeta):
 
 class Agent(BasePerson, metaclass=ORMMeta):
     pass
+
+
+class User(BaseModel, metaclass=ORMMeta):
+
+    """Super simple user model to facilitate auth. All profile information
+    should live on other models.
+    Passwords are stored bcrypt hashed via passlib
+    """
+    email = StringType(max_length=200, required=True)
+    password = StringType(max_length=100, required=True)
+    profile_id = UUIDType()
+    role_id = UUIDType()
+
+    @property
+    def profile(self):
+        from ..services.user import _user_profiles
+        return _user_profiles.get(id=str(self.profile_id))
+
+    @property
+    def role(self):
+        from ..services.user import _roles
+        return _roles.get(id=str(self.role_id))
+
+    def __str__(self):
+        return f'<User: {self.first_name} {self.last_name}>'

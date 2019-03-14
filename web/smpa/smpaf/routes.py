@@ -16,6 +16,11 @@ from .resources import (
     DocumentSizeResource
 )
 
+EXEMPT_ROUTES = [
+    # '/area-units',
+    # '/area-units/{id}',
+]
+
 
 def add_route(api, path, resource):
     prefix = '/api/v1'

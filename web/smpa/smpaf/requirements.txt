@@ -1,9 +1,11 @@
+cryptography
 falcon
 falcon-apispec
 falcon-auth[backend-hawk,backend-jwt]
 gunicorn
 httpie
 konch
+passlib[bcrypt]
 rethinkdb
 schematics
 schematics-apispec

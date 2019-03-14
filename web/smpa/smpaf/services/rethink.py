@@ -108,16 +108,14 @@ class RService(object):
             ValueError: Description
         """
         with rconnect() as conn:
-            if len(kwargs) == 0:
-                raise ValueError
-
             try:
                 query = self.q
                 if order_by is not None:
                     query = self._order_by(query, order_by)
 
                 # NOTE: Always filter before limiting
-                query = query.filter(kwargs)
+                if len(kwargs) > 0:
+                    query = query.filter(kwargs)
                 query = self._limit(query, 1)
                 rv = query.run(conn)
 

@@ -12,6 +12,8 @@
 
 __version__ = "0.2.2"
 
+import os
+
 # 3rd party
 import falcon
 
@@ -19,18 +21,23 @@ import falcon
 from .helpers.startup import Startup
 from .rdb.connection import RethinkDB
 from .rdb.registry import model_registry
-from .routes import init_routes
+from .routes import init_routes, EXEMPT_ROUTES
 
-from falcon_auth import FalconAuthMiddleware, BasicAuthBackend
+from falcon_auth import FalconAuthMiddleware, JWTAuthBackend
 
 
-# auth_backend = BasicAuthBackend(user_loader)
-# auth_middleware = FalconAuthMiddleware(auth_backend,
-#                     exempt_routes=['/exempt'], exempt_methods=['HEAD'])
-# api = falcon.API(middleware=[auth_middleware])
+user_loader = lambda email, password: {'email': email}
+secret_key = os.environ.get('SECRET_KEY')
+auth_backend = JWTAuthBackend(user_loader, secret_key)
+auth_middleware = FalconAuthMiddleware(
+    auth_backend,
+    exempt_routes=EXEMPT_ROUTES,
+    exempt_methods=['HEAD']
+)
 
 # Create the Falcon app
-api = application = falcon.API()
+api = application = falcon.API(middleware=[auth_middleware])
+# api = application = falcon.API()
 
 
 def create_app():
