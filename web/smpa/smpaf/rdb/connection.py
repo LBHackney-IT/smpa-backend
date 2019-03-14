@@ -7,7 +7,7 @@
 """
 
 import os
-import rethinkdb as r
+import rethinkdb
 from rethinkdb.errors import RqlRuntimeError, RqlDriverError
 from ..helpers.console import console
 
@@ -19,6 +19,9 @@ RDB_PASSWORD = os.environ.get('RDB_PASSWORD')
 
 
 connections = []
+
+
+r = rethinkdb.RethinkDB()
 
 
 class rconnect(object):

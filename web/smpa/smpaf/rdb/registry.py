@@ -7,11 +7,14 @@
 """
 
 import os
-import rethinkdb as r
+import rethinkdb
 from rethinkdb.errors import ReqlOpFailedError
 
 from ..helpers.console import console
 from .connection import rconnect
+
+
+r = rethinkdb.RethinkDB()
 
 
 class ModelRegistry(object):
@@ -45,7 +48,7 @@ class ModelRegistry(object):
             except ReqlOpFailedError as e:
                 console.info('{} table failed to drop'.format(model._table))
             except Exception as e:
-                log.warn(e)
+                console.warn(e)
                 raise
         return True
 
@@ -78,7 +81,7 @@ class ModelRegistry(object):
                 pass
                 # console.info('{} table probably already exists'.format(model._table))
             except Exception as e:
-                log.warn(e)
+                console.warn(e)
                 raise
             else:
                 self._tables.append(name)

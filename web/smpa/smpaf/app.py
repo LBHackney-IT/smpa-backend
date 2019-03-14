@@ -15,7 +15,8 @@ __version__ = "0.2.2"
 # 3rd party
 import falcon
 
-# Module
+# Application
+from .helpers.startup import Startup
 from .rdb.connection import RethinkDB
 from .rdb.registry import model_registry
 from .routes import init_routes
@@ -37,6 +38,7 @@ def create_app():
     db = RethinkDB()
     db.init()
     model_registry.init()
+    # Startup.init_data()
     init_routes(api)
 
 

@@ -5,6 +5,7 @@ fabfile/**/*
 
 # Venv packages
 web/reqs/.venv
+web/smpa/.venv
 
 
 # Misc files
@@ -31,3 +32,5 @@ data/**/*
 # Redis data folder
 redis/**/*
 
+# MyPy cache
+.mypy_cache/**/*

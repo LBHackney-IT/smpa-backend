@@ -25,6 +25,10 @@ invoke = "*"
 wsgicors = "*"
 waitress = "*"
 prometheus-client = "*"
+rethinkdb = "*"
+falcon-auth = "*"
+schematics = "*"
+konch = "*"
 
 [dev-packages]
 pdbpp = "*"
@@ -33,7 +37,7 @@ pytest = "*"
 pytest-cov = "*"
 pytest-falcon = "*"
 pytest-sugar = "*"
-pytest-variables = {version = "*", extras = ["hjson"]}
+pytest-variables = {version = "*",extras = ["hjson"]}
 
 [requires]
 python_version = "3.6"

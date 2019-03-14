@@ -47,9 +47,9 @@ class BaseModel(Model):
     updated_at = DateTimeType(default=datetime.datetime.now)
 
     def validate(self):
-        log.debug('VALIDATING')
+        console.debug('VALIDATING')
         for field in self._uniques:
-            log.debug('Validate that {} is unique'.format(field))
+            console.debug('Validate that {} is unique'.format(field))
             if self._data.get(field, None) is None:
                 raise ValidationError('Unique fields cannot be None ({})'.format(field))
             _ = self.query.get_by(column=field, value=self._data.get(field, None))
