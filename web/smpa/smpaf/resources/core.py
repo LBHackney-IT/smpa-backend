@@ -10,12 +10,19 @@ class Resource(object):
     def _json_or_404(self, data):
         if data is None:
             raise falcon.HTTPError(falcon.HTTP_404, 'Object not found')
-        try:
-            j = json.dumps(data.to_primitive())
-        except Exception as e:
-            raise falcon.HTTPError(falcon.HTTP_400, 'Error', e.message)
+
+        if isinstance(data, list):
+            try:
+                j = json.dumps([_.to_primitive() for _ in data])
+            except Exception as e:
+                raise falcon.HTTPError(falcon.HTTP_400, 'Error', e.message)
         else:
-            return j
+            try:
+                j = json.dumps(data.to_primitive())
+            except Exception as e:
+                raise falcon.HTTPError(falcon.HTTP_400, 'Error', e.message)
+
+        return j
 
     def on_get(self, req, resp, id=None):
         """Handles GET requests.
@@ -33,7 +40,7 @@ class Resource(object):
             resp.body = self._json_or_404(rv)
         else:
             rv = self._service.all()
-            resp.body = self._json_or_404([_ for _ in rv])
+            resp.body = self._json_or_404(rv)
 
     def on_post(self, req, resp, id=None):
         """Handles POST requests.
