@@ -38,7 +38,7 @@ def create_app():
     db = RethinkDB()
     db.init()
     model_registry.init()
-    # Startup.init_data()
+    Startup.init_data()
     init_routes(api)
 
 

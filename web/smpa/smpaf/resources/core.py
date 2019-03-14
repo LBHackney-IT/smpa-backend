@@ -58,9 +58,9 @@ class Resource(object):
             result = json.loads(raw_json, encoding='utf-8')
             console.info(result)
             if id is None:
-                rv = self._service.create(result)
+                rv = self._service.create(json=result)
             else:
-                rv = self._service.update(id, result)
+                rv = self._service.update(id, json=result)
 
             if not isinstance(rv, list):
                 resp.body = self._json_or_404(rv)

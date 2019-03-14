@@ -1,12 +1,19 @@
 
+# stdlib
 import json
-from typing import Optional
 import uuid
+
+# 3rd party
+import falcon
 import rethinkdb
-from rethinkdb.errors import RqlRuntimeError, RqlDriverError, ReqlOpFailedError
-from ..helpers.console import console
-from ..rdb.connection import rconnect, RDB_DB
+from slugify import slugify
+from typing import List, Any, Optional, Iterable  # NOQA
+from rethinkdb.errors import RqlDriverError, RqlRuntimeError, ReqlOpFailedError
+
+# Module
 from ..models.core import BaseModel
+from ..rdb.connection import RDB_DB, rconnect
+from ..helpers.console import console
 
 
 r = rethinkdb.RethinkDB()
@@ -16,6 +23,25 @@ class RService(object):
     """A service that operates on a RethinkDB database. Every database interaction should
     go through a service class instance, then if the backend data store ever changes you
     can simply swap out this service class for a different one with the same method signature.
+
+    Public method signature
+        * q : property, the base query
+        * get: Return one, by id
+        * get_or_404: Return one, by id, otherwise 404
+        * count: Count the total
+        * all: return all
+        * find: return multiple instances that match kwargs
+        * first: return one instance that matcges kwargs
+        * first_or_404: like first, but returns a 404 instead of None
+        * create: create a new SAVED instance
+        * update: update an existing instance
+        * delete: delete an existing instance
+        # TODO
+        * last: Get the last created instance
+        * new: create a new, unsaved instance
+        * save: Save one
+
+
     """
 
     __model__ = BaseModel
@@ -43,7 +69,6 @@ class RService(object):
 
             try:
                 query = self.q.get(id)
-                console.debug(query)
                 rv = query.run(conn)
             except ReqlOpFailedError as e:
                 console.warn(e)
@@ -55,6 +80,18 @@ class RService(object):
                 if rv is not None:
                     return self.__model__(rv)
         return None
+
+    def count(self):
+        with rconnect() as conn:
+            query = self.q.count()
+            return query.run(conn)
+
+    def get_or_404(self, id: str):
+        instance = self.get(id=id)
+        if not instance:
+            return falcon.HTTP_404
+
+        return instance
 
     def first(self, order_by: Optional[str] = None, **kwargs):
         """Fetch the first item that matches your filter.
@@ -96,6 +133,13 @@ class RService(object):
                     return data[0]
                 except IndexError:
                     return None
+
+    def first_or_404(self, order_by: Optional[str] = None, **kwargs):
+        instance = self.first(order_by=order_by, **kwargs)
+        if not instance:
+            return falcon.HTTP_404
+
+        return instance
 
     def create(self, **kwargs):
         """Creates one or more records from the json data. You can pass json directly to
@@ -181,6 +225,7 @@ class RService(object):
         Returns:
             __model__ or list: Single model instance or list of them.
         """
+        id = str(id)
         j = self._jsonify(kwargs)
 
         with rconnect() as conn:
@@ -207,6 +252,21 @@ class RService(object):
                 rv = query.run(conn)
                 data = [self.__model__(_) for _ in rv]
                 return data
+
+    def delete(self, instance: BaseModel):
+        """
+            Delete an instance from the DB.
+        """
+        with rconnect() as conn:
+            id = str(instance.id)
+            try:
+                query = self.q.get(id).delete()
+                rv = query.run(conn)
+            except Exception as e:
+                console.warn(e)
+                raise
+            else:
+                return True
 
     # Private methods - these do not form part of the public API or method signature of the
     # service class.
@@ -253,3 +313,40 @@ class RService(object):
             raise
         else:
             return rv
+
+    def _make_slug(
+            self, instance: BaseModel,
+            field: Optional[str] = None,
+            fields: Optional[List[str]] = None) -> str:
+        """
+        Make a slug for ``instance`` using ``field`` as the input, or optionally ``fields``,
+        useful for when you want to slug on two or more fields like firstname-lastname.
+
+        Args:
+            instance (Model): The model instance that we want a slug for
+            field (str, optional): Defaults to None. The field to take the input from
+            fields (str, optional): Defaults to None. For creating multi field slugs
+
+        Raises:
+            ValueError: If the supplied field(s) are None or empty strings
+
+        Returns:
+            str: The slug
+        """
+        if field is not None:
+            text = str(getattr(instance, field))
+            if text is None or text == '':
+                raise ValueError('There was no string to make a slug from')
+        elif fields is not None:
+            parts = [str(getattr(instance, field)) for field in fields]
+            text = '-'.join(parts)
+            if text is None or text.replace('-', '') == '':
+                raise ValueError('There was no string to make a slug from')
+
+        concrete_slug = slugify(text, to_lower=True)
+        slug = concrete_slug
+        counter = 1
+        while self.q.filter_by(slug=slug).first() is not None:
+            slug = '{}-{}'.format(concrete_slug, counter)
+            counter += 1
+        return slug

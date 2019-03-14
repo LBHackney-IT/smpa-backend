@@ -7,5 +7,6 @@ konch
 rethinkdb
 schematics
 schematics-apispec
+slugify
 ujson
 uwsgi
