@@ -89,7 +89,7 @@ class RService(object):
     def get_or_404(self, id: str):
         instance = self.get(id=id)
         if not instance:
-            return falcon.HTTP_404
+            raise falcon.HTTPError(falcon.HTTP_404, 'Object not found')
 
         return instance
 
@@ -137,7 +137,7 @@ class RService(object):
         kwargs = self._preprocess(**kwargs)
         instance = self.first(order_by=order_by, **kwargs)
         if not instance:
-            return falcon.HTTP_404
+            raise falcon.HTTPError(falcon.HTTP_404, 'Object not found')
 
         return instance
 

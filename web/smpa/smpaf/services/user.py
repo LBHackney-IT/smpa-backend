@@ -10,7 +10,7 @@ import arrow
 import falcon
 from passlib.hash import bcrypt
 from ..models.user import Role, User, Agent, Applicant, UserProfile
-from ..helpers.console import console
+from ..helpers.console import console  # NOQA
 
 from .rethink import RService
 
@@ -37,10 +37,6 @@ class UserService(RService):
         }
         return auth_backend.get_auth_token(user_payload)
 
-    def _hash(self, password):
-        hashed = bcrypt.hash(password)
-        return hashed
-
     def verify(self, user, password):
         return bcrypt.verify(password, user.password)
 
@@ -51,8 +47,6 @@ class UserService(RService):
         Args:
             **kwargs: Dict of data to create the user.
         """
-        console.info(f'Running create')
-        import ipdb; ipdb.set_trace()
         kwargs = self._preprocess(**kwargs)
         input_pass = kwargs.pop('password', None)
         if input_pass is None:
@@ -75,10 +69,15 @@ class UserService(RService):
         nopass = self._restore_uuids(**nopass)
         existing_user = self.first(**nopass)
         if existing_user is not None:
-            console.info(f'Found existing user {existing_user}')
             return existing_user
 
         return self.create(**kwargs)
+
+    # Private methods
+
+    def _hash(self, password):
+        hashed = bcrypt.hash(password)
+        return hashed
 
 
 class AgentService(RService):

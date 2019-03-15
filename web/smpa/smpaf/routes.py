@@ -10,15 +10,14 @@
 from .resources import (
     TestResource,
     AreaUnitResource, LinearUnitResource,
-    UserResource, AgentResource, ApplicantResource,
+    UserResource, AgentResource, ApplicantResource, AuthResource,
     AddressResource, SiteAddressResource, BS7666AddressResource, ExternalAddressResource,
     InternationalAddressResource,
     DocumentSizeResource
 )
 
 EXEMPT_ROUTES = [
-    # '/area-units',
-    # '/area-units/{id}',
+    '/auth',
 ]
 
 
@@ -41,8 +40,11 @@ def init_routes(api):
     externaladdresses = ExternalAddressResource()
     internationaladdresses = InternationalAddressResource()
     documentsizes = DocumentSizeResource()
+    auth = AuthResource()
 
     # Routes
+    add_route(api, '/auth', auth)
+
     add_route(api, '/tests', tests)
     add_route(api, '/tests/{id}', tests)
 
