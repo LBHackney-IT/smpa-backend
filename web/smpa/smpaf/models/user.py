@@ -165,4 +165,4 @@ class User(BaseModel, metaclass=ORMMeta):
         return _roles.get(id=str(self.role_id))
 
     def __str__(self):
-        return f'<User: {self.first_name} {self.last_name}>'
+        return f'<User: {self.email}>'

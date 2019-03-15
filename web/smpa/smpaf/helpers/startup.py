@@ -30,6 +30,10 @@ class Startup:
 
         super_admin = _roles.first(name='SuperAdmin')
         for _ in SUPERADMIN_USERS:
-            _users.create(email=_['email'], password=_['password'], role_id=str(super_admin.id))
+            _users.get_or_create(
+                email=_['email'],
+                password=_['password'],
+                role_id=str(super_admin.id)
+            )
 
         console.success('Created default data')

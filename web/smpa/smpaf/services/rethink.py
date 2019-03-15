@@ -107,6 +107,7 @@ class RService(object):
         Raises:
             ValueError: Description
         """
+        kwargs = self._preprocess(**kwargs)
         with rconnect() as conn:
             try:
                 query = self.q
@@ -133,6 +134,7 @@ class RService(object):
                     return None
 
     def first_or_404(self, order_by: Optional[str] = None, **kwargs):
+        kwargs = self._preprocess(**kwargs)
         instance = self.first(order_by=order_by, **kwargs)
         if not instance:
             return falcon.HTTP_404
@@ -149,6 +151,7 @@ class RService(object):
         Returns:
             __model__ or list: Single model instance or list of them.
         """
+        kwargs = self._preprocess(**kwargs)
         j = self._jsonify(kwargs)
 
         with rconnect() as conn:
@@ -181,6 +184,7 @@ class RService(object):
         Raises:
             ValueError: Description
         """
+        kwargs = self._preprocess(**kwargs)
         j = self._jsonify(kwargs)
 
         with rconnect() as conn:
@@ -206,6 +210,7 @@ class RService(object):
         Args:
             **kwargs: The params, ie: name="something"
         """
+        kwargs = self._preprocess(**kwargs)
         found = self.first(**kwargs)
         if found is not None:
             return found
@@ -223,7 +228,7 @@ class RService(object):
         Returns:
             __model__ or list: Single model instance or list of them.
         """
-        id = str(id)
+        kwargs = self._preprocess(**kwargs)
         j = self._jsonify(kwargs)
 
         with rconnect() as conn:
@@ -268,6 +273,20 @@ class RService(object):
 
     # Private methods - these do not form part of the public API or method signature of the
     # service class.
+
+    def _preprocess(self, **kwargs):
+        for k, v in kwargs.items():
+            if isinstance(v, uuid.UUID):
+                kwargs[k] = str(v)
+
+        return kwargs
+
+    def _restore_uuids(self, **kwargs):
+        for k, v in kwargs.items():
+            if k.endswith('_id'):
+                kwargs[k] = uuid.UUID(v)
+
+        return kwargs
 
     def _jsonify(self, data):
         """Allows methods to take arbitrary keywords or json

@@ -1,21 +1,25 @@
 # vi: set ft=python :
 
-import os
-import sys
-import konch
-from pathlib import Path
-from smpaf import app
+import os  # NOQA
+import sys  # NOQA
+import konch  # NOQA
+from smpaf import app  # NOQA
+from smpaf.services.address import (  # NOQA
+    _addresses, _site_addresses, _bs7666_addresses, _external_addresses, _international_addresses
+)
+from smpaf.services.application import *  # NOQA
+from smpaf.services.document import _document_sizes  # NOQA
+from smpaf.services.test import _tests  # NOQA
+from smpaf.services.unit import _area_units, _linear_units  # NOQA
+from smpaf.services.user import _roles, _users, _agents, _applicants  # NOQA
 
 
 konch.config({
     "banner": "<<<< SmPA >>>>",
-    "context": [
-        sys,
-        os,
-        app,
-    ],
+    'context': locals(),
     "ipy_extensions": ["autoreload", ],
     "ipy_autoreload": True,
+    'context_format': 'hide'
 })
 
 
@@ -27,5 +31,6 @@ def teardown():
     pass
 
 
+from pathlib import Path  # NOQA
 if Path(".konchrc.local").exists():
     konch.use_file(".konchrc.local", trust=True)
