@@ -20,6 +20,46 @@ BASEMENT_WORKS_LOCATIONS = [
     "Addition of lightwell(s)",
     "Other alterations to the appearance of the house",
 ]
+MATERIALS_ROOF = [
+    "Tiles",
+    "Concrete",
+    "Slate",
+    "Metal",
+    "Thatch",
+    "Asphalt shingles",
+    "Unknown",
+    "Other",
+]
+
+MATERIALS_WALLS = [
+    "Concrete",
+    "Mortar plaster",
+    "Natural stone cladding",
+    "Brick",
+    "Ceramic facade",
+    "Wooden cladding",
+    "Metal cladding",
+    "Plastic cladding",
+    "Glass enclosures",
+    "Other",
+]
+
+MATERIALS_WINDOWS = [
+    "Wood",
+    "Vynil",
+    "Aluminium",
+    "Fiberglass",
+    "Other",
+]
+
+MATERIALS_DOOR = [
+    "Wood",
+    "Steel",
+    "Fiberglass",
+    "Glass",
+    "Other",
+]
+
 ROLES = ['SuperAdmin', 'Admin', 'User']
 SUPERADMIN_USERS = [
     {

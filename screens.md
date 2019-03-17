@@ -367,3 +367,8 @@ Thatch
 Asphalt shingles
 Unknown
 Other
+
+
+## Questions
+
+Where does the `Are new windows added?` question live?

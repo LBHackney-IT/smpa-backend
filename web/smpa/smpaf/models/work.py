@@ -118,14 +118,27 @@ class ParkingWorksScope(BaseModel, metaclass=ORMMeta):
     name = StringType(max_length=255)
 
 
-class ParkingWorksType(BaseModel, metaclass=ORMMeta):
+class EquipmentWorksType(BaseModel, metaclass=ORMMeta):
 
-    """Types of work that can be done on parking
+    """Types of equipment that can be installed
 
-        Addition of a new entrance
-        Removal of an entrance
-        Improve disabled access
-        Dropped kerb and formation of vehicular access
+        Satellite dish or antenna
+        Air conditioning unit
+        Tank
+
+    TODO: add these to startup
+    """
+    name = StringType(max_length=255)
+
+
+class EquipmentWorksConservationType(BaseModel, metaclass=ORMMeta):
+
+    """Types of equipment that can be installed that need planning permissions
+    in a conservation area.
+
+        CCTV
+        Security alarm
+        Solar panel or other sustainable energy equipment
 
     TODO: add these to startup
     """
@@ -279,3 +292,35 @@ class WorkExtensionCarBikeSpaces(Work):
     def works_scope(self):
         from ..services.work import _parking_works_scopes
         return _parking_works_scopes.get(self.parking_works_scope_id).to_native()
+
+
+####################################################################################################
+# Equipment works
+####################################################################################################
+
+
+class WorkEquipment(BaseModel, metaclass=ORMMeta):
+    equipment_type_ids = ListType(UUIDType())
+    equipment_conservation_type_ids = ListType(UUIDType())
+
+    @serializable
+    def equipment_types(self):
+        from ..services.work import _equipment_types
+        return [_equipment_types.get(_).to_native() for _ in self.equipment_type_ids]
+
+    @serializable
+    def equipment_conservation_types(self):
+        from ..services.work import _equipment_conservation_types
+        return [_equipment_conservation_types.get(_).to_native()
+                for _ in self.equipment_conservation_type_ids]
+
+
+####################################################################################################
+# Tree works
+####################################################################################################
+
+
+class WorkTrees(BaseModel, metaclass=ORMMeta):
+    inside_boundry = BooleanType(default=False)
+    removed_or_pruned = BooleanType(default=False)
+    outside_boundry = BooleanType(default=False)
