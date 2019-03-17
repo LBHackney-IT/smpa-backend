@@ -7,7 +7,7 @@
 """
 
 from ..models.work import (
-    WorksLocation
+    WorksLocation, BasementWorksLocation
 )
 
 from .rethink import RService
@@ -18,3 +18,10 @@ class WorksLocationService(RService):
 
 
 _works_locations = WorksLocationService()
+
+
+class BasementWorksLocationService(RService):
+    __model__ = BasementWorksLocation
+
+
+_basement_works_locations = BasementWorksLocationService()

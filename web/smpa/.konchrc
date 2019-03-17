@@ -12,7 +12,7 @@ from smpaf.services.document import _document_sizes  # NOQA
 from smpaf.services.test import _tests  # NOQA
 from smpaf.services.unit import _area_units, _linear_units  # NOQA
 from smpaf.services.user import _roles, _users, _agents, _applicants  # NOQA
-from smpaf.services.work import _works_locations  # NOQA
+from smpaf.services.work import _works_locations, _basement_works_locations  # NOQA
 
 
 konch.config({

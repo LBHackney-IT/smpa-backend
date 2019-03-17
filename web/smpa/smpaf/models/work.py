@@ -16,15 +16,31 @@ class WorksLocation(BaseModel, metaclass=ORMMeta):
 
     """These can be...
 
-        * ! Rear
+        * Rear
         * Side
         * Front
         * Rear / side wrap-around
 
+    Attributes:
+        name (str): The name of the works location
+    """
+
+    name = StringType(max_length=255)
+
+
+class BasementWorksLocation(BaseModel, metaclass=ORMMeta):
+
+    """These can be...
+
+        Excavation of a new basement
+        Enlargement of an existing basement
+        Addition of lightwell(s)
+        Other alterations to the appearance of the house
+
     TODO: Add these to the statup
 
     Attributes:
-        name (str): The name of the works location
+        name (str): The name of the basement works location
     """
 
     name = StringType(max_length=255)
@@ -39,12 +55,12 @@ class WorkExtensionOption(BaseModel, metaclass=ORMMeta):
 
     """Base Work Extension sub-work.
     """
-    works_location_id = UUIDType()
+    works_location_ids = ListType(UUIDType())
 
     @property
-    def works_location(self):
+    def works_locations(self):
         from ..services.work import _works_locations
-        return _works_locations.get(self.works_location_id)
+        return [_works_locations.get(_) for _ in self.works_location_ids]
 
 
 class ExtensionOriginalHouseSingleStoreyExtension(WorkExtensionOption):
