@@ -16,6 +16,8 @@
 """
 
 from .core import BaseModel, ORMMeta
+from schematics.types.serializable import serializable
+from schematics.transforms import blacklist
 from schematics.types import (  # NOQA
     StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, ModelType
 )
@@ -149,20 +151,24 @@ class User(BaseModel, metaclass=ORMMeta):
     should live on other models.
     Passwords are stored bcrypt hashed via passlib
     """
+
+    class Options:
+        roles = {'default': blacklist('password', 'profile_id', 'role_id')}
+
     email = StringType(max_length=200, required=True)
     password = StringType(max_length=100, required=True)
     profile_id = UUIDType()
     role_id = UUIDType()
 
-    @property
+    @serializable
     def profile(self):
         from ..services.user import _user_profiles
-        return _user_profiles.get(id=str(self.profile_id))
+        return _user_profiles.get(id=str(self.profile_id)).to_native()
 
-    @property
+    @serializable
     def role(self):
         from ..services.user import _roles
-        return _roles.get(id=str(self.role_id))
+        return _roles.get(id=str(self.role_id)).to_native()
 
     def __str__(self):
         return f'<User: {self.email}>'

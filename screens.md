@@ -274,6 +274,9 @@ Does the proposal involve electrical vehicle (EV) charging points?
 * Yes
     * How many new EC charhing points are being added? - int
 
+## Questions 
+
+Do EV charging points only relate to the parking question?
 
 # About the equipment
 

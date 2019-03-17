@@ -7,6 +7,7 @@
 """
 
 from .core import BaseModel, ORMMeta
+from schematics.types.serializable import serializable
 from schematics.types import (  # NOQA
     StringType, BooleanType, DateType, IntType, UUIDType, ListType, FloatType, ModelType
 )
@@ -37,12 +38,97 @@ class BasementWorksLocation(BaseModel, metaclass=ORMMeta):
         Addition of lightwell(s)
         Other alterations to the appearance of the house
 
-    TODO: Add these to the statup
-
     Attributes:
         name (str): The name of the basement works location
     """
 
+    name = StringType(max_length=255)
+
+
+class RoofWorksType(BaseModel, metaclass=ORMMeta):
+
+    """Types of work that can be done on a roof.
+
+        Addition of a dormer extension
+        Removal of a dormer extension
+        Creation of a mansard styled roof extension
+        Installation of rooflight(s) and/or roof lantern(s)
+        Addition of a new storey(s)
+        Alteration of a roof slope
+        Replacement of a roof structure and/or covering
+        Removal of chimney
+        Addition of chimney
+
+    TODO: add these to startup
+    """
+    name = StringType(max_length=255)
+
+
+class BorderWorksType(BaseModel, metaclass=ORMMeta):
+
+    """Types of work that can be done on gates fences and walls.
+
+        Addition of a new entrance
+        Removal of an entrance
+        Replacement and/or repair of wall
+        Replacement and/or repair of pillar caps
+
+    TODO: add these to startup
+    """
+    name = StringType(max_length=255)
+
+
+class AccessWorksScope(BaseModel, metaclass=ORMMeta):
+
+    """Scopes of work that can be done on access to the property
+
+        Only for pedestrian access
+        Only for vehicle access
+        For vehicle and pedestrian access
+
+    TODO: add these to startup
+    """
+    name = StringType(max_length=255)
+
+
+class AccessWorksType(BaseModel, metaclass=ORMMeta):
+
+    """Types of work that can be done on access to the property
+
+        Addition of a new entrance
+        Removal of an entrance
+        Improve disabled access
+        Dropped kerb and formation of vehicular access
+
+    TODO: add these to startup
+    """
+    name = StringType(max_length=255)
+
+
+class ParkingWorksScope(BaseModel, metaclass=ORMMeta):
+
+    """Scopes of work that can be done on parking
+
+        Only car parking spaces
+        Only cycle parking spaces
+        Both, car and bike parking spaces
+
+    TODO: add these to startup
+    """
+    name = StringType(max_length=255)
+
+
+class ParkingWorksType(BaseModel, metaclass=ORMMeta):
+
+    """Types of work that can be done on parking
+
+        Addition of a new entrance
+        Removal of an entrance
+        Improve disabled access
+        Dropped kerb and formation of vehicular access
+
+    TODO: add these to startup
+    """
     name = StringType(max_length=255)
 
 
@@ -57,10 +143,10 @@ class WorkExtensionOption(BaseModel, metaclass=ORMMeta):
     """
     works_location_ids = ListType(UUIDType())
 
-    @property
+    @serializable
     def works_locations(self):
         from ..services.work import _works_locations
-        return [_works_locations.get(_) for _ in self.works_location_ids]
+        return [_works_locations.get(_).to_native() for _ in self.works_location_ids]
 
 
 class ExtensionOriginalHouseSingleStoreyExtension(WorkExtensionOption):
@@ -76,11 +162,22 @@ class ExtensionOriginalHousePartSinglePartTwoStoreyExtension(WorkExtensionOption
 
 
 class ExtensionOriginalHouseBasement(WorkExtensionOption):
-    pass
+    basement_works_location_ids = ListType(UUIDType())
+
+    @serializable
+    def basement_works_locations(self):
+        from ..services.work import _basement_works_locations
+        return [_basement_works_locations.get(_).to_native()
+                for _ in self.basement_works_location_ids]
 
 
 class ExtensionOriginalHouseRoofWorks(WorkExtensionOption):
-    pass
+    roof_works_type_ids = ListType(UUIDType())
+
+    @serializable
+    def works_types(self):
+        from ..services.work import _roof_works_types
+        return [_roof_works_types.get(_).to_native() for _ in self.roof_works_type_ids]
 
 
 class ExtensionOriginalHouseOutbuilding(WorkExtensionOption):
@@ -141,16 +238,44 @@ class WorkExtensionOriginalHouse(Work):
 
 
 class WorkExtensionIncidentalBuildings(Work):
-    pass
+    removal_or_demolition = BooleanType(default=False)
+    details = StringType()
 
 
 class WorkExtensionGatesFencesEtc(Work):
-    pass
+    border_works_type_ids = ListType(UUIDType())
+
+    @serializable
+    def works_types(self):
+        from ..services.work import _border_works_types
+        return [_border_works_types.get(_).to_native() for _ in self.border_works_type_ids]
 
 
 class WorkExtensionMeansOfAccessToSite(Work):
-    pass
+    access_works_scope_id = UUIDType()
+    access_works_sub_type_ids = ListType(UUIDType())
+
+    @serializable
+    def works_scope(self):
+        from ..services.work import _access_works_scopes
+        return _access_works_scopes.get(self.access_works_scope_id).to_native()
+
+    @serializable
+    def works_sub_types(self):
+        from ..services.work import _access_works_sub_types
+        return [_access_works_sub_types.get(_).to_native() for _ in self.access_works_sub_type_ids]
 
 
 class WorkExtensionCarBikeSpaces(Work):
-    pass
+    parking_works_scope_id = UUIDType()
+    parking_works_sub_type_ids = ListType(UUIDType())
+    current_car_parking_spaces = IntType(default=0)
+    planned_car_parking_spaces = IntType(default=0)
+    current_bike_parking_spaces = IntType(default=0)
+    planned_bike_parking_spaces = IntType(default=0)
+    new_ev_charging_points = IntType(default=0)
+
+    @serializable
+    def works_scope(self):
+        from ..services.work import _parking_works_scopes
+        return _parking_works_scopes.get(self.parking_works_scope_id).to_native()
