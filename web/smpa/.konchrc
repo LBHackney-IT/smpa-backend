@@ -7,11 +7,12 @@ from smpaf import app  # NOQA
 from smpaf.services.address import (  # NOQA
     _addresses, _site_addresses, _bs7666_addresses, _external_addresses, _international_addresses
 )
-from smpaf.services.application import *  # NOQA
+from smpaf.services import *
 from smpaf.services.document import _document_sizes  # NOQA
 from smpaf.services.test import _tests  # NOQA
 from smpaf.services.unit import _area_units, _linear_units  # NOQA
 from smpaf.services.user import _roles, _users, _agents, _applicants  # NOQA
+from smpaf.services.work import _works_locations  # NOQA
 
 
 konch.config({

@@ -63,23 +63,8 @@ def init_routes(api):
     add_route(api, '/applicants', applicants)
     add_route(api, '/applicants/{id}', applicants)
 
-    add_route(api, '/addresses', addresses)
-    add_route(api, '/addresses/{id}', addresses)
-
     add_route(api, '/site-addresses', siteaddresses)
     add_route(api, '/site-addresses/{id}', siteaddresses)
-
-    add_route(api, '/bs7666-addresses', bs7666addresses)
-    add_route(api, '/bs7666-addresses/{id}', bs7666addresses)
-
-    add_route(api, '/external-addresses', externaladdresses)
-    add_route(api, '/external-addresses/{id}', externaladdresses)
-
-    add_route(api, '/external-addresses', externaladdresses)
-    add_route(api, '/external-addresses/{id}', externaladdresses)
-
-    add_route(api, '/international-addresses', internationaladdresses)
-    add_route(api, '/international-addresses/{id}', internationaladdresses)
 
     add_route(api, '/document-sizes', documentsizes)
     add_route(api, '/document-sizes/{id}', documentsizes)

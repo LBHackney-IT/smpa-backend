@@ -26,6 +26,12 @@ Property type:  Semi-detached house
     * A4D Light Industrial to Residential Use
     * A4D Storage and Distribution to Residential Use
 
+## Questions:
+What kind of data could show up under...
+* flood zone
+* tree preservation orders
+* Do we have a definitive list of Article 4 Directions?
+
 # Screen 3
 
 * Have the works already started?

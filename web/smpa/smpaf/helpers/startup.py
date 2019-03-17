@@ -7,9 +7,11 @@
 """
 
 from .console import console
-from ..config.defaults import AREA_UNITS, LINEAR_UNITS, DOCUMENT_SIZES, ROLES, SUPERADMIN_USERS
+from ..config.defaults import (
+    AREA_UNITS, LINEAR_UNITS, DOCUMENT_SIZES, ROLES, SUPERADMIN_USERS, WORKS_LOCATIONS
+)
 from ..services import (
-    _area_units, _linear_units, _document_sizes, _roles, _users
+    _area_units, _linear_units, _document_sizes, _roles, _users, _works_locations
 )
 
 
@@ -27,6 +29,8 @@ class Startup:
             _document_sizes.get_or_create(name=_)
         for _ in ROLES:
             _roles.get_or_create(name=_)
+        for _ in WORKS_LOCATIONS:
+            _works_locations.get_or_create(name=_)
 
         super_admin = _roles.first(name='SuperAdmin')
         for _ in SUPERADMIN_USERS:

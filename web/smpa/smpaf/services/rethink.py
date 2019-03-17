@@ -166,6 +166,45 @@ class RService(object):
 
             return self.__model__(data[0])
 
+    def save(self, instance):
+        """Saves a specific instance.
+
+        Args:
+            instance (BaseModel): A new or existing insance of the model
+        """
+        # If this is a new unsaved object, it'll likely have an
+        # id of None, which RethinkDB won't like. So if it's None,
+        # generate a UUID for it. If the save fails, we should re-set
+        # it to None.
+        with rconnect() as conn:
+            if instance.id is None:
+                instance.id = str(uuid.uuid4())
+                console.debug(instance.id)
+
+            try:
+                query = self.q.insert(
+                    instance.to_primitive(),
+                    conflict="replace"
+                )
+                rv = query.run(conn)
+                # Returns something like this:
+                # {
+                #   u'errors': 0,
+                #   u'deleted': 0,
+                #   u'generated_keys': [u'dd8ad1bc-8609-4484-b6c4-ed96c72c03f2'],
+                #   u'unchanged': 0,
+                #   u'skipped': 0,
+                #   u'replaced': 0,
+                #   u'inserted': 1
+                # }
+                console.debug(rv)
+            except Exception as e:
+                console.error(e)
+                instance.id = None
+                raise
+            else:
+                return self.__model__(instance)
+
     def find(self, order_by: Optional[str] = None, limit: int = 0, **kwargs):
         """
         Find all items that matches your kwargs.

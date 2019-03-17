@@ -13,6 +13,7 @@ import envkey  # NOQA
 AREA_UNITS = ["sq centimetres", "sq metres", "hectares", "sq miles"]
 LINEAR_UNITS = ["centimetres", "metres", "miles"]
 DOCUMENT_SIZES = ["A1", "A2", "A3", "A4", "A5"]
+WORKS_LOCATIONS = ["Rear", "Side", "Front", "Rear / side wrap-around"]
 ROLES = ['SuperAdmin', 'Admin', 'User']
 SUPERADMIN_USERS = [
     {

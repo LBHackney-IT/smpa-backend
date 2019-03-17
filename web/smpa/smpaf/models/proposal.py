@@ -12,16 +12,27 @@ from schematics.types import (  # NOQA
 )
 
 
-class BaseProposal(BaseModel, metaclass=ORMMeta):
+class WorksProposal(BaseModel, metaclass=ORMMeta):
 
     """The base proposal.
 
     Attributes:
         site_area_id (UUID): Relationship to SiteArea
-        already_completed (bool): Has the project already been completed
-        date_completed (TYPE): If so, on what date?
+    """
+    pass
+
+
+class ExtensionProposal(WorksProposal):
+
+    """Summary
     """
 
-    site_area_id = UUIDType(required=True)
-    already_completed = BooleanType(default=False)
-    date_completed = DateType()
+    # original_house
+    # incidental_buildings
+    # gates_fences_etc
+    # means_of_access_to_site
+    # car_bike_spaces
+
+
+class EquipmentProposal(WorksProposal):
+    pass

@@ -11,3 +11,4 @@ from .document import _document_sizes  # NOQA
 from .test import _tests  # NOQA
 from .unit import _area_units, _linear_units  # NOQA
 from .user import _roles, _users, _agents, _applicants  # NOQA
+from .work import _works_locations  # NOQA

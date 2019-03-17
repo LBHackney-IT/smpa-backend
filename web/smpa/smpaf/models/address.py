@@ -8,7 +8,7 @@
 
 from .core import BaseModel, ORMMeta
 from schematics.types import (  # NOQA
-    StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, FloatType
+    StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, FloatType, ModelType
 )
 
 
@@ -49,8 +49,8 @@ class Address(BaseAddress, metaclass=ORMMeta):
 class SiteAddress(BaseAddress, metaclass=ORMMeta):
 
     """A site address. Site addresses may not have a postcode assigned
-    so this becomes optional and we add fields for easting, northing
-    and description.
+    so this becomes optional and we add fields for easting, northing, ward,
+    bplu, uprn, property type and description.
 
     Attributes:
         postcode (TYPE): Description
@@ -61,7 +61,46 @@ class SiteAddress(BaseAddress, metaclass=ORMMeta):
     postcode = StringType(max_length=15, required=True)
     easting = StringType(max_length=255)
     northing = StringType(max_length=255)
+    ward = StringType(max_length=255)
+    bplu = StringType(max_length=255)
+    uprn = StringType(max_length=255)
+    property_type = StringType(max_length=255)
     description = StringType(max_length=255)
+
+
+class Article4Direction(BaseModel, metaclass=ORMMeta):
+
+    """Article 4 directions should probably come from a predefined list.
+
+    TODO: Create these at startup.
+
+    Attributes:
+        name (str): The name of the direction.
+    """
+
+    name = StringType(max_length=255)
+
+
+class SiteConstraints(BaseModel, metaclass=ORMMeta):
+
+    """These details get pulled through from another API and saved here
+    for convenience.
+
+    Attributes:
+        conservation_area (str): The name of the conservation area
+        listed_statutary (bool): The statutary listed status
+        listed_local (bool): The local listed status
+        flood_zone (str): TODO
+        tree_preservation_orders (str): TODO
+        article_4_directions (list): List of fk relations to Article4Directions
+    """
+
+    conservation_area = StringType(max_length=255)
+    listed_statuary = BooleanType(default=False)
+    listed_local = BooleanType(default=False)
+    flood_zone = StringType(max_length=255)
+    tree_preservation_orders = StringType(max_length=255)
+    article_4_directions = ListType(ModelType(Article4Direction))
 
 
 class BS7666Address(BaseModel, metaclass=ORMMeta):
