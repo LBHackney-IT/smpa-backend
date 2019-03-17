@@ -19,6 +19,7 @@ import falcon
 
 # Application
 from .helpers.startup import Startup
+from .config.settings import Config
 from .rdb.connection import RethinkDB
 from .rdb.registry import model_registry
 from .routes import init_routes, EXEMPT_ROUTES
@@ -40,6 +41,8 @@ auth_middleware = FalconAuthMiddleware(
 api = application = falcon.API(middleware=[auth_middleware])
 api.req_options.auto_parse_form_urlencoded = True
 
+config = Config()
+
 
 def create_app():
     # Ensure the DB is set up
@@ -47,7 +50,7 @@ def create_app():
     db.init()
     model_registry.init()
     Startup.init_data()
-    init_routes(api)
+    init_routes(api, config)
 
 
 create_app()

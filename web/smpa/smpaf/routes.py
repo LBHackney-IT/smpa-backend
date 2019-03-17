@@ -6,7 +6,12 @@
     Routing config.
 """
 
-
+from .resources.material import (
+    MaterialOptionRoofResource,
+    MaterialOptionWallResource,
+    MaterialOptionWindowResource,
+    MaterialOptionDoorResource,
+)
 from .resources import (
     TestResource,
     AreaUnitResource, LinearUnitResource,
@@ -26,7 +31,7 @@ def add_route(api, path, resource):
     api.add_route(f'{prefix}{path}', resource)
 
 
-def init_routes(api):
+def init_routes(api, config):
     # Resources
     tests = TestResource()
     area_units = AreaUnitResource()
@@ -34,13 +39,13 @@ def init_routes(api):
     users = UserResource()
     agents = AgentResource()
     applicants = ApplicantResource()
-    addresses = AddressResource()
     siteaddresses = SiteAddressResource()
-    bs7666addresses = BS7666AddressResource()
-    externaladdresses = ExternalAddressResource()
-    internationaladdresses = InternationalAddressResource()
     documentsizes = DocumentSizeResource()
     auth = AuthResource()
+    material_option_roof_resource = MaterialOptionRoofResource()
+    material_option_wall_resource = MaterialOptionWallResource()
+    material_option_door_resource = MaterialOptionDoorResource()
+    material_option_window_resource = MaterialOptionWindowResource()
 
     # Routes
     add_route(api, '/auth', auth)
@@ -68,3 +73,24 @@ def init_routes(api):
 
     add_route(api, '/document-sizes', documentsizes)
     add_route(api, '/document-sizes/{id}', documentsizes)
+
+    add_route(api, '/materials/options/roof', material_option_roof_resource)
+    add_route(api, '/materials/options/wall', material_option_wall_resource)
+    add_route(api, '/materials/options/door', material_option_door_resource)
+    add_route(api, '/materials/options/window', material_option_window_resource)
+
+    config.resources = [
+        tests,
+        area_units,
+        linear_units,
+        users,
+        agents,
+        applicants,
+        siteaddresses,
+        documentsizes,
+        auth,
+        material_option_roof_resource,
+        material_option_wall_resource,
+        material_option_door_resource,
+        material_option_window_resource,
+    ]
