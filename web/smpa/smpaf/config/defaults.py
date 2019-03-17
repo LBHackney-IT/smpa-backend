@@ -31,7 +31,7 @@ MATERIALS_ROOF = [
     "Other",
 ]
 
-MATERIALS_WALLS = [
+MATERIALS_WALL = [
     "Concrete",
     "Mortar plaster",
     "Natural stone cladding",
@@ -44,7 +44,7 @@ MATERIALS_WALLS = [
     "Other",
 ]
 
-MATERIALS_WINDOWS = [
+MATERIALS_WINDOW = [
     "Wood",
     "Vynil",
     "Aluminium",

@@ -20,8 +20,6 @@ from schematics.types import (  # NOQA
 class MaterialOption(BaseModel, metaclass=ORMMeta):
 
     """A pre-defined list of materials
-
-    TODO: Add to startup
     """
     name = StringType(max_length=100, required=True)
 
