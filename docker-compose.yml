@@ -4,19 +4,7 @@ volumes:
   media: {}
 
 services:
-  # Postgres
-  db:
-    image: mongkok/postgres:10
-    restart: always
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_DB_EXTENSION=postgis,hstore,uuid-ossp
-    volumes:
-      - ./data/:/var/lib/postgresql/data
-    # command: psql -v -U ${POSTGRES_USER} '\c ${POSTGRES_DB}; CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology; CREATE EXTENSION "uuid-ossp"'
-
+  # RethinkDB
   rethink:
     image: rethinkdb:2.3
     restart: always
@@ -36,13 +24,6 @@ services:
       - ./redis:/var/lib/redis
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
-
-  # # Prometheus
-  # prometheus:
-  #   restart: always
-  #   image: quay.io/prometheus/prometheus:latest
-  #   ports:
-  #     - "9090:9090"
 
   # Application
   web:
@@ -64,10 +45,10 @@ services:
       - "8000:8000"
       - "5000:5000"
     links:
-      - db
+      - rethink
       - redis
     depends_on:
-      - db
+      - rethink
       - redis
 
     # USE THIS ON FIRST RUN IF YOU'VE NEVER RUN THE CONTAINER BEFORE MAYBE

@@ -5,6 +5,8 @@
     ~~~~~~~~~~~~~~~~
     Routing config.
 """
+import os
+from .resources.swagger import ApiSpecResource
 
 from .resources.material import (
     MaterialOptionRoofResource,
@@ -23,6 +25,7 @@ from .resources import (
 
 EXEMPT_ROUTES = [
     '/auth',
+    '/docs'
 ]
 
 
@@ -32,6 +35,10 @@ def add_route(api, path, resource):
 
 
 def init_routes(api, config):
+    # Documentation routes
+    api.add_route("/apispec", ApiSpecResource())
+    api.add_static_route("/swagger", os.path.join(os.path.dirname(__file__), "static"))
+
     # Resources
     tests = TestResource()
     area_units = AreaUnitResource()

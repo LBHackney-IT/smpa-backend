@@ -43,8 +43,8 @@ class BaseModel(Model):
     _uniques = []
 
     id = UUIDType()
-    created_at = DateTimeType(default=datetime.datetime.now)
-    updated_at = DateTimeType(default=datetime.datetime.now)
+    created_at: datetime = DateTimeType(default=datetime.datetime.now)
+    updated_at: datetime = DateTimeType(default=datetime.datetime.now)
 
     def validate(self):
         console.debug('VALIDATING')

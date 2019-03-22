@@ -19,7 +19,7 @@ class AreaUnit(BaseModel, metaclass=ORMMeta):
     Attributes:
         name (TYPE): The name of the unit, eg: sq meters, hectares
     """
-    name = StringType(max_length=100, required=True)
+    name: str = StringType(max_length=100, required=True)
 
 
 class LinearUnit(BaseModel, metaclass=ORMMeta):

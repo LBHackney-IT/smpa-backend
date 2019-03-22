@@ -18,6 +18,7 @@ import os
 import falcon
 
 # Application
+from .helpers.swagger import init_swagger
 from .helpers.startup import Startup
 from .config.settings import Config
 from .rdb.connection import RethinkDB
@@ -54,3 +55,4 @@ def create_app():
 
 
 create_app()
+spec = init_swagger(api, config)
