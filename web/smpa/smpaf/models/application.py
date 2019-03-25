@@ -12,12 +12,14 @@ from schematics.types import (  # NOQA
     FloatType, ModelType, DateType
 )
 
+from marshmallow import fields, validate, pprint  # NOQA
+
 
 class Application(BaseModel, metaclass=ORMMeta):
 
     # First screen when starting a new application
-    works_started = BooleanType(default=False)
-    date_works_started = DateType()
-    works_completed = BooleanType(default=False)
-    date_works_completed = DateType()
-    works_descreiption = StringType()
+    works_started = fields.Boolean(default=False)
+    date_works_started = fields.Date()
+    works_completed = fields.Boolean(default=False)
+    date_works_completed = fields.Date()
+    works_descreiption = fields.Str()

@@ -12,6 +12,8 @@ from schematics.types import (  # NOQA
     StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, FloatType, ModelType
 )
 
+from marshmallow import fields, validate, pprint  # NOQA
+
 ####################################################################################################
 # Material options are the predefined lists of materials
 ####################################################################################################
@@ -21,7 +23,7 @@ class MaterialOption(BaseModel, metaclass=ORMMeta):
 
     """A pre-defined list of materials
     """
-    name = StringType(max_length=100, required=True)
+    name: str = fields.Str(validate=validate.Length(max=100), required=True)
 
 
 class MaterialOptionRoof(MaterialOption):
@@ -52,8 +54,8 @@ class BaseExistingMaterial(BaseModel, metaclass=ORMMeta):
 
 class BaseMaterial(BaseModel, metaclass=ORMMeta):
     colour_and_type = StringType(required=True)
-    matches_existing = BooleanType(default=False)
-    existing_material = ModelType(BaseExistingMaterial)
+    matches_existing = fields.Boolean(default=False)
+    existing_material = fields.Nested(BaseExistingMaterial)
 
 
 ####################################################################################################
@@ -62,7 +64,7 @@ class BaseMaterial(BaseModel, metaclass=ORMMeta):
 
 
 class MaterialRoof(BaseMaterial):
-    material_id = UUIDType()
+    material_id = fields.UUID()
 
     @serializable
     def material(self):
@@ -71,7 +73,7 @@ class MaterialRoof(BaseMaterial):
 
 
 class MaterialWall(BaseMaterial):
-    material_id = UUIDType()
+    material_id = fields.UUID()
 
     @serializable
     def material(self):
@@ -80,7 +82,7 @@ class MaterialWall(BaseMaterial):
 
 
 class MaterialWindow(BaseMaterial):
-    material_id = UUIDType()
+    material_id = fields.UUID()
 
     @serializable
     def material(self):
@@ -89,7 +91,7 @@ class MaterialWindow(BaseMaterial):
 
 
 class MaterialDoor(BaseMaterial):
-    material_id = UUIDType()
+    material_id = fields.UUID()
 
     @serializable
     def material(self):

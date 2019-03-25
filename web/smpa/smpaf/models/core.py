@@ -7,39 +7,41 @@
 """
 
 import datetime
-from marshmallow.schema import SchemaMeta
-from schematics.models import Model, ModelMeta
 from inflection import tableize
-from schematics.types import (
-    StringType, BooleanType, DateTimeType, IntType, UUIDType
-)
+# from schematics.models import Model, ModelMeta
+# from schematics.exceptions import ValidationError
+# from schematics.types import (
+#     StringType, BooleanType, DateTimeType, IntType, UUIDType
+# )
 
-from schematics.exceptions import ValidationError
+from marshmallow.schema import SchemaMeta
+from marshmallow.validate import ValidationError
+from marshmallow import Schema, fields, validate, pprint  # NOQA
 
 from ..rdb.registry import model_registry
 from ..helpers.console import console
 
 
-class ORMMeta(ModelMeta):
+# class ORMMetaOLD(ModelMeta):
 
-    instance = None
+#     instance = None
 
-    def __new__(cls, name, bases, dct):
-        # console.info('ORMMeta {}'.format(name))
-        if name != "BaseModel":
-            # We have a model class
-            cls._table = tableize(name)
-            super_new = super(ORMMeta, cls).__new__
-            new_class = super_new(cls, name, bases, dct)
-            cls._model = new_class
-            setattr(new_class, '_table', cls._table)
-            # register the model
-            model_registry.add(name, new_class, cls)
+#     def __new__(cls, name, bases, dct):
+#         # console.info('ORMMeta {}'.format(name))
+#         if name != "BaseModel":
+#             # We have a model class
+#             cls._table = tableize(name)
+#             super_new = super(ORMMeta, cls).__new__
+#             new_class = super_new(cls, name, bases, dct)
+#             cls._model = new_class
+#             setattr(new_class, '_table', cls._table)
+#             # register the model
+#             model_registry.add(name, new_class, cls)
 
-        return new_class
+#         return new_class
 
 
-class ORMMeta2(SchemaMeta):
+class ORMMeta(SchemaMeta):
 
     instance = None
 
@@ -58,24 +60,55 @@ class ORMMeta2(SchemaMeta):
         return new_class
 
 
-class BaseModel(Model):
+# class BaseModelOLD(Model):
+
+#     _uniques = []
+
+#     id = UUIDType()
+#     created_at: datetime = DateTimeType(default=datetime.datetime.now)
+#     updated_at: datetime = DateTimeType(default=datetime.datetime.now)
+
+#     def validate(self):
+#         console.debug('VALIDATING')
+#         for field in self._uniques:
+#             console.debug('Validate that {} is unique'.format(field))
+#             if self._data.get(field, None) is None:
+#                 raise ValidationError('Unique fields cannot be None ({})'.format(field))
+#             _ = self.query.get_by(column=field, value=self._data.get(field, None))
+#             if _ is not None and _.id != self.id:
+#                 raise ValidationError('Field `{}` must be unique'.format(field))
+#         return super(BaseModel, self).validate()
+
+#     def __repr__(self):
+#         if hasattr(self, 'email'):
+#             return u'<{}: {}>'.format(self.__class__.__name__, self.email)
+#         if hasattr(self, 'slug'):
+#             return u'<{}: {}>'.format(self.__class__.__name__, self.slug)
+#         if hasattr(self, 'name'):
+#             return u'<{}: {}>'.format(self.__class__.__name__, self.name)
+#         if hasattr(self, 'id'):
+#             return u'<{}: {}>'.format(self.__class__.__name__, self.id)
+#         return u'<{}: {} object>'.format(self.__class__.__name__, self.__class__.__name__)
+
+
+class BaseModel(Schema):
 
     _uniques = []
 
-    id = UUIDType()
-    created_at: datetime = DateTimeType(default=datetime.datetime.now)
-    updated_at: datetime = DateTimeType(default=datetime.datetime.now)
+    id = fields.UUID()
+    created_at: datetime = fields.DateTime(default=datetime.datetime.now)
+    updated_at: datetime = fields.DateTime(default=datetime.datetime.now)
 
-    def validate(self):
-        console.debug('VALIDATING')
-        for field in self._uniques:
-            console.debug('Validate that {} is unique'.format(field))
-            if self._data.get(field, None) is None:
-                raise ValidationError('Unique fields cannot be None ({})'.format(field))
-            _ = self.query.get_by(column=field, value=self._data.get(field, None))
-            if _ is not None and _.id != self.id:
-                raise ValidationError('Field `{}` must be unique'.format(field))
-        return super(BaseModel, self).validate()
+    # def validate(self):
+    #     console.debug('VALIDATING')
+    #     for field in self._uniques:
+    #         console.debug('Validate that {} is unique'.format(field))
+    #         if self._data.get(field, None) is None:
+    #             raise ValidationError('Unique fields cannot be None ({})'.format(field))
+    #         _ = self.query.get_by(column=field, value=self._data.get(field, None))
+    #         if _ is not None and _.id != self.id:
+    #             raise ValidationError('Field `{}` must be unique'.format(field))
+    #     return super(BaseModel, self).validate()
 
     def __repr__(self):
         if hasattr(self, 'email'):

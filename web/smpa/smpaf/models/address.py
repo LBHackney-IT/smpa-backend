@@ -11,6 +11,8 @@ from schematics.types import (  # NOQA
     StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, FloatType, ModelType
 )
 
+from marshmallow import fields, validate, pprint  # NOQA
+
 
 class BaseAddress(BaseModel):
 
@@ -25,12 +27,12 @@ class BaseAddress(BaseModel):
         town_city (Unicode): Town or city
         postcode (Unicode): UK Postcode
     """
-    number = StringType(max_length=255)
-    property_name = StringType(max_length=255)
-    address_line_1 = StringType(max_length=255)
-    address_line_2 = StringType(max_length=255)
-    address_line_3 = StringType(max_length=255)
-    town_city = StringType(max_length=255)
+    number = fields.Str(validate=validate.Length(max=255), required=True)
+    property_name = fields.Str(validate=validate.Length(max=255), required=True)
+    address_line_1 = fields.Str(validate=validate.Length(max=255), required=True)
+    address_line_2 = fields.Str(validate=validate.Length(max=255), required=True)
+    address_line_3 = fields.Str(validate=validate.Length(max=255), required=True)
+    town_city = fields.Str(validate=validate.Length(max=255), required=True)
     postcode = StringType(max_length=15)
 
 
@@ -43,7 +45,7 @@ class Address(BaseAddress, metaclass=ORMMeta):
 
     TODO: Check other required fields.
     """
-    postcode = StringType(max_length=15, required=True)
+    postcode = fields.Str(validate=validate.Length(max=15), required=True)
 
 
 class SiteAddress(BaseAddress, metaclass=ORMMeta):
@@ -59,13 +61,13 @@ class SiteAddress(BaseAddress, metaclass=ORMMeta):
         description (TYPE): Description
     """
     postcode = StringType(max_length=15, required=True)
-    easting = StringType(max_length=255)
-    northing = StringType(max_length=255)
-    ward = StringType(max_length=255)
-    bplu = StringType(max_length=255)
-    uprn = StringType(max_length=255)
-    property_type = StringType(max_length=255)
-    description = StringType(max_length=255)
+    easting = fields.Str(validate=validate.Length(max=255), required=True)
+    northing = fields.Str(validate=validate.Length(max=255), required=True)
+    ward = fields.Str(validate=validate.Length(max=255), required=True)
+    bplu = fields.Str(validate=validate.Length(max=255), required=True)
+    uprn = fields.Str(validate=validate.Length(max=255), required=True)
+    property_type = fields.Str(validate=validate.Length(max=255), required=True)
+    description = fields.Str(validate=validate.Length(max=255), required=True)
 
 
 class Article4Direction(BaseModel, metaclass=ORMMeta):
@@ -78,7 +80,7 @@ class Article4Direction(BaseModel, metaclass=ORMMeta):
         name (str): The name of the direction.
     """
 
-    name = StringType(max_length=255)
+    name = fields.Str(validate=validate.Length(max=255), required=True)
 
 
 class SiteConstraints(BaseModel, metaclass=ORMMeta):
@@ -95,12 +97,12 @@ class SiteConstraints(BaseModel, metaclass=ORMMeta):
         article_4_directions (list): List of fk relations to Article4Directions
     """
 
-    conservation_area = StringType(max_length=255)
-    listed_statuary = BooleanType(default=False)
-    listed_local = BooleanType(default=False)
-    flood_zone = StringType(max_length=255)
-    tree_preservation_orders = StringType(max_length=255)
-    article_4_directions = ListType(ModelType(Article4Direction))
+    conservation_area = fields.Str(validate=validate.Length(max=255), required=True)
+    listed_statuary = fields.Boolean(default=False)
+    listed_local = fields.Boolean(default=False)
+    flood_zone = fields.Str(validate=validate.Length(max=255), required=True)
+    tree_preservation_orders = fields.Str(validate=validate.Length(max=255), required=True)
+    article_4_directions = fields.List(fields.Nested(Article4Direction))
 
 
 class BS7666Address(BaseModel, metaclass=ORMMeta):
@@ -119,14 +121,14 @@ class BS7666Address(BaseModel, metaclass=ORMMeta):
         paon (Unicode): Primary Addressable Object Name – e.g. building name or street number
         country (Unicode): Country name
     """
-    street_description = StringType(max_length=255)
-    locality = StringType(max_length=255)
-    town = StringType(max_length=255)
-    post_town = StringType(max_length=255)
-    postcode = StringType(max_length=255)
-    unique_property_reference_number = StringType(max_length=255)
-    paon = StringType(max_length=255)
-    country = StringType(max_length=255)
+    street_description = fields.Str(validate=validate.Length(max=255), required=True)
+    locality = fields.Str(validate=validate.Length(max=255), required=True)
+    town = fields.Str(validate=validate.Length(max=255), required=True)
+    post_town = fields.Str(validate=validate.Length(max=255), required=True)
+    postcode = fields.Str(validate=validate.Length(max=255), required=True)
+    unique_property_reference_number = fields.Str(validate=validate.Length(max=255), required=True)
+    paon = fields.Str(validate=validate.Length(max=255), required=True)
+    country = fields.Str(validate=validate.Length(max=255), required=True)
 
 
 class InternationalAddress(BaseModel, metaclass=ORMMeta):
@@ -138,13 +140,13 @@ class InternationalAddress(BaseModel, metaclass=ORMMeta):
         country (Unicode): The country
         international_postal_code (Unicode): The international postal code
     """
-    line1 = StringType(max_length=255)
-    country = StringType(max_length=255)
-    international_postal_code = StringType(max_length=255)
+    line1 = fields.Str(validate=validate.Length(max=255), required=True)
+    country = fields.Str(validate=validate.Length(max=255), required=True)
+    international_postal_code = fields.Str(validate=validate.Length(max=255), required=True)
 
 
 class ExternalAddress(BaseModel, metaclass=ORMMeta):
 
     """Yet to work out how or why this is used.
     """
-    international_address_id = UUIDType(required=True)  # rel: InternationalAddress
+    international_address_id = fields.UUID(required=True)  # rel: InternationalAddress

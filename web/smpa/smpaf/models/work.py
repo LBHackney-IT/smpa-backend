@@ -12,6 +12,8 @@ from schematics.types import (  # NOQA
     StringType, BooleanType, DateType, IntType, UUIDType, ListType, FloatType, ModelType
 )
 
+from marshmallow import fields, validate, pprint  # NOQA
+
 
 class WorksLocation(BaseModel, metaclass=ORMMeta):
 
@@ -26,7 +28,7 @@ class WorksLocation(BaseModel, metaclass=ORMMeta):
         name (str): The name of the works location
     """
 
-    name = StringType(max_length=255)
+    name = fields.Str(validate=validate.Length(max=255), required=True)
 
 
 class BasementWorksLocation(BaseModel, metaclass=ORMMeta):
@@ -42,7 +44,7 @@ class BasementWorksLocation(BaseModel, metaclass=ORMMeta):
         name (str): The name of the basement works location
     """
 
-    name = StringType(max_length=255)
+    name = fields.Str(validate=validate.Length(max=255), required=True)
 
 
 class RoofWorksType(BaseModel, metaclass=ORMMeta):
@@ -61,7 +63,7 @@ class RoofWorksType(BaseModel, metaclass=ORMMeta):
 
     TODO: add these to startup
     """
-    name = StringType(max_length=255)
+    name = fields.Str(validate=validate.Length(max=255), required=True)
 
 
 class BorderWorksType(BaseModel, metaclass=ORMMeta):
@@ -75,7 +77,7 @@ class BorderWorksType(BaseModel, metaclass=ORMMeta):
 
     TODO: add these to startup
     """
-    name = StringType(max_length=255)
+    name = fields.Str(validate=validate.Length(max=255), required=True)
 
 
 class AccessWorksScope(BaseModel, metaclass=ORMMeta):
@@ -88,7 +90,7 @@ class AccessWorksScope(BaseModel, metaclass=ORMMeta):
 
     TODO: add these to startup
     """
-    name = StringType(max_length=255)
+    name = fields.Str(validate=validate.Length(max=255), required=True)
 
 
 class AccessWorksType(BaseModel, metaclass=ORMMeta):
@@ -102,7 +104,7 @@ class AccessWorksType(BaseModel, metaclass=ORMMeta):
 
     TODO: add these to startup
     """
-    name = StringType(max_length=255)
+    name = fields.Str(validate=validate.Length(max=255), required=True)
 
 
 class ParkingWorksScope(BaseModel, metaclass=ORMMeta):
@@ -115,7 +117,7 @@ class ParkingWorksScope(BaseModel, metaclass=ORMMeta):
 
     TODO: add these to startup
     """
-    name = StringType(max_length=255)
+    name = fields.Str(validate=validate.Length(max=255), required=True)
 
 
 class EquipmentWorksType(BaseModel, metaclass=ORMMeta):
@@ -128,7 +130,7 @@ class EquipmentWorksType(BaseModel, metaclass=ORMMeta):
 
     TODO: add these to startup
     """
-    name = StringType(max_length=255)
+    name = fields.Str(validate=validate.Length(max=255), required=True)
 
 
 class EquipmentWorksConservationType(BaseModel, metaclass=ORMMeta):
@@ -142,7 +144,7 @@ class EquipmentWorksConservationType(BaseModel, metaclass=ORMMeta):
 
     TODO: add these to startup
     """
-    name = StringType(max_length=255)
+    name = fields.Str(validate=validate.Length(max=255), required=True)
 
 
 ####################################################################################################
@@ -154,7 +156,7 @@ class WorkExtensionOption(BaseModel, metaclass=ORMMeta):
 
     """Base Work Extension sub-work.
     """
-    works_location_ids = ListType(UUIDType())
+    works_location_ids = fields.List(fields.UUID())
 
     @serializable
     def works_locations(self):
@@ -175,7 +177,7 @@ class ExtensionOriginalHousePartSinglePartTwoStoreyExtension(WorkExtensionOption
 
 
 class ExtensionOriginalHouseBasement(WorkExtensionOption):
-    basement_works_location_ids = ListType(UUIDType())
+    basement_works_location_ids = fields.List(fields.UUID())
 
     @serializable
     def basement_works_locations(self):
@@ -185,7 +187,7 @@ class ExtensionOriginalHouseBasement(WorkExtensionOption):
 
 
 class ExtensionOriginalHouseRoofWorks(WorkExtensionOption):
-    roof_works_type_ids = ListType(UUIDType())
+    roof_works_type_ids = fields.List(fields.UUID())
 
     @serializable
     def works_types(self):
@@ -236,27 +238,27 @@ class WorkExtensionOriginalHouse(Work):
 
     """Summary
     """
-    single_storey_extension = ModelType(ExtensionOriginalHouseSingleStoreyExtension)
-    two_storey_extension = ModelType(ExtensionOriginalHouseTwoStoreyExtension)
+    single_storey_extension = fields.Nested(ExtensionOriginalHouseSingleStoreyExtension)
+    two_storey_extension = fields.Nested(ExtensionOriginalHouseTwoStoreyExtension)
     part_single_part_two_storey_extension = \
-        ModelType(ExtensionOriginalHousePartSinglePartTwoStoreyExtension)
-    basement = ModelType(ExtensionOriginalHouseBasement)
-    roof_works = ModelType(ExtensionOriginalHouseRoofWorks)
-    outbuilding = ModelType(ExtensionOriginalHouseOutbuilding)
-    porch = ModelType(ExtensionOriginalHousePorch)
-    balcony_terrace = ModelType(ExtensionOriginalHouseBalconyTerrace)
-    staircase = ModelType(ExtensionOriginalHouseStaircase)
-    add_replacement_windows_doors = ModelType(ExtensionOriginalHouseAddReplacementWindowsDoors)
-    cladding = ModelType(ExtensionOriginalHouseCladding)
+        fields.Nested(ExtensionOriginalHousePartSinglePartTwoStoreyExtension)
+    basement = fields.Nested(ExtensionOriginalHouseBasement)
+    roof_works = fields.Nested(ExtensionOriginalHouseRoofWorks)
+    outbuilding = fields.Nested(ExtensionOriginalHouseOutbuilding)
+    porch = fields.Nested(ExtensionOriginalHousePorch)
+    balcony_terrace = fields.Nested(ExtensionOriginalHouseBalconyTerrace)
+    staircase = fields.Nested(ExtensionOriginalHouseStaircase)
+    add_replacement_windows_doors = fields.Nested(ExtensionOriginalHouseAddReplacementWindowsDoors)
+    cladding = fields.Nested(ExtensionOriginalHouseCladding)
 
 
 class WorkExtensionIncidentalBuildings(Work):
-    removal_or_demolition = BooleanType(default=False)
-    details = StringType()
+    removal_or_demolition = fields.Boolean(default=False)
+    details = fields.Str()
 
 
 class WorkExtensionGatesFencesEtc(Work):
-    border_works_type_ids = ListType(UUIDType())
+    border_works_type_ids = fields.List(fields.UUID())
 
     @serializable
     def works_types(self):
@@ -265,8 +267,8 @@ class WorkExtensionGatesFencesEtc(Work):
 
 
 class WorkExtensionMeansOfAccessToSite(Work):
-    access_works_scope_id = UUIDType()
-    access_works_sub_type_ids = ListType(UUIDType())
+    access_works_scope_id = fields.UUID()
+    access_works_sub_type_ids = fields.List(fields.UUID())
 
     @serializable
     def works_scope(self):
@@ -280,13 +282,13 @@ class WorkExtensionMeansOfAccessToSite(Work):
 
 
 class WorkExtensionCarBikeSpaces(Work):
-    parking_works_scope_id = UUIDType()
-    parking_works_sub_type_ids = ListType(UUIDType())
-    current_car_parking_spaces = IntType(default=0)
-    planned_car_parking_spaces = IntType(default=0)
-    current_bike_parking_spaces = IntType(default=0)
-    planned_bike_parking_spaces = IntType(default=0)
-    new_ev_charging_points = IntType(default=0)
+    parking_works_scope_id = fields.UUID()
+    parking_works_sub_type_ids = fields.List(fields.UUID())
+    current_car_parking_spaces = fields.Integer(default=0)
+    planned_car_parking_spaces = fields.Integer(default=0)
+    current_bike_parking_spaces = fields.Integer(default=0)
+    planned_bike_parking_spaces = fields.Integer(default=0)
+    new_ev_charging_points = fields.Integer(default=0)
 
     @serializable
     def works_scope(self):
@@ -300,8 +302,8 @@ class WorkExtensionCarBikeSpaces(Work):
 
 
 class WorkEquipment(BaseModel, metaclass=ORMMeta):
-    equipment_type_ids = ListType(UUIDType())
-    equipment_conservation_type_ids = ListType(UUIDType())
+    equipment_type_ids = fields.List(fields.UUID())
+    equipment_conservation_type_ids = fields.List(fields.UUID())
 
     @serializable
     def equipment_types(self):
@@ -321,6 +323,6 @@ class WorkEquipment(BaseModel, metaclass=ORMMeta):
 
 
 class WorkTrees(BaseModel, metaclass=ORMMeta):
-    inside_boundry = BooleanType(default=False)
-    removed_or_pruned = BooleanType(default=False)
-    outside_boundry = BooleanType(default=False)
+    inside_boundry = fields.Boolean(default=False)
+    removed_or_pruned = fields.Boolean(default=False)
+    outside_boundry = fields.Boolean(default=False)

@@ -21,13 +21,14 @@ from schematics.transforms import blacklist
 from schematics.types import (  # NOQA
     StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, ModelType
 )
+from marshmallow import fields, validate, pprint
 
 
 class Role(BaseModel, metaclass=ORMMeta):
 
     """User roles. Like Admin etc.
     """
-    name = StringType(max_length=100, required=True)
+    name: str = fields.Str(validate=validate.Length(max=100), required=True)
 
 
 class PersonName(BaseModel, metaclass=ORMMeta):
@@ -40,9 +41,9 @@ class PersonName(BaseModel, metaclass=ORMMeta):
         family_name (Unicode): Family / surname
     """
 
-    title = StringType(max_length=100, required=True)
-    given_name = StringType(max_length=255, required=True)
-    family_name = StringType(max_length=255, required=True)
+    title = fields.Str(validate=validate.Length(max=100), required=True)
+    given_name = fields.Str(validate=validate.Length(max=255), required=True)
+    family_name = fields.Str(validate=validate.Length(max=255), required=True)
 
     def __str__(self):
         return f'<{self.__class__.__name__}: {self.title} {self.given_name} {self.family_name}>'
@@ -55,7 +56,7 @@ class ContactMethod(BaseModel, metaclass=ORMMeta):
     Attributes:
         name (Unicode): The name of the preferred contact method
     """
-    name = StringType(max_length=100, required=True)
+    name: str = fields.Str(validate=validate.Length(max=100), required=True)
 
 
 class Email(BaseModel, metaclass=ORMMeta):
@@ -69,8 +70,8 @@ class Email(BaseModel, metaclass=ORMMeta):
         verified (bool): Has the user verified this email address?
         user (Unicode): The user this email address belongs to
     """
-    email_address = StringType(max_length=255, required=True)
-    verified = BooleanType(default=False)
+    email_address = fields.Str(validate=validate.Length(max=255), required=True)
+    verified = fields.Boolean(default=False)
 
     # TODO: Relationships
     # user = relationship('User', backref=backref('email_addresses', uselist=True))
@@ -87,11 +88,11 @@ class UserProfile(BaseModel, metaclass=ORMMeta):
         title (Unicode): proxy to PersonName.title
     """
 
-    name = ModelType(PersonName)
-    preferred_contact_method = ModelType(ContactMethod)
-    email_addresses = ListType(ModelType(Email))
-    primary_email_id = UUIDType()
-    primary_phone_id = UUIDType()
+    name = fields.Nested(PersonName)
+    preferred_contact_method = fields.Nested(ContactMethod)
+    email_addresses = fields.List(fields.Nested(Email))
+    primary_email_id = fields.UUID()
+    primary_phone_id = fields.UUID()
 
 
 class TelephoneNumber(BaseModel, metaclass=ORMMeta):
@@ -102,8 +103,8 @@ class TelephoneNumber(BaseModel, metaclass=ORMMeta):
         tel_number (Unicode): The telephone number.
         tel_type (TYPE): Description
     """
-    tel_number = StringType(max_length=100, required=True)
-    tel_type_id = UUIDType()
+    tel_number = fields.Str(validate=validate.Length(max=100), required=True)
+    tel_type_id = fields.UUID()
 
 
 class TelephoneNumberType(BaseModel, metaclass=ORMMeta):
@@ -113,7 +114,7 @@ class TelephoneNumberType(BaseModel, metaclass=ORMMeta):
     Attributes:
         name (Unicode): The name of this type
     """
-    name = StringType(max_length=100, required=True)
+    name: str = fields.Str(validate=validate.Length(max=100), required=True)
 
 
 class BasePerson(BaseModel):
@@ -130,11 +131,11 @@ class BasePerson(BaseModel):
 
     __abstract__ = True
 
-    name_id = UUIDType()
-    company_name_id = UUIDType()
-    address_id = UUIDType()
-    telephone_number_ids = ListType(UUIDType)
-    email_addresses_ids = ListType(UUIDType)
+    name_id = fields.UUID()
+    company_name_id = fields.UUID()
+    address_id = fields.UUID()
+    telephone_number_ids = fields.List(fields.UUID())
+    email_addresses_ids = fields.List(fields.UUID())
 
 
 class Applicant(BasePerson, metaclass=ORMMeta):
@@ -155,10 +156,10 @@ class User(BaseModel, metaclass=ORMMeta):
     class Options:
         roles = {'default': blacklist('password', 'profile_id', 'role_id')}
 
-    email = StringType(max_length=200, required=True)
-    password = StringType(max_length=100, required=True)
-    profile_id = UUIDType()
-    role_id = UUIDType()
+    email = fields.Str(validate=validate.Length(max=200), required=True)
+    password = fields.Str(validate=validate.Length(max=100), required=True)
+    profile_id = fields.UUID()
+    role_id = fields.UUID()
 
     @serializable
     def profile(self):
