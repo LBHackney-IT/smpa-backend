@@ -38,8 +38,8 @@ auth_middleware = FalconAuthMiddleware(
 )
 
 # Create the Falcon app
-# api = application = falcon.API()  # NO AUTH
-api = application = falcon.API(middleware=[auth_middleware])
+api = application = falcon.API()  # NO AUTH
+# api = application = falcon.API(middleware=[auth_middleware])
 api.req_options.auto_parse_form_urlencoded = True
 
 config = Config()

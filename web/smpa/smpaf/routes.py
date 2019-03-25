@@ -15,7 +15,6 @@ from .resources.material import (
     MaterialOptionDoorResource,
 )
 from .resources import (
-    TestResource,
     AreaUnitResource, LinearUnitResource,
     UserResource, AgentResource, ApplicantResource, AuthResource,
     AddressResource, SiteAddressResource, BS7666AddressResource, ExternalAddressResource,
@@ -43,15 +42,15 @@ def init_routes(api, config):
     auth = AuthResource()
     area_units = AreaUnitResource()
     linear_units = LinearUnitResource()
-    # users = UserResource()
-    # agents = AgentResource()
-    # applicants = ApplicantResource()
-    # siteaddresses = SiteAddressResource()
-    # documentsizes = DocumentSizeResource()
-    # material_option_roof_resource = MaterialOptionRoofResource()
-    # material_option_wall_resource = MaterialOptionWallResource()
-    # material_option_door_resource = MaterialOptionDoorResource()
-    # material_option_window_resource = MaterialOptionWindowResource()
+    users = UserResource()
+    agents = AgentResource()
+    applicants = ApplicantResource()
+    siteaddresses = SiteAddressResource()
+    documentsizes = DocumentSizeResource()
+    material_option_roof_resource = MaterialOptionRoofResource()
+    material_option_wall_resource = MaterialOptionWallResource()
+    material_option_door_resource = MaterialOptionDoorResource()
+    material_option_window_resource = MaterialOptionWindowResource()
 
     # Routes
     add_route(api, '/auth', auth)
@@ -62,37 +61,37 @@ def init_routes(api, config):
     add_route(api, '/linear-units', linear_units)
     add_route(api, '/linear-units/{id}', linear_units)
 
-    # add_route(api, '/users', users)
-    # add_route(api, '/users/{id}', users)
+    add_route(api, '/users', users)
+    add_route(api, '/users/{id}', users)
 
-    # add_route(api, '/agents', agents)
-    # add_route(api, '/agents/{id}', agents)
+    add_route(api, '/agents', agents)
+    add_route(api, '/agents/{id}', agents)
 
-    # add_route(api, '/applicants', applicants)
-    # add_route(api, '/applicants/{id}', applicants)
+    add_route(api, '/applicants', applicants)
+    add_route(api, '/applicants/{id}', applicants)
 
-    # add_route(api, '/site-addresses', siteaddresses)
-    # add_route(api, '/site-addresses/{id}', siteaddresses)
+    add_route(api, '/site-addresses', siteaddresses)
+    add_route(api, '/site-addresses/{id}', siteaddresses)
 
-    # add_route(api, '/document-sizes', documentsizes)
-    # add_route(api, '/document-sizes/{id}', documentsizes)
+    add_route(api, '/document-sizes', documentsizes)
+    add_route(api, '/document-sizes/{id}', documentsizes)
 
-    # add_route(api, '/materials/options/roof', material_option_roof_resource)
-    # add_route(api, '/materials/options/wall', material_option_wall_resource)
-    # add_route(api, '/materials/options/door', material_option_door_resource)
-    # add_route(api, '/materials/options/window', material_option_window_resource)
+    add_route(api, '/materials/options/roof', material_option_roof_resource)
+    add_route(api, '/materials/options/wall', material_option_wall_resource)
+    add_route(api, '/materials/options/door', material_option_door_resource)
+    add_route(api, '/materials/options/window', material_option_window_resource)
 
     config.resources = [
         area_units,
         linear_units,
-        # users,
-        # agents,
-        # applicants,
-        # siteaddresses,
-        # documentsizes,
-        # auth,
-        # material_option_roof_resource,
-        # material_option_wall_resource,
-        # material_option_door_resource,
-        # material_option_window_resource,
+        users,
+        agents,
+        applicants,
+        siteaddresses,
+        documentsizes,
+        auth,
+        material_option_roof_resource,
+        material_option_wall_resource,
+        material_option_door_resource,
+        material_option_window_resource,
     ]

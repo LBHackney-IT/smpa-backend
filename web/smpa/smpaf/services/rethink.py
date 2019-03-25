@@ -78,7 +78,8 @@ class RService(object):
                 raise
             else:
                 if rv is not None:
-                    return self.__model__(rv)
+                    return self.__model__().load(rv)
+                    # return self.__model__(rv)
         return None
 
     def count(self):
@@ -127,7 +128,7 @@ class RService(object):
                 console.warn(e)
                 raise
             else:
-                data = [self.__model__(_) for _ in rv]
+                data = [self.__model__().load(_) for _ in rv]
                 try:
                     return data[0]
                 except IndexError:
@@ -162,9 +163,9 @@ class RService(object):
                 data.append(self.get(_))
 
             if len(data) > 2:
-                return [self.__model__(_) for _ in rv]
+                return [self.__model__().load(_) for _ in rv]
 
-            return self.__model__(data[0])
+            return self.__model__().load(data[0])
 
     def save(self, instance):
         """Saves a specific instance.
@@ -203,7 +204,7 @@ class RService(object):
                 instance.id = None
                 raise
             else:
-                return self.__model__(instance)
+                return self.__model__().load(instance)
 
     def find(self, order_by: Optional[str] = None, limit: int = 0, **kwargs):
         """
@@ -239,7 +240,7 @@ class RService(object):
                 console.warn(e)
                 raise
             else:
-                data = [self.__model__(_) for _ in rv]
+                data = [self.__model__().load(_) for _ in rv]
                 return data
 
     def get_or_create(self, **kwargs):
@@ -274,7 +275,7 @@ class RService(object):
             query = self.q.get(id).update(j, return_changes=True)
             rv = query.run(conn)
             if len(rv['changes']):
-                return self.__model__(rv['changes'][0]['new_val'])
+                return self.__model__().load(rv['changes'][0]['new_val'])
             else:
                 return self.get(id)
 
@@ -292,7 +293,7 @@ class RService(object):
                 raise
             else:
                 rv = query.run(conn)
-                data = [self.__model__(_) for _ in rv]
+                data = [self.__model__().load(_) for _ in rv]
                 return data
 
     def delete(self, instance: BaseModel):
