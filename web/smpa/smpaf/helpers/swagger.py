@@ -1,5 +1,6 @@
 from apispec import APISpec
 from falcon_apispec import FalconPlugin
+from apispec.ext.marshmallow import MarshmallowPlugin
 
 from ..rdb.registry import model_registry
 
@@ -11,6 +12,7 @@ def create_spec(app):
         openapi_version='3.0',
         plugins=[
             FalconPlugin(app),
+            MarshmallowPlugin()
         ],
     )
 

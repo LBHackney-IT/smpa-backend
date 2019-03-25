@@ -7,6 +7,7 @@
 """
 
 import datetime
+from marshmallow.schema import SchemaMeta
 from schematics.models import Model, ModelMeta
 from inflection import tableize
 from schematics.types import (
@@ -29,6 +30,25 @@ class ORMMeta(ModelMeta):
             # We have a model class
             cls._table = tableize(name)
             super_new = super(ORMMeta, cls).__new__
+            new_class = super_new(cls, name, bases, dct)
+            cls._model = new_class
+            setattr(new_class, '_table', cls._table)
+            # register the model
+            model_registry.add(name, new_class, cls)
+
+        return new_class
+
+
+class ORMMeta2(SchemaMeta):
+
+    instance = None
+
+    def __new__(cls, name, bases, dct):
+        # console.info('ORMMeta {}'.format(name))
+        if name != "BaseModel":
+            # We have a model class
+            cls._table = tableize(name)
+            super_new = super().__new__
             new_class = super_new(cls, name, bases, dct)
             cls._model = new_class
             setattr(new_class, '_table', cls._table)
