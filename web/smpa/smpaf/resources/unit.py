@@ -91,3 +91,75 @@ class LinearUnitResource(Resource):
     auth = {
         'exempt_methods': ['GET']
     }
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
+        """
+        ---
+        summary: Get one or more LinearUnits from the database
+        tags:
+            - LinearUnit
+        parameters:
+            - in: id
+              schema: CoreGetSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: One or more LinearUnits
+                schema:
+                    type: array
+                    items: LinearUnit
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp, id)
+
+    def on_patch(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
+        """
+        ---
+        summary: Update an LinearUnit in the database
+        tags:
+            - LinearUnit
+        parameters:
+            - in: json
+              schema: LinearUnit
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            200:
+                description: Returns updated LinearUnit
+                schema: LinearUnit
+            401:
+                description: Unauthorized
+            404:
+                description: Object does not exist
+            422:
+                description: Input body formatting issue
+        """
+        super().on_patch(req, resp, id)
+
+    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Add new LinearUnit to the database
+        tags:
+            - LinearUnit
+        parameters:
+            - in: json
+              schema: LinearUnit
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            201:
+                description: LinearUnit created successfully
+                schema: LinearUnit
+            401:
+                description: Unauthorized
+            422:
+                description: Input body formatting issue
+        """
+        super().on_post(req, resp)
