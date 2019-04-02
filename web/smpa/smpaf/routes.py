@@ -15,8 +15,7 @@ from .resources.material import (
     MaterialOptionDoorResource,
 )
 from .resources import (
-    TestResource,
-    AreaUnitResource, LinearUnitResource,
+    AreaUnitResource, AreaUnitListResource, LinearUnitResource, LinearUnitListResource,
     UserResource, AgentResource, ApplicantResource, AuthResource,
     AddressResource, SiteAddressResource, BS7666AddressResource, ExternalAddressResource,
     InternationalAddressResource,
@@ -37,18 +36,22 @@ def add_route(api, path, resource):
 def init_routes(api, config):
     # Documentation routes
     api.add_route("/apispec", ApiSpecResource())
-    api.add_static_route("/swagger", os.path.join(os.path.dirname(__file__), "static"))
+    api.add_static_route("/redoc", os.path.join(
+        os.path.dirname(__file__), "static", "redoc"))
+    api.add_static_route("/swagger", os.path.join(
+        os.path.dirname(__file__), "static", "swagger"))
 
     # Resources
-    tests = TestResource()
+    auth = AuthResource()
     area_units = AreaUnitResource()
+    area_units_list = AreaUnitListResource()
     linear_units = LinearUnitResource()
+    linear_units_list = LinearUnitListResource()
     users = UserResource()
     agents = AgentResource()
-    applicants = ApplicantResource()
+    # applicants = ApplicantResource()
     siteaddresses = SiteAddressResource()
     documentsizes = DocumentSizeResource()
-    auth = AuthResource()
     material_option_roof_resource = MaterialOptionRoofResource()
     material_option_wall_resource = MaterialOptionWallResource()
     material_option_door_resource = MaterialOptionDoorResource()
@@ -57,13 +60,10 @@ def init_routes(api, config):
     # Routes
     add_route(api, '/auth', auth)
 
-    add_route(api, '/tests', tests)
-    add_route(api, '/tests/{id}', tests)
-
-    add_route(api, '/area-units', area_units)
+    add_route(api, '/area-units', area_units_list)
     add_route(api, '/area-units/{id}', area_units)
 
-    add_route(api, '/linear-units', linear_units)
+    add_route(api, '/linear-units', linear_units_list)
     add_route(api, '/linear-units/{id}', linear_units)
 
     add_route(api, '/users', users)
@@ -72,8 +72,8 @@ def init_routes(api, config):
     add_route(api, '/agents', agents)
     add_route(api, '/agents/{id}', agents)
 
-    add_route(api, '/applicants', applicants)
-    add_route(api, '/applicants/{id}', applicants)
+    # add_route(api, '/applicants', applicants)
+    # add_route(api, '/applicants/{id}', applicants)
 
     add_route(api, '/site-addresses', siteaddresses)
     add_route(api, '/site-addresses/{id}', siteaddresses)
@@ -87,12 +87,13 @@ def init_routes(api, config):
     add_route(api, '/materials/options/window', material_option_window_resource)
 
     config.resources = [
-        tests,
         area_units,
+        area_units_list,
+        linear_units_list,
         linear_units,
         users,
         agents,
-        applicants,
+        # applicants,
         siteaddresses,
         documentsizes,
         auth,

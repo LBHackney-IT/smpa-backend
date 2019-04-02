@@ -3,6 +3,7 @@
 #
 # ie: ``from resources import UserResource``
 
+from .auth import *  # NOQA
 from .address import *  # NOQA
 from .document import *  # NOQA
 from .unit import *  # NOQA

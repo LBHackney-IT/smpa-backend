@@ -1,5 +1,8 @@
 .env
 
+# Temporary stuff
+web/smpa/smpaf 2/**/*
+
 # Hactar's Fabfile
 fabfile/**/*
 

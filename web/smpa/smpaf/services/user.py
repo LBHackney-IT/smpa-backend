@@ -8,6 +8,7 @@
 
 import arrow
 import falcon
+from typing import Optional
 from passlib.hash import bcrypt
 from ..models.user import Role, User, Agent, Applicant, UserProfile
 from ..helpers.console import console  # NOQA
@@ -24,6 +25,18 @@ _user_profiles = UserProfileService()
 
 class UserService(RService):
     __model__ = User
+
+    def authenticate(self, data: dict) -> Optional[User]:
+        email = data.get('email', None)
+        password = data.get('password', None)
+        if email is None or password is None:
+            return falcon.HTTP_403
+
+        user = _users.first(email=email)
+        if _users.verify(user, password):
+            return user
+
+        return falcon.HTTP_403
 
     def gen_token(self, user):
         from smpaf.app import auth_backend
