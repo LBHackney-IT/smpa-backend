@@ -43,26 +43,3 @@ class AuthResource:
 
         resp.status = falcon.HTTP_OK
         resp.media = {"message": "login successful!", "jwt": jwt_token}
-
-
-class AuthResourceOLD(object):
-
-    auth = {
-        'exempt_methods': ['POST']
-    }
-
-    def on_get(self):
-        raise NotImplementedError
-
-    def on_post(self, req, resp):
-        data = req.params
-        user = _users.first(email=data['email'])
-        if user is None:
-            raise falcon.HTTPError(falcon.HTTP_403, 'User not found')
-
-        if _users.verify(user, data['password']):
-            token = _users.gen_token(user)
-            rv = {'token': token}
-            return json.dumps(rv)
-        else:
-            raise falcon.HTTPError(falcon.HTTP_403, 'Password incorrect')

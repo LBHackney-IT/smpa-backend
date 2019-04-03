@@ -2,6 +2,7 @@
 # stdlib
 import json
 import uuid
+from importlib import import_module
 
 # 3rd party
 import falcon
@@ -9,6 +10,8 @@ import rethinkdb
 from slugify import slugify
 from typing import List, Any, Optional, Iterable  # NOQA
 from rethinkdb.errors import RqlDriverError, RqlRuntimeError, ReqlOpFailedError
+from schematics.types.base import UUIDType
+from schematics.types.serializable import serializable
 
 # Module
 from ..models.core import BaseModel
@@ -78,7 +81,9 @@ class RService(object):
                 raise
             else:
                 if rv is not None:
-                    return self.__model__(rv)
+                    instance = self.__model__(rv)
+                    self._pull_related(instance)
+                    return instance
         return None
 
     def count(self):
@@ -127,7 +132,8 @@ class RService(object):
                 console.warn(e)
                 raise
             else:
-                data = [self.__model__(_) for _ in rv]
+                result = [self.__model__(_) for _ in rv]
+                data = [self._pull_related(_) for _ in result]
                 try:
                     return data[0]
                 except IndexError:
@@ -239,7 +245,8 @@ class RService(object):
                 console.warn(e)
                 raise
             else:
-                data = [self.__model__(_) for _ in rv]
+                result = [self.__model__(_) for _ in rv]
+                data = [self._pull_related(_) for _ in result]
                 return data
 
     def get_or_create(self, **kwargs):
@@ -292,7 +299,8 @@ class RService(object):
                 raise
             else:
                 rv = query.run(conn)
-                data = [self.__model__(_) for _ in rv]
+                result = [self.__model__(_) for _ in rv]
+                data = [self._pull_related(_) for _ in result]
                 return data
 
     def delete(self, instance: BaseModel):
@@ -312,6 +320,31 @@ class RService(object):
 
     # Private methods - these do not form part of the public API or method signature of the
     # service class.
+
+    def _pull_related(self, instance):
+        """Looks for related models to add from foreign keys.
+
+        Args:
+            instance (BaseModel): An instance of this service's __model__
+
+        Returns:
+            BaseModel: The modified instance
+        """
+        if not hasattr(instance, 'related'):
+            return instance
+        for field, service_name in instance.related.items():
+            try:
+                module = import_module('.'.join(__name__.split('.')[:-1]))
+                service = getattr(module, service_name)
+                prop = field.replace('_id', '')
+                id = getattr(instance, field)
+                related = service.get(id)
+                console.log(f'Setting {prop} on {instance} to {related}')
+                setattr(instance, prop, related)
+            except Exception as e:
+                console.warn(e)
+
+        return instance
 
     def _preprocess(self, **kwargs):
         for k, v in kwargs.items():

@@ -42,7 +42,7 @@ class BaseModel(Model):
 
     _uniques = []
 
-    id = UUIDType()
+    id: str = UUIDType()
     created_at: datetime = DateTimeType(default=datetime.datetime.now)
     updated_at: datetime = DateTimeType(default=datetime.datetime.now)
 
