@@ -24,7 +24,7 @@ class Application(BaseModel, metaclass=ORMMeta):
     date_works_started: date = DateType()
     works_completed: bool = BooleanType(default=False)
     date_works_completed: date = DateType()
-    works_descreiption: str = StringType()
+    works_description: str = StringType()
 
     owner_id: str = UUIDType()
 
@@ -33,5 +33,8 @@ class Application(BaseModel, metaclass=ORMMeta):
     #
     related = {
         'owner_id': '_users',
+    }
+    backrefs = {
+        'site_address': '_site_addresses'
     }
     owner: Type[User] = ModelType(User)

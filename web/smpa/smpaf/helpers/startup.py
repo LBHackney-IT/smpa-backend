@@ -5,7 +5,7 @@
     ~~~~~~~~~~~~~~~
     Stuff for handling application start.
 """
-
+import arrow
 from .console import console
 from ..config.defaults import (
     AREA_UNITS, LINEAR_UNITS, DOCUMENT_SIZES, ROLES, SUPERADMIN_USERS, WORKS_LOCATIONS,
@@ -39,6 +39,7 @@ class Startup:
 
         self._add_materials()
         self._add_users()
+        # self._dummy_data()
 
         console.success('Created default data')
 
@@ -62,3 +63,27 @@ class Startup:
                 password=_['password'],
                 role_id=str(super_admin.id)
             )
+
+    @classmethod
+    def _dummy_data(self):
+        from ..services import _applications, _site_addresses
+        u = _users.first()
+        a = _applications.new(
+            id='9e7cf43a-6860-4061-b585-65b4fb778a30',
+            works_started=True,
+            date_works_started='2017-01-01',
+            works_completed=False,
+            date_works_completed='2018-01-01',
+            works_description="I did a thing to my house",
+            owner_id=u.id
+        )
+        _applications.save(a)
+        site_address = _site_addresses.new(
+            id='dcde565b-ff0b-4177-9c0b-f3d8d131ce02',
+            application_id=a.id,
+            address_line_1="12 Stephen Mews",
+            town_city="London",
+            postcode="W1T 1AH",
+            description="Hactar Towers"
+        )
+        _site_addresses.save(site_address)

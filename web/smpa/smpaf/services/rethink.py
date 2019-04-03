@@ -333,17 +333,7 @@ class RService(object):
     # Private methods - these do not form part of the public API or method signature of the
     # service class.
 
-    def _pull_related(self, instance):
-        """Looks for related models to add from foreign keys.
-
-        Args:
-            instance (BaseModel): An instance of this service's __model__
-
-        Returns:
-            BaseModel: The modified instance
-        """
-        if not hasattr(instance, 'related'):
-            return instance
+    def _related(self, instance):
         for field, service_name in instance.related.items():
             try:
                 module = import_module('.'.join(__name__.split('.')[:-1]))
@@ -355,6 +345,40 @@ class RService(object):
                 setattr(instance, prop, related)
             except Exception as e:
                 console.warn(e)
+
+        return instance
+
+    def _backrefs(self, instance):
+        for prop, service_name in instance.backrefs.items():
+            try:
+                module = import_module('.'.join(__name__.split('.')[:-1]))
+                service = getattr(module, service_name)
+                for k, v in service.__model__.related.items():
+                    if v == self.__name__:
+                        field = k
+                related = service.first(json={k: instance.id})
+                prop = field.replace('_id', '')
+                id = getattr(instance, field)
+                related = service.get(id)
+                # console.log(f'Setting {prop} on {instance} to {related}')
+                setattr(instance, prop, related)
+            except Exception as e:
+                console.warn(e)
+
+        return instance
+
+    def _pull_related(self, instance):
+        """Looks for related models to add from foreign keys.
+
+        Args:
+            instance (BaseModel): An instance of this service's __model__
+
+        Returns:
+            BaseModel: The modified instance
+        """
+
+        if hasattr(instance, 'related'):
+            instance = self._related(instance)
 
         return instance
 

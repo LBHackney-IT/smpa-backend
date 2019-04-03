@@ -8,6 +8,7 @@
     Run a dev server with...
 
     ``gunicorn --reload smpaf.app -b 0.0.0.0:5000``
+    ``gunicorn --reload smpaf.app -b 0.0.0.0:5000 -t 99999999``
 """
 
 __version__ = "0.2.2"
