@@ -166,13 +166,15 @@ class User(BaseModel, metaclass=ORMMeta):
     profile_id: str = UUIDType()
     role_id: str = UUIDType()
 
+    #
+    # Dynamic relations
+    #
     related = {
         'profile_id': '_user_profiles',
         'role_id': '_roles',
     }
-    # Dynamic relations
-    role: Type[Role] = ModelType(PersonName)
-    profile: Type[UserProfile] = ModelType(PersonName)
+    role: Type[Role] = ModelType(Role)
+    profile: Type[UserProfile] = ModelType(UserProfile)
 
     def __str__(self):
         return f'<User: {self.email}>'

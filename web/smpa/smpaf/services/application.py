@@ -1,18 +1,18 @@
-# # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
-# """
-#     services.application
-#     ~~~~~~~~~~~~~~~~
-#     Planning Application services.
-# """
+"""
+    services.application
+    ~~~~~~~~~~~~~~~~
+    Planning Application services.
+"""
 
-# # from ..models.application import PlanningApplication
+from ..models.application import Application
 
-# from .core import Service
-
-
-# class PlanningApplicationService(Service):
-#     __model__ = None
+from .rethink import RService
 
 
-# _planning_applications = PlanningApplicationService()
+class ApplicationService(RService):
+    __model__ = Application
+
+
+_applications = ApplicationService()

@@ -36,12 +36,12 @@ class RService(object):
         * find: return multiple instances that match kwargs
         * first: return one instance that matcges kwargs
         * first_or_404: like first, but returns a 404 instead of None
+        * new: create a new, unsaved instance
         * create: create a new SAVED instance
         * update: update an existing instance
         * delete: delete an existing instance
         # TODO
         * last: Get the last created instance
-        * new: create a new, unsaved instance
         * save: Save one
 
 
@@ -61,6 +61,17 @@ class RService(object):
             [type]: [description]
         """
         return r.db(RDB_DB).table(self.__model__._table)
+
+    def new(self, *args, **kwargs):
+        kwargs = self._preprocess(**kwargs)
+        j = self._jsonify(kwargs)
+        m = self.__model__()
+
+        for k, v in kwargs.items():
+            if hasattr(m, k):
+                setattr(m, k, v)
+
+        return m
 
     def get(self, id: str):
         with rconnect() as conn:
@@ -209,7 +220,8 @@ class RService(object):
                 instance.id = None
                 raise
             else:
-                return self.__model__(instance)
+                instance = self._pull_related(instance)
+                return instance
 
     def find(self, order_by: Optional[str] = None, limit: int = 0, **kwargs):
         """
@@ -339,7 +351,7 @@ class RService(object):
                 prop = field.replace('_id', '')
                 id = getattr(instance, field)
                 related = service.get(id)
-                console.log(f'Setting {prop} on {instance} to {related}')
+                # console.log(f'Setting {prop} on {instance} to {related}')
                 setattr(instance, prop, related)
             except Exception as e:
                 console.warn(e)

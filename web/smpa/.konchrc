@@ -4,6 +4,7 @@ import os  # NOQA
 import sys  # NOQA
 import konch  # NOQA
 from smpaf import app  # NOQA
+from smpaf.services.application import _applications
 from smpaf.services.address import (  # NOQA
     _addresses, _site_addresses, _bs7666_addresses, _external_addresses, _international_addresses
 )

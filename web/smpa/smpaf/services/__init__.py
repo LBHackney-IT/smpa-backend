@@ -6,7 +6,7 @@
 from .address import (  # NOQA
     _addresses, _site_addresses, _bs7666_addresses, _external_addresses, _international_addresses
 )
-from .application import *  # NOQA
+from .application import _applications  # NOQA
 from .document import _document_sizes  # NOQA
 from .material import (  # NOQA
     _material_options_roof, _material_options_wall, _material_options_window,
