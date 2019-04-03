@@ -383,6 +383,8 @@ class RService(object):
 
         """
         j = data.pop('json', None)
+        if isinstance(j, dict):
+            return j
         if j is None:
             # Create json from kwargs
             j = json.dumps(data)

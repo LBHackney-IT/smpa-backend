@@ -1,4 +1,3 @@
-import json
 import falcon
 
 from typing import Optional
@@ -7,6 +6,7 @@ from .core import Resource, ListResource
 from ..services.address import (
     _addresses, _site_addresses, _bs7666_addresses, _external_addresses, _international_addresses
 )
+from ..models.address import Address, SiteAddress  # NOQA
 
 
 class AddressListResource(ListResource):
@@ -114,6 +114,31 @@ class AddressResource(Resource):
         super().on_post(req, resp)
 
 
+class SiteAddressListResource(ListResource):
+    _service = _addresses
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Get all SiteAddresses from the DB
+        tags:
+            - Address
+        parameters:
+            - in: query
+              schema: CoreListSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: All SiteAddresses
+                schema:
+                    type: array
+                    items: SiteAddress
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp)
+
 
 class SiteAddressResource(Resource):
     _service = _site_addresses
@@ -132,9 +157,7 @@ class SiteAddressResource(Resource):
         responses:
             200:
                 description: One or more SiteAddresses
-                schema:
-                    type: array
-                    items: SiteAddress
+                schema: SiteAddress
             401:
                 description: Unauthorized
         """
@@ -416,4 +439,3 @@ class InternationalAddressResource(Resource):
                 description: Input body formatting issue
         """
         super().on_post(req, resp)
-

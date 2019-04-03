@@ -20,8 +20,8 @@ from .resources import (
     # User resources
     UserResource, AgentResource, ApplicantResource, AuthResource,
     # Address resources
-    AddressResource, AddressListResource, SiteAddressResource, BS7666AddressResource,
-    ExternalAddressResource, InternationalAddressResource,
+    AddressResource, AddressListResource, SiteAddressResource, SiteAddressListResource,
+    BS7666AddressResource, ExternalAddressResource, InternationalAddressResource,
     # Document size resources
     DocumentSizeResource,
     # Application resources
@@ -61,6 +61,7 @@ def init_routes(api, config):
     agents = AgentResource()
     # applicants = ApplicantResource()
     siteaddresses = SiteAddressResource()
+    siteaddresses_list = SiteAddressListResource()
     documentsizes = DocumentSizeResource()
     material_option_roof_resource = MaterialOptionRoofResource()
     material_option_wall_resource = MaterialOptionWallResource()
@@ -91,7 +92,7 @@ def init_routes(api, config):
     # add_route(api, '/applicants', applicants)
     # add_route(api, '/applicants/{id}', applicants)
 
-    add_route(api, '/site-addresses', siteaddresses)
+    add_route(api, '/site-addresses', siteaddresses_list)
     add_route(api, '/site-addresses/{id}', siteaddresses)
 
     add_route(api, '/document-sizes', documentsizes)
@@ -105,6 +106,8 @@ def init_routes(api, config):
     config.resources = [
         addresses_list,
         addresses,
+        siteaddresses_list,
+        siteaddresses,
         area_units,
         area_units_list,
         linear_units_list,
@@ -112,7 +115,6 @@ def init_routes(api, config):
         users,
         agents,
         # applicants,
-        siteaddresses,
         documentsizes,
         auth,
         material_option_roof_resource,

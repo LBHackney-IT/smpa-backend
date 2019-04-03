@@ -1,4 +1,3 @@
-import json
 import falcon
 
 from typing import Optional
