@@ -14,6 +14,8 @@ from schematics.types import (  # NOQA
     FloatType, ModelType, DateType
 )
 
+from .user import User
+
 
 class Application(BaseModel, metaclass=ORMMeta):
 
@@ -32,4 +34,4 @@ class Application(BaseModel, metaclass=ORMMeta):
     related = {
         'owner_id': '_users',
     }
-    owner: Type['models.User'] = ModelType('models.User')
+    owner: Type[User] = ModelType(User)

@@ -10,7 +10,7 @@ from ..models.address import (
     Address, SiteAddress, BS7666Address, InternationalAddress, ExternalAddress
 )
 
-from .core import Service
+from .rethink import RService as Service
 
 
 class AddressService(Service):

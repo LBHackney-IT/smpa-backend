@@ -9,7 +9,7 @@ from ..services.address import (
 from ..models.address import Address, SiteAddress  # NOQA
 
 
-class AddressListResource(ListResource):
+class AddressPost(ListResource):
     _service = _addresses
     auth = {
         'exempt_methods': ['GET']
@@ -37,8 +37,32 @@ class AddressListResource(ListResource):
         """
         super().on_get(req, resp)
 
+    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Add a new Address to the database
+        tags:
+            - Address
+        parameters:
+            - in: body
+              schema: Address
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            201:
+                description: Address created successfully
+                schema: Address
+            401:
+                description: Unauthorized
+            422:
+                description: Input body formatting issue
+        """
+        super().on_post(req, resp)
 
-class AddressResource(Resource):
+
+class AddressPatch(Resource):
     _service = _addresses
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -89,33 +113,9 @@ class AddressResource(Resource):
         """
         super().on_patch(req, resp, id)
 
-    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
-        """
-        ---
-        summary: Add a new Address to the database
-        tags:
-            - Address
-        parameters:
-            - in: body
-              schema: Address
-        consumes:
-            - application/json
-        produces:
-            - application/json
-        responses:
-            201:
-                description: Address created successfully
-                schema: Address
-            401:
-                description: Unauthorized
-            422:
-                description: Input body formatting issue
-        """
-        super().on_post(req, resp)
 
-
-class SiteAddressListResource(ListResource):
-    _service = _addresses
+class SiteAddressPost(ListResource):
+    _service = _site_addresses
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         """
@@ -139,8 +139,32 @@ class SiteAddressListResource(ListResource):
         """
         super().on_get(req, resp)
 
+    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Add new SiteAddress to the database
+        tags:
+            - SiteAddress
+        parameters:
+            - in: body
+              schema: SiteAddress
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            201:
+                description: SiteAddress created successfully
+                schema: SiteAddress
+            401:
+                description: Unauthorized
+            422:
+                description: Input body formatting issue
+        """
+        super().on_post(req, resp)
 
-class SiteAddressResource(Resource):
+
+class SiteAddressPatch(Resource):
     _service = _site_addresses
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -188,30 +212,6 @@ class SiteAddressResource(Resource):
                 description: Input body formatting issue
         """
         super().on_patch(req, resp, id)
-
-    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
-        """
-        ---
-        summary: Add new SiteAddress to the database
-        tags:
-            - SiteAddress
-        parameters:
-            - in: body
-              schema: SiteAddress
-        consumes:
-            - application/json
-        produces:
-            - application/json
-        responses:
-            201:
-                description: SiteAddress created successfully
-                schema: SiteAddress
-            401:
-                description: Unauthorized
-            422:
-                description: Input body formatting issue
-        """
-        super().on_post(req, resp)
 
 
 class BS7666AddressResource(Resource):

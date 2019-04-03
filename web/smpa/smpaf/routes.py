@@ -20,7 +20,7 @@ from .resources import (
     # User resources
     UserResource, AgentResource, ApplicantResource, AuthResource,
     # Address resources
-    AddressResource, AddressListResource, SiteAddressResource, SiteAddressListResource,
+    AddressPatch, AddressPost, SiteAddressPatch, SiteAddressPost,
     BS7666AddressResource, ExternalAddressResource, InternationalAddressResource,
     # Document size resources
     DocumentSizeResource,
@@ -49,8 +49,10 @@ def init_routes(api, config):
 
     # Resources
     auth = AuthResource()
-    addresses = AddressResource()
-    addresses_list = AddressListResource()
+    addresses_patch = AddressPatch()
+    addresses_post = AddressPost()
+    siteaddresses_patch = SiteAddressPatch()
+    siteaddresses_post = SiteAddressPost()
     applications = ApplicationResource()
     applications_list = ApplicationListResource()
     area_units = AreaUnitResource()
@@ -60,8 +62,6 @@ def init_routes(api, config):
     users = UserResource()
     agents = AgentResource()
     # applicants = ApplicantResource()
-    siteaddresses = SiteAddressResource()
-    siteaddresses_list = SiteAddressListResource()
     documentsizes = DocumentSizeResource()
     material_option_roof_resource = MaterialOptionRoofResource()
     material_option_wall_resource = MaterialOptionWallResource()
@@ -71,8 +71,8 @@ def init_routes(api, config):
     # Routes
     add_route(api, '/auth', auth)
 
-    add_route(api, '/addresses', addresses_list)
-    add_route(api, '/addresses/{id}', addresses)
+    add_route(api, '/addresses', addresses_post)
+    add_route(api, '/addresses/{id}', addresses_patch)
 
     add_route(api, '/area-units', area_units_list)
     add_route(api, '/area-units/{id}', area_units)
@@ -92,8 +92,8 @@ def init_routes(api, config):
     # add_route(api, '/applicants', applicants)
     # add_route(api, '/applicants/{id}', applicants)
 
-    add_route(api, '/site-addresses', siteaddresses_list)
-    add_route(api, '/site-addresses/{id}', siteaddresses)
+    add_route(api, '/site-addresses', siteaddresses_post)
+    add_route(api, '/site-addresses/{id}', siteaddresses_patch)
 
     add_route(api, '/document-sizes', documentsizes)
     add_route(api, '/document-sizes/{id}', documentsizes)
@@ -104,10 +104,10 @@ def init_routes(api, config):
     add_route(api, '/materials/options/window', material_option_window_resource)
 
     config.resources = [
-        addresses_list,
-        addresses,
-        siteaddresses_list,
-        siteaddresses,
+        addresses_post,
+        addresses_patch,
+        siteaddresses_post,
+        siteaddresses_patch,
         area_units,
         area_units_list,
         linear_units_list,

@@ -7,9 +7,15 @@
 """
 
 from .core import BaseModel, ORMMeta
+from typing import (  # NOQA
+    TYPE_CHECKING, Any, Callable, ClassVar, List, Dict, Generator, Optional,
+    Set, Tuple, Type, Union, cast, no_type_check
+)
 from schematics.types import (  # NOQA
     StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, FloatType, ModelType
 )
+
+from .application import Application
 
 
 class BaseAddress(BaseModel):
@@ -52,13 +58,8 @@ class SiteAddress(BaseAddress, metaclass=ORMMeta):
     so this becomes optional and we add fields for easting, northing, ward,
     bplu, uprn, property type and description.
 
-    Attributes:
-        postcode (TYPE): Description
-        easting (TYPE): Description
-        northing (TYPE): Description
-        description (TYPE): Description
     """
-    postcode = StringType(max_length=15, required=True)
+    postcode = StringType(max_length=15, required=False)
     easting = StringType(max_length=255)
     northing = StringType(max_length=255)
     ward = StringType(max_length=255)
@@ -66,6 +67,16 @@ class SiteAddress(BaseAddress, metaclass=ORMMeta):
     uprn = StringType(max_length=255)
     property_type = StringType(max_length=255)
     description = StringType(max_length=255)
+    application_id: str = UUIDType()
+
+    #
+    # Dynamic relations
+    #
+    related = {
+        'application_id': '_applications',
+    }
+    application: Type['Application'] = \
+        ModelType(Application)
 
 
 class Article4Direction(BaseModel, metaclass=ORMMeta):

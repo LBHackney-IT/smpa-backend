@@ -20,7 +20,6 @@ from typing import (  # NOQA
     TYPE_CHECKING, Any, Callable, ClassVar, List, Dict, Generator, Optional,
     Set, Tuple, Type, Union, cast, no_type_check
 )
-from schematics.types.serializable import serializable
 from schematics.transforms import blacklist
 from schematics.types import (  # NOQA
     StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, ModelType
