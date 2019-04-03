@@ -3,6 +3,7 @@ import falcon
 
 from typing import Optional
 
+from ..schemas.core import CoreListSchema, CoreGetSchema  # NOQA
 from .core import Resource, ListResource
 from ..services.unit import _area_units, _linear_units
 
@@ -56,9 +57,7 @@ class AreaUnitResource(Resource):
         responses:
             200:
                 description: The requested AreaUnit
-                schema:
-                    type: array
-                    items: AreaUnit
+                schema: AreaUnit
             401:
                 description: Unauthorized
         """

@@ -20,6 +20,7 @@ import falcon
 # Application
 from .helpers.swagger import init_swagger
 from .helpers.startup import Startup
+from .helpers.console import console
 from .config.settings import Config
 from .rdb.connection import RethinkDB
 from .rdb.registry import model_registry
@@ -28,7 +29,17 @@ from .routes import init_routes, EXEMPT_ROUTES
 from falcon_auth import FalconAuthMiddleware, JWTAuthBackend
 
 
-user_loader = lambda email, password: {'email': email}
+def user_loader(*args, **kwargs):
+    from .services.user import _users
+    try:
+        uid = args[0]['user']['id']
+        user = _users.get(uid)
+    except Exception as e:
+        console.error(e)
+    else:
+        return user
+
+
 secret_key = os.environ.get('SECRET_KEY')
 auth_backend = JWTAuthBackend(user_loader, secret_key)
 auth_middleware = FalconAuthMiddleware(

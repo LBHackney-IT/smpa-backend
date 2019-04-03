@@ -3,10 +3,39 @@ import falcon
 
 from typing import Optional
 
-from .core import Resource
+from .core import Resource, ListResource
 from ..services.address import (
     _addresses, _site_addresses, _bs7666_addresses, _external_addresses, _international_addresses
 )
+
+
+class AddressListResource(ListResource):
+    _service = _addresses
+    auth = {
+        'exempt_methods': ['GET']
+    }
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Get all Addresses from the DB
+        tags:
+            - Address
+        parameters:
+            - in: query
+              schema: CoreListSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: All Addresses
+                schema:
+                    type: array
+                    items: Address
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp)
 
 
 class AddressResource(Resource):

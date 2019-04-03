@@ -15,11 +15,17 @@ from .resources.material import (
     MaterialOptionDoorResource,
 )
 from .resources import (
+    # Unit resources
     AreaUnitResource, AreaUnitListResource, LinearUnitResource, LinearUnitListResource,
+    # User resources
     UserResource, AgentResource, ApplicantResource, AuthResource,
-    AddressResource, SiteAddressResource, BS7666AddressResource, ExternalAddressResource,
-    InternationalAddressResource,
-    DocumentSizeResource
+    # Address resources
+    AddressResource, AddressListResource, SiteAddressResource, BS7666AddressResource,
+    ExternalAddressResource, InternationalAddressResource,
+    # Document size resources
+    DocumentSizeResource,
+    # Application resources
+    ApplicationResource, ApplicationListResource,
 )
 
 EXEMPT_ROUTES = [
@@ -43,6 +49,10 @@ def init_routes(api, config):
 
     # Resources
     auth = AuthResource()
+    addresses = AddressResource()
+    addresses_list = AddressListResource()
+    applications = ApplicationResource()
+    applications_list = ApplicationListResource()
     area_units = AreaUnitResource()
     area_units_list = AreaUnitListResource()
     linear_units = LinearUnitResource()
@@ -60,11 +70,17 @@ def init_routes(api, config):
     # Routes
     add_route(api, '/auth', auth)
 
+    add_route(api, '/addresses', addresses_list)
+    add_route(api, '/addresses/{id}', addresses)
+
     add_route(api, '/area-units', area_units_list)
     add_route(api, '/area-units/{id}', area_units)
 
     add_route(api, '/linear-units', linear_units_list)
     add_route(api, '/linear-units/{id}', linear_units)
+
+    add_route(api, '/applications', applications_list)
+    add_route(api, '/applications/{id}', applications)
 
     add_route(api, '/users', users)
     add_route(api, '/users/{id}', users)
@@ -87,6 +103,8 @@ def init_routes(api, config):
     add_route(api, '/materials/options/window', material_option_window_resource)
 
     config.resources = [
+        addresses_list,
+        addresses,
         area_units,
         area_units_list,
         linear_units_list,
@@ -101,4 +119,6 @@ def init_routes(api, config):
         material_option_wall_resource,
         material_option_door_resource,
         material_option_window_resource,
+        applications_list,
+        applications,
     ]
