@@ -2,6 +2,9 @@
 # stdlib
 import json
 import uuid
+import arrow
+from inflection import underscore
+from datetime import datetime, date
 from importlib import import_module
 
 # 3rd party
@@ -143,9 +146,9 @@ class RService(object):
                 console.warn(e)
                 raise
             else:
-                result = [self.__model__(_) for _ in rv]
-                data = [self._pull_related(_) for _ in result]
                 try:
+                    result = [self.__model__(_) for _ in rv]
+                    data = [self._pull_related(_) for _ in result]
                     return data[0]
                 except IndexError:
                     return None
@@ -175,13 +178,16 @@ class RService(object):
             query = self.q.insert(j)
             rv = query.run(conn)
             data = []
-            for _ in rv['generated_keys']:
-                data.append(self.get(_))
+            if 'generated_keys' in rv:
+                for _ in rv['generated_keys']:
+                    data.append(self.get(_))
 
             if len(data) > 2:
                 return [self.__model__(_) for _ in rv]
-
-            return self.__model__(data[0])
+            try:
+                return self.__model__(data[0])
+            except:
+                import ipdb; ipdb.set_trace()
 
     def save(self, instance):
         """Saves a specific instance.
@@ -337,7 +343,12 @@ class RService(object):
         for field, service_name in instance.related.items():
             try:
                 module = import_module('.'.join(__name__.split('.')[:-1]))
-                service = getattr(module, service_name)
+                service_class = getattr(module, service_name)
+                if callable(service_class):
+                    service = service_class()
+                else:
+                    service = service_class
+
                 prop = field.replace('_id', '')
                 id = getattr(instance, field)
                 related = service.get(id)
@@ -349,18 +360,19 @@ class RService(object):
         return instance
 
     def _backrefs(self, instance):
-        for prop, service_name in instance.backrefs.items():
+        for field, service_name in instance.backrefs.items():
             try:
                 module = import_module('.'.join(__name__.split('.')[:-1]))
-                service = getattr(module, service_name)
-                for k, v in service.__model__.related.items():
-                    if v == self.__name__:
-                        field = k
-                related = service.first(json={k: instance.id})
-                prop = field.replace('_id', '')
-                id = getattr(instance, field)
-                related = service.get(id)
-                # console.log(f'Setting {prop} on {instance} to {related}')
+                service_class = getattr(module, service_name)
+                if callable(service_class):
+                    service = service_class()
+                else:
+                    service = service_class
+
+                query = {field: str(instance.id)}
+                related = service.first(**query)
+                prop = underscore(service.__model__.__name__)
+                console.log(f'Setting {prop} on {instance} to {related}')
                 setattr(instance, prop, related)
             except Exception as e:
                 console.warn(e)
@@ -379,6 +391,9 @@ class RService(object):
 
         if hasattr(instance, 'related'):
             instance = self._related(instance)
+
+        if hasattr(instance, 'backrefs'):
+            instance = self._backrefs(instance)
 
         return instance
 
@@ -410,6 +425,10 @@ class RService(object):
         if isinstance(j, dict):
             return j
         if j is None:
+            for k, v in data.items():
+                if isinstance(v, datetime) or isinstance(v, date):
+                    data[k] = arrow.get(v).isoformat()
+
             # Create json from kwargs
             j = json.dumps(data)
         return json.loads(j)

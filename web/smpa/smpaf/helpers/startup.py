@@ -11,9 +11,12 @@ from ..config.defaults import (
     AREA_UNITS, LINEAR_UNITS, DOCUMENT_SIZES, ROLES, SUPERADMIN_USERS, WORKS_LOCATIONS,
     BASEMENT_WORKS_LOCATIONS, MATERIALS_ROOF, MATERIALS_WALL, MATERIALS_WINDOW, MATERIALS_DOOR
 )
-from ..services import (
-    _area_units, _linear_units, _document_sizes, _roles, _users, _works_locations,
-    _basement_works_locations, _material_options_roof, _material_options_wall,
+from ..services.unit import _area_units, _linear_units
+from ..services.document import _document_sizes
+from ..services.user import _roles, _users
+from ..services.work import _works_locations, _basement_works_locations
+from ..services.material import (
+    _material_options_roof, _material_options_wall,
     _material_options_window, _material_options_door
 )
 
@@ -39,7 +42,7 @@ class Startup:
 
         self._add_materials()
         self._add_users()
-        # self._dummy_data()
+        self._dummy_data()
 
         console.success('Created default data')
 
@@ -66,24 +69,25 @@ class Startup:
 
     @classmethod
     def _dummy_data(self):
-        from ..services import _applications, _site_addresses
+        from ..services.application import _applications
+        from ..services.address import _site_addresses
         u = _users.first()
-        a = _applications.new(
-            id='9e7cf43a-6860-4061-b585-65b4fb778a30',
-            works_started=True,
-            date_works_started='2017-01-01',
-            works_completed=False,
-            date_works_completed='2018-01-01',
-            works_description="I did a thing to my house",
-            owner_id=u.id
+        a = _applications.get_or_create(
+            id='9e7cf43a-6860-4061-b585-65b4fb778a30'
         )
+        a.works_started = True
+        a.date_works_started = arrow.get('2017-01-01').date()
+        a.works_completed = False
+        a.date_works_completed = arrow.get('2018-01-01').date()
+        a.works_description = "I did a thing to my house"
+        a.owner_id = u.id
         _applications.save(a)
-        site_address = _site_addresses.new(
-            id='dcde565b-ff0b-4177-9c0b-f3d8d131ce02',
-            application_id=a.id,
-            address_line_1="12 Stephen Mews",
-            town_city="London",
-            postcode="W1T 1AH",
-            description="Hactar Towers"
+        site_address = _site_addresses.get_or_create(
+            id='dcde565b-ff0b-4177-9c0b-f3d8d131ce02'
         )
+        site_address.application_id = a.id
+        site_address.address_line_1 = "12 Stephen Mews"
+        site_address.town_city = "London"
+        site_address.postcode = "W1T 1AH"
+        site_address.description = "Hactar Towers"
         _site_addresses.save(site_address)

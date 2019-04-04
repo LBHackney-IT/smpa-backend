@@ -15,6 +15,7 @@ from schematics.types import (  # NOQA
 )
 
 from .user import User
+# from .address import SiteAddress
 
 
 class Application(BaseModel, metaclass=ORMMeta):
@@ -32,9 +33,11 @@ class Application(BaseModel, metaclass=ORMMeta):
     # Dynamic relations
     #
     related = {
-        'owner_id': '_users',
+        'owner_id': 'UserService',
     }
     backrefs = {
-        'site_address': '_site_addresses'
+        'application_id': 'SiteAddressService'
     }
     owner: Type[User] = ModelType(User)
+    site_address: Type['smpaf.models.address.SiteAddress'] = \
+        ModelType('smpaf.models.address.SiteAddress')

@@ -2,6 +2,14 @@
 # import any service directly from ``services``
 #
 # ie: ``from services import _users``
+from .address import *  # NOQA
+from .application import *  # NOQA
+from .document import *  # NOQA
+from .material import *  # NOQA
+from .unit import *  # NOQA
+from .user import *  # NOQA
+from .work import *  # NOQA
+
 
 from .address import (  # NOQA
     _addresses, _site_addresses, _bs7666_addresses, _external_addresses, _international_addresses

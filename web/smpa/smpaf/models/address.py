@@ -72,11 +72,11 @@ class SiteAddress(BaseAddress, metaclass=ORMMeta):
     #
     # Dynamic relations
     #
-    related = {
-        'application_id': '_applications',
-    }
-    application: Type['Application'] = \
-        ModelType(Application)
+    # related = {
+    #     'application_id': 'ApplicationService',
+    # }
+    # application: Type['smpaf.models.application.Application'] = \
+    #     ModelType('smpaf.models.application.Application')
 
 
 class Article4Direction(BaseModel, metaclass=ORMMeta):
