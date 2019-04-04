@@ -14,7 +14,13 @@ from ..config.defaults import (
 from ..services.unit import _area_units, _linear_units
 from ..services.document import _document_sizes
 from ..services.user import _roles, _users
-from ..services.work import _works_locations, _basement_works_locations
+from ..services.work import (
+    _works_locations, _basement_works_locations,
+    # TODO
+    _roof_works_types, _border_works_types,
+    _access_works_scopes, _access_works_types, _parking_works_scopes, _equipment_works_types,
+    _equipment_works_conservation_types, _work_extension_options
+)
 from ..services.material import (
     _material_options_roof, _material_options_wall,
     _material_options_window, _material_options_door

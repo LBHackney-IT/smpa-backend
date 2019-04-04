@@ -7,8 +7,9 @@
 """
 
 import datetime
+from importlib import import_module
 from schematics.models import Model, ModelMeta
-from inflection import tableize
+from inflection import tableize, underscore
 from schematics.types import (
     StringType, BooleanType, DateTimeType, IntType, UUIDType
 )
@@ -56,6 +57,74 @@ class BaseModel(Model):
             if _ is not None and _.id != self.id:
                 raise ValidationError('Field `{}` must be unique'.format(field))
         return super(BaseModel, self).validate()
+
+    def to_primitive(self):
+        if hasattr(self, 'related_lists'):
+            self._get_related_lists()
+        if hasattr(self, 'related'):
+            self._get_related()
+        if hasattr(self, 'backrefs'):
+            self._get_backrefs()
+
+        return super().to_primitive()
+
+    #
+    # Private methods for serializing relationships
+
+    def _get_related_lists(self):
+        for d in self.related_lists:
+            field, target, service_name = d[0], d[1], d[2]
+            module = import_module('smpaf.services')
+            service_class = getattr(module, service_name)
+            if callable(service_class):
+                service = service_class()
+            else:
+                service = service_class
+
+            prop = target
+            results = []
+            ids = getattr(self, field)
+            for id in ids:
+                results.append(service.get(id))
+            # console.log(f'Setting {prop} on {instance} to {related}')
+            setattr(self, prop, results)
+
+    def _get_related(self):
+        for field, service_name in self.related.items():
+            try:
+                module = import_module('.'.join(__name__.split('.')[:-1]))
+                service_class = getattr(module, service_name)
+                if callable(service_class):
+                    service = service_class()
+                else:
+                    service = service_class
+
+                prop = field.replace('_id', '')
+                id = getattr(self, field)
+                related = service.get(id)
+                # console.log(f'Setting {prop} on {self} to {related}')
+                setattr(self, prop, related)
+            except Exception as e:
+                console.warn(e)
+
+    def _get_backrefs(self):
+        for d in self.backrefs:
+            field, service_name = d[0], d[1]
+            try:
+                module = import_module('.'.join(__name__.split('.')[:-1]))
+                service_class = getattr(module, service_name)
+                if callable(service_class):
+                    service = service_class()
+                else:
+                    service = service_class
+
+                query = {field: str(self.id)}
+                related = service.first(**query)
+                prop = underscore(service.__model__.__name__)
+                console.log(f'Setting {prop} on {self} to {related}')
+                setattr(self, prop, related)
+            except Exception as e:
+                console.warn(e)
 
     def __repr__(self):
         if hasattr(self, 'email'):

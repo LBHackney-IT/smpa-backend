@@ -4,11 +4,11 @@ from typing import Optional
 
 from ..schemas.core import CoreListSchema, CoreGetSchema  # NOQA
 from .core import Resource, ListResource
-from ..services.unit import _area_units, _linear_units
+from ..services.work import _works_locations, _basement_works_locations
 
 
-class AreaUnitListResource(ListResource):
-    _service = _area_units
+class WorksLocationPost(ListResource):
+    _service = _works_locations
     auth = {
         'exempt_methods': ['GET']
     }
@@ -16,9 +16,9 @@ class AreaUnitListResource(ListResource):
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         """
         ---
-        summary: Get all AreaUnits from the DB
+        summary: Get all WorksLocations from the DB
         tags:
-            - AreaUnit
+            - WorksLocation
         parameters:
             - in: query
               schema: CoreListSchema
@@ -26,18 +26,18 @@ class AreaUnitListResource(ListResource):
             - application/json
         responses:
             200:
-                description: All AreaUnits
+                description: All WorksLocations
                 schema:
                     type: array
-                    items: AreaUnit
+                    items: WorksLocation
             401:
                 description: Unauthorized
         """
         super().on_get(req, resp)
 
 
-class AreaUnitResource(Resource):
-    _service = _area_units
+class WorksLocationPatch(Resource):
+    _service = _works_locations
     auth = {
         'exempt_methods': ['GET']
     }
@@ -45,9 +45,9 @@ class AreaUnitResource(Resource):
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
         """
         ---
-        summary: Get one AreaUnit from the DB
+        summary: Get one WorksLocation from the DB
         tags:
-            - AreaUnit
+            - WorksLocation
         parameters:
             - in: path
               schema: CoreGetSchema
@@ -55,8 +55,8 @@ class AreaUnitResource(Resource):
             - application/json
         responses:
             200:
-                description: The requested AreaUnit
-                schema: AreaUnit
+                description: The requested WorksLocation
+                schema: WorksLocation
             401:
                 description: Unauthorized
         """
@@ -65,22 +65,22 @@ class AreaUnitResource(Resource):
     def on_patch(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
         """
         ---
-        summary: Update an AreaUnit in the database
+        summary: Update an WorksLocation in the database
         tags:
-            - AreaUnit
+            - WorksLocation
         parameters:
             - in: path
               schema: CoreGetSchema
             - in: body
-              schema: AreaUnit
+              schema: WorksLocation
         consumes:
             - application/json
         produces:
             - application/json
         responses:
             200:
-                description: Returns updated AreaUnit
-                schema: AreaUnit
+                description: Returns updated WorksLocation
+                schema: WorksLocation
             401:
                 description: Unauthorized
             404:
@@ -93,22 +93,22 @@ class AreaUnitResource(Resource):
     def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
         """
         ---
-        summary: Add new AreaUnit to the database
+        summary: Add new WorksLocation to the database
         tags:
-            - AreaUnit
+            - WorksLocation
         parameters:
             - in: path
               schema: CoreGetSchema
             - in: body
-              schema: AreaUnit
+              schema: WorksLocation
         consumes:
             - application/json
         produces:
             - application/json
         responses:
             201:
-                description: AreaUnit created successfully
-                schema: AreaUnit
+                description: WorksLocation created successfully
+                schema: WorksLocation
             401:
                 description: Unauthorized
             422:
@@ -117,8 +117,8 @@ class AreaUnitResource(Resource):
         super().on_post(req, resp)
 
 
-class LinearUnitListResource(ListResource):
-    _service = _linear_units
+class BasementWorksLocationPost(ListResource):
+    _service = _basement_works_locations
     auth = {
         'exempt_methods': ['GET']
     }
@@ -126,9 +126,9 @@ class LinearUnitListResource(ListResource):
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         """
         ---
-        summary: Get all LinearUnits from the DB
+        summary: Get all BasementWorksLocations from the DB
         tags:
-            - LinearUnit
+            - BasementWorksLocation
         parameters:
             - in: query
               schema: CoreListSchema
@@ -136,18 +136,18 @@ class LinearUnitListResource(ListResource):
             - application/json
         responses:
             200:
-                description: All LinearUnits
+                description: All BasementWorksLocations
                 schema:
                     type: array
-                    items: LinearUnit
+                    items: BasementWorksLocation
             401:
                 description: Unauthorized
         """
         super().on_get(req, resp)
 
 
-class LinearUnitResource(Resource):
-    _service = _linear_units
+class BasementWorksLocationPatch(Resource):
+    _service = _basement_works_locations
     auth = {
         'exempt_methods': ['GET']
     }
@@ -155,9 +155,9 @@ class LinearUnitResource(Resource):
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
         """
         ---
-        summary: Get one LinearUnit from the database
+        summary: Get one BasementWorksLocation from the database
         tags:
-            - LinearUnit
+            - BasementWorksLocation
         parameters:
             - in: path
               schema: CoreGetSchema
@@ -165,8 +165,8 @@ class LinearUnitResource(Resource):
             - application/json
         responses:
             200:
-                description: One LinearUnit
-                schema: LinearUnit
+                description: One BasementWorksLocation
+                schema: BasementWorksLocation
             401:
                 description: Unauthorized
         """
@@ -175,20 +175,20 @@ class LinearUnitResource(Resource):
     def on_patch(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
         """
         ---
-        summary: Update an LinearUnit in the database
+        summary: Update an BasementWorksLocation in the database
         tags:
-            - LinearUnit
+            - BasementWorksLocation
         parameters:
             - in: body
-              schema: LinearUnit
+              schema: BasementWorksLocation
         consumes:
             - application/json
         produces:
             - application/json
         responses:
             200:
-                description: Returns updated LinearUnit
-                schema: LinearUnit
+                description: Returns updated BasementWorksLocation
+                schema: BasementWorksLocation
             401:
                 description: Unauthorized
             404:
@@ -201,20 +201,20 @@ class LinearUnitResource(Resource):
     def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
         """
         ---
-        summary: Add new LinearUnit to the database
+        summary: Add new BasementWorksLocation to the database
         tags:
-            - LinearUnit
+            - BasementWorksLocation
         parameters:
             - in: body
-              schema: LinearUnit
+              schema: BasementWorksLocation
         consumes:
             - application/json
         produces:
             - application/json
         responses:
             201:
-                description: LinearUnit created successfully
-                schema: LinearUnit
+                description: BasementWorksLocation created successfully
+                schema: BasementWorksLocation
             401:
                 description: Unauthorized
             422:

@@ -3,7 +3,6 @@
 import json
 import uuid
 import arrow
-from inflection import underscore
 from datetime import datetime, date
 from importlib import import_module
 
@@ -96,7 +95,6 @@ class RService(object):
             else:
                 if rv is not None:
                     instance = self.__model__(rv)
-                    self._pull_related(instance)
                     return instance
         return None
 
@@ -147,8 +145,7 @@ class RService(object):
                 raise
             else:
                 try:
-                    result = [self.__model__(_) for _ in rv]
-                    data = [self._pull_related(_) for _ in result]
+                    data = [self.__model__(_) for _ in rv]
                     return data[0]
                 except IndexError:
                     return None
@@ -225,7 +222,6 @@ class RService(object):
                 instance.id = None
                 raise
             else:
-                instance = self._pull_related(instance)
                 return instance
 
     def find(self, order_by: Optional[str] = None, limit: int = 0, **kwargs):
@@ -262,8 +258,7 @@ class RService(object):
                 console.warn(e)
                 raise
             else:
-                result = [self.__model__(_) for _ in rv]
-                data = [self._pull_related(_) for _ in result]
+                data = [self.__model__(_) for _ in rv]
                 return data
 
     def get_or_create(self, **kwargs):
@@ -316,8 +311,7 @@ class RService(object):
                 raise
             else:
                 rv = query.run(conn)
-                result = [self.__model__(_) for _ in rv]
-                data = [self._pull_related(_) for _ in result]
+                data = [self.__model__(_) for _ in rv]
                 return data
 
     def delete(self, instance: BaseModel):
@@ -337,65 +331,6 @@ class RService(object):
 
     # Private methods - these do not form part of the public API or method signature of the
     # service class.
-
-    def _related(self, instance):
-        for field, service_name in instance.related.items():
-            try:
-                module = import_module('.'.join(__name__.split('.')[:-1]))
-                service_class = getattr(module, service_name)
-                if callable(service_class):
-                    service = service_class()
-                else:
-                    service = service_class
-
-                prop = field.replace('_id', '')
-                id = getattr(instance, field)
-                related = service.get(id)
-                # console.log(f'Setting {prop} on {instance} to {related}')
-                setattr(instance, prop, related)
-            except Exception as e:
-                console.warn(e)
-
-        return instance
-
-    def _backrefs(self, instance):
-        for d in instance.backrefs:
-            field, service_name = d[0], d[1]
-            try:
-                module = import_module('.'.join(__name__.split('.')[:-1]))
-                service_class = getattr(module, service_name)
-                if callable(service_class):
-                    service = service_class()
-                else:
-                    service = service_class
-
-                query = {field: str(instance.id)}
-                related = service.first(**query)
-                prop = underscore(service.__model__.__name__)
-                console.log(f'Setting {prop} on {instance} to {related}')
-                setattr(instance, prop, related)
-            except Exception as e:
-                console.warn(e)
-
-        return instance
-
-    def _pull_related(self, instance):
-        """Looks for related models to add from foreign keys.
-
-        Args:
-            instance (BaseModel): An instance of this service's __model__
-
-        Returns:
-            BaseModel: The modified instance
-        """
-
-        if hasattr(instance, 'related'):
-            instance = self._related(instance)
-
-        if hasattr(instance, 'backrefs'):
-            instance = self._backrefs(instance)
-
-        return instance
 
     def _preprocess(self, **kwargs):
         for k, v in kwargs.items():

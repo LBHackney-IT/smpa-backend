@@ -167,6 +167,7 @@ _parking_works_scopes = ParkingWorksScopeService()
 _equipment_works_types = EquipmentWorksTypeService()
 _equipment_works_conservation_types = EquipmentWorksConservationTypeService()
 _work_extension_options = WorkExtensionOptionService()
+
 _extension_original_house_single_storey_extensions = \
     ExtensionOriginalHouseSingleStoreyExtensionService()
 _extension_original_house_two_storey_extensions = \

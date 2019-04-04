@@ -32,6 +32,8 @@ from .resources import (
     # Proposals
     ProposalExtensionPostResource, ProposalExtensionPatchResource,
     ProposalEquipmentPostResource, ProposalEquipmentPatchResource,
+    # Work
+    WorksLocationPost, WorksLocationPatch, BasementWorksLocationPost, BasementWorksLocationPatch
 )
 
 EXEMPT_ROUTES = [
@@ -65,10 +67,14 @@ def init_routes(api, config):
     site_area_patch = SiteAreaPatchResource()
     site_constraints_post = SiteConstraintsPostResource()
     site_constraints_patch = SiteConstraintsPatchResource()
-    proposal_extension_post =  ProposalExtensionPostResource()
-    proposal_extension_patch =  ProposalExtensionPatchResource()
-    proposal_equipment_post =  ProposalEquipmentPostResource()
-    proposal_equipment_patch =  ProposalEquipmentPatchResource()
+    proposal_extension_post = ProposalExtensionPostResource()
+    proposal_extension_patch = ProposalExtensionPatchResource()
+    proposal_equipment_post = ProposalEquipmentPostResource()
+    proposal_equipment_patch = ProposalEquipmentPatchResource()
+    works_location_post = WorksLocationPost()
+    works_location_patch = WorksLocationPatch()
+    basement_works_location_post = BasementWorksLocationPost()
+    basement_works_location_patch = BasementWorksLocationPatch()
 
     # To fix
     applications = ApplicationResource()
@@ -101,6 +107,10 @@ def init_routes(api, config):
     add_route(api, '/extension-proposals/{id}', proposal_extension_patch)
     add_route(api, '/equipment-proposals', proposal_equipment_post)
     add_route(api, '/equipment-proposals/{id}', proposal_equipment_patch)
+    add_route(api, '/works-locations', works_location_post)
+    add_route(api, '/works-locations/{id}', works_location_patch)
+    add_route(api, '/basement-works-locations', basement_works_location_post)
+    add_route(api, '/basement-works-locations/{id}', basement_works_location_patch)
 
     add_route(api, '/area-units', area_units_list)
     add_route(api, '/area-units/{id}', area_units)
@@ -137,6 +147,10 @@ def init_routes(api, config):
         site_area_patch,
         site_constraints_post,
         site_constraints_patch,
+        works_location_post,
+        works_location_patch,
+        basement_works_location_post,
+        basement_works_location_patch,
         # To fix
         area_units,
         area_units_list,
