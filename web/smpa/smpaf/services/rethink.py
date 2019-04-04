@@ -182,12 +182,11 @@ class RService(object):
                 for _ in rv['generated_keys']:
                     data.append(self.get(_))
 
-            if len(data) > 2:
+            if len(data) > 1:
                 return [self.__model__(_) for _ in rv]
-            try:
+
+            if len(data):
                 return self.__model__(data[0])
-            except:
-                import ipdb; ipdb.set_trace()
 
     def save(self, instance):
         """Saves a specific instance.

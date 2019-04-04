@@ -28,7 +28,10 @@ from .resources import (
     ApplicationResource, ApplicationListResource,
     # Site resources
     SiteAreaPostResource, SiteAreaPatchResource, SiteConstraintsPostResource,
-    SiteConstraintsPatchResource
+    SiteConstraintsPatchResource,
+    # Proposals
+    ProposalExtensionPostResource, ProposalExtensionPatchResource,
+    ProposalEquipmentPostResource, ProposalEquipmentPatchResource,
 )
 
 EXEMPT_ROUTES = [
@@ -62,6 +65,10 @@ def init_routes(api, config):
     site_area_patch = SiteAreaPatchResource()
     site_constraints_post = SiteConstraintsPostResource()
     site_constraints_patch = SiteConstraintsPatchResource()
+    proposal_extension_post =  ProposalExtensionPostResource()
+    proposal_extension_patch =  ProposalExtensionPatchResource()
+    proposal_equipment_post =  ProposalEquipmentPostResource()
+    proposal_equipment_patch =  ProposalEquipmentPatchResource()
 
     # To fix
     applications = ApplicationResource()
@@ -90,6 +97,10 @@ def init_routes(api, config):
     add_route(api, '/site-areas/{id}', site_area_patch)
     add_route(api, '/site-constraints', site_constraints_post)
     add_route(api, '/site-constraints/{id}', site_constraints_patch)
+    add_route(api, '/extension-proposals', proposal_extension_post)
+    add_route(api, '/extension-proposals/{id}', proposal_extension_patch)
+    add_route(api, '/equipment-proposals', proposal_equipment_post)
+    add_route(api, '/equipment-proposals/{id}', proposal_equipment_patch)
 
     add_route(api, '/area-units', area_units_list)
     add_route(api, '/area-units/{id}', area_units)

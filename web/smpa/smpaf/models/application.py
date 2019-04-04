@@ -37,7 +37,9 @@ class Application(BaseModel, metaclass=ORMMeta):
     }
     backrefs = [
         ('application_id', 'SiteAddressService'),
-        ('application_id', 'SiteConstraintsService')
+        ('application_id', 'SiteConstraintsService'),
+        ('application_id', 'ProposalExtensionService'),
+        ('application_id', 'ProposalEquipmentService'),
     ]
     owner: Type[User] = ModelType(User)
     site_address: Type['smpaf.models.address.SiteAddress'] = \

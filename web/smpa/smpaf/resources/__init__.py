@@ -7,6 +7,7 @@ from .auth import *  # NOQA
 from .address import *  # NOQA
 from .application import *  # NOQA
 from .document import *  # NOQA
+from .proposal import *  # NOQA
 from .site import *  # NOQA
 from .unit import *  # NOQA
 from .test import *  # NOQA
