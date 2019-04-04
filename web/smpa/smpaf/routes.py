@@ -33,7 +33,11 @@ from .resources import (
     ProposalExtensionPostResource, ProposalExtensionPatchResource,
     ProposalEquipmentPostResource, ProposalEquipmentPatchResource,
     # Work
-    WorksLocationPost, WorksLocationPatch, BasementWorksTypePost, BasementWorksTypePatch
+    WorksLocationPost, WorksLocationPatch, BasementWorksTypePost, BasementWorksTypePatch,
+    RoofWorksTypePost, RoofWorksTypePatch, BorderWorksTypePost, BorderWorksTypePatch,
+    AccessWorksScopePost, AccessWorksScopePatch, AccessWorksTypePost, AccessWorksTypePatch,
+    ParkingWorksScopePost, ParkingWorksScopePatch, EquipmentWorksTypePost, EquipmentWorksTypePatch,
+    EquipmentWorksConservationTypePost, EquipmentWorksConservationTypePatch
 )
 
 EXEMPT_ROUTES = [
@@ -75,6 +79,20 @@ def init_routes(api, config):
     works_location_patch = WorksLocationPatch()
     basement_works_type_post = BasementWorksTypePost()
     basement_works_type_patch = BasementWorksTypePatch()
+    roof_works_type_post = RoofWorksTypePost()
+    roof_works_type_patch = RoofWorksTypePatch()
+    border_works_type_post = BorderWorksTypePost()
+    border_works_type_patch = BorderWorksTypePatch()
+    access_works_scope_post = AccessWorksScopePost()
+    access_works_scope_patch = AccessWorksScopePatch()
+    access_works_type_post = AccessWorksTypePost()
+    access_works_type_patch = AccessWorksTypePatch()
+    parking_works_scope_post = ParkingWorksScopePost()
+    parking_works_scope_patch = ParkingWorksScopePatch()
+    equipment_works_type_post = EquipmentWorksTypePost()
+    equipment_works_type_patch = EquipmentWorksTypePatch()
+    equipment_works_conservation_type_post = EquipmentWorksConservationTypePost()
+    equipment_works_conservation_type_patch = EquipmentWorksConservationTypePatch()
 
     # To fix
     applications = ApplicationResource()
@@ -111,6 +129,22 @@ def init_routes(api, config):
     add_route(api, '/works-locations/{id}', works_location_patch)
     add_route(api, '/basement-works-types', basement_works_type_post)
     add_route(api, '/basement-works-types/{id}', basement_works_type_patch)
+
+    add_route(api, '/roof-works-types', roof_works_type_post)
+    add_route(api, '/roof-works-types/{id}', roof_works_type_patch)
+    add_route(api, '/border-works-types', border_works_type_post)
+    add_route(api, '/border-works-types/{id}', border_works_type_patch)
+    add_route(api, '/access-works-scopes', access_works_scope_post)
+    add_route(api, '/access-works-scopes/{id}', access_works_scope_patch)
+    add_route(api, '/access-works-types', access_works_type_post)
+    add_route(api, '/access-works-types/{id}', access_works_type_patch)
+    add_route(api, '/parking-works-scopes', parking_works_scope_post)
+    add_route(api, '/parking-works-scopes/{id}', parking_works_scope_patch)
+    add_route(api, '/equipment-works-types', equipment_works_type_post)
+    add_route(api, '/equipment-works-types/{id}', equipment_works_type_patch)
+    add_route(api, '/equipment-works-conservation-types', equipment_works_conservation_type_post)
+    add_route(
+        api, '/equipment-works-conservation-types/{id}', equipment_works_conservation_type_patch)
 
     add_route(api, '/area-units', area_units_list)
     add_route(api, '/area-units/{id}', area_units)
@@ -151,6 +185,20 @@ def init_routes(api, config):
         works_location_patch,
         basement_works_type_post,
         basement_works_type_patch,
+        roof_works_type_post,
+        roof_works_type_patch,
+        border_works_type_post,
+        border_works_type_patch,
+        access_works_scope_post,
+        access_works_scope_patch,
+        access_works_type_post,
+        access_works_type_patch,
+        parking_works_scope_post,
+        parking_works_scope_patch,
+        equipment_works_type_post,
+        equipment_works_type_patch,
+        equipment_works_conservation_type_post,
+        equipment_works_conservation_type_patch,
         # To fix
         area_units,
         area_units_list,
