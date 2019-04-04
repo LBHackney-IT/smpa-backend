@@ -25,3 +25,25 @@ class SiteArea(BaseModel, metaclass=ORMMeta):
     """
     area = FloatType(required=True)
     unit = UUIDType(required=True)  # rel: AreaUnit
+
+
+class SiteConstraints(BaseModel, metaclass=ORMMeta):
+
+    """Planning constraints on the site. These field names come from the
+    geoserver.
+    """
+    has_boundry: str = StringType()
+    nb_a4d: int = IntType()
+    a4d_name: str = StringType()
+    nb_conarea: int = IntType()
+    conarea_name: str = StringType()
+    nb_tpo: int = IntType()
+    tpo_name: str = StringType()
+    is_listed_building: str = StringType()
+    is_floodzone_2: str = StringType()
+    is_floodzone_3a: str = StringType()
+    is_floodzone_3b: str = StringType()
+    geom: str = StringType()  # JSON blob
+
+    # See backrefs on Application
+    application_id: str = UUIDType()

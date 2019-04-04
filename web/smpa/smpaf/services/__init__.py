@@ -7,6 +7,7 @@ from .application import *  # NOQA
 from .document import *  # NOQA
 from .material import *  # NOQA
 from .unit import *  # NOQA
+from .site import *  # NOQA
 from .user import *  # NOQA
 from .work import *  # NOQA
 
@@ -22,6 +23,7 @@ from .material import (  # NOQA
     _materials_door, _other_materials, _external_building_materials
 )
 from .test import _tests  # NOQA
+from .site import _site_areas, _site_constraints  # NOQA
 from .unit import _area_units, _linear_units  # NOQA
 from .user import _roles, _users, _agents, _applicants, _user_profiles  # NOQA
 from .work import _works_locations, _basement_works_locations  # NOQA

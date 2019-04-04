@@ -26,6 +26,9 @@ from .resources import (
     DocumentSizeResource,
     # Application resources
     ApplicationResource, ApplicationListResource,
+    # Site resources
+    SiteAreaPostResource, SiteAreaPatchResource, SiteConstraintsPostResource,
+    SiteConstraintsPatchResource
 )
 
 EXEMPT_ROUTES = [
@@ -49,10 +52,18 @@ def init_routes(api, config):
 
     # Resources
     auth = AuthResource()
+
+    # API resources
     addresses_patch = AddressPatch()
     addresses_post = AddressPost()
     siteaddresses_patch = SiteAddressPatch()
     siteaddresses_post = SiteAddressPost()
+    site_area_post = SiteAreaPostResource()
+    site_area_patch = SiteAreaPatchResource()
+    site_constraints_post = SiteConstraintsPostResource()
+    site_constraints_patch = SiteConstraintsPatchResource()
+
+    # To fix
     applications = ApplicationResource()
     applications_list = ApplicationListResource()
     area_units = AreaUnitResource()
@@ -73,6 +84,12 @@ def init_routes(api, config):
 
     add_route(api, '/addresses', addresses_post)
     add_route(api, '/addresses/{id}', addresses_patch)
+    add_route(api, '/site-addresses', siteaddresses_post)
+    add_route(api, '/site-addresses/{id}', siteaddresses_patch)
+    add_route(api, '/site-areas', site_area_post)
+    add_route(api, '/site-areas/{id}', site_area_patch)
+    add_route(api, '/site-constraints', site_constraints_post)
+    add_route(api, '/site-constraints/{id}', site_constraints_patch)
 
     add_route(api, '/area-units', area_units_list)
     add_route(api, '/area-units/{id}', area_units)
@@ -92,9 +109,6 @@ def init_routes(api, config):
     # add_route(api, '/applicants', applicants)
     # add_route(api, '/applicants/{id}', applicants)
 
-    add_route(api, '/site-addresses', siteaddresses_post)
-    add_route(api, '/site-addresses/{id}', siteaddresses_patch)
-
     add_route(api, '/document-sizes', documentsizes)
     add_route(api, '/document-sizes/{id}', documentsizes)
 
@@ -108,6 +122,11 @@ def init_routes(api, config):
         addresses_patch,
         siteaddresses_post,
         siteaddresses_patch,
+        site_area_post,
+        site_area_patch,
+        site_constraints_post,
+        site_constraints_patch,
+        # To fix
         area_units,
         area_units_list,
         linear_units_list,

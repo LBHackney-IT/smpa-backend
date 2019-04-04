@@ -35,9 +35,10 @@ class Application(BaseModel, metaclass=ORMMeta):
     related = {
         'owner_id': 'UserService',
     }
-    backrefs = {
-        'application_id': 'SiteAddressService'
-    }
+    backrefs = [
+        ('application_id', 'SiteAddressService'),
+        ('application_id', 'SiteConstraintsService')
+    ]
     owner: Type[User] = ModelType(User)
     site_address: Type['smpaf.models.address.SiteAddress'] = \
         ModelType('smpaf.models.address.SiteAddress')

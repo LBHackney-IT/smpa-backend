@@ -67,16 +67,9 @@ class SiteAddress(BaseAddress, metaclass=ORMMeta):
     uprn = StringType(max_length=255)
     property_type = StringType(max_length=255)
     description = StringType(max_length=255)
-    application_id: str = UUIDType()
 
-    #
-    # Dynamic relations
-    #
-    # related = {
-    #     'application_id': 'ApplicationService',
-    # }
-    # application: Type['smpaf.models.application.Application'] = \
-    #     ModelType('smpaf.models.application.Application')
+    # backref ids
+    application_id: str = UUIDType()
 
 
 class Article4Direction(BaseModel, metaclass=ORMMeta):

@@ -360,7 +360,8 @@ class RService(object):
         return instance
 
     def _backrefs(self, instance):
-        for field, service_name in instance.backrefs.items():
+        for d in instance.backrefs:
+            field, service_name = d[0], d[1]
             try:
                 module = import_module('.'.join(__name__.split('.')[:-1]))
                 service_class = getattr(module, service_name)
