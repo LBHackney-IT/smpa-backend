@@ -4,7 +4,7 @@ from typing import Optional
 
 from ..schemas.core import CoreListSchema, CoreGetSchema  # NOQA
 from .core import Resource, ListResource
-from ..services.work import _works_locations, _basement_works_locations
+from ..services.work import _works_locations, _basement_works_types
 
 
 class WorksLocationPost(ListResource):
@@ -117,8 +117,8 @@ class WorksLocationPatch(Resource):
         super().on_post(req, resp)
 
 
-class BasementWorksLocationPost(ListResource):
-    _service = _basement_works_locations
+class BasementWorksTypePost(ListResource):
+    _service = _basement_works_types
     auth = {
         'exempt_methods': ['GET']
     }
@@ -126,9 +126,9 @@ class BasementWorksLocationPost(ListResource):
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         """
         ---
-        summary: Get all BasementWorksLocations from the DB
+        summary: Get all BasementWorksTypes from the DB
         tags:
-            - BasementWorksLocation
+            - BasementWorksType
         parameters:
             - in: query
               schema: CoreListSchema
@@ -136,18 +136,18 @@ class BasementWorksLocationPost(ListResource):
             - application/json
         responses:
             200:
-                description: All BasementWorksLocations
+                description: All BasementWorksTypes
                 schema:
                     type: array
-                    items: BasementWorksLocation
+                    items: BasementWorksType
             401:
                 description: Unauthorized
         """
         super().on_get(req, resp)
 
 
-class BasementWorksLocationPatch(Resource):
-    _service = _basement_works_locations
+class BasementWorksTypePatch(Resource):
+    _service = _basement_works_types
     auth = {
         'exempt_methods': ['GET']
     }
@@ -155,9 +155,9 @@ class BasementWorksLocationPatch(Resource):
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
         """
         ---
-        summary: Get one BasementWorksLocation from the database
+        summary: Get one BasementWorksType from the database
         tags:
-            - BasementWorksLocation
+            - BasementWorksType
         parameters:
             - in: path
               schema: CoreGetSchema
@@ -165,8 +165,8 @@ class BasementWorksLocationPatch(Resource):
             - application/json
         responses:
             200:
-                description: One BasementWorksLocation
-                schema: BasementWorksLocation
+                description: One BasementWorksType
+                schema: BasementWorksType
             401:
                 description: Unauthorized
         """
@@ -175,20 +175,20 @@ class BasementWorksLocationPatch(Resource):
     def on_patch(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
         """
         ---
-        summary: Update an BasementWorksLocation in the database
+        summary: Update an BasementWorksType in the database
         tags:
-            - BasementWorksLocation
+            - BasementWorksType
         parameters:
             - in: body
-              schema: BasementWorksLocation
+              schema: BasementWorksType
         consumes:
             - application/json
         produces:
             - application/json
         responses:
             200:
-                description: Returns updated BasementWorksLocation
-                schema: BasementWorksLocation
+                description: Returns updated BasementWorksType
+                schema: BasementWorksType
             401:
                 description: Unauthorized
             404:
@@ -201,20 +201,20 @@ class BasementWorksLocationPatch(Resource):
     def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
         """
         ---
-        summary: Add new BasementWorksLocation to the database
+        summary: Add new BasementWorksType to the database
         tags:
-            - BasementWorksLocation
+            - BasementWorksType
         parameters:
             - in: body
-              schema: BasementWorksLocation
+              schema: BasementWorksType
         consumes:
             - application/json
         produces:
             - application/json
         responses:
             201:
-                description: BasementWorksLocation created successfully
-                schema: BasementWorksLocation
+                description: BasementWorksType created successfully
+                schema: BasementWorksType
             401:
                 description: Unauthorized
             422:

@@ -29,7 +29,7 @@ class WorksLocation(BaseModel, metaclass=ORMMeta):
     name = StringType(max_length=255)
 
 
-class BasementWorksLocation(BaseModel, metaclass=ORMMeta):
+class BasementWorksType(BaseModel, metaclass=ORMMeta):
 
     """These can be...
 
@@ -149,9 +149,6 @@ class EquipmentWorksConservationType(BaseModel, metaclass=ORMMeta):
 # Works sub-types
 ####################################################################################################
 
-from inflection import pluralize
-from importlib import import_module
-
 
 class WorkExtensionOption(BaseModel, metaclass=ORMMeta):
 
@@ -179,17 +176,14 @@ class ExtensionOriginalHousePartSinglePartTwoStoreyExtension(WorkExtensionOption
 
 class ExtensionOriginalHouseBasement(WorkExtensionOption):
     works_location_ids = ListType(UUIDType())
-    works_locations = ListType(ModelType(BasementWorksLocation))
+    works_locations = ListType(ModelType(WorksLocation))
+    works_type_ids = ListType(UUIDType())
+    works_types = ListType(ModelType(BasementWorksType))
 
     related_lists = [
-        ('works_location_ids', 'works_locations', 'BasementWorksLocationService'),
+        ('works_location_ids', 'works_locations', 'WorksLocationService'),
+        ('works_type_ids', 'works_types', 'BasementWorksTypeService'),
     ]
-
-    # @serializable
-    # def basement_works_locations(self):
-    #     from ..services.work import _basement_works_locations
-    #     return [_basement_works_locations.get(_).to_native()
-    #             for _ in self.basement_works_location_ids]
 
 
 class ExtensionOriginalHouseRoofWorks(WorkExtensionOption):
@@ -199,11 +193,6 @@ class ExtensionOriginalHouseRoofWorks(WorkExtensionOption):
     related_lists = [
         ('works_type_ids', 'works_types', 'RoofWorksTypeService'),
     ]
-
-    # @serializable
-    # def works_types(self):
-    #     from ..services.work import _roof_works_types
-    #     return [_roof_works_types.get(_).to_native() for _ in self.roof_works_type_ids]
 
 
 class ExtensionOriginalHouseOutbuilding(WorkExtensionOption):

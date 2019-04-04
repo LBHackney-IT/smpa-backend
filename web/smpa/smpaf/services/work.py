@@ -8,7 +8,7 @@
 
 from ..models.work import (
     WorksLocation,
-    BasementWorksLocation,
+    BasementWorksType,
     RoofWorksType,
     BorderWorksType,
     AccessWorksScope,
@@ -45,8 +45,8 @@ class WorksLocationService(RService):
     __model__ = WorksLocation
 
 
-class BasementWorksLocationService(RService):
-    __model__ = BasementWorksLocation
+class BasementWorksTypeService(RService):
+    __model__ = BasementWorksType
 
 
 class RoofWorksTypeService(RService):
@@ -158,7 +158,7 @@ class WorkTreesService(RService):
 
 
 _works_locations = WorksLocationService()
-_basement_works_locations = BasementWorksLocationService()
+_basement_works_types = BasementWorksTypeService()
 _roof_works_types = RoofWorksTypeService()
 _border_works_types = BorderWorksTypeService()
 _access_works_scopes = AccessWorksScopeService()

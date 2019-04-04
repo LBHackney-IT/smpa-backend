@@ -33,7 +33,7 @@ from .resources import (
     ProposalExtensionPostResource, ProposalExtensionPatchResource,
     ProposalEquipmentPostResource, ProposalEquipmentPatchResource,
     # Work
-    WorksLocationPost, WorksLocationPatch, BasementWorksLocationPost, BasementWorksLocationPatch
+    WorksLocationPost, WorksLocationPatch, BasementWorksTypePost, BasementWorksTypePatch
 )
 
 EXEMPT_ROUTES = [
@@ -73,8 +73,8 @@ def init_routes(api, config):
     proposal_equipment_patch = ProposalEquipmentPatchResource()
     works_location_post = WorksLocationPost()
     works_location_patch = WorksLocationPatch()
-    basement_works_location_post = BasementWorksLocationPost()
-    basement_works_location_patch = BasementWorksLocationPatch()
+    basement_works_type_post = BasementWorksTypePost()
+    basement_works_type_patch = BasementWorksTypePatch()
 
     # To fix
     applications = ApplicationResource()
@@ -109,8 +109,8 @@ def init_routes(api, config):
     add_route(api, '/equipment-proposals/{id}', proposal_equipment_patch)
     add_route(api, '/works-locations', works_location_post)
     add_route(api, '/works-locations/{id}', works_location_patch)
-    add_route(api, '/basement-works-locations', basement_works_location_post)
-    add_route(api, '/basement-works-locations/{id}', basement_works_location_patch)
+    add_route(api, '/basement-works-types', basement_works_type_post)
+    add_route(api, '/basement-works-types/{id}', basement_works_type_patch)
 
     add_route(api, '/area-units', area_units_list)
     add_route(api, '/area-units/{id}', area_units)
@@ -149,8 +149,8 @@ def init_routes(api, config):
         site_constraints_patch,
         works_location_post,
         works_location_patch,
-        basement_works_location_post,
-        basement_works_location_patch,
+        basement_works_type_post,
+        basement_works_type_patch,
         # To fix
         area_units,
         area_units_list,

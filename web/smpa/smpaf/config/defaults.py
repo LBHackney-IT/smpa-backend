@@ -14,7 +14,7 @@ AREA_UNITS = ["sq centimetres", "sq metres", "hectares", "sq miles"]
 LINEAR_UNITS = ["centimetres", "metres", "miles"]
 DOCUMENT_SIZES = ["A1", "A2", "A3", "A4", "A5"]
 WORKS_LOCATIONS = ["Rear", "Side", "Front", "Rear / side wrap-around"]
-BASEMENT_WORKS_LOCATIONS = [
+BASEMENT_WORKS_TYPES = [
     "Excavation of a new basement",
     "Enlargement of an existing basement",
     "Addition of lightwell(s)",

@@ -14,7 +14,7 @@ from .work import *  # NOQA
 from .work import (  # NOQA
     _works, _work_treess, _work_equipments, _works_locations, _roof_works_types,
     _access_works_types, _border_works_types, _access_works_scopes, _parking_works_scopes,
-    _equipment_works_types, _work_extension_options, _basement_works_locations,
+    _equipment_works_types, _work_extension_options, _basement_works_types,
     _work_extension_original_houses, _extension_original_house_porchs,
     _work_extension_car_bike_spacess, _work_extension_gates_fences_etcs,
     _equipment_works_conservation_types, _extension_original_house_basements,

@@ -9,13 +9,13 @@ import arrow
 from .console import console
 from ..config.defaults import (
     AREA_UNITS, LINEAR_UNITS, DOCUMENT_SIZES, ROLES, SUPERADMIN_USERS, WORKS_LOCATIONS,
-    BASEMENT_WORKS_LOCATIONS, MATERIALS_ROOF, MATERIALS_WALL, MATERIALS_WINDOW, MATERIALS_DOOR
+    BASEMENT_WORKS_TYPES, MATERIALS_ROOF, MATERIALS_WALL, MATERIALS_WINDOW, MATERIALS_DOOR
 )
 from ..services.unit import _area_units, _linear_units
 from ..services.document import _document_sizes
 from ..services.user import _roles, _users
 from ..services.work import (
-    _works_locations, _basement_works_locations,
+    _works_locations, _basement_works_types,
     # TODO
     _roof_works_types, _border_works_types,
     _access_works_scopes, _access_works_types, _parking_works_scopes, _equipment_works_types,
@@ -43,8 +43,8 @@ class Startup:
             _roles.get_or_create(name=_)
         for _ in WORKS_LOCATIONS:
             _works_locations.get_or_create(name=_)
-        for _ in BASEMENT_WORKS_LOCATIONS:
-            _basement_works_locations.get_or_create(name=_)
+        for _ in BASEMENT_WORKS_TYPES:
+            _basement_works_types.get_or_create(name=_)
 
         self._add_materials()
         self._add_users()
