@@ -58,8 +58,6 @@ class RoofWorksType(BaseModel, metaclass=ORMMeta):
         Replacement of a roof structure and/or covering
         Removal of chimney
         Addition of chimney
-
-    TODO: add these to startup
     """
     name = StringType(max_length=255)
 
@@ -72,8 +70,6 @@ class BorderWorksType(BaseModel, metaclass=ORMMeta):
         Removal of an entrance
         Replacement and/or repair of wall
         Replacement and/or repair of pillar caps
-
-    TODO: add these to startup
     """
     name = StringType(max_length=255)
 
@@ -86,7 +82,6 @@ class AccessWorksScope(BaseModel, metaclass=ORMMeta):
         Only for vehicle access
         For vehicle and pedestrian access
 
-    TODO: add these to startup
     """
     name = StringType(max_length=255)
 
@@ -99,8 +94,6 @@ class AccessWorksType(BaseModel, metaclass=ORMMeta):
         Removal of an entrance
         Improve disabled access
         Dropped kerb and formation of vehicular access
-
-    TODO: add these to startup
     """
     name = StringType(max_length=255)
 
@@ -113,7 +106,6 @@ class ParkingWorksScope(BaseModel, metaclass=ORMMeta):
         Only cycle parking spaces
         Both, car and bike parking spaces
 
-    TODO: add these to startup
     """
     name = StringType(max_length=255)
 
@@ -126,7 +118,6 @@ class EquipmentWorksType(BaseModel, metaclass=ORMMeta):
         Air conditioning unit
         Tank
 
-    TODO: add these to startup
     """
     name = StringType(max_length=255)
 
@@ -140,7 +131,6 @@ class EquipmentWorksConservationType(BaseModel, metaclass=ORMMeta):
         Security alarm
         Solar panel or other sustainable energy equipment
 
-    TODO: add these to startup
     """
     name = StringType(max_length=255)
 

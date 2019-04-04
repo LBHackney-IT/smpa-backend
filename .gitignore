@@ -2,6 +2,7 @@
 
 # Temporary stuff
 web/smpa/smpaf 2/**/*
+dummyresources.py
 
 # Hactar's Fabfile
 fabfile/**/*

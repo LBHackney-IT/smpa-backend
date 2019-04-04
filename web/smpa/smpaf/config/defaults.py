@@ -20,6 +20,49 @@ BASEMENT_WORKS_TYPES = [
     "Addition of lightwell(s)",
     "Other alterations to the appearance of the house",
 ]
+ROOF_WORKS_TYPES = [
+    "Addition of a dormer extension",
+    "Removal of a dormer extension",
+    "Creation of a mansard styled roof extension",
+    "Installation of rooflight(s) and/or roof lantern(s)",
+    "Addition of a new storey(s)",
+    "Alteration of a roof slope",
+    "Replacement of a roof structure and/or covering",
+    "Removal of chimney",
+    "Addition of chimney",
+]
+BORDER_WORKS_TYPES = [
+    "Addition of a new entrance",
+    "Removal of an entrance",
+    "Replacement and/or repair of wall",
+    "Replacement and/or repair of pillar caps",
+]
+ACCESS_WORKS_SCOPES = [
+    "Only for pedestrian access",
+    "Only for vehicle access",
+    "For vehicle and pedestrian access",
+]
+ACCESS_WORKS_TYPES = [
+    "Addition of a new entrance",
+    "Removal of an entrance",
+    "Improve disabled access",
+    "Dropped kerb and formation of vehicular access",
+]
+PARKING_WORKS_SCOPES = [
+    "Only car parking spaces",
+    "Only cycle parking spaces",
+    "Both, car and bike parking spaces",
+]
+EQUIPMENT_WORKS_TYPES = [
+    "Satellite dish or antenna",
+    "Air conditioning unit",
+    "Tank",
+]
+EQUIPMENT_WORKS_CONSERVATION_TYPES = [
+    "CCTV",
+    "Security alarm",
+    "Solar panel or other sustainable energy equipment",
+]
 MATERIALS_ROOF = [
     "Tiles",
     "Concrete",
