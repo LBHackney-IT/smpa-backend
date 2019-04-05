@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-    smpaf.routes
+    smpa.routes
     ~~~~~~~~~~~~~~~~
     Routing config.
 """

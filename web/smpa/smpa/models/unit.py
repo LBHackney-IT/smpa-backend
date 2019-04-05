@@ -6,39 +6,27 @@
     Unit models.
 """
 
-
-# 3rd party
-import sqlalchemy as sa
-from sqlalchemy.ext.associationproxy import association_proxy
-
-# Project
-from ..helpers.database import MyUUID
-
-# Module
-from .core import BaseModel
+from .core import BaseModel, ORMMeta
+from schematics.types import (  # NOQA
+    StringType, BooleanType, DateTimeType, IntType, UUIDType
+)
 
 
-class AreaUnit(BaseModel):
+class AreaUnit(BaseModel, metaclass=ORMMeta):
 
     """Units of measurement of areas. These should populate dropdowns.
 
     Attributes:
         name (TYPE): The name of the unit, eg: sq meters, hectares
     """
-
-    __tablename__ = 'area_units'
-
-    name = sa.Column(sa.Unicode(100))
+    name: str = StringType(max_length=100, required=True)
 
 
-class LinearUnit(BaseModel):
+class LinearUnit(BaseModel, metaclass=ORMMeta):
 
     """Units of linear measurement, eg: meters, centimeters, miles
 
     Attributes:
         name (Unicode): The name of the unit.
     """
-
-    __tablename__ = 'linear_units'
-
-    name = sa.Column(sa.Unicode(100))
+    name = StringType(max_length=100, required=True)

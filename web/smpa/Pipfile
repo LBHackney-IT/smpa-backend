@@ -1,0 +1,27 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+cryptography = "*"
+falcon = "*"
+falcon-apispec = "*"
+falcon-auth = {extras = ["backend-hawk", "backend-jwt"],version = "*"}
+gunicorn = "*"
+httpie = "*"
+konch = "*"
+marshmallow = "*"
+passlib = {extras = ["bcrypt"],version = "*"}
+rethinkdb = "*"
+schematics = "*"
+schematics-apispec = "*"
+simplejson = "*"
+slugify = "*"
+ujson = "*"
+uWSGI = "*"
+
+[requires]
+python_version = "3.6"

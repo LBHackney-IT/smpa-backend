@@ -1,21 +1,31 @@
 # SmPA API
 
-# Authentication
+## Authentication
 
 Post form-encoded `email` and `password` to the auth endpoint and receive a JSON Web Token back.
 
-POST /api/v1/auth
+`POST /api/v1/auth`
 
 ### Example
 
-    email: systems@h
+    email: test@example.com
+    password: secretpassword
+
+### Returns
+
+    {
+      "message": "login successful!",
+      "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjp7ImlkIjoiZWYwY2Q5NDktMzFiYS00MjhlLWE3ZTQtMTk0MzczOWIxN2YwIn0sImlhdCI6MTU1NDQ2MDQ0MSwibmJmIjoxNTU0NDYwNDQxLCJleHAiOjE1NTQ1NDY4NDF9.4bIuU99dFXVb3nmEpohvkCl_etOJ0bDm3OT916Suyxo"
+    }
 
 
 
-# Default data
+
+## Default data
 
 There are a bunch of endpoints that you can use to grab default data and associated ids.
 
+```
 GET /api/v1/roof-works-types
     /api/v1/works-locations
     /api/v1/basement-works-types
@@ -28,10 +38,11 @@ GET /api/v1/roof-works-types
     /api/v1/area-units
     /api/v1/linear-units
     /api/v1/document-sizes
+```
 
 These all return a list along the lines of...
 
-GET /api/v1/border-works-types
+`GET /api/v1/border-works-types`
 
     [
       {
@@ -61,9 +72,9 @@ GET /api/v1/border-works-types
     ]
 
 
-# Starting the works
+## Starting the works
 
-POST /api/v1/applications
+`POST /api/v1/applications`
 
     works_started: bool
     date_works_started: date
@@ -89,9 +100,9 @@ POST /api/v1/applications
     }
 
 
-# About the works
+## About the works
 
-POST /api/v1/extension-proposals
+`POST /api/v1/extension-proposals`
 
     application_id: str
 
@@ -110,7 +121,7 @@ POST /api/v1/extension-proposals
       "car_bike_spaces": null
     }
 
-POST /api/v1/equipment-proposals
+`POST /api/v1/equipment-proposals`
 
     application_id: str
 
@@ -119,9 +130,9 @@ POST /api/v1/equipment-proposals
 
 
 
-# About the extension or alteration
+## About the extension or alteration
 
-PATCH /api/v1/extension-proposals/{id}
+`PATCH /api/v1/extension-proposals/{id}`
 
     original_house: json
     incidental_buildings: json
@@ -131,7 +142,7 @@ PATCH /api/v1/extension-proposals/{id}
 
 For each option that the user has checked, send an empty json object {}
 
-### Example
+## Example
 
     {
         "original_house": {},
@@ -173,9 +184,9 @@ For each option that the user has checked, send an empty json object {}
       "car_bike_spaces": null
     }
 
-# About the extension or alteration to the original house
+## About the extension or alteration to the original house
 
-PATCH /api/v1/extension-proposals/{id}
+`PATCH /api/v1/extension-proposals/{id}`
 
     single_storey_extension: json
     two_storey_extension: json
@@ -249,11 +260,11 @@ Again, you can send empty json for each item checked
       "car_bike_spaces": null
     }
 
-# About the Single storey extension
+## About the Single storey extension
 
 On load of this page, or at the start of the app, you should make a request to get the list of works location IDs.
 
-GET /api/v1/works-locations
+`GET /api/v1/works-locations`
 
 ### Returns
 
@@ -285,20 +296,20 @@ GET /api/v1/works-locations
     ]
 
 
-GET /api/v1/basement-works-locations
+`GET /api/v1/basement-works-locations`
 
-    ### Returns
+### Returns
 
-        [
-          {
-            "id": "3b76431b-2254-4e24-aee1-dbb70a501999",
-            "created_at": "2019-04-04T18:22:03.450561",
-            "updated_at": "2019-04-04T18:22:03.450601",
-            "name": "Enlargement of an existing basement"
-          },
-          {
-            "id": "22ca10ac-fecf-4eee-a060-46f2d768fcb5",
-            "created_at": "2019-04-04T18:22:03.450758",
+    [
+      {
+        "id": "3b76431b-2254-4e24-aee1-dbb70a501999",
+        "created_at": "2019-04-04T18:22:03.450561",
+        "updated_at": "2019-04-04T18:22:03.450601",
+        "name": "Enlargement of an existing basement"
+      },
+      {
+        "id": "22ca10ac-fecf-4eee-a060-46f2d768fcb5",
+        "created_at": "2019-04-04T18:22:03.450758",
         "updated_at": "2019-04-04T18:22:03.450789",
         "name": "Other alterations to the appearance of the house"
       },
@@ -318,7 +329,7 @@ GET /api/v1/basement-works-locations
 
 Once you have these IDs, you can patch the proposal again
 
-PATCH /api/v1/extension-proposals/{id}
+`PATCH /api/v1/extension-proposals/{id}`
 
 ### Example
 

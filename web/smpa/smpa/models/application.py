@@ -42,5 +42,5 @@ class Application(BaseModel, metaclass=ORMMeta):
         ('application_id', 'ProposalEquipmentService'),
     ]
     owner: Type[User] = ModelType(User)
-    site_address: Type['smpaf.models.address.SiteAddress'] = \
-        ModelType('smpaf.models.address.SiteAddress')
+    site_address: Type['smpa.models.address.SiteAddress'] = \
+        ModelType('smpa.models.address.SiteAddress')

@@ -6,22 +6,35 @@
     Models for describing a planning proposal.
 """
 
-
-# 3rd party
-import sqlalchemy as sa
-from sqlalchemy_utils import ArrowType
-from sqlalchemy.ext.associationproxy import association_proxy
-
-# Project
-from ..helpers.database import MyUUID
-
-# Module
-from .core import BaseModel
+from .core import BaseModel, ORMMeta
+from typing import Type
+from schematics.types import (  # NOQA
+    StringType, BooleanType, DateType, IntType, UUIDType, ListType, FloatType, ModelType
+)
 
 
-class BaseProposal(BaseModel):
-    __abstract__ = True
+class WorksProposal(BaseModel, metaclass=ORMMeta):
 
-    site_area = sa.Column(MyUUID, sa.ForeignKey('site_areas.id'))
-    already_completed = sa.Column(sa.Boolean(), default=False)
-    date_completed = sa.Column(ArrowType)
+    """The base proposal.
+    """
+    application_id: str = UUIDType()
+
+
+class ProposalExtension(WorksProposal):
+
+    """Summary
+    """
+    original_house: Type['smpa.models.work.WorkExtensionOriginalHouse'] = \
+        ModelType('smpa.models.work.WorkExtensionOriginalHouse')
+    incidental_buildings: Type['smpa.models.work.WorkExtensionIncidentalBuildings'] = \
+        ModelType('smpa.models.work.WorkExtensionIncidentalBuildings')
+    gates_fences_etc: Type['smpa.models.work.WorkExtensionGatesFencesEtc'] = \
+        ModelType('smpa.models.work.WorkExtensionGatesFencesEtc')
+    means_of_access_to_site: Type['smpa.models.work.WorkExtensionMeansOfAccessToSite'] = \
+        ModelType('smpa.models.work.WorkExtensionMeansOfAccessToSite')
+    car_bike_spaces: Type['smpa.models.work.WorkExtensionCarBikeSpaces'] = \
+        ModelType('smpa.models.work.WorkExtensionCarBikeSpaces')
+
+
+class ProposalEquipment(WorksProposal):
+    pass

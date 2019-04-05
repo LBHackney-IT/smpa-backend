@@ -1,89 +1,234 @@
-from molten import field, schema
-from typing import Optional, Type
-from inspect import Parameter
+import json
+import falcon
 
-from ..services.user import AgentService, ApplicantService
-from ..helpers.console import console  # NOQA
+from typing import Optional
 
-from .core import (
-    BaseResource, BaseManager, BaseComponent, MetaHandler
-)
-from .address import Address
+from .core import Resource
+from ..services.user import _users, _agents, _applicants
 
 
-@schema
-class Email(BaseResource):
-    email_address: str
-    verified: bool
+class UserResource(Resource):
+    _service = _users
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
+        """
+        ---
+        summary: Get one or more Users from the database
+        tags:
+            - User
+        parameters:
+            - in: path
+              schema: CoreGetSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: One or more Users
+                schema:
+                    type: array
+                    items: User
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp, id)
+
+    def on_patch(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
+        """
+        ---
+        summary: Update a User in the database
+        tags:
+            - User
+        parameters:
+            - in: body
+              schema: User
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            200:
+                description: Returns updated User
+                schema: User
+            401:
+                description: Unauthorized
+            404:
+                description: Object does not exist
+            422:
+                description: Input body formatting issue
+        """
+        super().on_patch(req, resp, id)
+
+    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Add new User to the database
+        tags:
+            - User
+        parameters:
+            - in: body
+              schema: User
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            201:
+                description: User created successfully
+                schema: User
+            401:
+                description: Unauthorized
+            422:
+                description: Input body formatting issue
+        """
+        super().on_post(req, resp)
 
 
-@schema
-class TelephoneNumberType(BaseResource):
-    name: str
+class AgentResource(Resource):
+    _service = _agents
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
+        """
+        ---
+        summary: Get one or more Agents from the database
+        tags:
+            - Agent
+        parameters:
+            - in: path
+              schema: CoreGetSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: One or more Agents
+                schema:
+                    type: array
+                    items: Agent
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp, id)
+
+    def on_patch(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
+        """
+        ---
+        summary: Update an Agent in the database
+        tags:
+            - Agent
+        parameters:
+            - in: body
+              schema: Agent
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            200:
+                description: Returns updated Agent
+                schema: Agent
+            401:
+                description: Unauthorized
+            404:
+                description: Object does not exist
+            422:
+                description: Input body formatting issue
+        """
+        super().on_patch(req, resp, id)
+
+    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Add new Agent to the database
+        tags:
+            - Agent
+        parameters:
+            - in: body
+              schema: Agent
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            201:
+                description: Agent created successfully
+                schema: Agent
+            401:
+                description: Unauthorized
+            422:
+                description: Input body formatting issue
+        """
+        super().on_post(req, resp)
 
 
-@schema
-class TelephoneNumber(BaseResource):
-    tel_number: str
-    tel_type: Type[TelephoneNumberType]
+class ApplicantResource(Resource):
+    _service = _applicants
 
+    def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
+        """
+        ---
+        summary: Get one or more Applicants from the database
+        tags:
+            - Applicant
+        parameters:
+            - in: path
+              schema: CoreGetSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: One or more Applicants
+                schema:
+                    type: array
+                    items: Applicant
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp, id)
 
-@schema
-class PersonName(BaseResource):
-    title: Optional[str]
-    given_name: Optional[str]
-    family_name: str
+    def on_patch(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
+        """
+        ---
+        summary: Update an Applicant in the database
+        tags:
+            - Applicant
+        parameters:
+            - in: body
+              schema: Applicant
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            200:
+                description: Returns updated Applicant
+                schema: Applicant
+            401:
+                description: Unauthorized
+            404:
+                description: Object does not exist
+            422:
+                description: Input body formatting issue
+        """
+        super().on_patch(req, resp, id)
 
-
-@schema
-class Person(BaseResource):
-    person_name: Type[PersonName]
-    company_name: Optional[str]
-    address: Type[Address]
-
-    primary_number: Type[TelephoneNumber]
-    secondary_number: Optional[Type[TelephoneNumber]]
-    fax_number: Optional[Type[TelephoneNumber]]
-    email_address: Type[Email]
-
-
-@schema
-class Applicant(Person):
-    pass
-
-
-@schema
-class Agent(Person):
-    pass
-
-
-class AgentManager(BaseManager):
-    _service: AgentService
-
-
-class ApplicantManager(BaseManager):
-    _service: ApplicantService
-
-
-class AgentManagerComponent(BaseComponent):
-    __manager__ = AgentManager
-    __service__ = AgentService
-    __resource__: Agent
-
-
-class ApplicantManagerComponent(BaseComponent):
-    __manager__ = ApplicantManager
-    __service__ = ApplicantService
-    __resource__: Applicant
-
-
-class AgentHandler(metaclass=MetaHandler):
-    resource: Type[Agent] = Agent
-    manager: Type[AgentManager] = AgentManager
-    namespace: str = 'addresses'
-
-
-class ApplicantHandler(metaclass=MetaHandler):
-    resource: Type[Applicant] = Applicant
-    manager: Type[ApplicantManager] = ApplicantManager
-    namespace: str = 'applicants'
+    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Add new Applicant to the database
+        tags:
+            - Applicant
+        parameters:
+            - in: body
+              schema: Applicant
+            - application/json
+        produces:
+            - application/json
+        responses:
+            201:
+                description: Applicant created successfully
+                schema: Applicant
+            401:
+                description: Unauthorized
+            422:
+                description: Input body formatting issue
+        """
+        super().on_post(req, resp)

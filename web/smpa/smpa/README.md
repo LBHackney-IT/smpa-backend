@@ -10,8 +10,7 @@ The app uses schematics models so that data structures can still be enforced at 
 
 ## Getting started
 
-    pip install -r smpaf/requirements.txt
-    gunicorn --reload smpaf.app -b 0.0.0.0:5000
+    gunicorn --reload smpa.app -b 0.0.0.0:5000
 
 
 ## IPython Shell
