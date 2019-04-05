@@ -39,8 +39,7 @@ services:
         - SERVER_ENV=development
         - ENVKEY=${ENVKEY}
     volumes:
-      - ./web/reqs/:/usr/srv/reqs
-      - ./web/smpa/:/usr/srv/app
+      - ./web/smpa/:/usr/srv/app:Z
     ports:
       - "8000:8000"
       - "5000:5000"
@@ -51,17 +50,4 @@ services:
       - rethink
       - redis
 
-    # USE THIS ON FIRST RUN IF YOU'VE NEVER RUN THE CONTAINER BEFORE MAYBE
-    # command: zsh -c "eval $$(envkey-source) && python /usr/srv/app/manage.py makemigrations users && python /usr/srv/app/manage.py makemigrations core && python /usr/srv/app/manage.py migrate core && python /usr/srv/app/manage.py makemigrations && python /usr/srv/app/manage.py migrate"
-
-    # Run just the dev server
-    # command: zsh -c "eval $$(envkey-source) && python /usr/srv/app/manage.py runserver 0.0.0.0:5000"
-
-    # Automatically run migrations when the dev server is started
-    # command: zsh -c "eval $$(envkey-source) && python /usr/srv/app/manage.py makemigrations && python /usr/srv/app/manage.py migrate && python /usr/srv/app/manage.py runserver 0.0.0.0:5000"
-
-    # Run gunicorn instead of the devserver
-    # command: zsh -c "eval $$(envkey-source) && /usr/local/bin/gunicorn docker_django.wsgi:application -w 2 -b :5000
-
-    # Run indefinitely
     command: sleep 1000000
