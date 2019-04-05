@@ -1,0 +1,16 @@
+cryptography
+falcon
+falcon-apispec
+falcon-auth[backend-hawk,backend-jwt]
+gunicorn
+httpie
+konch
+marshmallow --pre
+passlib[bcrypt]
+rethinkdb
+schematics
+schematics-apispec
+simplejson
+slugify
+ujson
+uwsgi

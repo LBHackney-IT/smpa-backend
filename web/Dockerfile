@@ -21,20 +21,18 @@ ENV PYTHONUNBUFFERED 1
 ENV PIPENV_VENV_IN_PROJECT 1
 ENV LANG en_GB.utf8
 
-# Switch to our reqs mount
-RUN mkdir -p /usr/srv/reqs/
-WORKDIR /usr/srv/reqs/
+# Create our working directory
+RUN mkdir -p /usr/srv/app/
+WORKDIR /usr/srv/app/
 
 # Pipenv install
-COPY ./reqs/Pipfile /usr/srv/reqs/Pipfile
-COPY ./reqs/Pipfile.lock /usr/srv/reqs/Pipfile.lock
+COPY ./smpa/Pipfile /usr/srv/app/Pipfile
+COPY ./smpa/Pipfile.lock /usr/srv/app/Pipfile.lock
 RUN ls -la && whoami && pwd && cat Pipfile
 RUN pip install pipenv
 RUN pipenv install --system --sequential --dev
 
-# Create our working directory
-RUN mkdir -p /usr/srv/app/
-WORKDIR /usr/srv/app/
+RUN echo "\nalias dev='gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999'" >> ~/.zshrc
 
 # Expose the dev server
 EXPOSE 5000

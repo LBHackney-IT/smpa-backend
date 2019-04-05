@@ -1,11 +1,21 @@
+# -*- coding: utf-8 -*-
 
-# 3rd Party
-import sqlalchemy as sa
+"""
+    models.address
+    ~~~~~~~~~~~~~~
+    Address related models.
+"""
 
-from ..helpers.database import MyUUID
+from .core import BaseModel, ORMMeta
+from typing import (  # NOQA
+    TYPE_CHECKING, Any, Callable, ClassVar, List, Dict, Generator, Optional,
+    Set, Tuple, Type, Union, cast, no_type_check
+)
+from schematics.types import (  # NOQA
+    StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, FloatType, ModelType
+)
 
-# Module
-from .core import BaseModel
+from .application import Application
 
 
 class BaseAddress(BaseModel):
@@ -21,19 +31,16 @@ class BaseAddress(BaseModel):
         town_city (Unicode): Town or city
         postcode (Unicode): UK Postcode
     """
-
-    __abstract__ = True
-
-    number = sa.Column(sa.Unicode(255))
-    property_name = sa.Column(sa.Unicode(255))
-    address_line_1 = sa.Column(sa.Unicode(255))
-    address_line_2 = sa.Column(sa.Unicode(255))
-    address_line_3 = sa.Column(sa.Unicode(255))
-    town_city = sa.Column(sa.Unicode(255))
-    postcode = sa.Column(sa.Unicode(12))
+    number = StringType(max_length=255)
+    property_name = StringType(max_length=255)
+    address_line_1 = StringType(max_length=255)
+    address_line_2 = StringType(max_length=255)
+    address_line_3 = StringType(max_length=255)
+    town_city = StringType(max_length=255)
+    postcode = StringType(max_length=15)
 
 
-class Address(BaseAddress):
+class Address(BaseAddress, metaclass=ORMMeta):
 
     """A basic address.
 
@@ -42,34 +49,65 @@ class Address(BaseAddress):
 
     TODO: Check other required fields.
     """
-
-    __tablename__ = 'addresses'
-
-    postcode = sa.Column(sa.Unicode(12), nullable=False)
+    postcode = StringType(max_length=15, required=True)
 
 
-class SiteAddress(BaseAddress):
+class SiteAddress(BaseAddress, metaclass=ORMMeta):
 
     """A site address. Site addresses may not have a postcode assigned
-    so this becomes optional and we add fields for easting, northing
-    and description.
+    so this becomes optional and we add fields for easting, northing, ward,
+    bplu, uprn, property type and description.
+
+    """
+    postcode = StringType(max_length=15, required=False)
+    easting = StringType(max_length=255)
+    northing = StringType(max_length=255)
+    ward = StringType(max_length=255)
+    bplu = StringType(max_length=255)
+    uprn = StringType(max_length=255)
+    property_type = StringType(max_length=255)
+    description = StringType(max_length=255)
+
+    # backref ids
+    application_id: str = UUIDType()
+
+
+class Article4Direction(BaseModel, metaclass=ORMMeta):
+
+    """Article 4 directions should probably come from a predefined list.
+
+    TODO: Create these at startup.
 
     Attributes:
-        postcode (TYPE): Description
-        easting (TYPE): Description
-        northing (TYPE): Description
-        description (TYPE): Description
+        name (str): The name of the direction.
     """
 
-    __tablename__ = 'site_addresses'
-
-    postcode = sa.Column(sa.Unicode(12), nullable=True)
-    easting = sa.Column(sa.Unicode(255))
-    northing = sa.Column(sa.Unicode(255))
-    description = sa.Column(sa.Unicode(255))
+    name = StringType(max_length=255)
 
 
-class BS7666Address(BaseModel):
+class SiteConstraints(BaseModel, metaclass=ORMMeta):
+
+    """These details get pulled through from another API and saved here
+    for convenience.
+
+    Attributes:
+        conservation_area (str): The name of the conservation area
+        listed_statutary (bool): The statutary listed status
+        listed_local (bool): The local listed status
+        flood_zone (str): TODO
+        tree_preservation_orders (str): TODO
+        article_4_directions (list): List of fk relations to Article4Directions
+    """
+
+    conservation_area = StringType(max_length=255)
+    listed_statuary = BooleanType(default=False)
+    listed_local = BooleanType(default=False)
+    flood_zone = StringType(max_length=255)
+    tree_preservation_orders = StringType(max_length=255)
+    article_4_directions = ListType(ModelType(Article4Direction))
+
+
+class BS7666Address(BaseModel, metaclass=ORMMeta):
 
     """A BS7666 compatible address.
 
@@ -85,20 +123,17 @@ class BS7666Address(BaseModel):
         paon (Unicode): Primary Addressable Object Name – e.g. building name or street number
         country (Unicode): Country name
     """
-
-    __tablename__ = 'bs7666_addresses'
-
-    street_description = sa.Column(sa.Unicode(255))
-    locality = sa.Column(sa.Unicode(255))
-    town = sa.Column(sa.Unicode(255))
-    post_town = sa.Column(sa.Unicode(255))
-    postcode = sa.Column(sa.Unicode(255))
-    unique_property_reference_number = sa.Column(sa.Unicode(255))
-    paon = sa.Column(sa.Unicode(255))
-    country = sa.Column(sa.Unicode(255))
+    street_description = StringType(max_length=255)
+    locality = StringType(max_length=255)
+    town = StringType(max_length=255)
+    post_town = StringType(max_length=255)
+    postcode = StringType(max_length=255)
+    unique_property_reference_number = StringType(max_length=255)
+    paon = StringType(max_length=255)
+    country = StringType(max_length=255)
 
 
-class InternationalAddress(BaseModel):
+class InternationalAddress(BaseModel, metaclass=ORMMeta):
 
     """Used for international addresses
 
@@ -107,19 +142,13 @@ class InternationalAddress(BaseModel):
         country (Unicode): The country
         international_postal_code (Unicode): The international postal code
     """
-
-    __tablename__ = 'international_addresses'
-
-    line1 = sa.Column(sa.Unicode(255))
-    country = sa.Column(sa.Unicode(255))
-    international_postal_code = sa.Column(sa.Unicode(255))
+    line1 = StringType(max_length=255)
+    country = StringType(max_length=255)
+    international_postal_code = StringType(max_length=255)
 
 
-class ExternalAddress(BaseModel):
+class ExternalAddress(BaseModel, metaclass=ORMMeta):
 
     """Yet to work out how or why this is used.
     """
-
-    __tablename__ = 'external_addresses'
-
-    international_address = sa.Column(MyUUID, sa.ForeignKey('international_address.id'))
+    international_address_id = UUIDType(required=True)  # rel: InternationalAddress

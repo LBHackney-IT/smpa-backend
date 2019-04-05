@@ -1,10 +1,15 @@
 .env
 
+# Temporary stuff
+web/smpa/smpa 2/**/*
+dummyresources.py
+
 # Hactar's Fabfile
 fabfile/**/*
 
 # Venv packages
 web/reqs/.venv
+web/smpa/.venv
 
 
 # Misc files
@@ -31,3 +36,5 @@ data/**/*
 # Redis data folder
 redis/**/*
 
+# MyPy cache
+.mypy_cache/**/*

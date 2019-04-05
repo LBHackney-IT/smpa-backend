@@ -5,9 +5,14 @@ edit_uri: /projects/hackney-planning/repositories/smpa/tree/master/docs/docs
 site_dir: build/html
 use_directory_urls: true
 dev_addr: 127.0.0.1:8008
+theme: readthedocs
 
 nav:
 - 'index.md'
 - 'about.md'
 - 'schema.md'
 - 'contributing/index.md'
+- 'contributing/python.md'
+- 'contributing/setup.md'
+- Screen notes: 'screens/screens.md'
+- 'screens/api.md'

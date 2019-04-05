@@ -1,55 +1,111 @@
-from molten import field, schema
-from typing import Optional, Type
-from inspect import Parameter
-from arrow.arrow import Arrow
+import json
+import falcon
 
-from ..helpers.database import MyUUID
-from ..helpers.console import console
-from ..services.application import PlanningApplicationService
+from typing import Optional
 
-from .user import Applicant, Agent
-from .development import Proposal
-from .site import Site
-from .core import (
-    BaseResource, BaseManager, BaseComponent, MetaHandler, make_base_handler
-)
+from .core import Resource, ListResource
+from ..services.application import _applications
 
 
-@schema
-class Declaration(BaseResource):
-    is_staff_member: bool
-    is_elected_member: bool
-    is_staff_related: bool
-    is_elected_related: bool
+class ApplicationListResource(ListResource):
+    _service = _applications
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Get all Applications from the DB
+        tags:
+            - Application
+        parameters:
+            - in: query
+              schema: CoreListSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: All Applications
+                schema:
+                    type: array
+                    items: Application
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp)
 
 
-@schema
-class PlanningApplication:
-    """This is probably going to be the top of the schema tree for
-    a new planning application.
-    """
-    id: Optional[MyUUID] = field(response_only=True)
-    created_at: Optional[Arrow]
-    updated_at: Optional[Arrow]
-    #
-    applicant: Type[Applicant]
-    agent: Type[Agent]
-    proposal: Type[Proposal]
-    declaration: Type[Declaration]
-    site: Type[Site]
+class ApplicationResource(Resource):
+    _service = _applications
 
+    def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
+        """
+        ---
+        summary: Get one Application from the DB
+        tags:
+            - Application
+        parameters:
+            - in: path
+              schema: CoreGetSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: The requested Application
+                schema: Application
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp, id)
 
-class PlanningApplicationManager(BaseManager):
-    _service = PlanningApplicationService
+    def on_patch(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
+        """
+        ---
+        summary: Update an Application in the database
+        tags:
+            - Application
+        parameters:
+            - in: path
+              schema: CoreGetSchema
+            - in: body
+              schema: Application
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            200:
+                description: Returns updated Application
+                schema: Application
+            401:
+                description: Unauthorized
+            404:
+                description: Object does not exist
+            422:
+                description: Input body formatting issue
+        """
+        super().on_patch(req, resp, id)
 
-
-class PlanningApplicationManagerComponent(BaseComponent):
-    __manager__ = PlanningApplicationManager
-    __service__ = PlanningApplicationService
-    __resource__ = PlanningApplication
-
-
-class PlanningApplicationHandler(metaclass=MetaHandler):
-    resource: Type[PlanningApplication] = PlanningApplication
-    manager: Type[PlanningApplicationManager] = PlanningApplicationManager
-    namespace: str = 'planning_applications'
+    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Add new Application to the database
+        tags:
+            - Application
+        parameters:
+            - in: path
+              schema: CoreGetSchema
+            - in: body
+              schema: Application
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            201:
+                description: Application created successfully
+                schema: Application
+            401:
+                description: Unauthorized
+            422:
+                description: Input body formatting issue
+        """
+        super().on_post(req, resp)
