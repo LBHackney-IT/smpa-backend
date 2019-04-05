@@ -110,7 +110,10 @@ class RService(object):
 
         return instance
 
-    def first(self, order_by: Optional[str] = None, **kwargs):
+    def last(self, **kwargs):
+        return self.first(order_by='>created_at', **kwargs)
+
+    def first(self, order_by: Optional[str] = '<created_at', **kwargs):
         """Fetch the first item that matches your filter.
         To set the sorting direction prepend with `<` or `>`
 
@@ -190,6 +193,17 @@ class RService(object):
 
         Args:
             instance (BaseModel): A new or existing insance of the model
+
+        Returns:
+            {
+              u'errors': 0,
+              u'deleted': 0,
+              u'generated_keys': [u'dd8ad1bc-8609-4484-b6c4-ed96c72c03f2'],
+              u'unchanged': 0,
+              u'skipped': 0,
+              u'replaced': 0,
+              u'inserted': 1
+            }
         """
         # If this is a new unsaved object, it'll likely have an
         # id of None, which RethinkDB won't like. So if it's None,
@@ -206,16 +220,6 @@ class RService(object):
                     conflict="replace"
                 )
                 rv = query.run(conn)
-                # Returns something like this:
-                # {
-                #   u'errors': 0,
-                #   u'deleted': 0,
-                #   u'generated_keys': [u'dd8ad1bc-8609-4484-b6c4-ed96c72c03f2'],
-                #   u'unchanged': 0,
-                #   u'skipped': 0,
-                #   u'replaced': 0,
-                #   u'inserted': 1
-                # }
                 console.debug(rv)
             except Exception as e:
                 console.error(e)

@@ -93,7 +93,13 @@ class Startup:
     def _dummy_data(self):
         from ..services.application import _applications
         from ..services.address import _site_addresses
-        u = _users.first()
+        # TODO: Make this only run when in SERVER_ENV=development
+        user_role = _roles.first(name='User')
+        u = _users.get_or_create(
+            email="test@example.com",
+            password="secretpassword",
+            role_id=str(user_role.id)
+        )
         a = _applications.get_or_create(
             id='9e7cf43a-6860-4061-b585-65b4fb778a30'
         )

@@ -1,3 +1,17 @@
+# SmPA API
+
+# Authentication
+
+Post form-encoded `email` and `password` to the auth endpoint and receive a JSON Web Token back.
+
+POST /api/v1/auth
+
+### Example
+
+    email: systems@h
+
+
+
 # Default data
 
 There are a bunch of endpoints that you can use to grab default data and associated ids.
