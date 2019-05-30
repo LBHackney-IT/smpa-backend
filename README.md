@@ -23,18 +23,26 @@ The project uses EnvKey to manage secrets. For local development you should gene
 
 Bring the whole thing up with ``docker-compose up``
 
-## Python Packages
+### Shells
 
-If you need to add any Python packages to the project, you should first pipenv install them into the .venv in /usr/srv/app/.venv so that pipenv can keep the lock file updated.
+There's a choice of sh, zsh, and fish for the shells inside the container. You should be able to use any of these by running, for example:
 
-    pipenv install {package_name}
+    docker exec -it smpa_web_1 fish
 
-This ensures the package will be added next time the container is built. Once you've done this you can install it system wide with...
+We recommend fish as the best shell.
 
-    pipenv install --system --sequential --dev
+### Run the dev server
 
-If the lockfile somwhow ends up outdated, you can fix this with...
+There's a gunicorn dev server that should run just by running `dev` at the prompt. This is an alias in both zsh and fish that expands to `gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999`
 
-    cd /usr/srv/app
-    pipenv install
+The initial startup will show a progress bar while it creates tables in the database. After that it should be running on `0.0.0.0:5000`
 
+### Python Packages
+
+Python dependencies are now managed via Poetry. To add a single package, inside the container run...
+
+    poetry add {package_name}
+
+To add a package with optional extra installs, you can use the -E flag.
+
+    postry add passlib -E bcrypt

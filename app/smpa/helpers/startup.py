@@ -103,19 +103,23 @@ class Startup:
         a = _applications.get_or_create(
             id='9e7cf43a-6860-4061-b585-65b4fb778a30'
         )
-        a.works_started = True
-        a.date_works_started = arrow.get('2017-01-01').date()
-        a.works_completed = False
-        a.date_works_completed = arrow.get('2018-01-01').date()
-        a.works_description = "I did a thing to my house"
-        a.owner_id = u.id
-        _applications.save(a)
+        if a is not None:
+            a.works_started = True
+            a.date_works_started = arrow.get('2017-01-01').date()
+            a.works_completed = False
+            a.date_works_completed = arrow.get('2018-01-01').date()
+            a.works_description = "I did a thing to my house"
+            a.owner_id = u.id
+            _applications.save(a)
+
         site_address = _site_addresses.get_or_create(
             id='dcde565b-ff0b-4177-9c0b-f3d8d131ce02'
         )
-        site_address.application_id = a.id
-        site_address.address_line_1 = "12 Stephen Mews"
-        site_address.town_city = "London"
-        site_address.postcode = "W1T 1AH"
-        site_address.description = "Hactar Towers"
-        _site_addresses.save(site_address)
+
+        if site_address is not None:
+            site_address.application_id = a.id
+            site_address.address_line_1 = "12 Stephen Mews"
+            site_address.town_city = "London"
+            site_address.postcode = "W1T 1AH"
+            site_address.description = "Hactar Towers"
+            _site_addresses.save(site_address)
