@@ -1,0 +1,70 @@
+# vi: set ft=python :
+
+import os  # NOQA
+import sys  # NOQA
+import konch  # NOQA
+from smpa import app  # NOQA
+
+# IMPORT SERVICES #
+
+from smpa.services.site import *  # NOQA
+from smpa.services.site import _site_areas, _site_constraints # NOQA
+from smpa.services.test import _tests  # NOQA
+from smpa.services.unit import *  # NOQA
+from smpa.services.unit import _area_units, _linear_units  # NOQA
+from smpa.services.user import *  # NOQA
+from smpa.services.user import _roles, _users, _agents, _applicants, _user_profiles  # NOQA
+from smpa.services.work import *  # NOQA
+from smpa.services.work import (  # NOQA
+    _works, _work_treess, _work_equipments, _works_locations, _roof_works_types,
+    _access_works_types, _border_works_types, _access_works_scopes, _parking_works_scopes,
+    _equipment_works_types, _work_extension_options, _basement_works_types,
+    _work_extension_original_houses, _extension_original_house_porchs,
+    _work_extension_car_bike_spacess, _work_extension_gates_fences_etcs,
+    _equipment_works_conservation_types, _extension_original_house_basements,
+    _extension_original_house_claddings, _extension_original_house_staircases,
+    _extension_original_house_roof_workss, _work_extension_incidental_buildingss,
+    _extension_original_house_outbuildings, _work_extension_means_of_access_to_sites,
+    _extension_original_house_balcony_terraces, _extension_original_house_two_storey_extensions,
+    _extension_original_house_single_storey_extensions,
+    _extension_original_house_add_replacement_windows_doorss,
+    _extension_original_house_part_single_part_two_storey_extensions
+)
+from smpa.services.address import *  # NOQA
+from smpa.services.address import (  # NOQA
+    _addresses, _site_addresses, _bs7666_addresses, _external_addresses, _international_addresses
+)
+from smpa.services.document import *  # NOQA
+from smpa.services.document import _document_sizes  # NOQA
+from smpa.services.material import *  # NOQA
+from smpa.services.material import (  # NOQA
+    _base_materials, _materials_door, _materials_roof, _materials_wall, _other_materials,
+    _materials_window, _material_options_door, _material_options_roof, _material_options_wall,
+    _material_options_window, _external_building_materials
+)
+from smpa.services.application import *  # NOQA
+from smpa.services.application import _applications  # NOQA
+from smpa.services.proposal import *  # NOQA
+from smpa.services.proposal import _proposals_extension, _proposals_equipment  # NOQA
+
+
+konch.config({
+    "banner": "<<<< SmPA >>>>",
+    'context': locals(),
+    "ipy_extensions": ["autoreload", ],
+    "ipy_autoreload": True,
+    'context_format': 'hide'
+})
+
+
+def setup():
+    pass
+
+
+def teardown():
+    pass
+
+
+from pathlib import Path  # NOQA
+if Path(".konchrc.local").exists():
+    konch.use_file(".konchrc.local", trust=True)

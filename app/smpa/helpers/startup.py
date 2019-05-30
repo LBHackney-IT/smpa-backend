@@ -111,6 +111,8 @@ class Startup:
             a.works_description = "I did a thing to my house"
             a.owner_id = u.id
             _applications.save(a)
+        else:
+            console.warn("Failed to get or create Application")
 
         site_address = _site_addresses.get_or_create(
             id='dcde565b-ff0b-4177-9c0b-f3d8d131ce02'
@@ -123,3 +125,5 @@ class Startup:
             site_address.postcode = "W1T 1AH"
             site_address.description = "Hactar Towers"
             _site_addresses.save(site_address)
+        else:
+            console.warn("Failed to get or create site address")
