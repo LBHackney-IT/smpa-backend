@@ -21,7 +21,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./redis:/var/lib/redis
+      - ./docker/redis:/var/lib/redis
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
 
@@ -34,12 +34,13 @@ services:
       - INDOCKER=1
     restart: always
     build:
-      context: ./web
+      context: ./app
+      dockerfile: ../docker/web/Dockerfile
       args:
         - SERVER_ENV=development
         - ENVKEY=${ENVKEY}
     volumes:
-      - ./web/smpa/:/usr/srv/app:Z
+      - ./app:/usr/srv/app:Z
     ports:
       - "8000:8000"
       - "5000:5000"

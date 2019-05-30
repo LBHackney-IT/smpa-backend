@@ -1,28 +1,21 @@
 .env
 
-# Temporary stuff
-web/smpa/smpa 2/**/*
-dummyresources.py
 
 # Hactar's Fabfile
 fabfile/**/*
-
-# Venv packages
-web/reqs/.venv
-web/smpa/.venv
-
 
 # Misc files
 *.scssc
 *.pyc
 .DS_Store
+.notifier
 *.sublime-workspace
 .vscode/**/*
 **/__pycache__/**/*
 
 
 # Tests
-web/smpa/app/tests/.cache/**/*
+app/smpa/tests/.cache/**/*
 
 
 # Docs & Guide

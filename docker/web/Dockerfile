@@ -25,14 +25,20 @@ ENV LANG en_GB.utf8
 RUN mkdir -p /usr/srv/app/
 WORKDIR /usr/srv/app/
 
-# Pipenv install
-COPY ./smpa/Pipfile /usr/srv/app/Pipfile
-COPY ./smpa/Pipfile.lock /usr/srv/app/Pipfile.lock
-RUN ls -la && whoami && pwd && cat Pipfile
-RUN pip install pipenv
-RUN pipenv install --system --sequential --dev
+# Poetry install
+WORKDIR /usr/srv/app/
+COPY ./config.toml /usr/srv/app/config.toml
+COPY ./pyproject.toml /usr/srv/app/pyproject.toml
+COPY ./poetry.lock /usr/srv/app/poetry.lock
+RUN source $HOME/.poetry/env && \
+    poetry self:update && \
+    poetry install
 
-RUN echo -e "\nalias dev='gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999'" >> ~/.zshrc
+RUN echo -e "\nalias dev='gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999'\n" >> ~/.zshrc
+RUN echo -e "\nalias dev='gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999'\nfunction fish_greeting\n\techo \"🐟 use \`dev\` to run the server\n\"\nend" >> ~/.config/fish/config.fish
+
+
+ENV SHELL /bin/zsh
 
 # Expose the dev server
 EXPOSE 5000

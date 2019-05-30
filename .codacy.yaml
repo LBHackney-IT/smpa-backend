@@ -1,9 +1,6 @@
 ---
 exclude_paths:
-  - docs/**/*
-  - redis/**/*
-  - data/**/*
-  - web/smpa/migrations/*.py
-  - web/smpa/smpa/tests/**/*
-  - web/smpa/smpa/tests/*.py
-  - web/smpa/htmlcov/**/*
+  - docker/**/*
+  - app/tests/**/*
+  - app/tests/*.py
+  - app/htmlcov/**/*

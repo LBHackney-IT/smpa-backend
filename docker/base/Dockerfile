@@ -8,6 +8,7 @@ RUN apk update && apk add --no-cache \
     bash \
     cairo \
     curl \
+    fish \
     freetype-dev \
     gettext \
     gcc \
@@ -29,6 +30,7 @@ RUN apk update && apk add --no-cache \
     postgresql-dev \
     zlib-dev \
     nodejs \
+    nodejs-npm \
     zsh && \
     rm -f /tmp/* /etc/apk/cache/*
 
@@ -54,9 +56,15 @@ ENV SHELL /bin/zsh
 # Install oh-my-zsh and set zsh as the default shell
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
+# Add zsh config
 COPY conf/zshrc /tmp/.zshrc
 COPY conf/hactar.zsh-theme /tmp/hactar.zsh-theme
 COPY conf/zsh-auto-suggest.cfg /tmp/config.zsh
+
+# Add fish config
+RUN mkdir -p ~/.config/fish
+COPY conf/config.fish /tmp/config.fish
+RUN mv /tmp/config.fish ~/.config/fish/config.fish
 
 RUN ls -la /tmp && \
     mv /tmp/.zshrc ~/.zshrc && \
@@ -66,10 +74,17 @@ RUN ls -la /tmp && \
 # # Install zsh autosuggestions
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 
-CMD ["zsh", "--version"]
 
 # Install envkey-source
 RUN curl -s https://raw.githubusercontent.com/envkey/envkey-source/master/install.sh | bash
+
+# Install and set up Poetry for python dependencies management
+RUN mkdir -p /usr/srv/reqs/
+WORKDIR /usr/srv/reqs/
+RUN set -ex pip install pip --upgrade
+RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+RUN source $HOME/.poetry/env && \
+    poetry config settings.virtualenvs.create false
 
 # Because nodejs
 RUN rm -f /usr/lib/node_modules/npm/node_modules/update-notifier/node_modules/configstore/node_modules/dot-prop/license
