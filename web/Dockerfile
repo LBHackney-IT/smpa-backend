@@ -32,7 +32,7 @@ RUN ls -la && whoami && pwd && cat Pipfile
 RUN pip install pipenv
 RUN pipenv install --system --sequential --dev
 
-RUN echo "\nalias dev='gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999'" >> ~/.zshrc
+RUN echo -e "\nalias dev='gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999'" >> ~/.zshrc
 
 # Expose the dev server
 EXPOSE 5000
