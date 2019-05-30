@@ -35,7 +35,7 @@ RUN source $HOME/.poetry/env && \
     poetry install
 
 RUN echo -e "\nalias dev='gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999'\n" >> ~/.zshrc
-RUN echo -e "\nalias dev='gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999'\nfunction fish_greeting\n\techo \"🐟 use \`dev\` to run the server\n\"\nend" >> ~/.config/fish/config.fish
+RUN echo -e "\nalias dev='gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999'\nfunction fish_greeting\n\techo \"🐟 use \`dev\` to run the server\"\n\t echo ""\nend" >> ~/.config/fish/config.fish
 
 
 ENV SHELL /bin/zsh

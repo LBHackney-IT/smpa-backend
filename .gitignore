@@ -21,13 +21,8 @@ app/smpa/tests/.cache/**/*
 # Docs & Guide
 docs/build/**/*
 
-
-# Postgres Data folder
-data/**/*
-
-
 # Redis data folder
-redis/**/*
+docker/redis/**/*
 
 # MyPy cache
 .mypy_cache/**/*
