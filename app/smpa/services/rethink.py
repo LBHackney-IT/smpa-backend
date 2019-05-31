@@ -4,16 +4,13 @@ import json
 import uuid
 import arrow
 from datetime import datetime, date
-from importlib import import_module
 
 # 3rd party
 import falcon
 import rethinkdb
 from slugify import slugify
 from typing import List, Any, Optional, Iterable, Dict  # NOQA
-from rethinkdb.errors import RqlDriverError, RqlRuntimeError, ReqlOpFailedError
-from schematics.types.base import UUIDType
-from schematics.types.serializable import serializable
+from rethinkdb.errors import ReqlOpFailedError
 
 # Module
 from ..models.core import BaseModel
