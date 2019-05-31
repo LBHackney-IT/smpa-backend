@@ -16,7 +16,7 @@ fabfile/**/*
 
 # Tests
 app/smpa/tests/.cache/**/*
-
+app/coverage/**/*
 
 # Docs & Guide
 docs/build/**/*
