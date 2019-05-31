@@ -1,6 +1,7 @@
 ---
 exclude_paths:
   - docker/**/*
-  - app/tests/**/*
-  - app/tests/*.py
+  - app/smpa/tests/**/*
+  - app/smpa/tests/*.py
   - app/htmlcov/**/*
+  - app/coverage/**/*
