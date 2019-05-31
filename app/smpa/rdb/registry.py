@@ -38,15 +38,21 @@ class ModelRegistry(object):
             self._init_model(name, model)
 
     def drop_tables(self):
+        total = len(self._models)
+        count = 0
         for name, model in self._models.items():
+            count += 1
+            progress = count / total * 100
+            console.progress('Dropping tables', progress)
             try:
-                console.info('Drop {} table'.format(model._table))
+                # console.info('Drop {} table'.format(model._table))
                 with rconnect() as conn:
                     query = r.db(model._db).table_drop(model._table)
-                    console.info(query)
+                    # console.info(query)
                     query.run(conn)
             except ReqlOpFailedError as e:
-                console.info('{} table failed to drop'.format(model._table))
+                console.warn(e)
+                console.warn('{} table failed to drop'.format(model._table))
             except Exception as e:
                 console.warn(e)
                 raise

@@ -123,6 +123,7 @@ class Logger(object):
         self.terminal.flush()
         blocks = math.floor(perc / 5)
         spaces = math.ceil((100 - perc) / 5)
+        perc = "{0:.2f}".format(perc)
         self.terminal.write(
             ' [{}{}] {}% {}\r'.format(bg_blue(' ') * blocks, ' ' * spaces, perc, message)
         )

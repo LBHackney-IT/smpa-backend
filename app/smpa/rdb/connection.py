@@ -85,7 +85,9 @@ class RethinkDB(object):
 
     def drop_all(self):
         with rconnect() as conn:
-            return r.db_drop(self.db).run(conn)
+            rv = r.db_drop(self.db).run(conn)
+            console.error(rv)
+            return rv
 
     def disconnect(self):
         console.info('============== DISCONNECT ===============')
