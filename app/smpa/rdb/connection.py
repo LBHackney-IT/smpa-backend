@@ -92,13 +92,17 @@ class RethinkDB(object):
                 db=RDB_DB
             )
             connections.append(self.rdb_conn)
-            assert self.rdb_conn in connections
+            self._check_connections()
         except RqlDriverError as e:
             console.warn(e)
             raise
 
     def get_connection(self):
         return self.rdb_conn
+
+    def _check_connections(self):
+        if self.rdb_conn not in connections:
+            raise RqlRuntimeError('Connection is not in the connection pool')
 
     def init(self):
         console.info('RethinkSetup.init')
