@@ -1,6 +1,6 @@
 # Submit my Planning Application
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8895ca51468e42448335a85cff559f92)](https://www.codacy.com/app/Hactar/smpa-backend?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LBHackney-IT/smpa-backend&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8895ca51468e42448335a85cff559f92)](https://www.codacy.com/app/Hactar/smpa-backend?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LBHackney-IT/smpa-backend&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/8895ca51468e42448335a85cff559f92)](https://www.codacy.com/app/Hactar/smpa-backend?utm_source=github.com&utm_medium=referral&utm_content=LBHackney-IT/smpa-backend&utm_campaign=Badge_Coverage)
 
 ## Secrets management
 
