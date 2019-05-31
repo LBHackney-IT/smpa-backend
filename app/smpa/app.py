@@ -19,6 +19,7 @@ import os
 import falcon
 
 # Application
+from .config.settings import init_settings
 from .helpers.swagger import init_swagger
 from .helpers.startup import Startup
 from .helpers.console import console
@@ -54,10 +55,21 @@ auth_middleware = FalconAuthMiddleware(
 api = application = falcon.API(middleware=[auth_middleware])
 api.req_options.auto_parse_form_urlencoded = True
 
-config = Config()
+
+config: Config
+db: RethinkDB
 
 
 def create_app():
+    global config
+    global db
+    global api
+    global application
+    settings = init_settings()
+    console.log(settings.base)
+    config = settings
+    console.log(config.base)
+
     # Ensure the DB is set up
     db = RethinkDB()
     db.init()

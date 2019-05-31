@@ -35,7 +35,7 @@ python-versions = "*"
 version = "0.24.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Atomic file writes."
 name = "atomicwrites"
 optional = false
@@ -251,7 +251,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "2.8"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Read metadata from Python packages"
 name = "importlib-metadata"
 optional = false
@@ -366,7 +366,7 @@ version = "6.1.3"
 Faker = "0.9.1"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "More routines for operating on iterables, beyond itertools"
 marker = "python_version > \"2.7\""
 name = "more-itertools"
@@ -439,7 +439,7 @@ python-versions = "*"
 version = "0.7.5"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "plugin and hook calling mechanisms for python"
 name = "pluggy"
 optional = false
@@ -471,7 +471,7 @@ python-versions = "*"
 version = "0.6.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "library with cross-python path, ini-parsing, io, code, log facilities"
 name = "py"
 optional = false
@@ -530,7 +530,7 @@ version = "0.15.2"
 six = "*"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "pytest: simple powerful testing with Python"
 name = "pytest"
 optional = false
@@ -562,6 +562,17 @@ version = "2.7.1"
 [package.dependencies]
 coverage = ">=4.4"
 pytest = ">=3.6"
+
+[[package]]
+category = "main"
+description = "py.test plugin that allows you to add environment variables."
+name = "pytest-env"
+optional = false
+python-versions = "*"
+version = "0.6.2"
+
+[package.dependencies]
+pytest = ">=2.6.0"
 
 [[package]]
 category = "dev"
@@ -785,7 +796,7 @@ version = "0.7.0"
 "backports.functools_lru_cache" = ">=1.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Backport of pathlib-compatible object wrapper for zip files"
 name = "zipp"
 optional = false
@@ -793,7 +804,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "e27f44ef88a77618dfd120c6f7269767a8b539bfa5866a7cbfc0603b126b9dce"
+content-hash = "76005c901fa0d11bee314650113c154e4fd29dc7059ebc8d9cdf01b4fa7faf61"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -852,6 +863,7 @@ pyrepl = ["292570f34b5502e871bbb966d639474f2b57fbfcd3373c2d6a2f3d56e681a775"]
 pyrsistent = ["16692ee739d42cf5e39cef8d27649a8c1fdb7aa99887098f1460057c5eb75c3a"]
 pytest = ["1a8aa4fa958f8f451ac5441f3ac130d9fc86ea38780dd2715e6d5c5882700b24", "b8bf138592384bd4e87338cb0f256bf5f615398a649d4bd83915f0e4047a5ca6"]
 pytest-cov = ["2b097cde81a302e1047331b48cadacf23577e431b61e9c6f49a1170bbe3d3da6", "e00ea4fdde970725482f1f35630d12f074e121a23801aabf2ae154ec6bdd343a"]
+pytest-env = ["7e94956aef7f2764f3c147d216ce066bf6c42948bb9e293169b1b1c880a580c2"]
 pytest-falcon = ["b196d169ad756cfae46b39c48196af5ebb6e3f7d3c2a5f59cd5979462dcf7dfa", "d4c54c89f6c83b0ef12db5dc4fd129c2255aeabb20467190696a57ffd9bde394"]
 pytest-sugar = ["26cf8289fe10880cbbc130bd77398c4e6a8b936d8393b116a5c16121d95ab283", "fcd87a74b2bce5386d244b49ad60549bfbc4602527797fac167da147983f58ab"]
 pytest-variables = ["59c00b95779657532ac5f8209b28b5d447c8b4bc4210c1d6bdf9a42aa201f9b0", "7808b77b643b9f8a24f1ee1c32132648b1c62ab93956f20fe101dde66db6d09a"]

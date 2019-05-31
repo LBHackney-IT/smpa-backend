@@ -29,6 +29,7 @@ waitress = "^1.3"
 wsgicors = "^0.7.0"
 passlib = {version = "^1.7",extras = ["bcrypt"]}
 falcon-auth = {version = "^1.1",extras = ["backend-hawk", "backend-jwt"]}
+pytest-env = "^0.6.2"
 
 
 [tool.poetry.dev-dependencies]
