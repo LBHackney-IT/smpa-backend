@@ -54,7 +54,8 @@ class RethinkDB(object):
         connections.append(conn)
         return conn
 
-    def setup(self):
+    @staticmethod
+    def setup():
         conn = r.connect(host=RDB_HOST, port=RDB_PORT, password=RDB_PASSWORD)
         if r.db_list().contains(RDB_DB).run(conn) is False:
             try:

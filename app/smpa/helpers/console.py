@@ -35,20 +35,23 @@ class Logger(object):
         self.terminal.write('\r\n{}'.format(SHOW_CURSOR))
         self.terminal.flush()
 
-    def _get_code_position(self, curframe):
+    @staticmethod
+    def _get_code_position(curframe):
         frame = inspect.getouterframes(curframe, 0)
         base = os.getcwd()
         try:
             pos = '{}:{}'.format(frame[1].filename.replace(base, ''), frame[1].lineno)
         except IndexError:  # We couldn't get the stack info for some reason
-            return '¯\_(ツ)_/¯'
+            return '¯\\_(ツ)_/¯'
         else:
             return pos
 
-    def _output(self, prefix, msg, extra):
+    @staticmethod
+    def _output(prefix, msg, extra):
         print('{}\n> {} {}'.format(prefix, decode(msg), extra if extra else ''))
 
-    def _ts(self):
+    @staticmethod
+    def _ts():
         return magenta(str(arrow.now().format('H:mm:ss')))
 
     def info(self, msg, extra=None):

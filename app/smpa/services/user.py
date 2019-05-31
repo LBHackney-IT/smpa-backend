@@ -26,6 +26,10 @@ _user_profiles = UserProfileService()
 class UserService(RService):
     __model__ = User
 
+    @staticmethod
+    def verify(user, password):
+        return bcrypt.verify(password, user.password)
+
     def authenticate(self, data: dict) -> Optional[User]:
         email = data.get('email', None)
         password = data.get('password', None)
@@ -49,9 +53,6 @@ class UserService(RService):
             "issued_at": str(now),
         }
         return auth_backend.get_auth_token(user_payload)
-
-    def verify(self, user, password):
-        return bcrypt.verify(password, user.password)
 
     def create(self, **kwargs):
         """Creates a user record. Encrypts the password first though and creates a
@@ -88,7 +89,8 @@ class UserService(RService):
 
     # Private methods
 
-    def _hash(self, password):
+    @staticmethod
+    def _hash(password):
         hashed = bcrypt.hash(password)
         return hashed
 

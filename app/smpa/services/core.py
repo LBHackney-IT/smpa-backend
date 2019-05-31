@@ -115,7 +115,7 @@ class Service(object):
             raise ValueError(f'{model} is not of type {self.__model__}')
         return rv
 
-    def _preprocess_params(self, kwargs:dict) -> dict:
+    def _preprocess_params(self, kwargs: dict) -> dict:
         """Returns a preprocessed dictionary of parameters. Used by default
         before creating a new instance or updating an existing instance. Use this
         to do things like remove the csrf_token etc.

@@ -10,7 +10,7 @@ from importlib import import_module
 import falcon
 import rethinkdb
 from slugify import slugify
-from typing import List, Any, Optional, Iterable  # NOQA
+from typing import List, Any, Optional, Iterable, Dict  # NOQA
 from rethinkdb.errors import RqlDriverError, RqlRuntimeError, ReqlOpFailedError
 from schematics.types.base import UUIDType
 from schematics.types.serializable import serializable
@@ -188,7 +188,7 @@ class RService(object):
             if len(data):
                 return self.__model__(data[0])
 
-    def save(self, instance):
+    def save(self, instance: BaseModel):
         """Saves a specific instance.
 
         Args:
@@ -280,7 +280,7 @@ class RService(object):
         new = self.create(**kwargs)
         return new
 
-    def update(self, id, **kwargs):
+    def update(self, id: str, **kwargs: dict):
         """updates a record from the json data
 
         Args:
@@ -336,21 +336,53 @@ class RService(object):
     # Private methods - these do not form part of the public API or method signature of the
     # service class.
 
-    def _preprocess(self, **kwargs):
+    @staticmethod
+    def _preprocess(**kwargs):
         for k, v in kwargs.items():
             if isinstance(v, uuid.UUID):
                 kwargs[k] = str(v)
 
         return kwargs
 
-    def _restore_uuids(self, **kwargs):
+    @staticmethod
+    def _order_by(query, column: str):
+        if column.startswith('>'):
+            index = r.desc(column[1:])
+        elif column.startswith('<'):
+            index = r.asc(column[1:])
+        else:
+            index = column
+
+        try:
+            rv = query.order_by(index)
+        except Exception as e:
+            console.warn(e)
+            raise
+        else:
+            return rv
+
+    @staticmethod
+    def _limit(query, limit: int):
+        if not isinstance(limit, int):
+            raise ValueError('Limit must be an integer')
+        try:
+            rv = query.limit(limit)
+        except Exception as e:
+            console.warn(e)
+            raise
+        else:
+            return rv
+
+    @staticmethod
+    def _restore_uuids(**kwargs):
         for k, v in kwargs.items():
             if k.endswith('_id'):
                 kwargs[k] = uuid.UUID(v)
 
         return kwargs
 
-    def _jsonify(self, data):
+    @staticmethod
+    def _jsonify(data: dict):
         """Allows methods to take arbitrary keywords or json
 
         Args:
@@ -371,33 +403,6 @@ class RService(object):
             # Create json from kwargs
             j = json.dumps(data)
         return json.loads(j)
-
-    def _order_by(self, query, column):
-        if column.startswith('>'):
-            index = r.desc(column[1:])
-        elif column.startswith('<'):
-            index = r.asc(column[1:])
-        else:
-            index = column
-
-        try:
-            rv = query.order_by(index)
-        except Exception as e:
-            console.warn(e)
-            raise
-        else:
-            return rv
-
-    def _limit(self, query, limit):
-        if not isinstance(limit, int):
-            raise ValueError('Limit must be an integer')
-        try:
-            rv = query.limit(limit)
-        except Exception as e:
-            console.warn(e)
-            raise
-        else:
-            return rv
 
     def _make_slug(
             self, instance: BaseModel,

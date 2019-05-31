@@ -38,5 +38,11 @@ class ProposalExtension(WorksProposal):
         ModelType('smpa.models.work.ExtensionOriginalHouseBasement')
 
 
+class ProposalRoof(WorksProposal):
+
+    """Work being done to the roof.
+    """
+
+
 class ProposalEquipment(WorksProposal):
     pass
