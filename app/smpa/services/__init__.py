@@ -20,7 +20,7 @@ from .work import (  # NOQA
     _equipment_works_conservation_types, _extension_original_house_basements,
     _extension_original_house_claddings, _extension_original_house_staircases,
     _extension_original_house_roofs, _work_extension_incidental_buildingss,
-    _extension_original_house_outbuildings, _work_extension_means_of_access_to_sites,
+    _extension_outbuildings, _work_extension_means_of_access_to_sites,
     _extension_original_house_balcony_terraces, _extension_original_house_two_storey_extensions,
     _extension_original_house_single_storey_extensions,
     _extension_original_house_add_replacement_windows_doorss,

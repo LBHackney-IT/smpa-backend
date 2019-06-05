@@ -185,7 +185,7 @@ class ExtensionOriginalHouseRoof(WorkExtensionOption):
     ]
 
 
-class ExtensionOriginalHouseOutbuilding(WorkExtensionOption):
+class ExtensionOutbuilding(WorkExtensionOption):
     pass
 
 
@@ -234,7 +234,6 @@ class WorkExtensionOriginalHouse(Work):
         ModelType(ExtensionOriginalHousePartSinglePartTwoStoreyExtension)
     basement = ModelType(ExtensionOriginalHouseBasement)
     roof = ModelType(ExtensionOriginalHouseRoof)
-    outbuilding = ModelType(ExtensionOriginalHouseOutbuilding)
     porch = ModelType(ExtensionOriginalHousePorch)
     balcony_terrace = ModelType(ExtensionOriginalHouseBalconyTerrace)
     staircase = ModelType(ExtensionOriginalHouseStaircase)
@@ -245,6 +244,7 @@ class WorkExtensionOriginalHouse(Work):
 class WorkExtensionIncidentalBuildings(Work):
     removal_or_demolition = BooleanType(default=False)
     details = StringType()
+    outbuilding = ModelType(ExtensionOutbuilding)
 
 
 class WorkExtensionGatesFencesEtc(Work):

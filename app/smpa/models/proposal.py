@@ -34,11 +34,6 @@ class ProposalExtension(WorksProposal):
         ModelType('smpa.models.work.WorkExtensionMeansOfAccessToSite')
     car_bike_spaces: Type['smpa.models.work.WorkExtensionCarBikeSpaces'] = \
         ModelType('smpa.models.work.WorkExtensionCarBikeSpaces')
-    basement: Type['smpa.models.work.ExtensionOriginalHouseBasement'] = \
-        ModelType('smpa.models.work.ExtensionOriginalHouseBasement')
-    roof: Type['smpa.models.work.ExtensionOriginalHouseRoof'] = \
-        ModelType('smpa.models.work.ExtensionOriginalHouseRoof')
-
 
 
 class ProposalEquipment(WorksProposal):
