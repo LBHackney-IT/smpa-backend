@@ -201,7 +201,7 @@ class ExtensionOriginalHouseStaircase(WorkExtensionOption):
     pass
 
 
-class ExtensionOriginalHouseAddReplacementWindowsDoors(WorkExtensionOption):
+class ExtensionOriginalHouseWindowsDoors(WorkExtensionOption):
     pass
 
 
@@ -238,7 +238,7 @@ class WorkExtensionOriginalHouse(Work):
     porch = ModelType(ExtensionOriginalHousePorch)
     balcony_terrace = ModelType(ExtensionOriginalHouseBalconyTerrace)
     staircase = ModelType(ExtensionOriginalHouseStaircase)
-    add_replacement_windows_doors = ModelType(ExtensionOriginalHouseAddReplacementWindowsDoors)
+    windows_doors = ModelType(ExtensionOriginalHouseWindowsDoors)
     cladding = ModelType(ExtensionOriginalHouseCladding)
 
 

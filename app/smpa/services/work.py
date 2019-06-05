@@ -26,7 +26,7 @@ from ..models.work import (
     ExtensionOriginalHousePorch,
     ExtensionOriginalHouseBalconyTerrace,
     ExtensionOriginalHouseStaircase,
-    ExtensionOriginalHouseAddReplacementWindowsDoors,
+    ExtensionOriginalHouseWindowsDoors,
     ExtensionOriginalHouseCladding,
     Work,
     WorkExtensionOriginalHouse,
@@ -117,8 +117,8 @@ class ExtensionOriginalHouseStaircaseService(RService):
     __model__ = ExtensionOriginalHouseStaircase
 
 
-class ExtensionOriginalHouseAddReplacementWindowsDoorsService(RService):
-    __model__ = ExtensionOriginalHouseAddReplacementWindowsDoors
+class ExtensionOriginalHouseWindowsDoorsService(RService):
+    __model__ = ExtensionOriginalHouseWindowsDoors
 
 
 class ExtensionOriginalHouseCladdingService(RService):
@@ -181,7 +181,7 @@ _extension_original_house_porchs = ExtensionOriginalHousePorchService()
 _extension_original_house_balcony_terraces = ExtensionOriginalHouseBalconyTerraceService()
 _extension_original_house_staircases = ExtensionOriginalHouseStaircaseService()
 _extension_original_house_add_replacement_windows_doorss = \
-    ExtensionOriginalHouseAddReplacementWindowsDoorsService()
+    ExtensionOriginalHouseWindowsDoorsService()
 _extension_original_house_claddings = ExtensionOriginalHouseCladdingService()
 _works = WorkService()
 _work_extension_original_houses = WorkExtensionOriginalHouseService()
