@@ -32,7 +32,7 @@ from ..models.work import (
     WorkExtensionOriginalHouse,
     WorkExtensionIncidentalBuildings,
     WorkExtensionBoundaries,
-    WorkExtensionMeansOfAccessToSite,
+    WorkExtensionMeansOfAccess,
     WorkExtensionCarBikeSpaces,
     WorkEquipment,
     WorkTrees,
@@ -142,8 +142,8 @@ class WorkExtensionBoundariesService(RService):
     __model__ = WorkExtensionBoundaries
 
 
-class WorkExtensionMeansOfAccessToSiteService(RService):
-    __model__ = WorkExtensionMeansOfAccessToSite
+class WorkExtensionMeansOfAccessService(RService):
+    __model__ = WorkExtensionMeansOfAccess
 
 
 class WorkExtensionCarBikeSpacesService(RService):
@@ -193,7 +193,7 @@ _works = WorkService()
 _work_extension_original_houses = WorkExtensionOriginalHouseService()
 _work_extension_incidental_buildings = WorkExtensionIncidentalBuildingsService()
 _work_extension_boundaries = WorkExtensionBoundariesService()
-_work_extension_means_of_access_to_sites = WorkExtensionMeansOfAccessToSiteService()
+_work_extension_means_of_access_to_sites = WorkExtensionMeansOfAccessService()
 _work_extension_car_bike_spaces = WorkExtensionCarBikeSpacesService()
 _work_equipments = WorkEquipmentService()
 _work_trees = WorkTreesService()

@@ -279,19 +279,9 @@ class WorkExtensionBoundaries(Work):
     border_works_types = ListType(ModelType(BorderWorksType))
 
 
-class WorkExtensionMeansOfAccessToSite(Work):
+class WorkExtensionMeansOfAccess(Work):
     access_works_scope_id = UUIDType()
     access_works_sub_type_ids = ListType(UUIDType())
-
-    @serializable
-    def works_scope(self):
-        from ..services.work import _access_works_scopes
-        return _access_works_scopes.get(self.access_works_scope_id).to_native()
-
-    @serializable
-    def works_sub_types(self):
-        from ..services.work import _access_works_sub_types
-        return [_access_works_sub_types.get(_).to_native() for _ in self.access_works_sub_type_ids]
 
 
 class WorkExtensionCarBikeSpaces(Work):
