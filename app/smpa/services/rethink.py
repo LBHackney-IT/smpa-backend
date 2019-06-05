@@ -91,7 +91,7 @@ class RService(object):
                 raise
             else:
                 if rv is not None:
-                    instance = self.__model__(rv)
+                    instance = self.__model__(rv, strict=False)
                     return instance
         return None
 
@@ -145,7 +145,7 @@ class RService(object):
                 raise
             else:
                 try:
-                    data = [self.__model__(_) for _ in rv]
+                    data = [self.__model__(_, strict=False) for _ in rv]
                     return data[0]
                 except IndexError:
                     return None

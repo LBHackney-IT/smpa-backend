@@ -222,6 +222,18 @@ class ExtensionOriginalHouseCladding(WorkExtensionOption):
     pass
 
 
+class ExtensionBoundaraiesGatesFencesWalls(WorkExtensionOption):
+    works_location_ids = ListType(UUIDType())
+    works_locations = ListType(ModelType(WorksLocation))
+    works_type_ids = ListType(UUIDType())
+    works_types = ListType(ModelType(GatesFencesWallsType))
+
+    related_lists = [
+        ('works_location_ids', 'works_locations', 'WorksLocationService'),
+        ('works_type_ids', 'works_types', 'GatesFencesWallsTypeService'),
+    ]
+
+
 ####################################################################################################
 # Works Types
 ####################################################################################################
@@ -261,10 +273,10 @@ class WorkExtensionIncidentalBuildings(Work):
 
 
 class WorkExtensionBoundaries(Work):
+    gates_fences_walls = ModelType(ExtensionBoundaraiesGatesFencesWalls)
+    # TODO Probably removing
     border_works_type_ids = ListType(UUIDType())
     border_works_types = ListType(ModelType(BorderWorksType))
-    gates_fences_walls_type_ids = ListType(UUIDType())
-    gates_fences_walls_types = ListType(ModelType(GatesFencesWallsType))
 
 
 class WorkExtensionMeansOfAccessToSite(Work):
