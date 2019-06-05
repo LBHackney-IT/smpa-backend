@@ -15,5 +15,13 @@ nav:
 - 'contributing/python.md'
 - 'contributing/setup.md'
 - Screen notes: 'screens/screens.md'
-- 'screens/api.md'
+- API Walkthrough:
+  - 'screens/0-screen.md'
+  - 'screens/1-screen.md'
+  - 'screens/2-screen.md'
+  - 'screens/3-screen.md'
+  - 'screens/4-screen.md'
+  - 'screens/5-screen.md'
+  - 'screens/6-screen.md'
+  - 'screens/7-screen.md'
 - tests.md

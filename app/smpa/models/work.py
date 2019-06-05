@@ -176,7 +176,7 @@ class ExtensionOriginalHouseBasement(WorkExtensionOption):
     ]
 
 
-class ExtensionOriginalHouseRoofWorks(WorkExtensionOption):
+class ExtensionOriginalHouseRoof(WorkExtensionOption):
     works_type_ids = ListType(UUIDType())
     works_types = ListType(ModelType(RoofWorksType))
 
@@ -233,7 +233,7 @@ class WorkExtensionOriginalHouse(Work):
     part_single_part_two_storey_extension = \
         ModelType(ExtensionOriginalHousePartSinglePartTwoStoreyExtension)
     basement = ModelType(ExtensionOriginalHouseBasement)
-    roof_works = ModelType(ExtensionOriginalHouseRoofWorks)
+    roof = ModelType(ExtensionOriginalHouseRoof)
     outbuilding = ModelType(ExtensionOriginalHouseOutbuilding)
     porch = ModelType(ExtensionOriginalHousePorch)
     balcony_terrace = ModelType(ExtensionOriginalHouseBalconyTerrace)

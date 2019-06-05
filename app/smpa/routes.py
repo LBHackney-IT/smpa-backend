@@ -127,11 +127,18 @@ def init_routes(api, config):
     add_route(api, '/equipment-proposals/{id}', proposal_equipment_patch)
     add_route(api, '/works-locations', works_location_post)
     add_route(api, '/works-locations/{id}', works_location_patch)
-    add_route(api, '/basement-works-types', basement_works_type_post)
-    add_route(api, '/basement-works-types/{id}', basement_works_type_patch)
 
+    add_route(api, '/basement-works-types', basement_works_type_post)
     add_route(api, '/roof-works-types', roof_works_type_post)
+
+    # Might need superadmin auth
+    add_route(api, '/basement-works-types/{id}', basement_works_type_patch)  # QA
     add_route(api, '/roof-works-types/{id}', roof_works_type_patch)
+    # Working on
+
+
+
+    # To document
     add_route(api, '/border-works-types', border_works_type_post)
     add_route(api, '/border-works-types/{id}', border_works_type_patch)
     add_route(api, '/access-works-scopes', access_works_scope_post)
