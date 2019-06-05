@@ -136,8 +136,6 @@ def init_routes(api, config):
     add_route(api, '/roof-works-types/{id}', roof_works_type_patch)
     # Working on
 
-
-
     # To document
     add_route(api, '/border-works-types', border_works_type_post)
     add_route(api, '/border-works-types/{id}', border_works_type_patch)
