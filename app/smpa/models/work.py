@@ -135,6 +135,19 @@ class EquipmentWorksConservationType(BaseModel, metaclass=ORMMeta):
     name = StringType(max_length=255)
 
 
+class GatesFencesWallsType(BaseModel, metaclass=ORMMeta):
+
+    """Types of work that can be done on gates, fences and walls.
+
+        Addition of a new gate
+        Removal of a gate
+        Replacement and/or repair of any boundary treatment
+        Replacement and/or repair of pillar caps
+
+    """
+    name = StringType(max_length=255)
+
+
 ####################################################################################################
 # Works sub-types
 ####################################################################################################
@@ -247,13 +260,11 @@ class WorkExtensionIncidentalBuildings(Work):
     outbuilding = ModelType(ExtensionOutbuilding)
 
 
-class WorkExtensionGatesFencesEtc(Work):
+class WorkExtensionBoundaries(Work):
     border_works_type_ids = ListType(UUIDType())
-
-    @serializable
-    def works_types(self):
-        from ..services.work import _border_works_types
-        return [_border_works_types.get(_).to_native() for _ in self.border_works_type_ids]
+    border_works_types = ListType(ModelType(BorderWorksType))
+    gates_fences_walls_type_ids = ListType(UUIDType())
+    gates_fences_walls_types = ListType(ModelType(GatesFencesWallsType))
 
 
 class WorkExtensionMeansOfAccessToSite(Work):

@@ -37,7 +37,8 @@ from .resources import (
     RoofWorksTypePost, RoofWorksTypePatch, BorderWorksTypePost, BorderWorksTypePatch,
     AccessWorksScopePost, AccessWorksScopePatch, AccessWorksTypePost, AccessWorksTypePatch,
     ParkingWorksScopePost, ParkingWorksScopePatch, EquipmentWorksTypePost, EquipmentWorksTypePatch,
-    EquipmentWorksConservationTypePost, EquipmentWorksConservationTypePatch
+    EquipmentWorksConservationTypePost, EquipmentWorksConservationTypePatch,
+    GatesFencesWallsTypePost, GatesFencesWallsTypePatch
 )
 
 EXEMPT_ROUTES = [
@@ -93,6 +94,8 @@ def init_routes(api, config):
     equipment_works_type_patch = EquipmentWorksTypePatch()
     equipment_works_conservation_type_post = EquipmentWorksConservationTypePost()
     equipment_works_conservation_type_patch = EquipmentWorksConservationTypePatch()
+    gates_fences_walls_type_post = GatesFencesWallsTypePost()
+    gates_fences_walls_type_patch = GatesFencesWallsTypePatch()
 
     # To fix
     applications = ApplicationResource()
@@ -135,6 +138,8 @@ def init_routes(api, config):
     add_route(api, '/basement-works-types/{id}', basement_works_type_patch)  # QA
     add_route(api, '/roof-works-types/{id}', roof_works_type_patch)
     # Working on
+    add_route(api, '/gate-fences-walls-types', gates_fences_walls_type_post)
+    add_route(api, '/gate-fences-walls-types/{id}', gates_fences_walls_type_patch)
 
     # To document
     add_route(api, '/border-works-types', border_works_type_post)
@@ -204,6 +209,8 @@ def init_routes(api, config):
         equipment_works_type_patch,
         equipment_works_conservation_type_post,
         equipment_works_conservation_type_patch,
+        gates_fences_walls_type_post,
+        gates_fences_walls_type_patch,
         # To fix
         area_units,
         area_units_list,

@@ -28,12 +28,12 @@ class ProposalExtension(WorksProposal):
         ModelType('smpa.models.work.WorkExtensionOriginalHouse')
     incidental_buildings: Type['smpa.models.work.WorkExtensionIncidentalBuildings'] = \
         ModelType('smpa.models.work.WorkExtensionIncidentalBuildings')
-    gates_fences_etc: Type['smpa.models.work.WorkExtensionGatesFencesEtc'] = \
-        ModelType('smpa.models.work.WorkExtensionGatesFencesEtc')
-    means_of_access_to_site: Type['smpa.models.work.WorkExtensionMeansOfAccessToSite'] = \
-        ModelType('smpa.models.work.WorkExtensionMeansOfAccessToSite')
-    car_bike_spaces: Type['smpa.models.work.WorkExtensionCarBikeSpaces'] = \
-        ModelType('smpa.models.work.WorkExtensionCarBikeSpaces')
+    boundaries: Type['smpa.models.work.WorkExtensionBoundaries'] = \
+        ModelType('smpa.models.work.WorkExtensionBoundaries')
+    means_of_access: Type['smpa.models.work.WorkExtensionMeansOfAccess'] = \
+        ModelType('smpa.models.work.WorkExtensionMeansOfAccess')
+    parking: Type['smpa.models.work.WorkExtensionParking'] = \
+        ModelType('smpa.models.work.WorkExtensionParking')
 
 
 class ProposalEquipment(WorksProposal):

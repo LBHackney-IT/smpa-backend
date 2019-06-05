@@ -14,6 +14,13 @@ AREA_UNITS = ["sq centimetres", "sq metres", "hectares", "sq miles"]
 LINEAR_UNITS = ["centimetres", "metres", "miles"]
 DOCUMENT_SIZES = ["A1", "A2", "A3", "A4", "A5"]
 WORKS_LOCATIONS = ["Rear", "Side", "Front", "Rear / side wrap-around"]
+
+
+####################################################################################################
+# Works types
+####################################################################################################
+
+
 BASEMENT_WORKS_TYPES = [
     "Excavation of a new basement",
     "Enlargement of an existing basement",
@@ -63,6 +70,20 @@ EQUIPMENT_WORKS_CONSERVATION_TYPES = [
     "Security alarm",
     "Solar panel or other sustainable energy equipment",
 ]
+
+GATES_FENCES_WALLS_TYPES = [
+    "Addition of a new gate",
+    "Removal of a gate",
+    "Replacement and/or repair of any boundary treatment",
+    "Replacement and/or repair of pillar caps ",
+]
+
+
+####################################################################################################
+# Materials
+####################################################################################################
+
+
 MATERIALS_ROOF = [
     "Tiles",
     "Concrete",
@@ -102,6 +123,12 @@ MATERIALS_DOOR = [
     "Glass",
     "Other",
 ]
+
+
+####################################################################################################
+# Users
+####################################################################################################
+
 
 ROLES = ['SuperAdmin', 'Admin', 'User']
 SUPERADMIN_USERS = [

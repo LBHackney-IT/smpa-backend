@@ -33,6 +33,7 @@ GET /api/v1/roof-works-types
     /api/v1/access-works-scopes
     /api/v1/access-works-types
     /api/v1/parking-works-scopes
+    /api/v1//gate-fences-walls-types
     /api/v1/equipment-works-types
     /api/v1/equipment-works-conservation
     /api/v1/area-units

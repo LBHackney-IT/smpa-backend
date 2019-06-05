@@ -31,11 +31,12 @@ from ..models.work import (
     Work,
     WorkExtensionOriginalHouse,
     WorkExtensionIncidentalBuildings,
-    WorkExtensionGatesFencesEtc,
+    WorkExtensionBoundaries,
     WorkExtensionMeansOfAccessToSite,
     WorkExtensionCarBikeSpaces,
     WorkEquipment,
     WorkTrees,
+    GatesFencesWallsType,
 )
 
 from .rethink import RService
@@ -137,8 +138,8 @@ class WorkExtensionIncidentalBuildingsService(RService):
     __model__ = WorkExtensionIncidentalBuildings
 
 
-class WorkExtensionGatesFencesEtcService(RService):
-    __model__ = WorkExtensionGatesFencesEtc
+class WorkExtensionBoundariesService(RService):
+    __model__ = WorkExtensionBoundaries
 
 
 class WorkExtensionMeansOfAccessToSiteService(RService):
@@ -157,6 +158,10 @@ class WorkTreesService(RService):
     __model__ = WorkTrees
 
 
+class GatesFencesWallsTypeService(RService):
+    __model__ = GatesFencesWallsType
+
+
 _works_locations = WorksLocationService()
 _basement_works_types = BasementWorksTypeService()
 _roof_works_types = RoofWorksTypeService()
@@ -167,6 +172,7 @@ _parking_works_scopes = ParkingWorksScopeService()
 _equipment_works_types = EquipmentWorksTypeService()
 _equipment_works_conservation_types = EquipmentWorksConservationTypeService()
 _work_extension_options = WorkExtensionOptionService()
+_gates_fences_walls_types = GatesFencesWallsTypeService()
 
 _extension_original_house_single_storey_extensions = \
     ExtensionOriginalHouseSingleStoreyExtensionService()
@@ -185,8 +191,8 @@ _extension_original_house_add_replacement_windows_doorss = \
 _extension_original_house_claddings = ExtensionOriginalHouseCladdingService()
 _works = WorkService()
 _work_extension_original_houses = WorkExtensionOriginalHouseService()
-_work_extension_incidental_buildingss = WorkExtensionIncidentalBuildingsService()
-_work_extension_gates_fences_etcs = WorkExtensionGatesFencesEtcService()
+_work_extension_incidental_buildings = WorkExtensionIncidentalBuildingsService()
+_work_extension_boundaries = WorkExtensionBoundariesService()
 _work_extension_means_of_access_to_sites = WorkExtensionMeansOfAccessToSiteService()
 _work_extension_car_bike_spacess = WorkExtensionCarBikeSpacesService()
 _work_equipments = WorkEquipmentService()

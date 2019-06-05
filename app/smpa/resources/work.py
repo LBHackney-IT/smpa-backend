@@ -7,7 +7,7 @@ from .core import Resource, ListResource
 from ..services.work import (
     _works_locations, _basement_works_types, _roof_works_types, _border_works_types,
     _access_works_scopes, _access_works_types, _parking_works_scopes, _equipment_works_types,
-    _equipment_works_conservation_types
+    _equipment_works_conservation_types, _gates_fences_walls_types
 )
 
 
@@ -959,6 +959,112 @@ class EquipmentWorksConservationTypePatch(Resource):
             200:
                 description: Returns updated EquipmentWorksConservationType
                 schema: EquipmentWorksConservationType
+            401:
+                description: Unauthorized
+            404:
+                description: Object does not exist
+            422:
+                description: Input body formatting issue
+        """
+        super().on_patch(req, resp, id)
+
+
+class GatesFencesWallsTypePost(ListResource):
+    _service = _gates_fences_walls_types
+    auth = {
+        'exempt_methods': ['GET']
+    }
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Get all GatesFencesWallsType from the DB
+        tags:
+            - GatesFencesWallsType
+        parameters:
+            - in: query
+              schema: CoreListSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: All GatesFencesWallsTypes
+                schema:
+                    type: array
+                    items: GatesFencesWallsType
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp)
+
+    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Add new GatesFencesWallsType to the database
+        tags:
+            - GatesFencesWallsType
+        parameters:
+            - in: body
+              schema: GatesFencesWallsType
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            201:
+                description: GatesFencesWallsType created successfully
+                schema: GatesFencesWallsType
+            401:
+                description: Unauthorized
+            422:
+                description: Input body formatting issue
+        """
+        super().on_post(req, resp)
+
+
+class GatesFencesWallsTypePatch(Resource):
+    _service = _gates_fences_walls_types
+    auth = {
+        'exempt_methods': ['GET']
+    }
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
+        """
+        ---
+        summary: Get one GatesFencesWallsType from the database
+        tags:
+            - GatesFencesWallsType
+        parameters:
+            - in: path
+              schema: CoreGetSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: One GatesFencesWallsType
+                schema: GatesFencesWallsType
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp, id)
+
+    def on_patch(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
+        """
+        ---
+        summary: Update an GatesFencesWallsType in the database
+        tags:
+            - GatesFencesWallsType
+        parameters:
+            - in: body
+              schema: GatesFencesWallsType
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            200:
+                description: Returns updated GatesFencesWallsType
+                schema: GatesFencesWallsType
             401:
                 description: Unauthorized
             404:

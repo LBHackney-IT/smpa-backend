@@ -11,7 +11,8 @@ from ..config.defaults import (
     AREA_UNITS, LINEAR_UNITS, DOCUMENT_SIZES, ROLES, SUPERADMIN_USERS, WORKS_LOCATIONS,
     BASEMENT_WORKS_TYPES, MATERIALS_ROOF, MATERIALS_WALL, MATERIALS_WINDOW, MATERIALS_DOOR,
     ROOF_WORKS_TYPES, BORDER_WORKS_TYPES, ACCESS_WORKS_TYPES, ACCESS_WORKS_SCOPES,
-    PARKING_WORKS_SCOPES, EQUIPMENT_WORKS_TYPES, EQUIPMENT_WORKS_CONSERVATION_TYPES
+    PARKING_WORKS_SCOPES, EQUIPMENT_WORKS_TYPES, EQUIPMENT_WORKS_CONSERVATION_TYPES,
+    GATES_FENCES_WALLS_TYPES
 )
 from ..services.unit import _area_units, _linear_units
 from ..services.document import _document_sizes
@@ -19,7 +20,7 @@ from ..services.user import _roles, _users
 from ..services.work import (
     _works_locations, _basement_works_types, _roof_works_types, _border_works_types,
     _access_works_scopes, _access_works_types, _parking_works_scopes, _equipment_works_types,
-    _equipment_works_conservation_types,
+    _equipment_works_conservation_types, _gates_fences_walls_types,
     # TODO
     _work_extension_options
 )
@@ -61,6 +62,8 @@ class Startup:
             _equipment_works_types.get_or_create(name=_)
         for _ in EQUIPMENT_WORKS_CONSERVATION_TYPES:
             _equipment_works_conservation_types.get_or_create(name=_)
+        for _ in GATES_FENCES_WALLS_TYPES:
+            _gates_fences_walls_types.get_or_create(name=_)
 
         self._add_materials()
         self._add_users()
