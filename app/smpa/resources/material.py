@@ -14,7 +14,7 @@ from ..services.material import (
 class MaterialOptionRoofResource(Resource):
     _service = _material_options_roof
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -97,7 +97,7 @@ class MaterialOptionRoofResource(Resource):
 class MaterialOptionWallResource(Resource):
     _service = _material_options_wall
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -182,7 +182,7 @@ class MaterialOptionWallResource(Resource):
 class MaterialOptionWindowResource(Resource):
     _service = _material_options_window
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -267,7 +267,7 @@ class MaterialOptionWindowResource(Resource):
 class MaterialOptionDoorResource(Resource):
     _service = _material_options_door
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:

@@ -9,6 +9,10 @@ from ..helpers.console import console
 class Resource(object):
     """Base Resource class for making stuff extensible."""
 
+    auth = {
+        'exempt_methods': ['OPTIONS']
+    }
+
     def on_options(self, req, resp):
         resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
 

@@ -9,7 +9,7 @@ from ..services.document import _document_sizes
 class DocumentSizeResource(Resource):
     _service = _document_sizes
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
