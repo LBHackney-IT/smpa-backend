@@ -213,6 +213,17 @@ falcon = "*"
 pyjwt = "*"
 
 [[package]]
+category = "main"
+description = "Falcon CORS middlware"
+name = "falcon-cors"
+optional = false
+python-versions = "*"
+version = "1.1.7"
+
+[package.dependencies]
+falcon = "*"
+
+[[package]]
 category = "dev"
 description = "colorful TAB completion for Python prompt"
 name = "fancycompleter"
@@ -815,7 +826,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "67f165c3fb36de8c51971faf0c7f4981c8c4c97ec37100e38d73ee048f4dd9e5"
+content-hash = "15cba3de25095f1e84f3c495fd8bc75faf23d1c1ba6e21114b1e80cf1a40a15c"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -841,6 +852,7 @@ faker = ["74b32991f8e08e4f2f84858b919eca253becfaec4b3fa5fcff7fdbd70d5d78b1", "c2
 falcon = ["18157af2a4fc3feedf2b5dcc6196f448639acf01c68bc33d4d5a04c3ef87f494", "24adcd2b29a8ffa9d552dc79638cd21736a3fb04eda7d102c6cebafdaadb88ad", "54f2cb4b687035b2a03206dbfc538055cc48b59a953187b0458aa1b574d47b53", "59d1e8c993b9a37ea06df9d72cf907a46cc8063b30717cdac2f34d1658b6f936", "733033ec80c896e30a43ab3e776856096836787197a44eb21022320a61311983", "74cf1d18207381c665b9e6292d65100ce146d958707793174b03869dc6e614f4", "95bf6ce986c1119aef12c9b348f4dee9c6dcc58391bdd0bc2b0bf353c2b15986", "9712975adcf8c6e12876239085ad757b8fdeba223d46d23daef82b47658f83a9", "a5ebb22a04c9cc65081938ee7651b4e3b4d2a28522ea8ec04c7bdd2b3e9e8cd8", "aa184895d1ad4573fbfaaf803563d02f019ebdf4790e41cc568a330607eae439", "e3782b7b92fefd46a6ad1fd8fe63fe6c6f1b7740a95ca56957f48d1aee34b357", "e9efa0791b5d9f9dd9689015ea6bce0a27fcd5ecbcd30e6d940bffa4f7f03389", "eea593cf466b9c126ce667f6d30503624ef24459f118c75594a69353b6c3d5fc", "f93351459f110b4c1ee28556aef9a791832df6f910bea7b3f616109d534df06b"]
 falcon-apispec = ["24f8bd6d1cbe86cc5ac7f7a7262476e1f40d59fab7213a64f5172dbcb034c9a3", "dd0d7058004be00fb987d331e2e45b623deddd8588732700f0e422525b261f1b"]
 falcon-auth = ["21ee33daf8b615fb24392b6f80bc2287d02bd0a3c4a924180d2678d5cc55838d"]
+falcon-cors = ["1788ec5c31b5a39240f7979a7c7170a33ea4952dc97e151858a82dcde1a9fe8a"]
 fancycompleter = ["d2522f1f3512371f295379c4c0d1962de06762eb586c199620a2a5d423539b12"]
 gunicorn = ["aa8e0b40b4157b36a5df5e599f45c9c76d6af43845ba3b3b0efe2c70473c2471", "fa2662097c66f920f53f70621c6c58ca4a3c4d3434205e608e121b5b3b71f4f3"]
 hjson = ["1d1727faa6aaef2973921877125a3ab7c5f6d34b93233179d01770f41fab51f9"]

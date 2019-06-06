@@ -17,6 +17,7 @@ import os
 
 # 3rd party
 import falcon
+from falcon_cors import CORS
 
 # Application
 from .config.settings import init_settings
@@ -50,9 +51,17 @@ auth_middleware = FalconAuthMiddleware(
     exempt_methods=['HEAD']
 )
 
+# Setup CORS
+cors = CORS(allow_origins_list=[
+    'http://localhost:8081'
+])
+
 # Create the Falcon app
 # api = application = falcon.API()  # NO AUTH
-api = application = falcon.API(middleware=[auth_middleware])
+api = application = falcon.API(middleware=[
+    auth_middleware,
+    cors.middleware
+])
 api.req_options.auto_parse_form_urlencoded = True
 
 
