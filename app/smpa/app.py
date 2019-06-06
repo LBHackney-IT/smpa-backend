@@ -55,7 +55,8 @@ auth_middleware = FalconAuthMiddleware(
 cors = CORS(
     allow_origins_list=[
         'http://localhost:8081'
-    ], allow_all_headers=True
+    ], allow_all_headers=True,
+    allow_all_methods=True
 )
 
 # Create the Falcon app
