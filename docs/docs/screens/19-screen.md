@@ -1,21 +1,18 @@
-# 18. About the vehicle / pedestrian access
+# 19. About the vehicle / pedestrian access
 
 
-> **NOTE**: We're now submitting to the `means_of_access` key of an extension proposal.
+> **NOTE**: We're now submitting to the `parking` key of an extension proposal.
 
 
-### Example - set the works types
+### Example - set the scope
 
-![](/static/screen20.png)
+![](/static/screen21.png)
 
 `PATCH /api/v1/extension-proposals/{id}`
 
     {
-        "means_of_access": {
-            "access_works_sub_type_ids": [
-                "590a7e3d-87ab-4b44-8406-fe0fb369aa81",
-                "181deec8-d26f-4796-a036-c66528536de9"
-            ]
+        "parking": {
+            "parking_works_scope_id": "d17dea6b-20d8-46df-87d0-b41fc5ec08c3"
         }
     }
 
@@ -135,12 +132,12 @@
       },
       "boundaries": {
         "id": null,
-        "created_at": "2019-06-06T11:43:32.508186",
-        "updated_at": "2019-06-06T11:43:32.508234",
+        "created_at": "2019-06-06T12:01:16.760282",
+        "updated_at": "2019-06-06T12:01:16.760320",
         "gates_fences_walls": {
           "id": null,
-          "created_at": "2019-06-06T11:43:32.508357",
-          "updated_at": "2019-06-06T11:43:32.508390",
+          "created_at": "2019-06-06T12:01:16.760431",
+          "updated_at": "2019-06-06T12:01:16.760464",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -155,15 +152,27 @@
       },
       "means_of_access": {
         "id": null,
-        "created_at": "2019-06-06T11:43:32.508700",
-        "updated_at": "2019-06-06T11:43:32.508733",
+        "created_at": "2019-06-06T12:01:16.761054",
+        "updated_at": "2019-06-06T12:01:16.761124",
         "access_works_scope_id": "4c75ce90-4616-4dd0-b70a-de5ca530a37d",
-        "border_works_scope": null,
+        "access_works_scope": null,
         "access_works_sub_type_ids": [
           "590a7e3d-87ab-4b44-8406-fe0fb369aa81",
           "181deec8-d26f-4796-a036-c66528536de9"
         ],
         "access_works_sub_types": null
       },
-      "parking": null
+      "parking": {
+        "id": null,
+        "created_at": "2019-06-06T12:01:16.761472",
+        "updated_at": "2019-06-06T12:01:16.761506",
+        "parking_works_scope_id": "d17dea6b-20d8-46df-87d0-b41fc5ec08c3",
+        "parking_works_scope": null,
+        "parking_works_sub_type_ids": null,
+        "current_car_parking_spaces": 0,
+        "planned_car_parking_spaces": 0,
+        "current_bike_parking_spaces": 0,
+        "planned_bike_parking_spaces": 0,
+        "new_ev_charging_points": 0
+      }
     }
