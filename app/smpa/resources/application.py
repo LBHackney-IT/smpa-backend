@@ -56,7 +56,6 @@ class ApplicationResourcePost(ListResource):
             422:
                 description: Input body formatting issue
         """
-        import ipdb; ipdb.set_trace()
         super().on_post(req, resp)
 
 
