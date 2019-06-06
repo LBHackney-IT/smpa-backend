@@ -25,7 +25,7 @@ from .resources import (
     # Document size resources
     DocumentSizeResource,
     # Application resources
-    ApplicationResource, ApplicationListResource,
+    ApplicationResourcePost, ApplicationResourcePatch,
     # Site resources
     SiteAreaPostResource, SiteAreaPatchResource, SiteConstraintsPostResource,
     SiteConstraintsPatchResource,
@@ -96,10 +96,10 @@ def init_routes(api, config):
     equipment_works_conservation_type_patch = EquipmentWorksConservationTypePatch()
     gates_fences_walls_type_post = GatesFencesWallsTypePost()
     gates_fences_walls_type_patch = GatesFencesWallsTypePatch()
+    applications_post = ApplicationResourcePost()
+    applications_patch = ApplicationResourcePatch()
 
     # To fix
-    applications = ApplicationResource()
-    applications_list = ApplicationListResource()
     area_units = AreaUnitResource()
     area_units_list = AreaUnitListResource()
     linear_units = LinearUnitResource()
@@ -161,8 +161,8 @@ def init_routes(api, config):
     add_route(api, '/linear-units', linear_units_list)
     add_route(api, '/linear-units/{id}', linear_units)
 
-    add_route(api, '/applications', applications_list)
-    add_route(api, '/applications/{id}', applications)
+    add_route(api, '/applications', applications_post)
+    add_route(api, '/applications/{id}', applications_patch)
 
     add_route(api, '/users', users)
     add_route(api, '/users/{id}', users)
@@ -224,6 +224,6 @@ def init_routes(api, config):
         material_option_wall_resource,
         material_option_door_resource,
         material_option_window_resource,
-        applications_list,
-        applications,
+        applications_post,
+        applications_patch,
     ]

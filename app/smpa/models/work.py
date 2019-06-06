@@ -281,7 +281,10 @@ class WorkExtensionBoundaries(Work):
 
 class WorkExtensionMeansOfAccess(Work):
     access_works_scope_id = UUIDType()
+    border_works_scope = ModelType(BorderWorksType)
+
     access_works_sub_type_ids = ListType(UUIDType())
+    access_works_sub_types = ListType(ModelType(AccessWorksType))
 
 
 class WorkExtensionCarBikeSpaces(Work):
