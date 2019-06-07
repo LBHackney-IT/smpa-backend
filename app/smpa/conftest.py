@@ -10,6 +10,7 @@ def setup_teardown():
     # Set up
     running = True
     from smpa.app import db
+    console.warn(f'DB = {db.db}')
     from smpa.rdb.registry import model_registry
     yield running
     # Tear down

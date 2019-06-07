@@ -71,8 +71,9 @@ class ModelRegistry(object):
         console.success('READY')
 
     def _init_model(self, name, model):
+        from smpa.app import config
         model._model = model
-        setattr(model, '_db', os.environ.get('RDB_DB'))
+        setattr(model, '_db', config.RDB_DB)
         self._create_table(name, model)
 
     def _create_table(self, name, model):

@@ -14,7 +14,7 @@ from rethinkdb.errors import ReqlOpFailedError
 
 # Module
 from ..models.core import BaseModel
-from ..rdb.connection import RDB_DB, rconnect
+from ..rdb.connection import rconnect
 from ..helpers.console import console
 
 
@@ -59,7 +59,8 @@ class RService(object):
         Returns:
             [type]: [description]
         """
-        return r.db(RDB_DB).table(self.__model__._table)
+        from ..app import config
+        return r.db(config.RDB_DB).table(self.__model__._table)
 
     def new(self, *args, **kwargs):
         kwargs = self._preprocess(**kwargs)
