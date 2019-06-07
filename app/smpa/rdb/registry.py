@@ -37,6 +37,28 @@ class ModelRegistry(object):
             # This model is appearing after init has already run, so we need to _init_model it.
             self._init_model(name, model)
 
+    def purge(self):
+        """Purges all records from all tables, without dropping those tables.
+        """
+        total = len(self._models)
+        count = 0
+        for name, model in self._models.items():
+            count += 1
+            progress = count / total * 100
+            console.progress('Dropping tables', progress)
+            try:
+                # console.info('Drop {} table'.format(model._table))
+                with rconnect() as conn:
+                    query = r.db(model._db).table(model._table).get_all().delete()
+                    query.run(conn)
+            except ReqlOpFailedError as e:
+                console.warn(e)
+                console.warn('{} table failed to purge'.format(model._table))
+            except Exception as e:
+                console.warn(e)
+                raise
+        return True
+
     def drop_tables(self):
         total = len(self._models)
         count = 0

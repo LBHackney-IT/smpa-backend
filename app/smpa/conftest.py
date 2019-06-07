@@ -15,8 +15,7 @@ def setup_teardown():
     yield running
     # Tear down
     if db.db.startswith('test_'):
-        model_registry.drop_tables()
-        db.drop_all()
+        model_registry.purge()
     else:
         console.warn('Refusing to drop non-test database')
     console.log('EXIT TESTS')
