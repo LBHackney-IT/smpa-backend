@@ -163,6 +163,7 @@ ROLES = [
 
 SUPERADMIN_USERS = [
     {
+        "id": "d485c8d2-e116-4573-acf8-ddccc4dff129",
         "email": "systems@hactar.is",
         "password": os.environ.get('HACTAR_PASSWORD')
     }
