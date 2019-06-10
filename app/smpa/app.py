@@ -88,6 +88,7 @@ def create_app():
     model_registry.init()
     Startup.init_data()
     init_routes(api, config)
+    return api
 
 
 create_app()
