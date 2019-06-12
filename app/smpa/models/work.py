@@ -306,6 +306,28 @@ class WorkExtensionParking(Work):
 ####################################################################################################
 
 
+class WorkEquipmentLocation(BaseModel, metaclass=ORMMeta):
+
+    location_id = UUIDType()
+    location = ModelType(WorksLocation)
+
+    equipment_type_id = UUIDType()
+    equipment_type = ModelType(EquipmentWorksType)
+
+    # TODO Add relationships
+
+
+class WorkEquipmentConservationLocation(BaseModel, metaclass=ORMMeta):
+
+    location_id = UUIDType()
+    location = ModelType(WorksLocation)
+
+    equipment_type_id = UUIDType()
+    equipment_conservation_type = ModelType(EquipmentWorksConservationType)
+
+    # TODO Add relationships
+
+
 class WorkEquipment(BaseModel, metaclass=ORMMeta):
 
     equipment_type_ids = ListType(UUIDType())
@@ -313,6 +335,11 @@ class WorkEquipment(BaseModel, metaclass=ORMMeta):
 
     equipment_conservation_type_ids = ListType(UUIDType())
     equipment_conservation_types = ListType(ModelType(EquipmentWorksConservationType))
+
+    equipment_locations = ListType(ModelType(WorkEquipmentLocation))
+    equipment_conservation_locations = ListType(ModelType(WorkEquipmentLocation))
+
+    # TODO Add relationships
 
 
 ####################################################################################################
