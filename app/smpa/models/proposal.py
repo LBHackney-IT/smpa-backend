@@ -35,6 +35,9 @@ class ProposalExtension(WorksProposal):
     parking: Type['smpa.models.work.WorkExtensionParking'] = \
         ModelType('smpa.models.work.WorkExtensionParking')
 
+    additional_floor_area = FloatType()
+    additional_floor_area_units_id = UUIDType()
+
 
 class ProposalEquipment(WorksProposal):
     equipment: Type['smpa.models.work.WorkEquipment'] = \
