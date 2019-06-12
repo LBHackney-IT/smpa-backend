@@ -38,6 +38,9 @@ class ProposalExtension(WorksProposal):
     additional_floor_area = FloatType()
     additional_floor_area_units_id = UUIDType()
 
+    new_single_bedrooms = IntType()
+    new_double_bedrooms = IntType()
+
 
 class ProposalEquipment(WorksProposal):
     equipment: Type['smpa.models.work.WorkEquipment'] = \
