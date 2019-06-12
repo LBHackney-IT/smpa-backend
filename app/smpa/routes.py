@@ -116,31 +116,38 @@ def init_routes(api, config):
     # Routes
     add_route(api, '/auth', auth)
 
+    add_route(api, '/access-works-scopes', access_works_scope_post)
     add_route(api, '/addresses', addresses_post)
     add_route(api, '/addresses/{id}', addresses_patch)
+    add_route(api, '/basement-works-types', basement_works_type_post)
+    add_route(api, '/equipment-proposals', proposal_equipment_post)
+    add_route(api, '/equipment-works-conservation-types', equipment_works_conservation_type_post)
+    add_route(api, '/equipment-works-types', equipment_works_type_post)
+    add_route(api, '/extension-proposals', proposal_extension_post)
+    add_route(api, '/gate-fences-walls-types', gates_fences_walls_type_post)
+    add_route(api, '/roof-works-types', roof_works_type_post)
     add_route(api, '/site-addresses', siteaddresses_post)
     add_route(api, '/site-addresses/{id}', siteaddresses_patch)
     add_route(api, '/site-areas', site_area_post)
-    add_route(api, '/site-areas/{id}', site_area_patch)
     add_route(api, '/site-constraints', site_constraints_post)
-    add_route(api, '/site-constraints/{id}', site_constraints_patch)
-    add_route(api, '/extension-proposals', proposal_extension_post)
-    add_route(api, '/extension-proposals/{id}', proposal_extension_patch)
-    add_route(api, '/equipment-proposals', proposal_equipment_post)
-    add_route(api, '/equipment-proposals/{id}', proposal_equipment_patch)
     add_route(api, '/works-locations', works_location_post)
-    add_route(api, '/works-locations/{id}', works_location_patch)
-    add_route(api, '/basement-works-types', basement_works_type_post)
-    add_route(api, '/roof-works-types', roof_works_type_post)
-    add_route(api, '/gate-fences-walls-types', gates_fences_walls_type_post)
-    add_route(api, '/gate-fences-walls-types/{id}', gates_fences_walls_type_patch)
 
     # Might need superadmin auth
-    add_route(api, '/basement-works-types/{id}', basement_works_type_patch)  # QA
-    add_route(api, '/roof-works-types/{id}', roof_works_type_patch)
-    # Working on
-    add_route(api, '/access-works-scopes', access_works_scope_post)
     add_route(api, '/access-works-scopes/{id}', access_works_scope_patch)
+    add_route(api, '/basement-works-types/{id}', basement_works_type_patch)  # QA
+    add_route(api, '/equipment-proposals/{id}', proposal_equipment_patch)
+    add_route(
+        api, '/equipment-works-conservation-types/{id}', equipment_works_conservation_type_patch)
+    add_route(api, '/equipment-works-types/{id}', equipment_works_type_patch)
+    add_route(api, '/extension-proposals/{id}', proposal_extension_patch)
+    add_route(api, '/gate-fences-walls-types/{id}', gates_fences_walls_type_patch)
+    add_route(api, '/roof-works-types/{id}', roof_works_type_patch)
+    add_route(api, '/site-areas/{id}', site_area_patch)
+    add_route(api, '/site-constraints/{id}', site_constraints_patch)
+    add_route(api, '/works-locations/{id}', works_location_patch)
+
+    # Working on
+
     # To document
     add_route(api, '/border-works-types', border_works_type_post)
     add_route(api, '/border-works-types/{id}', border_works_type_patch)
@@ -149,11 +156,7 @@ def init_routes(api, config):
     add_route(api, '/access-works-types/{id}', access_works_type_patch)
     add_route(api, '/parking-works-scopes', parking_works_scope_post)
     add_route(api, '/parking-works-scopes/{id}', parking_works_scope_patch)
-    add_route(api, '/equipment-works-types', equipment_works_type_post)
-    add_route(api, '/equipment-works-types/{id}', equipment_works_type_patch)
-    add_route(api, '/equipment-works-conservation-types', equipment_works_conservation_type_post)
-    add_route(
-        api, '/equipment-works-conservation-types/{id}', equipment_works_conservation_type_patch)
+
 
     add_route(api, '/area-units', area_units_list)
     add_route(api, '/area-units/{id}', area_units)

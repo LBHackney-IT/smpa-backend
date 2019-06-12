@@ -37,4 +37,5 @@ class ProposalExtension(WorksProposal):
 
 
 class ProposalEquipment(WorksProposal):
-    pass
+    equipment: Type['smpa.models.work.WorkEquipment'] = \
+        ModelType('smpa.models.work.WorkEquipment')

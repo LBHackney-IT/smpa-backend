@@ -301,26 +301,18 @@ class WorkExtensionParking(Work):
     new_ev_charging_points = IntType(default=0)
 
 
-
 ####################################################################################################
 # Equipment works
 ####################################################################################################
 
 
 class WorkEquipment(BaseModel, metaclass=ORMMeta):
+
     equipment_type_ids = ListType(UUIDType())
+    equipment_types = ListType(ModelType(EquipmentWorksType))
+
     equipment_conservation_type_ids = ListType(UUIDType())
-
-    @serializable
-    def equipment_types(self):
-        from ..services.work import _equipment_types
-        return [_equipment_types.get(_).to_native() for _ in self.equipment_type_ids]
-
-    @serializable
-    def equipment_conservation_types(self):
-        from ..services.work import _equipment_conservation_types
-        return [_equipment_conservation_types.get(_).to_native()
-                for _ in self.equipment_conservation_type_ids]
+    equipment_conservation_types = ListType(ModelType(EquipmentWorksConservationType))
 
 
 ####################################################################################################
