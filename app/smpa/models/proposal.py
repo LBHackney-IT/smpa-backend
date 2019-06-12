@@ -34,6 +34,9 @@ class ProposalExtension(WorksProposal):
         ModelType('smpa.models.work.WorkExtensionMeansOfAccess')
     parking: Type['smpa.models.work.WorkExtensionParking'] = \
         ModelType('smpa.models.work.WorkExtensionParking')
+    trees: Type['smpa.models.work.WorkTrees'] = \
+        ModelType('smpa.models.work.WorkTrees')
+
 
     additional_floor_area = FloatType()
     additional_floor_area_units_id = UUIDType()
