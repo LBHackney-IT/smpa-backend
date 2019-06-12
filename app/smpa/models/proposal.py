@@ -44,6 +44,13 @@ class ProposalExtension(WorksProposal):
     new_single_bedrooms = IntType()
     new_double_bedrooms = IntType()
 
+    # You will define materials on supporting documentation
+    materials_definitions_in_documents = BooleanType(default=False)
+    # You will define materials using this form <- we can ignore
+    materials_definitions_in_form = BooleanType(default=False)
+    # You don’t know yet and will submit an Approval of Conditions later
+    materials_definitions_to_follow = BooleanType(default=False)
+
 
 class ProposalEquipment(WorksProposal):
     equipment: Type['smpa.models.work.WorkEquipment'] = \

@@ -25,6 +25,19 @@ class MaterialOption(BaseModel, metaclass=ORMMeta):
 
 
 class MaterialOptionRoof(MaterialOption):
+
+    """Options for roof materials
+
+        Tiles
+        Concrete
+        Slate
+        Metal
+        Thatch
+        Asphalt shingles
+        Unknown
+
+    """
+
     pass
 
 
@@ -57,47 +70,27 @@ class BaseMaterial(BaseModel, metaclass=ORMMeta):
 
 
 ####################################################################################################
-# comment
+# Answers to "Other"
 ####################################################################################################
 
 
-class MaterialRoof(BaseMaterial):
+class MaterialRoofOther(BaseMaterial):
     material_id = UUIDType()
 
-    @serializable
-    def material(self):
-        from ..services.material import _material_options_roof
-        return _material_options_roof.get(self.material_id).to_native()
 
-
-class MaterialWall(BaseMaterial):
+class MaterialWallOther(BaseMaterial):
     material_id = UUIDType()
 
-    @serializable
-    def material(self):
-        from ..services.material import _material_options_wall
-        return _material_options_wall.get(self.material_id).to_native()
 
-
-class MaterialWindow(BaseMaterial):
+class MaterialWindowOther(BaseMaterial):
     material_id = UUIDType()
 
-    @serializable
-    def material(self):
-        from ..services.material import _material_options_window
-        return _material_options_window.get(self.material_id).to_native()
 
-
-class MaterialDoor(BaseMaterial):
+class MaterialDoorOther(BaseMaterial):
     material_id = UUIDType()
 
-    @serializable
-    def material(self):
-        from ..services.material import _material_options_door
-        return _material_options_door.get(self.material_id).to_native()
 
-
-class OtherMaterial(BaseMaterial):
+class OtherMaterialOther(BaseMaterial):
     name = StringType(required=True)
 
 

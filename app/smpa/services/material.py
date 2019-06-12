@@ -9,8 +9,8 @@
 from .rethink import RService
 from ..models.material import (
     MaterialOptionRoof, MaterialOptionWall, MaterialOptionWindow,
-    MaterialOptionDoor, BaseMaterial, MaterialRoof, MaterialWall,
-    MaterialWindow, MaterialDoor, OtherMaterial, ExternalBuildingMaterial
+    MaterialOptionDoor, BaseMaterial, MaterialRoofOther, MaterialWallOther,
+    MaterialWindowOther, MaterialDoorOther, OtherMaterialOther, ExternalBuildingMaterial
 )
 
 
@@ -34,24 +34,24 @@ class BaseMaterialService(RService):
     __model__ = BaseMaterial
 
 
-class MaterialRoofService(RService):
-    __model__ = MaterialRoof
+class MaterialRoofOtherService(RService):
+    __model__ = MaterialRoofOther
 
 
-class MaterialWallService(RService):
-    __model__ = MaterialWall
+class MaterialWallOtherService(RService):
+    __model__ = MaterialWallOther
 
 
-class MaterialWindowService(RService):
-    __model__ = MaterialWindow
+class MaterialWindowOtherService(RService):
+    __model__ = MaterialWindowOther
 
 
-class MaterialDoorService(RService):
-    __model__ = MaterialDoor
+class MaterialDoorOtherService(RService):
+    __model__ = MaterialDoorOther
 
 
-class OtherMaterialService(RService):
-    __model__ = OtherMaterial
+class OtherMaterialOtherService(RService):
+    __model__ = OtherMaterialOther
 
 
 class ExternalBuildingMaterialService(RService):
@@ -63,9 +63,9 @@ _material_options_wall = MaterialOptionWallService()
 _material_options_window = MaterialOptionWindowService()
 _material_options_door = MaterialOptionDoorService()
 _base_materials = BaseMaterialService()
-_materials_roof = MaterialRoofService()
-_materials_wall = MaterialWallService()
-_materials_window = MaterialWindowService()
-_materials_door = MaterialDoorService()
-_other_materials = OtherMaterialService()
+_materials_roof_other = MaterialRoofOtherService()
+_materials_wall_other = MaterialWallOtherService()
+_materials_window_other = MaterialWindowOtherService()
+_materials_door_other = MaterialDoorOtherService()
+_other_materials = OtherMaterialOtherService()
 _external_building_materials = ExternalBuildingMaterialService()

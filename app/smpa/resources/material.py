@@ -6,8 +6,8 @@ from typing import Optional
 from .core import Resource
 from ..services.material import (
     _material_options_roof, _material_options_wall, _material_options_window,
-    _material_options_door, _base_materials, _materials_roof, _materials_wall, _materials_window,
-    _materials_door, _other_materials, _external_building_materials
+    _material_options_door, _base_materials, _materials_roof_other, _materials_wall_other,
+    _materials_window_other, _materials_door_other, _other_materials, _external_building_materials
 )
 
 

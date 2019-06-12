@@ -193,6 +193,12 @@ class ExtensionOriginalHouseRoof(WorkExtensionOption):
     works_type_ids = ListType(UUIDType())
     works_types = ListType(ModelType(RoofWorksType))
 
+    materials_ids = ListType(UUIDType())
+    materials = ListType(ModelType('smpa.models.material.MaterialOptionRoof'))
+
+    materials_other_ids = ListType(UUIDType())
+    materials = ListType(ModelType('smpa.models.material.MaterialOptionRoof'))
+
     related_lists = [
         ('works_type_ids', 'works_types', 'RoofWorksTypeService'),
     ]

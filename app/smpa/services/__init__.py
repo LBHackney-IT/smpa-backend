@@ -34,9 +34,9 @@ from .document import *  # NOQA
 from .document import _document_sizes  # NOQA
 from .material import *  # NOQA
 from .material import (  # NOQA
-    _base_materials, _materials_door, _materials_roof, _materials_wall, _other_materials,
-    _materials_window, _material_options_door, _material_options_roof, _material_options_wall,
-    _material_options_window, _external_building_materials
+    _base_materials, _materials_door_other, _materials_roof_other, _materials_wall_other,
+    _other_materials, _materials_window_other, _material_options_door, _material_options_roof,
+    _material_options_wall, _material_options_window, _external_building_materials
 )
 from .application import *  # NOQA
 from .application import _applications  # NOQA
