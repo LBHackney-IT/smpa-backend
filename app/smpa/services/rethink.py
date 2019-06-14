@@ -171,7 +171,6 @@ class RService(object):
         """
         kwargs = self._preprocess(**kwargs)
         j = self._jsonify(kwargs)
-
         with rconnect() as conn:
             query = self.q.insert(j)
             rv = query.run(conn)
@@ -181,7 +180,7 @@ class RService(object):
                     data.append(self.get(_))
 
             if len(data) > 1:
-                return [self.__model__(_) for _ in rv]
+                return data
 
             if len(data):
                 return self.__model__(data[0])
@@ -226,7 +225,7 @@ class RService(object):
             else:
                 return instance
 
-    def find(self, order_by: Optional[str] = None, limit: int = 0, **kwargs):
+    def find(self, order_by: Optional[str] = None, limit: Optional[int] = None, **kwargs):
         """
         Find all items that matches your kwargs.
         :param limit: How many rows to fetch.
@@ -252,7 +251,7 @@ class RService(object):
                 query = self.q
                 if order_by is not None:
                     query = self._order_by(query, order_by)
-                if limit > 0:
+                if limit is not None:
                     query = self._limit(query, limit)
                 query = query.filter(j)
                 rv = query.run(conn)
@@ -291,6 +290,9 @@ class RService(object):
         kwargs = self._preprocess(**kwargs)
         j = self._jsonify(kwargs)
 
+        if isinstance(id, uuid.UUID):
+            id = str(id)
+
         with rconnect() as conn:
             query = self.q.get(id).update(j, return_changes=True)
             rv = query.run(conn)
@@ -299,13 +301,13 @@ class RService(object):
             else:
                 return self.get(id)
 
-    def all(self, order_by: Optional[str] = None, limit: int = 0):
+    def all(self, order_by: Optional[str] = None, limit: Optional[int] = None):
         with rconnect() as conn:
             try:
                 query = self.q
                 if order_by is not None:
                     query = self._order_by(query, order_by)
-                if limit > 0:
+                if limit is not None:
                     query = self._limit(query, limit)
                 rv = query.run(conn)
             except Exception as e:
@@ -333,6 +335,12 @@ class RService(object):
 
     # Private methods - these do not form part of the public API or method signature of the
     # service class.
+
+    def _purge(self):
+        """Use with caution. Mostly here to help with tests cleanup.
+        """
+        for _ in self.all():
+            self.delete(_)
 
     @staticmethod
     def _preprocess(**kwargs):

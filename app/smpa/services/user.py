@@ -45,7 +45,7 @@ class UserService(RService):
     def gen_token(self, user):
         from smpa.app import auth_backend
         now = arrow.utcnow()
-        then = now.shift(hours=12)
+        then = now.shift(hours=24 * 7)
         user_payload = {
             'subject': user.email,
             "issuer": "SmPA",

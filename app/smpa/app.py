@@ -38,9 +38,14 @@ def user_loader(*args, **kwargs):
         uid = args[0]['user']['id']
         user = _users.get(uid)
     except Exception as e:
-        console.error(e)
-    else:
-        return user
+        try:
+            email = args[0]['user']['subject']
+            user = _users.first(email=email)
+        except Exception as e:
+            console.error(e)
+            raise
+
+    return user
 
 
 secret_key = os.environ.get('SECRET_KEY')

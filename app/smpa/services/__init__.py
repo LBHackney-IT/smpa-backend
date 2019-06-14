@@ -5,7 +5,6 @@
 # Module
 from .site import *  # NOQA
 from .site import _site_areas, _site_constraints # NOQA
-from .test import _tests  # NOQA
 from .unit import *  # NOQA
 from .unit import _area_units, _linear_units  # NOQA
 from .user import *  # NOQA

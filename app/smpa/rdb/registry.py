@@ -97,6 +97,7 @@ class ModelRegistry(object):
         model._model = model
         setattr(model, '_db', config.RDB_DB)
         self._create_table(name, model)
+        self._add_indexes(name, model)
 
     def _create_table(self, name, model):
         if name not in self._tables:
@@ -106,7 +107,7 @@ class ModelRegistry(object):
                     query = r.db(model._db).table_create(model._table)
                     # console.info(query)
                     query.run(conn)
-            except ReqlOpFailedError as e:
+            except ReqlOpFailedError:
                 pass
                 # console.info('{} table probably already exists'.format(model._table))
             except Exception as e:
@@ -114,6 +115,16 @@ class ModelRegistry(object):
                 raise
             else:
                 self._tables.append(name)
+
+    def _add_indexes(self, name, model):
+        table = r.db(model._db).table(model._table)
+        with rconnect() as conn:
+            try:
+                table.index_create("created_at", r.row["created_at"]).run(conn)
+                table.index_create("updated_at", r.row["updated_at"]).run(conn)
+            except rethinkdb.errors.ReqlOpFailedError:
+                # Already exists.
+                pass
 
 
 model_registry = ModelRegistry()
