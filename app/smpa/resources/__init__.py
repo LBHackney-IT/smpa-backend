@@ -10,6 +10,5 @@ from .document import *  # NOQA
 from .proposal import *  # NOQA
 from .site import *  # NOQA
 from .unit import *  # NOQA
-from .test import *  # NOQA
 from .work import *  # NOQA
 from .user import *  # NOQA

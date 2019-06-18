@@ -9,6 +9,13 @@ from ..helpers.console import console
 class Resource(object):
     """Base Resource class for making stuff extensible."""
 
+    auth = {
+        'exempt_methods': ['OPTIONS']
+    }
+
+    # def on_options(self, req, resp):
+    #     resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
+
     def _json_or_404(self, data: Union[MarshalResult, List[MarshalResult]]) -> str:
         """Take a MarshalResult object or list of MarshalResult objects
         and return the json.

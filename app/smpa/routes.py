@@ -9,10 +9,24 @@ import os
 from .resources.swagger import ApiSpecResource
 
 from .resources.material import (
-    MaterialOptionRoofResource,
-    MaterialOptionWallResource,
-    MaterialOptionWindowResource,
-    MaterialOptionDoorResource,
+    # Options
+    MaterialOptionRoofPost,
+    MaterialOptionRoofPatch,
+    MaterialOptionWallPost,
+    MaterialOptionWallPatch,
+    MaterialOptionWindowPost,
+    MaterialOptionWindowPatch,
+    MaterialOptionDoorPost,
+    MaterialOptionDoorPatch,
+    # Materials
+    MaterialRoofPost,
+    MaterialRoofPatch,
+    MaterialWallPost,
+    MaterialWallPatch,
+    MaterialWindowPost,
+    MaterialWindowPatch,
+    MaterialDoorPost,
+    MaterialDoorPatch,
 )
 from .resources import (
     # Unit resources
@@ -25,7 +39,7 @@ from .resources import (
     # Document size resources
     DocumentSizeResource,
     # Application resources
-    ApplicationResource, ApplicationListResource,
+    ApplicationResourcePost, ApplicationResourcePatch,
     # Site resources
     SiteAreaPostResource, SiteAreaPatchResource, SiteConstraintsPostResource,
     SiteConstraintsPatchResource,
@@ -37,7 +51,8 @@ from .resources import (
     RoofWorksTypePost, RoofWorksTypePatch, BorderWorksTypePost, BorderWorksTypePatch,
     AccessWorksScopePost, AccessWorksScopePatch, AccessWorksTypePost, AccessWorksTypePatch,
     ParkingWorksScopePost, ParkingWorksScopePatch, EquipmentWorksTypePost, EquipmentWorksTypePatch,
-    EquipmentWorksConservationTypePost, EquipmentWorksConservationTypePatch
+    EquipmentWorksConservationTypePost, EquipmentWorksConservationTypePatch,
+    GatesFencesWallsTypePost, GatesFencesWallsTypePatch
 )
 
 EXEMPT_ROUTES = [
@@ -93,10 +108,12 @@ def init_routes(api, config):
     equipment_works_type_patch = EquipmentWorksTypePatch()
     equipment_works_conservation_type_post = EquipmentWorksConservationTypePost()
     equipment_works_conservation_type_patch = EquipmentWorksConservationTypePatch()
+    gates_fences_walls_type_post = GatesFencesWallsTypePost()
+    gates_fences_walls_type_patch = GatesFencesWallsTypePatch()
+    applications_post = ApplicationResourcePost()
+    applications_patch = ApplicationResourcePatch()
 
     # To fix
-    applications = ApplicationResource()
-    applications_list = ApplicationListResource()
     area_units = AreaUnitResource()
     area_units_list = AreaUnitListResource()
     linear_units = LinearUnitResource()
@@ -105,46 +122,87 @@ def init_routes(api, config):
     agents = AgentResource()
     # applicants = ApplicantResource()
     documentsizes = DocumentSizeResource()
-    material_option_roof_resource = MaterialOptionRoofResource()
-    material_option_wall_resource = MaterialOptionWallResource()
-    material_option_door_resource = MaterialOptionDoorResource()
-    material_option_window_resource = MaterialOptionWindowResource()
+
+    # Material Options
+    material_option_roof_post = MaterialOptionRoofPost()
+    material_option_roof_patch = MaterialOptionRoofPatch()
+    material_option_wall_post = MaterialOptionWallPost()
+    material_option_wall_patch = MaterialOptionWallPatch()
+    material_option_door_post = MaterialOptionDoorPost()
+    material_option_door_patch = MaterialOptionDoorPatch()
+    material_option_window_post = MaterialOptionWindowPost()
+    material_option_window_patch = MaterialOptionWindowPatch()
+
+    # Submitted Materials
+    material_roof_post = MaterialRoofPost()
+    material_roof_patch = MaterialRoofPatch()
+    material_wall_post = MaterialWallPost()
+    material_wall_patch = MaterialWallPatch()
+    material_window_post = MaterialWindowPost()
+    material_window_patch = MaterialWindowPatch()
+    material_door_post = MaterialDoorPost()
+    material_door_patch = MaterialDoorPatch()
 
     # Routes
     add_route(api, '/auth', auth)
 
+    add_route(api, '/access-works-scopes', access_works_scope_post)
     add_route(api, '/addresses', addresses_post)
     add_route(api, '/addresses/{id}', addresses_patch)
+    add_route(api, '/basement-works-types', basement_works_type_post)
+    add_route(api, '/equipment-proposals', proposal_equipment_post)
+    add_route(api, '/equipment-works-conservation-types', equipment_works_conservation_type_post)
+    add_route(api, '/equipment-works-types', equipment_works_type_post)
+    add_route(api, '/extension-proposals', proposal_extension_post)
+    add_route(api, '/gate-fences-walls-types', gates_fences_walls_type_post)
+    add_route(api, '/roof-works-types', roof_works_type_post)
     add_route(api, '/site-addresses', siteaddresses_post)
     add_route(api, '/site-addresses/{id}', siteaddresses_patch)
     add_route(api, '/site-areas', site_area_post)
-    add_route(api, '/site-areas/{id}', site_area_patch)
     add_route(api, '/site-constraints', site_constraints_post)
-    add_route(api, '/site-constraints/{id}', site_constraints_patch)
-    add_route(api, '/extension-proposals', proposal_extension_post)
-    add_route(api, '/extension-proposals/{id}', proposal_extension_patch)
-    add_route(api, '/equipment-proposals', proposal_equipment_post)
-    add_route(api, '/equipment-proposals/{id}', proposal_equipment_patch)
     add_route(api, '/works-locations', works_location_post)
-    add_route(api, '/works-locations/{id}', works_location_patch)
-    add_route(api, '/basement-works-types', basement_works_type_post)
-    add_route(api, '/basement-works-types/{id}', basement_works_type_patch)
 
-    add_route(api, '/roof-works-types', roof_works_type_post)
+    # Might need superadmin auth
+    add_route(api, '/access-works-scopes/{id}', access_works_scope_patch)
+    add_route(api, '/basement-works-types/{id}', basement_works_type_patch)  # QA
+    add_route(api, '/equipment-proposals/{id}', proposal_equipment_patch)
+    add_route(
+        api, '/equipment-works-conservation-types/{id}', equipment_works_conservation_type_patch)
+    add_route(api, '/equipment-works-types/{id}', equipment_works_type_patch)
+    add_route(api, '/extension-proposals/{id}', proposal_extension_patch)
+    add_route(api, '/gate-fences-walls-types/{id}', gates_fences_walls_type_patch)
     add_route(api, '/roof-works-types/{id}', roof_works_type_patch)
+    add_route(api, '/site-areas/{id}', site_area_patch)
+    add_route(api, '/site-constraints/{id}', site_constraints_patch)
+    add_route(api, '/works-locations/{id}', works_location_patch)
+
+    # Working on
+    add_route(api, '/materials/options/roof', material_option_roof_post)
+    add_route(api, '/materials/options/roof/{id}', material_option_roof_patch)
+    add_route(api, '/materials/options/wall', material_option_wall_post)
+    add_route(api, '/materials/options/wall/{id}', material_option_wall_patch)
+    add_route(api, '/materials/options/door', material_option_door_post)
+    add_route(api, '/materials/options/door/{id}', material_option_door_patch)
+    add_route(api, '/materials/options/window', material_option_window_post)
+    add_route(api, '/materials/options/window/{id}', material_option_window_patch)
+
+    add_route(api, '/materials/roof', material_roof_post)
+    add_route(api, '/materials/roof/{id}', material_roof_patch)
+    add_route(api, '/materials/wall', material_wall_post)
+    add_route(api, '/materials/wall/{id}', material_wall_patch)
+    add_route(api, '/materials/wind', material_window_post)
+    add_route(api, '/materials/wind/{id}', material_window_patch)
+    add_route(api, '/materials/door', material_door_post)
+    add_route(api, '/materials/door/{id}', material_door_patch)
+
+    # To document
     add_route(api, '/border-works-types', border_works_type_post)
     add_route(api, '/border-works-types/{id}', border_works_type_patch)
-    add_route(api, '/access-works-scopes', access_works_scope_post)
-    add_route(api, '/access-works-scopes/{id}', access_works_scope_patch)
+
     add_route(api, '/access-works-types', access_works_type_post)
     add_route(api, '/access-works-types/{id}', access_works_type_patch)
     add_route(api, '/parking-works-scopes', parking_works_scope_post)
     add_route(api, '/parking-works-scopes/{id}', parking_works_scope_patch)
-    add_route(api, '/equipment-works-types', equipment_works_type_post)
-    add_route(api, '/equipment-works-types/{id}', equipment_works_type_patch)
-    add_route(api, '/equipment-works-conservation-types', equipment_works_conservation_type_post)
-    add_route(
-        api, '/equipment-works-conservation-types/{id}', equipment_works_conservation_type_patch)
 
     add_route(api, '/area-units', area_units_list)
     add_route(api, '/area-units/{id}', area_units)
@@ -152,8 +210,8 @@ def init_routes(api, config):
     add_route(api, '/linear-units', linear_units_list)
     add_route(api, '/linear-units/{id}', linear_units)
 
-    add_route(api, '/applications', applications_list)
-    add_route(api, '/applications/{id}', applications)
+    add_route(api, '/applications', applications_post)
+    add_route(api, '/applications/{id}', applications_patch)
 
     add_route(api, '/users', users)
     add_route(api, '/users/{id}', users)
@@ -166,11 +224,6 @@ def init_routes(api, config):
 
     add_route(api, '/document-sizes', documentsizes)
     add_route(api, '/document-sizes/{id}', documentsizes)
-
-    add_route(api, '/materials/options/roof', material_option_roof_resource)
-    add_route(api, '/materials/options/wall', material_option_wall_resource)
-    add_route(api, '/materials/options/door', material_option_door_resource)
-    add_route(api, '/materials/options/window', material_option_window_resource)
 
     config.resources = [
         addresses_post,
@@ -199,6 +252,26 @@ def init_routes(api, config):
         equipment_works_type_patch,
         equipment_works_conservation_type_post,
         equipment_works_conservation_type_patch,
+        gates_fences_walls_type_post,
+        gates_fences_walls_type_patch,
+        # Materials
+        material_option_roof_post,
+        material_option_roof_patch,
+        material_option_wall_post,
+        material_option_wall_patch,
+        material_option_door_post,
+        material_option_door_patch,
+        material_option_window_post,
+        material_option_window_patch,
+        material_roof_post,
+        material_roof_patch,
+        material_wall_post,
+        material_wall_patch,
+        material_window_post,
+        material_window_patch,
+        material_door_post,
+        material_door_patch,
+
         # To fix
         area_units,
         area_units_list,
@@ -209,10 +282,6 @@ def init_routes(api, config):
         # applicants,
         documentsizes,
         auth,
-        material_option_roof_resource,
-        material_option_wall_resource,
-        material_option_door_resource,
-        material_option_window_resource,
-        applications_list,
-        applications,
+        applications_post,
+        applications_patch,
     ]

@@ -21,21 +21,22 @@ from ..models.work import (
     ExtensionOriginalHouseTwoStoreyExtension,
     ExtensionOriginalHousePartSinglePartTwoStoreyExtension,
     ExtensionOriginalHouseBasement,
-    ExtensionOriginalHouseRoofWorks,
-    ExtensionOriginalHouseOutbuilding,
+    ExtensionOriginalHouseRoof,
+    ExtensionOutbuilding,
     ExtensionOriginalHousePorch,
     ExtensionOriginalHouseBalconyTerrace,
     ExtensionOriginalHouseStaircase,
-    ExtensionOriginalHouseAddReplacementWindowsDoors,
+    ExtensionOriginalHouseWindowsDoors,
     ExtensionOriginalHouseCladding,
     Work,
     WorkExtensionOriginalHouse,
     WorkExtensionIncidentalBuildings,
-    WorkExtensionGatesFencesEtc,
-    WorkExtensionMeansOfAccessToSite,
-    WorkExtensionCarBikeSpaces,
+    WorkExtensionBoundaries,
+    WorkExtensionMeansOfAccess,
+    WorkExtensionParking,
     WorkEquipment,
     WorkTrees,
+    GatesFencesWallsType,
 )
 
 from .rethink import RService
@@ -97,12 +98,12 @@ class ExtensionOriginalHouseBasementService(RService):
     __model__ = ExtensionOriginalHouseBasement
 
 
-class ExtensionOriginalHouseRoofWorksService(RService):
-    __model__ = ExtensionOriginalHouseRoofWorks
+class ExtensionOriginalHouseRoofService(RService):
+    __model__ = ExtensionOriginalHouseRoof
 
 
-class ExtensionOriginalHouseOutbuildingService(RService):
-    __model__ = ExtensionOriginalHouseOutbuilding
+class ExtensionOutbuildingService(RService):
+    __model__ = ExtensionOutbuilding
 
 
 class ExtensionOriginalHousePorchService(RService):
@@ -117,8 +118,8 @@ class ExtensionOriginalHouseStaircaseService(RService):
     __model__ = ExtensionOriginalHouseStaircase
 
 
-class ExtensionOriginalHouseAddReplacementWindowsDoorsService(RService):
-    __model__ = ExtensionOriginalHouseAddReplacementWindowsDoors
+class ExtensionOriginalHouseWindowsDoorsService(RService):
+    __model__ = ExtensionOriginalHouseWindowsDoors
 
 
 class ExtensionOriginalHouseCladdingService(RService):
@@ -137,16 +138,16 @@ class WorkExtensionIncidentalBuildingsService(RService):
     __model__ = WorkExtensionIncidentalBuildings
 
 
-class WorkExtensionGatesFencesEtcService(RService):
-    __model__ = WorkExtensionGatesFencesEtc
+class WorkExtensionBoundariesService(RService):
+    __model__ = WorkExtensionBoundaries
 
 
-class WorkExtensionMeansOfAccessToSiteService(RService):
-    __model__ = WorkExtensionMeansOfAccessToSite
+class WorkExtensionMeansOfAccessService(RService):
+    __model__ = WorkExtensionMeansOfAccess
 
 
-class WorkExtensionCarBikeSpacesService(RService):
-    __model__ = WorkExtensionCarBikeSpaces
+class WorkExtensionParkingService(RService):
+    __model__ = WorkExtensionParking
 
 
 class WorkEquipmentService(RService):
@@ -155,6 +156,10 @@ class WorkEquipmentService(RService):
 
 class WorkTreesService(RService):
     __model__ = WorkTrees
+
+
+class GatesFencesWallsTypeService(RService):
+    __model__ = GatesFencesWallsType
 
 
 _works_locations = WorksLocationService()
@@ -167,6 +172,7 @@ _parking_works_scopes = ParkingWorksScopeService()
 _equipment_works_types = EquipmentWorksTypeService()
 _equipment_works_conservation_types = EquipmentWorksConservationTypeService()
 _work_extension_options = WorkExtensionOptionService()
+_gates_fences_walls_types = GatesFencesWallsTypeService()
 
 _extension_original_house_single_storey_extensions = \
     ExtensionOriginalHouseSingleStoreyExtensionService()
@@ -175,19 +181,19 @@ _extension_original_house_two_storey_extensions = \
 _extension_original_house_part_single_part_two_storey_extensions = \
     ExtensionOriginalHousePartSinglePartTwoStoreyExtensionService()
 _extension_original_house_basements = ExtensionOriginalHouseBasementService()
-_extension_original_house_roof_workss = ExtensionOriginalHouseRoofWorksService()
-_extension_original_house_outbuildings = ExtensionOriginalHouseOutbuildingService()
+_extension_original_house_roofs = ExtensionOriginalHouseRoofService()
+_extension_outbuildings = ExtensionOutbuildingService()
 _extension_original_house_porchs = ExtensionOriginalHousePorchService()
 _extension_original_house_balcony_terraces = ExtensionOriginalHouseBalconyTerraceService()
 _extension_original_house_staircases = ExtensionOriginalHouseStaircaseService()
-_extension_original_house_add_replacement_windows_doorss = \
-    ExtensionOriginalHouseAddReplacementWindowsDoorsService()
+_extension_original_house_add_replacement_windows_doors = \
+    ExtensionOriginalHouseWindowsDoorsService()
 _extension_original_house_claddings = ExtensionOriginalHouseCladdingService()
 _works = WorkService()
 _work_extension_original_houses = WorkExtensionOriginalHouseService()
-_work_extension_incidental_buildingss = WorkExtensionIncidentalBuildingsService()
-_work_extension_gates_fences_etcs = WorkExtensionGatesFencesEtcService()
-_work_extension_means_of_access_to_sites = WorkExtensionMeansOfAccessToSiteService()
-_work_extension_car_bike_spacess = WorkExtensionCarBikeSpacesService()
+_work_extension_incidental_buildings = WorkExtensionIncidentalBuildingsService()
+_work_extension_boundaries = WorkExtensionBoundariesService()
+_work_extension_means_of_access_to_sites = WorkExtensionMeansOfAccessService()
+_work_extension_car_bike_spaces = WorkExtensionParkingService()
 _work_equipments = WorkEquipmentService()
-_work_treess = WorkTreesService()
+_work_trees = WorkTreesService()

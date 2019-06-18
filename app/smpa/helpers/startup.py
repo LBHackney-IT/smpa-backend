@@ -11,7 +11,8 @@ from ..config.defaults import (
     AREA_UNITS, LINEAR_UNITS, DOCUMENT_SIZES, ROLES, SUPERADMIN_USERS, WORKS_LOCATIONS,
     BASEMENT_WORKS_TYPES, MATERIALS_ROOF, MATERIALS_WALL, MATERIALS_WINDOW, MATERIALS_DOOR,
     ROOF_WORKS_TYPES, BORDER_WORKS_TYPES, ACCESS_WORKS_TYPES, ACCESS_WORKS_SCOPES,
-    PARKING_WORKS_SCOPES, EQUIPMENT_WORKS_TYPES, EQUIPMENT_WORKS_CONSERVATION_TYPES
+    PARKING_WORKS_SCOPES, EQUIPMENT_WORKS_TYPES, EQUIPMENT_WORKS_CONSERVATION_TYPES,
+    GATES_FENCES_WALLS_TYPES
 )
 from ..services.unit import _area_units, _linear_units
 from ..services.document import _document_sizes
@@ -19,7 +20,7 @@ from ..services.user import _roles, _users
 from ..services.work import (
     _works_locations, _basement_works_types, _roof_works_types, _border_works_types,
     _access_works_scopes, _access_works_types, _parking_works_scopes, _equipment_works_types,
-    _equipment_works_conservation_types,
+    _equipment_works_conservation_types, _gates_fences_walls_types,
     # TODO
     _work_extension_options
 )
@@ -36,54 +37,67 @@ class Startup:
         """Creates some initital data. Called at startup, objects should be idempotent.
         """
         for _ in AREA_UNITS:
-            _area_units.get_or_create(name=_)
+            _area_units.get_or_create(id=_[0], name=_[1])
         for _ in LINEAR_UNITS:
-            _linear_units.get_or_create(name=_)
+            _linear_units.get_or_create(id=_[0], name=_[1])
         for _ in DOCUMENT_SIZES:
-            _document_sizes.get_or_create(name=_)
+            _document_sizes.get_or_create(id=_[0], name=_[1])
         for _ in ROLES:
-            _roles.get_or_create(name=_)
+            _roles.get_or_create(id=_[0], name=_[1])
         for _ in WORKS_LOCATIONS:
-            _works_locations.get_or_create(name=_)
+            _works_locations.get_or_create(id=_[0], name=_[1])
         for _ in BASEMENT_WORKS_TYPES:
-            _basement_works_types.get_or_create(name=_)
+            _basement_works_types.get_or_create(id=_[0], name=_[1])
         for _ in ROOF_WORKS_TYPES:
-            _roof_works_types.get_or_create(name=_)
+            _roof_works_types.get_or_create(id=_[0], name=_[1])
         for _ in BORDER_WORKS_TYPES:
-            _border_works_types.get_or_create(name=_)
+            _border_works_types.get_or_create(id=_[0], name=_[1])
         for _ in ACCESS_WORKS_TYPES:
-            _access_works_types.get_or_create(name=_)
+            _access_works_types.get_or_create(id=_[0], name=_[1])
         for _ in ACCESS_WORKS_SCOPES:
-            _access_works_scopes.get_or_create(name=_)
+            _access_works_scopes.get_or_create(id=_[0], name=_[1])
         for _ in PARKING_WORKS_SCOPES:
-            _parking_works_scopes.get_or_create(name=_)
+            _parking_works_scopes.get_or_create(id=_[0], name=_[1])
         for _ in EQUIPMENT_WORKS_TYPES:
-            _equipment_works_types.get_or_create(name=_)
+            _equipment_works_types.get_or_create(id=_[0], name=_[1])
         for _ in EQUIPMENT_WORKS_CONSERVATION_TYPES:
-            _equipment_works_conservation_types.get_or_create(name=_)
+            _equipment_works_conservation_types.get_or_create(id=_[0], name=_[1])
+        for _ in GATES_FENCES_WALLS_TYPES:
+            _gates_fences_walls_types.get_or_create(id=_[0], name=_[1])
 
         self._add_materials()
-        self._add_users()
-        self._dummy_data()
+
+        try:
+            self._add_users()
+        except Exception as e:
+            console.error(e)
+
+        from smpa.app import config
+        if config.base == 'development' or config.base == 'test':
+            try:
+                self._dummy_data()
+            except Exception as e:
+                console.error(e)
 
         console.success('Created default data')
 
     @classmethod
     def _add_materials(self):
         for _ in MATERIALS_ROOF:
-            _material_options_roof.get_or_create(name=_)
+            _material_options_roof.get_or_create(id=_[0], name=_[1])
         for _ in MATERIALS_WALL:
-            _material_options_wall.get_or_create(name=_)
+            _material_options_wall.get_or_create(id=_[0], name=_[1])
         for _ in MATERIALS_WINDOW:
-            _material_options_window.get_or_create(name=_)
+            _material_options_window.get_or_create(id=_[0], name=_[1])
         for _ in MATERIALS_DOOR:
-            _material_options_door.get_or_create(name=_)
+            _material_options_door.get_or_create(id=_[0], name=_[1])
 
     @classmethod
     def _add_users(self):
         super_admin = _roles.first(name='SuperAdmin')
         for _ in SUPERADMIN_USERS:
             _users.get_or_create(
+                id=_['id'],
                 email=_['email'],
                 password=_['password'],
                 role_id=str(super_admin.id)
@@ -93,9 +107,9 @@ class Startup:
     def _dummy_data(self):
         from ..services.application import _applications
         from ..services.address import _site_addresses
-        # TODO: Make this only run when in SERVER_ENV=development
         user_role = _roles.first(name='User')
         u = _users.get_or_create(
+            id="b7d623db-5b4a-43df-b3f1-2bfca845d657",
             email="test@example.com",
             password="secretpassword",
             role_id=str(user_role.id)
@@ -127,3 +141,5 @@ class Startup:
             _site_addresses.save(site_address)
         else:
             console.warn("Failed to get or create site address")
+
+        console.success('Added dummy data')

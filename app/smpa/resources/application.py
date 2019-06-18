@@ -7,7 +7,7 @@ from .core import Resource, ListResource
 from ..services.application import _applications
 
 
-class ApplicationListResource(ListResource):
+class ApplicationResourcePost(ListResource):
     _service = _applications
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
@@ -32,8 +32,34 @@ class ApplicationListResource(ListResource):
         """
         super().on_get(req, resp)
 
+    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Add new Application to the database
+        tags:
+            - Application
+        parameters:
+            - in: path
+              schema: CoreGetSchema
+            - in: body
+              schema: Application
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            201:
+                description: Application created successfully
+                schema: Application
+            401:
+                description: Unauthorized
+            422:
+                description: Input body formatting issue
+        """
+        super().on_post(req, resp)
 
-class ApplicationResource(Resource):
+
+class ApplicationResourcePatch(Resource):
     _service = _applications
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -83,29 +109,3 @@ class ApplicationResource(Resource):
                 description: Input body formatting issue
         """
         super().on_patch(req, resp, id)
-
-    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
-        """
-        ---
-        summary: Add new Application to the database
-        tags:
-            - Application
-        parameters:
-            - in: path
-              schema: CoreGetSchema
-            - in: body
-              schema: Application
-        consumes:
-            - application/json
-        produces:
-            - application/json
-        responses:
-            201:
-                description: Application created successfully
-                schema: Application
-            401:
-                description: Unauthorized
-            422:
-                description: Input body formatting issue
-        """
-        super().on_post(req, resp)

@@ -12,12 +12,6 @@ from rethinkdb.errors import RqlRuntimeError, RqlDriverError
 from ..helpers.console import console
 
 
-RDB_HOST = os.environ.get('RDB_HOST')
-RDB_PORT = os.environ.get('RDB_PORT')
-RDB_DB = os.environ.get('RDB_DB')
-RDB_PASSWORD = os.environ.get('RDB_PASSWORD')
-
-
 connections = []
 
 
@@ -28,12 +22,11 @@ class rconnect(object):
     def __enter__(self):
         # console.info('CONNECT ENTER - {}:{}/{}'.format(RDB_HOST, RDB_PORT, RDB_DB))
         from smpa.app import config
-        self.host = RDB_HOST
-        self.port = RDB_PORT
-        self.pw = RDB_PASSWORD
-        self.db = RDB_DB
-        if config.base == 'test':
-            self.db = f"test_{RDB_DB}"
+        self.host = config.RDB_HOST
+        self.port = config.RDB_PORT
+        self.pw = config.RDB_PASSWORD
+        self.db = config.RDB_DB
+
         try:
             self.conn = r.connect(
                 host=self.host,
@@ -58,12 +51,10 @@ class RethinkDB(object):
 
     def __init__(self, *args, **kwargs):
         from smpa.app import config
-        self.host = RDB_HOST
-        self.port = RDB_PORT
-        self.pw = RDB_PASSWORD
-        self.db = RDB_DB
-        if config.base == 'test':
-            self.db = f"test_{RDB_DB}"
+        self.host = config.RDB_HOST
+        self.port = config.RDB_PORT
+        self.pw = config.RDB_PASSWORD
+        self.db = config.RDB_DB
 
     def connection(self):
         conn = r.connect(host=self.host, port=self.port, password=self.pw)
@@ -81,7 +72,7 @@ class RethinkDB(object):
                 console.warn(e)
                 raise
         else:
-            console.info('Skipping DB creation')
+            console.info('Skipping creation of {} DB'.format(self.db))
 
     def drop_all(self):
         with rconnect() as conn:

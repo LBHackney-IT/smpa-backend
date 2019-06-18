@@ -1,6 +1,7 @@
 import pytest
 from smpa.tests.fixtures.app import *  # NOQA
 from smpa.tests.fixtures.address import *  # NOQA
+from smpa.tests.fixtures.auth import *  # NOQA
 from smpa.helpers.console import console
 
 
@@ -10,12 +11,12 @@ def setup_teardown():
     # Set up
     running = True
     from smpa.app import db
+    console.warn(f'DB = {db.db}')
     from smpa.rdb.registry import model_registry
     yield running
     # Tear down
     if db.db.startswith('test_'):
-        model_registry.drop_tables()
-        db.drop_all()
+        model_registry.purge()
     else:
         console.warn('Refusing to drop non-test database')
     console.log('EXIT TESTS')

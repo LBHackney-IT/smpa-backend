@@ -135,6 +135,19 @@ class EquipmentWorksConservationType(BaseModel, metaclass=ORMMeta):
     name = StringType(max_length=255)
 
 
+class GatesFencesWallsType(BaseModel, metaclass=ORMMeta):
+
+    """Types of work that can be done on gates, fences and walls.
+
+        Addition of a new gate
+        Removal of a gate
+        Replacement and/or repair of any boundary treatment
+        Replacement and/or repair of pillar caps
+
+    """
+    name = StringType(max_length=255)
+
+
 ####################################################################################################
 # Works sub-types
 ####################################################################################################
@@ -176,16 +189,22 @@ class ExtensionOriginalHouseBasement(WorkExtensionOption):
     ]
 
 
-class ExtensionOriginalHouseRoofWorks(WorkExtensionOption):
+class ExtensionOriginalHouseRoof(WorkExtensionOption):
     works_type_ids = ListType(UUIDType())
     works_types = ListType(ModelType(RoofWorksType))
+
+    materials_ids = ListType(UUIDType())
+    materials = ListType(ModelType('smpa.models.material.MaterialOptionRoof'))
+
+    materials_not_applicable = BooleanType(default=False)
+    materials_match_existing = BooleanType(default=False)
 
     related_lists = [
         ('works_type_ids', 'works_types', 'RoofWorksTypeService'),
     ]
 
 
-class ExtensionOriginalHouseOutbuilding(WorkExtensionOption):
+class ExtensionOutbuilding(WorkExtensionOption):
     pass
 
 
@@ -201,12 +220,24 @@ class ExtensionOriginalHouseStaircase(WorkExtensionOption):
     pass
 
 
-class ExtensionOriginalHouseAddReplacementWindowsDoors(WorkExtensionOption):
+class ExtensionOriginalHouseWindowsDoors(WorkExtensionOption):
     pass
 
 
 class ExtensionOriginalHouseCladding(WorkExtensionOption):
     pass
+
+
+class ExtensionBoundaraiesGatesFencesWalls(WorkExtensionOption):
+    works_location_ids = ListType(UUIDType())
+    works_locations = ListType(ModelType(WorksLocation))
+    works_type_ids = ListType(UUIDType())
+    works_types = ListType(ModelType(GatesFencesWallsType))
+
+    related_lists = [
+        ('works_location_ids', 'works_locations', 'WorksLocationService'),
+        ('works_type_ids', 'works_types', 'GatesFencesWallsTypeService'),
+    ]
 
 
 ####################################################################################################
@@ -233,57 +264,47 @@ class WorkExtensionOriginalHouse(Work):
     part_single_part_two_storey_extension = \
         ModelType(ExtensionOriginalHousePartSinglePartTwoStoreyExtension)
     basement = ModelType(ExtensionOriginalHouseBasement)
-    roof_works = ModelType(ExtensionOriginalHouseRoofWorks)
-    outbuilding = ModelType(ExtensionOriginalHouseOutbuilding)
+    roof = ModelType(ExtensionOriginalHouseRoof)
     porch = ModelType(ExtensionOriginalHousePorch)
     balcony_terrace = ModelType(ExtensionOriginalHouseBalconyTerrace)
     staircase = ModelType(ExtensionOriginalHouseStaircase)
-    add_replacement_windows_doors = ModelType(ExtensionOriginalHouseAddReplacementWindowsDoors)
+    windows_doors = ModelType(ExtensionOriginalHouseWindowsDoors)
     cladding = ModelType(ExtensionOriginalHouseCladding)
 
 
 class WorkExtensionIncidentalBuildings(Work):
     removal_or_demolition = BooleanType(default=False)
     details = StringType()
+    outbuilding = ModelType(ExtensionOutbuilding)
 
 
-class WorkExtensionGatesFencesEtc(Work):
+class WorkExtensionBoundaries(Work):
+    gates_fences_walls = ModelType(ExtensionBoundaraiesGatesFencesWalls)
+    # TODO Probably removing
     border_works_type_ids = ListType(UUIDType())
-
-    @serializable
-    def works_types(self):
-        from ..services.work import _border_works_types
-        return [_border_works_types.get(_).to_native() for _ in self.border_works_type_ids]
+    border_works_types = ListType(ModelType(BorderWorksType))
 
 
-class WorkExtensionMeansOfAccessToSite(Work):
+class WorkExtensionMeansOfAccess(Work):
     access_works_scope_id = UUIDType()
+    access_works_scope = ModelType(BorderWorksType)
+
     access_works_sub_type_ids = ListType(UUIDType())
-
-    @serializable
-    def works_scope(self):
-        from ..services.work import _access_works_scopes
-        return _access_works_scopes.get(self.access_works_scope_id).to_native()
-
-    @serializable
-    def works_sub_types(self):
-        from ..services.work import _access_works_sub_types
-        return [_access_works_sub_types.get(_).to_native() for _ in self.access_works_sub_type_ids]
+    access_works_sub_types = ListType(ModelType(AccessWorksType))
 
 
-class WorkExtensionCarBikeSpaces(Work):
+class WorkExtensionParking(Work):
     parking_works_scope_id = UUIDType()
+    parking_works_scope = ModelType(ParkingWorksScope)
+
     parking_works_sub_type_ids = ListType(UUIDType())
+    # parking_works_sub_types = ListType(ModelType())
+
     current_car_parking_spaces = IntType(default=0)
     planned_car_parking_spaces = IntType(default=0)
     current_bike_parking_spaces = IntType(default=0)
     planned_bike_parking_spaces = IntType(default=0)
     new_ev_charging_points = IntType(default=0)
-
-    @serializable
-    def works_scope(self):
-        from ..services.work import _parking_works_scopes
-        return _parking_works_scopes.get(self.parking_works_scope_id).to_native()
 
 
 ####################################################################################################
@@ -291,20 +312,40 @@ class WorkExtensionCarBikeSpaces(Work):
 ####################################################################################################
 
 
+class WorkEquipmentLocation(BaseModel, metaclass=ORMMeta):
+
+    location_id = UUIDType()
+    location = ModelType(WorksLocation)
+
+    equipment_type_id = UUIDType()
+    equipment_type = ModelType(EquipmentWorksType)
+
+    # TODO Add relationships
+
+
+class WorkEquipmentConservationLocation(BaseModel, metaclass=ORMMeta):
+
+    location_id = UUIDType()
+    location = ModelType(WorksLocation)
+
+    equipment_type_id = UUIDType()
+    equipment_conservation_type = ModelType(EquipmentWorksConservationType)
+
+    # TODO Add relationships
+
+
 class WorkEquipment(BaseModel, metaclass=ORMMeta):
+
     equipment_type_ids = ListType(UUIDType())
+    equipment_types = ListType(ModelType(EquipmentWorksType))
+
     equipment_conservation_type_ids = ListType(UUIDType())
+    equipment_conservation_types = ListType(ModelType(EquipmentWorksConservationType))
 
-    @serializable
-    def equipment_types(self):
-        from ..services.work import _equipment_types
-        return [_equipment_types.get(_).to_native() for _ in self.equipment_type_ids]
+    equipment_locations = ListType(ModelType(WorkEquipmentLocation))
+    equipment_conservation_locations = ListType(ModelType(WorkEquipmentLocation))
 
-    @serializable
-    def equipment_conservation_types(self):
-        from ..services.work import _equipment_conservation_types
-        return [_equipment_conservation_types.get(_).to_native()
-                for _ in self.equipment_conservation_type_ids]
+    # TODO Add relationships
 
 
 ####################################################################################################

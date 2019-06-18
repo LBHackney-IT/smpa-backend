@@ -10,7 +10,7 @@ from ..services.unit import _area_units, _linear_units
 class AreaUnitListResource(ListResource):
     _service = _area_units
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
@@ -39,7 +39,7 @@ class AreaUnitListResource(ListResource):
 class AreaUnitResource(Resource):
     _service = _area_units
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -120,7 +120,7 @@ class AreaUnitResource(Resource):
 class LinearUnitListResource(ListResource):
     _service = _linear_units
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
@@ -149,7 +149,7 @@ class LinearUnitListResource(ListResource):
 class LinearUnitResource(Resource):
     _service = _linear_units
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:

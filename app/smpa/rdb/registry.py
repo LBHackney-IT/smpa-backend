@@ -37,6 +37,28 @@ class ModelRegistry(object):
             # This model is appearing after init has already run, so we need to _init_model it.
             self._init_model(name, model)
 
+    def purge(self):
+        """Purges all records from all tables, without dropping those tables.
+        """
+        total = len(self._models)
+        count = 0
+        for name, model in self._models.items():
+            count += 1
+            progress = count / total * 100
+            console.progress('Dropping tables', progress)
+            try:
+                # console.info('Drop {} table'.format(model._table))
+                with rconnect() as conn:
+                    query = r.db(model._db).table(model._table).get_all().delete()
+                    query.run(conn)
+            except ReqlOpFailedError as e:
+                console.warn(e)
+                console.warn('{} table failed to purge'.format(model._table))
+            except Exception as e:
+                console.warn(e)
+                raise
+        return True
+
     def drop_tables(self):
         total = len(self._models)
         count = 0
@@ -71,9 +93,11 @@ class ModelRegistry(object):
         console.success('READY')
 
     def _init_model(self, name, model):
+        from smpa.app import config
         model._model = model
-        setattr(model, '_db', os.environ.get('RDB_DB'))
+        setattr(model, '_db', config.RDB_DB)
         self._create_table(name, model)
+        self._add_indexes(name, model)
 
     def _create_table(self, name, model):
         if name not in self._tables:
@@ -83,7 +107,7 @@ class ModelRegistry(object):
                     query = r.db(model._db).table_create(model._table)
                     # console.info(query)
                     query.run(conn)
-            except ReqlOpFailedError as e:
+            except ReqlOpFailedError:
                 pass
                 # console.info('{} table probably already exists'.format(model._table))
             except Exception as e:
@@ -91,6 +115,16 @@ class ModelRegistry(object):
                 raise
             else:
                 self._tables.append(name)
+
+    def _add_indexes(self, name, model):
+        table = r.db(model._db).table(model._table)
+        with rconnect() as conn:
+            try:
+                table.index_create("created_at", r.row["created_at"]).run(conn)
+                table.index_create("updated_at", r.row["updated_at"]).run(conn)
+            except rethinkdb.errors.ReqlOpFailedError:
+                # Already exists.
+                pass
 
 
 model_registry = ModelRegistry()

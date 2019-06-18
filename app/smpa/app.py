@@ -17,6 +17,7 @@ import os
 
 # 3rd party
 import falcon
+from falcon_cors import CORS
 
 # Application
 from .config.settings import init_settings
@@ -37,9 +38,14 @@ def user_loader(*args, **kwargs):
         uid = args[0]['user']['id']
         user = _users.get(uid)
     except Exception as e:
-        console.error(e)
-    else:
-        return user
+        try:
+            email = args[0]['user']['subject']
+            user = _users.first(email=email)
+        except Exception as e:
+            console.error(e)
+            raise
+
+    return user
 
 
 secret_key = os.environ.get('SECRET_KEY')
@@ -50,9 +56,20 @@ auth_middleware = FalconAuthMiddleware(
     exempt_methods=['HEAD']
 )
 
+# Setup CORS
+cors = CORS(
+    allow_origins_list=[
+        'http://localhost:8081'
+    ], allow_all_headers=True,
+    allow_all_methods=True
+)
+
 # Create the Falcon app
 # api = application = falcon.API()  # NO AUTH
-api = application = falcon.API(middleware=[auth_middleware])
+api = application = falcon.API(middleware=[
+    auth_middleware,
+    cors.middleware
+])
 api.req_options.auto_parse_form_urlencoded = True
 
 
@@ -76,6 +93,7 @@ def create_app():
     model_registry.init()
     Startup.init_data()
     init_routes(api, config)
+    return api
 
 
 create_app()

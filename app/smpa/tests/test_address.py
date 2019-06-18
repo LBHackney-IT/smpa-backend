@@ -1,5 +1,10 @@
+import falcon
 import pytest
-from smpa.services.address import _addresses
+from smpa.services.address import _addresses, _site_addresses
+from .util import purger
+
+
+SITE_ADDRESS_UUID = 'dcde565b-ff0b-4177-9c0b-f3d8d131ce02'
 
 
 def test_address_fixture(address):
@@ -23,11 +28,12 @@ def test_address_save_and_get(address):
     assert _addresses.count() == 1
     assert a.id is not None
     assert _addresses.get(a.id) is not None
-    _addresses.delete(a)
+    _addresses._purge()
     assert _addresses.count() == 0
 
 
 @pytest.mark.slow
+@purger(_addresses)
 def test_address_find(address):
     a = _addresses.save(address)
     assert len(_addresses.find(number='42')) > 0
@@ -35,6 +41,7 @@ def test_address_find(address):
     assert _addresses.count() == 0
 
 
+@purger(_addresses)
 def test_new(address):
     a = _addresses.new(
         number="23",
@@ -46,3 +53,295 @@ def test_new(address):
         postcode="N1 1NN"
     )
     assert a.validate() is None
+
+
+@pytest.mark.slow
+def test_first():
+    sa = _site_addresses.first(postcode='W1T 1AH')
+    assert sa is not None
+    assert sa.town_city == 'London'
+
+
+@purger(_addresses)
+def test_get_value_error():
+    with pytest.raises(ValueError):
+        _addresses.get(id=None)
+
+
+@purger(_addresses)
+def test_get_stringify_id():
+    import uuid
+    id = uuid.UUID(SITE_ADDRESS_UUID)
+    assert _site_addresses.get(id=id) is not None
+
+
+@purger(_addresses)
+def test_get_or_404_good():
+    assert _site_addresses.get_or_404(SITE_ADDRESS_UUID) is not None
+
+
+@purger(_addresses)
+def test_get_or_404_bad():
+    with pytest.raises(falcon.HTTPError) as e:
+        res = _site_addresses.get_or_404(id='a3c09c6f-3774-4c2a-b425-3f300bc6b287')
+
+
+@purger(_addresses)
+def test_first_or_404_good():
+    assert _site_addresses.first_or_404(SITE_ADDRESS_UUID) is not None
+
+
+@purger(_addresses)
+def test_first_or_404_bad():
+    with pytest.raises(falcon.HTTPError) as e:
+        res = _site_addresses.first_or_404(id='a3c09c6f-3774-4c2a-b425-3f300bc6b287')
+
+
+@purger(_addresses)
+def test_create():
+    a = _addresses.create(postcode='N1 1NN')
+    assert a is not None
+    b = _addresses.first(postcode='N1 1NN')
+    assert b is not None
+
+
+@purger(_addresses)
+def test_create_from_json():
+    a = _addresses.create(json="""
+        {
+            "postcode": "N2 2NN"
+        }
+    """)
+    assert a is not None
+    b = _addresses.first(postcode='N2 2NN')
+    assert b is not None
+
+
+@purger(_addresses)
+def test_create_multiple_from_json():
+    a = _addresses.create(json="""
+        [
+            {
+                "postcode": "N2 2NN"
+            },
+            {
+                "postcode": "N3 3NN"
+            }
+        ]
+    """)
+    assert a is not None
+    b = _addresses.first(postcode='N2 2NN')
+    c = _addresses.first(postcode='N3 3NN')
+    assert b is not None
+    assert c is not None
+
+
+@purger(_addresses)
+def test_find_with_limit():
+    rv = _addresses.create(json="""
+        [
+            {
+                "property_name": "1 name",
+                "postcode": "N2 2NN"
+            },
+            {
+                "property_name": "3 name",
+                "postcode": "N2 2NN"
+            },
+            {
+                "property_name": "2 name",
+                "postcode": "N2 2NN"
+            }
+        ]
+    """)
+    assert rv is not None
+    a = _addresses.first(property_name='1 name')
+    b = _addresses.first(property_name='2 name')
+    c = _addresses.first(property_name='3 name')
+    assert a is not None
+    assert b is not None
+    assert c is not None
+    rv2 = _addresses.find(limit=1, postcode="N2 2NN")
+    assert rv2 is not None
+    rv3 = _addresses.find(limit=2, postcode="N2 2NN")
+    assert len(rv3) == 2
+
+
+@purger(_addresses)
+def test_find_with_order():
+    rv = _addresses.create(json="""
+        [
+            {
+                "property_name": "1 name",
+                "postcode": "N2 2NN"
+            },
+            {
+                "property_name": "3 name",
+                "postcode": "N2 2NN"
+            },
+            {
+                "property_name": "2 name",
+                "postcode": "N2 2NN"
+            }
+        ]
+    """)
+    assert rv is not None
+    a = _addresses.first(property_name='1 name')
+    b = _addresses.first(property_name='2 name')
+    c = _addresses.first(property_name='3 name')
+    assert a is not None
+    assert b is not None
+    assert c is not None
+    rv2 = _addresses.find(order_by="property_name", postcode="N2 2NN")
+    assert rv2[0].id == a.id
+    assert rv2[1].id == b.id
+    assert rv2[2].id == c.id
+
+
+@purger(_addresses)
+def test_all_with_limit():
+    rv = _addresses.create(json="""
+        [
+            {
+                "property_name": "1 name",
+                "postcode": "N2 2NN"
+            },
+            {
+                "property_name": "3 name",
+                "postcode": "N2 2NN"
+            },
+            {
+                "property_name": "2 name",
+                "postcode": "N2 2NN"
+            }
+        ]
+    """)
+    assert rv is not None
+    a = _addresses.first(property_name='1 name')
+    b = _addresses.first(property_name='2 name')
+    c = _addresses.first(property_name='3 name')
+    assert a is not None
+    assert b is not None
+    assert c is not None
+    rv2 = _addresses.all(limit=1)
+    assert rv2 is not None
+    rv3 = _addresses.all(limit=2)
+    assert len(rv3) == 2
+
+
+@purger(_addresses)
+def test_all_with_order():
+    rv = _addresses.create(json="""
+        [
+            {
+                "property_name": "1 name",
+                "postcode": "N2 2NN"
+            },
+            {
+                "property_name": "3 name",
+                "postcode": "N2 2NN"
+            },
+            {
+                "property_name": "2 name",
+                "postcode": "N2 2NN"
+            }
+        ]
+    """)
+    assert rv is not None
+    a = _addresses.first(property_name='1 name')
+    b = _addresses.first(property_name='2 name')
+    c = _addresses.first(property_name='3 name')
+    assert a is not None
+    assert b is not None
+    assert c is not None
+    rv2 = _addresses.all(order_by="property_name")
+    assert rv2[0].id == a.id
+    assert rv2[1].id == b.id
+    assert rv2[2].id == c.id
+
+
+@purger(_addresses)
+def test_all_with_order_reversed():
+    rv = _addresses.create(json="""
+        [
+            {
+                "property_name": "1 name",
+                "postcode": "N2 2NN"
+            },
+            {
+                "property_name": "3 name",
+                "postcode": "N2 2NN"
+            },
+            {
+                "property_name": "2 name",
+                "postcode": "N2 2NN"
+            }
+        ]
+    """)
+    assert rv is not None
+    a = _addresses.first(property_name='1 name')
+    b = _addresses.first(property_name='2 name')
+    c = _addresses.first(property_name='3 name')
+    assert a is not None
+    assert b is not None
+    assert c is not None
+    rv2 = _addresses.all(order_by=">property_name")
+    assert rv2[0].id == c.id
+    assert rv2[1].id == b.id
+    assert rv2[2].id == a.id
+
+
+@purger(_addresses)
+def test_get_or_create():
+    a = _addresses.first(postcode='N1 1NN')
+    assert a is None
+    b = _addresses.get_or_create(postcode='N1 1NN')
+    assert b is not None
+    rv = _addresses.find(postcode='N1 1NN')
+    assert len(rv) == 1
+    # c should return the address created in b
+    c = _addresses.get_or_create(postcode='N1 1NN')
+    assert c is not None
+    rv2 = _addresses.find(postcode='N1 1NN')
+    assert len(rv2) == 1
+
+
+@purger(_addresses)
+def test_update():
+    a = _addresses.get_or_create(
+        postcode='N1 1NN'
+    )
+    assert a is not None
+    _addresses.update(id=a.id, postcode='N9 9NN')
+    b = _addresses.get(a.id)
+    assert b is not None
+    assert b.postcode == 'N9 9NN'
+
+
+@purger(_addresses)
+def test_update_with_no_changes():
+    a = _addresses.get_or_create(
+        postcode='N1 1NN'
+    )
+    assert a is not None
+    _addresses.update(id=a.id, postcode='N1 1NN')
+    b = _addresses.get(a.id)
+    assert b is not None
+    assert b.postcode == 'N1 1NN'
+
+
+@purger(_addresses)
+def test_bad_limit_exception():
+    with pytest.raises(ValueError):
+        a = _addresses.get_or_create(
+            postcode='N1 1NN'
+        )
+        _addresses.all(limit='no')
+
+
+# def test_first_and_last():
+#     a = _addresses.create(postcode='FIRST')
+#     b = _addresses.create(postcode='LAST')
+#     assert _addresses.count() == 2
+#     assert _addresses.last() == b
+#     assert _addresses.first() == a

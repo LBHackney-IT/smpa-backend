@@ -7,14 +7,14 @@ from .core import Resource, ListResource
 from ..services.work import (
     _works_locations, _basement_works_types, _roof_works_types, _border_works_types,
     _access_works_scopes, _access_works_types, _parking_works_scopes, _equipment_works_types,
-    _equipment_works_conservation_types
+    _equipment_works_conservation_types, _gates_fences_walls_types
 )
 
 
 class WorksLocationPost(ListResource):
     _service = _works_locations
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
@@ -69,7 +69,7 @@ class WorksLocationPost(ListResource):
 class WorksLocationPatch(Resource):
     _service = _works_locations
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -124,7 +124,7 @@ class WorksLocationPatch(Resource):
 class BasementWorksTypePost(ListResource):
     _service = _basement_works_types
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
@@ -177,7 +177,7 @@ class BasementWorksTypePost(ListResource):
 class BasementWorksTypePatch(Resource):
     _service = _basement_works_types
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -230,7 +230,7 @@ class BasementWorksTypePatch(Resource):
 class RoofWorksTypePost(ListResource):
     _service = _roof_works_types
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
@@ -283,7 +283,7 @@ class RoofWorksTypePost(ListResource):
 class RoofWorksTypePatch(Resource):
     _service = _roof_works_types
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -336,7 +336,7 @@ class RoofWorksTypePatch(Resource):
 class BorderWorksTypePost(ListResource):
     _service = _border_works_types
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
@@ -389,7 +389,7 @@ class BorderWorksTypePost(ListResource):
 class BorderWorksTypePatch(Resource):
     _service = _border_works_types
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -442,7 +442,7 @@ class BorderWorksTypePatch(Resource):
 class AccessWorksScopePost(ListResource):
     _service = _access_works_scopes
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
@@ -495,7 +495,7 @@ class AccessWorksScopePost(ListResource):
 class AccessWorksScopePatch(Resource):
     _service = _access_works_scopes
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -548,7 +548,7 @@ class AccessWorksScopePatch(Resource):
 class AccessWorksTypePost(ListResource):
     _service = _access_works_types
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
@@ -601,7 +601,7 @@ class AccessWorksTypePost(ListResource):
 class AccessWorksTypePatch(Resource):
     _service = _access_works_types
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -654,7 +654,7 @@ class AccessWorksTypePatch(Resource):
 class ParkingWorksScopePost(ListResource):
     _service = _parking_works_scopes
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
@@ -707,7 +707,7 @@ class ParkingWorksScopePost(ListResource):
 class ParkingWorksScopePatch(Resource):
     _service = _parking_works_scopes
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -760,7 +760,7 @@ class ParkingWorksScopePatch(Resource):
 class EquipmentWorksTypePost(ListResource):
     _service = _equipment_works_types
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
@@ -813,7 +813,7 @@ class EquipmentWorksTypePost(ListResource):
 class EquipmentWorksTypePatch(Resource):
     _service = _equipment_works_types
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -866,7 +866,7 @@ class EquipmentWorksTypePatch(Resource):
 class EquipmentWorksConservationTypePost(ListResource):
     _service = _equipment_works_conservation_types
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
@@ -919,7 +919,7 @@ class EquipmentWorksConservationTypePost(ListResource):
 class EquipmentWorksConservationTypePatch(Resource):
     _service = _equipment_works_conservation_types
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
@@ -959,6 +959,112 @@ class EquipmentWorksConservationTypePatch(Resource):
             200:
                 description: Returns updated EquipmentWorksConservationType
                 schema: EquipmentWorksConservationType
+            401:
+                description: Unauthorized
+            404:
+                description: Object does not exist
+            422:
+                description: Input body formatting issue
+        """
+        super().on_patch(req, resp, id)
+
+
+class GatesFencesWallsTypePost(ListResource):
+    _service = _gates_fences_walls_types
+    auth = {
+        'exempt_methods': ['OPTIONS', 'GET']
+    }
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Get all GatesFencesWallsType from the DB
+        tags:
+            - GatesFencesWallsType
+        parameters:
+            - in: query
+              schema: CoreListSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: All GatesFencesWallsTypes
+                schema:
+                    type: array
+                    items: GatesFencesWallsType
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp)
+
+    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Add new GatesFencesWallsType to the database
+        tags:
+            - GatesFencesWallsType
+        parameters:
+            - in: body
+              schema: GatesFencesWallsType
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            201:
+                description: GatesFencesWallsType created successfully
+                schema: GatesFencesWallsType
+            401:
+                description: Unauthorized
+            422:
+                description: Input body formatting issue
+        """
+        super().on_post(req, resp)
+
+
+class GatesFencesWallsTypePatch(Resource):
+    _service = _gates_fences_walls_types
+    auth = {
+        'exempt_methods': ['OPTIONS', 'GET']
+    }
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
+        """
+        ---
+        summary: Get one GatesFencesWallsType from the database
+        tags:
+            - GatesFencesWallsType
+        parameters:
+            - in: path
+              schema: CoreGetSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: One GatesFencesWallsType
+                schema: GatesFencesWallsType
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp, id)
+
+    def on_patch(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
+        """
+        ---
+        summary: Update an GatesFencesWallsType in the database
+        tags:
+            - GatesFencesWallsType
+        parameters:
+            - in: body
+              schema: GatesFencesWallsType
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            200:
+                description: Returns updated GatesFencesWallsType
+                schema: GatesFencesWallsType
             401:
                 description: Unauthorized
             404:

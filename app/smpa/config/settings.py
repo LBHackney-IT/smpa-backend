@@ -7,6 +7,11 @@ class Config(object):
     base: str = 'config'
     debug = False
 
+    RDB_HOST = os.environ.get('RDB_HOST')
+    RDB_PORT = os.environ.get('RDB_PORT')
+    RDB_DB = os.environ.get('RDB_DB')
+    RDB_PASSWORD = os.environ.get('RDB_PASSWORD')
+
 
 class ConfigTest(Config):
 
@@ -14,6 +19,8 @@ class ConfigTest(Config):
     """
     base = "test"
     debug = True
+
+    RDB_DB = 'test_' + str(os.environ.get('RDB_DB'))
 
 
 class ConfigDevelopment(Config):

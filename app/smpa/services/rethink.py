@@ -14,7 +14,7 @@ from rethinkdb.errors import ReqlOpFailedError
 
 # Module
 from ..models.core import BaseModel
-from ..rdb.connection import RDB_DB, rconnect
+from ..rdb.connection import rconnect
 from ..helpers.console import console
 
 
@@ -59,7 +59,8 @@ class RService(object):
         Returns:
             [type]: [description]
         """
-        return r.db(RDB_DB).table(self.__model__._table)
+        from ..app import config
+        return r.db(config.RDB_DB).table(self.__model__._table)
 
     def new(self, *args, **kwargs):
         kwargs = self._preprocess(**kwargs)
@@ -91,7 +92,7 @@ class RService(object):
                 raise
             else:
                 if rv is not None:
-                    instance = self.__model__(rv)
+                    instance = self.__model__(rv, strict=False)
                     return instance
         return None
 
@@ -145,7 +146,7 @@ class RService(object):
                 raise
             else:
                 try:
-                    data = [self.__model__(_) for _ in rv]
+                    data = [self.__model__(_, strict=False) for _ in rv]
                     return data[0]
                 except IndexError:
                     return None
@@ -170,7 +171,6 @@ class RService(object):
         """
         kwargs = self._preprocess(**kwargs)
         j = self._jsonify(kwargs)
-
         with rconnect() as conn:
             query = self.q.insert(j)
             rv = query.run(conn)
@@ -180,7 +180,7 @@ class RService(object):
                     data.append(self.get(_))
 
             if len(data) > 1:
-                return [self.__model__(_) for _ in rv]
+                return data
 
             if len(data):
                 return self.__model__(data[0])
@@ -225,7 +225,7 @@ class RService(object):
             else:
                 return instance
 
-    def find(self, order_by: Optional[str] = None, limit: int = 0, **kwargs):
+    def find(self, order_by: Optional[str] = None, limit: Optional[int] = None, **kwargs):
         """
         Find all items that matches your kwargs.
         :param limit: How many rows to fetch.
@@ -251,7 +251,7 @@ class RService(object):
                 query = self.q
                 if order_by is not None:
                     query = self._order_by(query, order_by)
-                if limit > 0:
+                if limit is not None:
                     query = self._limit(query, limit)
                 query = query.filter(j)
                 rv = query.run(conn)
@@ -290,6 +290,9 @@ class RService(object):
         kwargs = self._preprocess(**kwargs)
         j = self._jsonify(kwargs)
 
+        if isinstance(id, uuid.UUID):
+            id = str(id)
+
         with rconnect() as conn:
             query = self.q.get(id).update(j, return_changes=True)
             rv = query.run(conn)
@@ -298,13 +301,13 @@ class RService(object):
             else:
                 return self.get(id)
 
-    def all(self, order_by: Optional[str] = None, limit: int = 0):
+    def all(self, order_by: Optional[str] = None, limit: Optional[int] = None):
         with rconnect() as conn:
             try:
                 query = self.q
                 if order_by is not None:
                     query = self._order_by(query, order_by)
-                if limit > 0:
+                if limit is not None:
                     query = self._limit(query, limit)
                 rv = query.run(conn)
             except Exception as e:
@@ -332,6 +335,12 @@ class RService(object):
 
     # Private methods - these do not form part of the public API or method signature of the
     # service class.
+
+    def _purge(self):
+        """Use with caution. Mostly here to help with tests cleanup.
+        """
+        for _ in self.all():
+            self.delete(_)
 
     @staticmethod
     def _preprocess(**kwargs):

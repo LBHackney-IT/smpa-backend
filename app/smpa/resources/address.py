@@ -12,7 +12,7 @@ from ..models.address import Address, SiteAddress  # NOQA
 class AddressPost(ListResource):
     _service = _addresses
     auth = {
-        'exempt_methods': ['GET']
+        'exempt_methods': ['OPTIONS', 'GET']
     }
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
