@@ -65,8 +65,8 @@ class BaseExistingMaterial(BaseModel, metaclass=ORMMeta):
 
 class BaseMaterial(BaseModel, metaclass=ORMMeta):
     colour_and_type = StringType(required=True)
-    matches_existing = BooleanType(default=False)
-    existing_material = ModelType(BaseExistingMaterial)
+    # matches_existing = BooleanType(default=False)
+    # existing_material = ModelType(BaseExistingMaterial)
 
 
 ####################################################################################################
@@ -74,23 +74,23 @@ class BaseMaterial(BaseModel, metaclass=ORMMeta):
 ####################################################################################################
 
 
-class MaterialRoofOther(BaseMaterial):
+class MaterialRoof(BaseMaterial):
     material_id = UUIDType()
 
 
-class MaterialWallOther(BaseMaterial):
+class MaterialWall(BaseMaterial):
     material_id = UUIDType()
 
 
-class MaterialWindowOther(BaseMaterial):
+class MaterialWindow(BaseMaterial):
     material_id = UUIDType()
 
 
-class MaterialDoorOther(BaseMaterial):
+class MaterialDoor(BaseMaterial):
     material_id = UUIDType()
 
 
-class OtherMaterialOther(BaseMaterial):
+class OtherMaterial(BaseMaterial):
     name = StringType(required=True)
 
 

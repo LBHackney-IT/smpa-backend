@@ -39,6 +39,10 @@ GET /api/v1/roof-works-types
     /api/v1/area-units
     /api/v1/linear-units
     /api/v1/document-sizes
+    /api/v1/materials/options/roof
+    /api/v1/materials/options/wall
+    /api/v1/materials/options/door
+    /api/v1/materials/options/window
 ```
 
 These all return a list along the lines of...

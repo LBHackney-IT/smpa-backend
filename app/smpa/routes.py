@@ -9,10 +9,24 @@ import os
 from .resources.swagger import ApiSpecResource
 
 from .resources.material import (
-    MaterialOptionRoofResource,
-    MaterialOptionWallResource,
-    MaterialOptionWindowResource,
-    MaterialOptionDoorResource,
+    # Options
+    MaterialOptionRoofPost,
+    MaterialOptionRoofPatch,
+    MaterialOptionWallPost,
+    MaterialOptionWallPatch,
+    MaterialOptionWindowPost,
+    MaterialOptionWindowPatch,
+    MaterialOptionDoorPost,
+    MaterialOptionDoorPatch,
+    # Materials
+    MaterialRoofPost,
+    MaterialRoofPatch,
+    MaterialWallPost,
+    MaterialWallPatch,
+    MaterialWindowPost,
+    MaterialWindowPatch,
+    MaterialDoorPost,
+    MaterialDoorPatch,
 )
 from .resources import (
     # Unit resources
@@ -108,10 +122,26 @@ def init_routes(api, config):
     agents = AgentResource()
     # applicants = ApplicantResource()
     documentsizes = DocumentSizeResource()
-    material_option_roof_resource = MaterialOptionRoofResource()
-    material_option_wall_resource = MaterialOptionWallResource()
-    material_option_door_resource = MaterialOptionDoorResource()
-    material_option_window_resource = MaterialOptionWindowResource()
+
+    # Material Options
+    material_option_roof_post = MaterialOptionRoofPost()
+    material_option_roof_patch = MaterialOptionRoofPatch()
+    material_option_wall_post = MaterialOptionWallPost()
+    material_option_wall_patch = MaterialOptionWallPatch()
+    material_option_door_post = MaterialOptionDoorPost()
+    material_option_door_patch = MaterialOptionDoorPatch()
+    material_option_window_post = MaterialOptionWindowPost()
+    material_option_window_patch = MaterialOptionWindowPatch()
+
+    # Submitted Materials
+    material_roof_post = MaterialRoofPost()
+    material_roof_patch = MaterialRoofPatch()
+    material_wall_post = MaterialWallPost()
+    material_wall_patch = MaterialWallPatch()
+    material_window_post = MaterialWindowPost()
+    material_window_patch = MaterialWindowPatch()
+    material_door_post = MaterialDoorPost()
+    material_door_patch = MaterialDoorPatch()
 
     # Routes
     add_route(api, '/auth', auth)
@@ -147,6 +177,23 @@ def init_routes(api, config):
     add_route(api, '/works-locations/{id}', works_location_patch)
 
     # Working on
+    add_route(api, '/materials/options/roof', material_option_roof_post)
+    add_route(api, '/materials/options/roof/{id}', material_option_roof_patch)
+    add_route(api, '/materials/options/wall', material_option_wall_post)
+    add_route(api, '/materials/options/wall/{id}', material_option_wall_patch)
+    add_route(api, '/materials/options/door', material_option_door_post)
+    add_route(api, '/materials/options/door/{id}', material_option_door_patch)
+    add_route(api, '/materials/options/window', material_option_window_post)
+    add_route(api, '/materials/options/window/{id}', material_option_window_patch)
+
+    add_route(api, '/materials/roof', material_roof_post)
+    add_route(api, '/materials/roof/{id}', material_roof_patch)
+    add_route(api, '/materials/wall', material_wall_post)
+    add_route(api, '/materials/wall/{id}', material_wall_patch)
+    add_route(api, '/materials/wind', material_window_post)
+    add_route(api, '/materials/wind/{id}', material_window_patch)
+    add_route(api, '/materials/door', material_door_post)
+    add_route(api, '/materials/door/{id}', material_door_patch)
 
     # To document
     add_route(api, '/border-works-types', border_works_type_post)
@@ -156,7 +203,6 @@ def init_routes(api, config):
     add_route(api, '/access-works-types/{id}', access_works_type_patch)
     add_route(api, '/parking-works-scopes', parking_works_scope_post)
     add_route(api, '/parking-works-scopes/{id}', parking_works_scope_patch)
-
 
     add_route(api, '/area-units', area_units_list)
     add_route(api, '/area-units/{id}', area_units)
@@ -178,11 +224,6 @@ def init_routes(api, config):
 
     add_route(api, '/document-sizes', documentsizes)
     add_route(api, '/document-sizes/{id}', documentsizes)
-
-    add_route(api, '/materials/options/roof', material_option_roof_resource)
-    add_route(api, '/materials/options/wall', material_option_wall_resource)
-    add_route(api, '/materials/options/door', material_option_door_resource)
-    add_route(api, '/materials/options/window', material_option_window_resource)
 
     config.resources = [
         addresses_post,
@@ -213,6 +254,24 @@ def init_routes(api, config):
         equipment_works_conservation_type_patch,
         gates_fences_walls_type_post,
         gates_fences_walls_type_patch,
+        # Materials
+        material_option_roof_post,
+        material_option_roof_patch,
+        material_option_wall_post,
+        material_option_wall_patch,
+        material_option_door_post,
+        material_option_door_patch,
+        material_option_window_post,
+        material_option_window_patch,
+        material_roof_post,
+        material_roof_patch,
+        material_wall_post,
+        material_wall_patch,
+        material_window_post,
+        material_window_patch,
+        material_door_post,
+        material_door_patch,
+
         # To fix
         area_units,
         area_units_list,
@@ -223,10 +282,6 @@ def init_routes(api, config):
         # applicants,
         documentsizes,
         auth,
-        material_option_roof_resource,
-        material_option_wall_resource,
-        material_option_door_resource,
-        material_option_window_resource,
         applications_post,
         applications_patch,
     ]
