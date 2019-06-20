@@ -42,4 +42,6 @@ def init_swagger(app, config):
     add_components(spec)
     add_resources(spec, config)
 
+    # import ipdb; ipdb.set_trace()
+
     return spec

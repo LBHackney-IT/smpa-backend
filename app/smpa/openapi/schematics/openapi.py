@@ -8,6 +8,8 @@ marshmallow :class:`Schemas <marshmallow.Schema>` and :class:`Fields <marshmallo
     Users should not need to use this module directly.
 """
 from __future__ import absolute_import, unicode_literals
+import arrow
+import datetime
 import operator
 import functools
 from collections import OrderedDict
@@ -15,7 +17,9 @@ from typing import Any, Union, Optional
 
 from schematics import types
 from schematics.models import Model
+from schematics.undefined import UndefinedType
 
+import marshmallow
 from marshmallow.utils import is_collection
 from marshmallow.compat import iteritems
 from marshmallow.orderedset import OrderedSet
@@ -186,9 +190,24 @@ class OpenAPIConverter(object):
             dict: ie: {'default': False}
 
         """
-        ret = {}
+        datetypes = (
+            types.DateTimeType,
+            types.DateType,
+            datetime.datetime
+        )
+        ret: dict = {}
         if hasattr(field, 'default') and field.default is not None:
-            ret["default"] = field.default
+            if isinstance(field.default, marshmallow.utils._Missing):
+                return ret
+            if not isinstance(field.default, UndefinedType):
+                if isinstance(field.default, datetypes):
+                    try:
+                        ret["default"] = arrow.get(field.default).isoformat()
+                    except Exception as e:
+                        console.warn(e)
+                        ret["default"] = ""
+                else:
+                    ret["default"] = field.default
 
         return ret
 
