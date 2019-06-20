@@ -5,3 +5,4 @@ exclude_paths:
   - app/smpa/tests/*.py
   - app/htmlcov/**/*
   - app/coverage/**/*
+  - docs/**/*
