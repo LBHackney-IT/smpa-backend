@@ -3,7 +3,7 @@
 """
     openapi.schematics
     ~~~~~~~~~~~~~~~~~~
-    Schematics plugin for apispec based on the ext.MarshmallowPlugin
+    Schematics plugin for apispec based on ext.MarshmallowPlugin
 """
 import warnings
 

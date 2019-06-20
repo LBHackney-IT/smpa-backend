@@ -1,60 +1,104 @@
 # -*- coding: utf-8 -*-
-"""Utilities to get schema instances/classes"""
+
+"""
+    smpa.openapi.schematics.common
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Schematics plugin for apispec based on the bundled Marshmallow
+    plugin.
+
+"""
 
 import copy
 import warnings
 from collections import namedtuple, OrderedDict
+from typing import Union
 
-import marshmallow
+from smpa.models.core import BaseModel
+from smpa.rdb.registry import RegistryError, model_registry
+
+# import marshmallow
 
 
 MODIFIERS = ["only", "exclude", "load_only", "dump_only", "partial"]
 
 
-def resolve_schema_instance(schema):
-    """Return schema instance for given schema (instance or class)
+def resolve_schema_instance(schema: Union[BaseModel, str]) -> BaseModel:
+    """Fetches an instance of the schematics model ``schema``
 
-    :param type|Schema|str schema: instance, class or class name of marshmallow.Schema
-    :return: schema instance of given schema (instance or class)
+    Args:
+        schema (BaseModel, str): Model or name of the model you want an instance of
+
+    Returns:
+        BaseModel: Instance
+
+    Raises:
+        ValueError: If the model is not found or registered.
     """
-    if isinstance(schema, type) and issubclass(schema, marshmallow.Schema):
+    from smpa.schemas.core import CoreGetSchema, CoreListSchema
+    from smpa.schemas.auth import LoginSchema
+
+    if schema == 'CoreListSchema':
+        return CoreListSchema
+    elif schema == 'CoreGetSchema':
+        return CoreGetSchema
+    elif schema == 'LoginSchema':
+        return LoginSchema
+
+    if isinstance(schema, type) and issubclass(schema, BaseModel):
         return schema()
-    if isinstance(schema, marshmallow.Schema):
+    if isinstance(schema, BaseModel):
         return schema
     try:
-        return marshmallow.class_registry.get_class(schema)()
-    except marshmallow.exceptions.RegistryError:
+        return model_registry.get_class(schema)()
+    except RegistryError:
         raise ValueError(
-            "{!r} is not a marshmallow.Schema subclass or instance and has not"
-            " been registered in the Marshmallow class registry.".format(schema)
+            "{!r} is not a BaseModel subclass or instance and has not"
+            " been registered in the model registry.".format(schema)
         )
 
 
-def resolve_schema_cls(schema):
-    """Return schema class for given schema (instance or class)
+def resolve_schema_cls(schema: Union[BaseModel, str]) -> BaseModel:
+    """Fetches the class of the schematics model ``schema``
 
-    :param type|Schema|str: instance, class or class name of marshmallow.Schema
-    :return: schema class of given schema (instance or class)
+    Args:
+        schema (BaseModel, str): Model or name of the model you want an instance of
+
+    Returns:
+        BaseModel: BaseModel class, not an instance of
+
+    Raises:
+        ValueError: If the model is not found or registered.
     """
-    if isinstance(schema, type) and issubclass(schema, marshmallow.Schema):
+
+    if isinstance(schema, type) and issubclass(schema, BaseModel):
         return schema
-    if isinstance(schema, marshmallow.Schema):
+    if isinstance(schema, BaseModel):
         return type(schema)
     try:
-        return marshmallow.class_registry.get_class(schema)
-    except marshmallow.exceptions.RegistryError:
+        return model_registry.get_class(schema)
+    except RegistryError:
         raise ValueError(
-            "{!r} is not a marshmallow.Schema subclass or instance and has not"
-            " been registered in the Marshmallow class registry.".format(schema)
+            "{!r} is not a BaseModel subclass or instance and has not"
+            " been registered in the model registry.".format(schema)
         )
 
 
-def get_fields(schema, exclude_dump_only=False):
+def get_fields(schema: BaseModel, exclude_dump_only: bool = False) -> dict:
     """Return fields from schema
 
     :param Schema schema: A marshmallow Schema instance or a class object
     :param bool exclude_dump_only: whether to filter fields in Meta.dump_only
     :rtype: dict, of field name field object pairs
+
+    Args:
+        schema (BaseModel): The model you want the fields for
+        exclude_dump_only (bool, optional): @TODO
+
+    Returns:
+        dict: Dict of field name field object pairs
+
+    Raises:
+        ValueError: If the model has no fields.
     """
     if hasattr(schema, "fields"):
         fields = schema.fields
@@ -65,27 +109,7 @@ def get_fields(schema, exclude_dump_only=False):
             "{!r} doesn't have either `fields` or `_declared_fields`.".format(schema)
         )
     Meta = getattr(schema, "Meta", None)
-    warn_if_fields_defined_in_meta(fields, Meta)
     return filter_excluded_fields(fields, Meta, exclude_dump_only)
-
-
-def warn_if_fields_defined_in_meta(fields, Meta):
-    """Warns user that fields defined in Meta.fields or Meta.additional will
-    be ignored
-
-    :param dict fields: A dictionary of of fields name field object pairs
-    :param Meta: the schema's Meta class
-    """
-    if getattr(Meta, "fields", None) or getattr(Meta, "additional", None):
-        declared_fields = set(fields.keys())
-        if (
-            set(getattr(Meta, "fields", set())) > declared_fields
-            or set(getattr(Meta, "additional", set())) > declared_fields
-        ):
-            warnings.warn(
-                "Only explicitly-declared fields will be included in the Schema Object. "
-                "Fields defined in Meta.fields or Meta.additional are ignored."
-            )
 
 
 def filter_excluded_fields(fields, Meta, exclude_dump_only):
@@ -107,16 +131,24 @@ def filter_excluded_fields(fields, Meta, exclude_dump_only):
 
 
 def make_schema_key(schema):
-    if not isinstance(schema, marshmallow.Schema):
-        raise TypeError("can only make a schema key based on a Schema instance.")
+    """Creates a schema key which is used to check for duplicates in the refs."""
+    # @TODO make this use schematics modifiers
+    if not isinstance(schema, BaseModel):
+        raise TypeError("can only make a schema key based on a BaseModel instance.")
     modifiers = []
     for modifier in MODIFIERS:
-        attribute = getattr(schema, modifier)
-        try:
-            hash(attribute)
-        except TypeError:
-            attribute = tuple(attribute)
-        modifiers.append(attribute)
+        if hasattr(schema, modifier):
+            attribute = getattr(schema, modifier)
+            try:
+                hash(attribute)
+            except TypeError:
+                attribute = tuple(attribute)
+            modifiers.append(attribute)
+
+
+        else:
+            modifiers.append((modifier, None))
+
     return SchemaKey(schema.__class__, *modifiers)
 
 

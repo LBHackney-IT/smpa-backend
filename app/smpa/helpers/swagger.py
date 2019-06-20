@@ -1,7 +1,10 @@
 from apispec import APISpec
+from apispec.exceptions import DuplicateComponentNameError
 from falcon_apispec import FalconPlugin
 
+from ..openapi.schematics import SchematicsPlugin
 from ..rdb.registry import model_registry
+from smpa.helpers.console import console
 
 
 def create_spec(app):
@@ -11,6 +14,7 @@ def create_spec(app):
         openapi_version='3.0',
         plugins=[
             FalconPlugin(app),
+            SchematicsPlugin()
         ],
     )
 
@@ -18,8 +22,13 @@ def create_spec(app):
 
 
 def add_components(spec):
+    console.log('ADD COMPONENTS CALLED')
     for k, v in model_registry._models.items():
-        spec.components.schema(k, schema=v)
+        try:
+            spec.components.schema(k, schema=v)
+        except DuplicateComponentNameError as e:
+            console.warn(e)
+            # import ipdb; ipdb.set_trace()
 
 
 def add_resources(spec, config):

@@ -1,35 +1,10 @@
-# 29. Specifying materials
+# 30. Other materials options
 
-When we specify the materials for a particular work, we create a new MaterialX object, and then associate that to the extension proposal. So this is a minimum two step process.
+The user is allowed to select "This is not applicable" or "You're proposing a new material to be used" on each of the materials screens. In these cases, we just want to patch the extension-proposal.
 
+![](/static/screen32.png)
 
-![](/static/screen31.png)
-
-### Step 1 - create the material record
-
-In the example below, the `material_id` key is an id retrieved from the list of possible options with `GET /api/v1/materials/options/roof`
-
-`POST /api/v1/materials/roof`
-
-    {
-        "material_id": "d470020f-984f-4acf-9e75-387f58db4604",
-        "colour_and_type": "Some lovely green roof tiles."
-    }
-
-
-### Returns
-
-This returns a newly saved MaterialsRoof object.
-
-    {
-      "id": "57d072b7-fe54-486c-bee0-7f8aad74bdcf",
-      "created_at": "2019-06-18T20:14:46.737193",
-      "updated_at": "2019-06-18T20:14:46.737231",
-      "colour_and_type": "Some lovely green roof tiles.",
-      "material_id": "d470020f-984f-4acf-9e75-387f58db4604"
-    }
-
-### Step 2
+### Example
 
 Save the newly created material object(s) against the correct key in the extension proposal.
 
@@ -37,7 +12,7 @@ Save the newly created material object(s) against the correct key in the extensi
 
     {
         "original_house": {
-            "roof": {
+            "wall": {
                 "materials_ids": [
                     "57d072b7-fe54-486c-bee0-7f8aad74bdcf"
                 ]

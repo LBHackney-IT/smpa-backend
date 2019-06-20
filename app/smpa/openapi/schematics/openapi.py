@@ -10,10 +10,12 @@ marshmallow :class:`Schemas <marshmallow.Schema>` and :class:`Fields <marshmallo
 from __future__ import absolute_import, unicode_literals
 import operator
 import functools
-import warnings
 from collections import OrderedDict
+from typing import Any, Union, Optional
 
-import marshmallow
+from schematics import types
+from schematics.models import Model
+
 from marshmallow.utils import is_collection
 from marshmallow.compat import iteritems
 from marshmallow.orderedset import OrderedSet
@@ -29,30 +31,26 @@ from .common import (
 )
 from apispec.exceptions import APISpecError
 
+from smpa.helpers.console import console
 
-MARSHMALLOW_VERSION_INFO = tuple(
-    [int(part) for part in marshmallow.__version__.split(".") if part.isdigit()]
-)
 
-# marshmallow field => (JSON Schema type, format)
+# Schematics field => (JSON Schema type, format)
 DEFAULT_FIELD_MAPPING = {
-    marshmallow.fields.Integer: ("integer", "int32"),
-    marshmallow.fields.Number: ("number", None),
-    marshmallow.fields.Float: ("number", "float"),
-    marshmallow.fields.Decimal: ("number", None),
-    marshmallow.fields.String: ("string", None),
-    marshmallow.fields.Boolean: ("boolean", None),
-    marshmallow.fields.UUID: ("string", "uuid"),
-    marshmallow.fields.DateTime: ("string", "date-time"),
-    marshmallow.fields.Date: ("string", "date"),
-    marshmallow.fields.Time: ("string", None),
-    marshmallow.fields.Email: ("string", "email"),
-    marshmallow.fields.URL: ("string", "url"),
-    marshmallow.fields.Dict: ("object", None),
-    # Assume base Field and Raw are strings
-    marshmallow.fields.Field: ("string", None),
-    marshmallow.fields.Raw: ("string", None),
-    marshmallow.fields.List: ("array", None),
+    types.IntType: ("integer", "int32"),
+    types.NumberType: ("number", None),
+    types.FloatType: ("number", "float"),
+    types.DecimalType: ("number", None),
+    types.StringType: ("string", None),
+    types.BooleanType: ("boolean", None),
+    types.UUIDType: ("string", "uuid"),
+    types.DateTimeType: ("string", "date-time"),
+    types.DateType: ("string", "date"),
+    types.TimestampType: ("string", None),
+    types.EmailType: ("string", "email"),
+    # types.URL: ("string", "url"),  # Not in Schematics
+    types.DictType: ("object", None),
+    types.ListType: ("array", None),
+    types.BaseType: ("string", None),
 }
 
 
@@ -127,13 +125,16 @@ class OpenAPIConverter(object):
         :param Field field: A marshmallow field.
         :param str name: Field name
         :rtype: str
+
+        @TODO re-write this to use the serialize method of a BaseModel maybe?
         """
-        if MARSHMALLOW_VERSION_INFO[0] < 3:
-            # use getattr in case we're running against older versions of marshmallow.
-            dump_to = getattr(field, "dump_to", None)
-            load_from = getattr(field, "load_from", None)
-            return dump_to or load_from or name
-        return field.data_key or name
+        # if MARSHMALLOW_VERSION_INFO[0] < 3:
+        #     # use getattr in case we're running against older versions of marshmallow.
+        #     dump_to = getattr(field, "dump_to", None)
+        #     load_from = getattr(field, "load_from", None)
+        #     return dump_to or load_from or name
+        # return field.data_key or name
+        return name
 
     def map_to_openapi_type(self, *args):
         """Decorator to set mapping for custom fields.
@@ -148,7 +149,7 @@ class OpenAPIConverter(object):
         elif len(args) == 2:
             openapi_type_field = args
         else:
-            raise TypeError("Pass core marshmallow field type or (type, fmt) pair.")
+            raise TypeError("Pass core Schematics type or (type, fmt) pair.")
 
         def inner(field_type):
             self.field_mapping[field_type] = openapi_type_field
@@ -156,12 +157,15 @@ class OpenAPIConverter(object):
 
         return inner
 
-    def field2type_and_format(self, field):
+    def field2type_and_format(self, field: types.BaseType) -> dict:
         """Return the dictionary of OpenAPI type and format based on the field
         type
 
-        :param Field field: A marshmallow field.
-        :rtype: dict
+        Args:
+            field (fields.BaseType): Description
+
+        Returns:
+            dict: A dict mapping the field type
         """
         type_, fmt = self.field_mapping.get(type(field), ("string", None))
 
@@ -172,23 +176,19 @@ class OpenAPIConverter(object):
 
         return ret
 
-    def field2default(self, field):
+    def field2default(self, field: types.BaseType):
         """Return the dictionary containing the field's default value
 
-        Will first look for a `doc_default` key in the field's metadata and then
-        fall back on the field's `missing` parameter. A callable passed to the
-        field's missing parameter will be ignored.
+        Args:
+            field (types.BaseType): The field we're looking for a default value on
 
-        :param Field field: A marshmallow field.
-        :rtype: dict
+        Returns:
+            dict: ie: {'default': False}
+
         """
         ret = {}
-        if "doc_default" in field.metadata:
-            ret["default"] = field.metadata["doc_default"]
-        else:
-            default = field.missing
-            if default is not marshmallow.missing and not callable(default):
-                ret["default"] = default
+        if hasattr(field, 'default') and field.default is not None:
+            ret["default"] = field.default
 
         return ret
 
@@ -197,12 +197,18 @@ class OpenAPIConverter(object):
 
         :param Field field: A marshmallow field.
         :rtype: dict
+
+        @TODO Work out if we're going to need this at all for Schematics.
         """
         attributes = {}
+        vals = []
+
+        if hasattr(field, 'validators'):
+            vals = field.validators
 
         comparable = [
             validator.comparable
-            for validator in field.validators
+            for validator in vals
             if hasattr(validator, "comparable")
         ]
         if comparable:
@@ -210,7 +216,7 @@ class OpenAPIConverter(object):
         else:
             choices = [
                 OrderedSet(validator.choices)
-                for validator in field.validators
+                for validator in vals
                 if hasattr(validator, "choices")
             ]
             if choices:
@@ -218,36 +224,46 @@ class OpenAPIConverter(object):
 
         return attributes
 
-    def field2read_only(self, field, **kwargs):
-        """Return the dictionary of OpenAPI field attributes for a dump_only field.
+    # def field2read_only(self, field, **kwargs):
+    #     """Return the dictionary of OpenAPI field attributes for a dump_only field.
 
-        :param Field field: A marshmallow field.
-        :rtype: dict
-        """
-        attributes = {}
-        if field.dump_only:
-            attributes["readOnly"] = True
-        return attributes
+    #     :param Field field: A marshmallow field.
+    #     :rtype: dict
+    #     @TODO Work out if we're going to need this at all for Schematics.
+    #     """
+    #     attributes = {}
+    #     if field.dump_only:
+    #         attributes["readOnly"] = True
+    #     return attributes
 
-    def field2write_only(self, field, **kwargs):
-        """Return the dictionary of OpenAPI field attributes for a load_only field.
+    # def field2write_only(self, field, **kwargs):
+    #     """Return the dictionary of OpenAPI field attributes for a load_only field.
 
-        :param Field field: A marshmallow field.
-        :rtype: dict
-        """
-        attributes = {}
-        if field.load_only and self.openapi_version.major >= 3:
-            attributes["writeOnly"] = True
-        return attributes
+    #     :param Field field: A marshmallow field.
+    #     :rtype: dict
+    #     @TODO Work out if we're going to need this at all for Schematics.
+    #     """
+    #     attributes = {}
+    #     if field.load_only and self.openapi_version.major >= 3:
+    #         attributes["writeOnly"] = True
+    #     return attributes
 
-    def field2nullable(self, field, **kwargs):
+    def field2nullable(self, field: types.BaseType, **kwargs: dict) -> dict:
         """Return the dictionary of OpenAPI field attributes for a nullable field.
 
-        :param Field field: A marshmallow field.
-        :rtype: dict
+        Args:
+            field (types.BaseType): The field
+            **kwargs (dict): Any extra kwargs for some reason
+
+        Returns:
+            dict: ie: {'nullable': False}
         """
         attributes = {}
-        if field.allow_none:
+        required = False
+        if hasattr(field, 'required'):
+            required = field.required
+
+        if not required:
             attributes[
                 "x-nullable" if self.openapi_version.major < 3 else "nullable"
             ] = True
@@ -259,6 +275,7 @@ class OpenAPIConverter(object):
 
         :param Field field: A marshmallow field.
         :rtype: dict
+        # @NOTE: Schematics has no Range validator and we don't use a custom one
         """
         validators = [
             validator
@@ -284,105 +301,92 @@ class OpenAPIConverter(object):
                     attributes["maximum"] = validator.max
         return attributes
 
-    def field2length(self, field, **kwargs):
-        """Return the dictionary of OpenAPI field attributes for a set of
-        :class:`Length <marshmallow.validators.Length>` validators.
+    def field2length(self, field: types.BaseType, **kwargs) -> dict:
+        """Return the dictionary of OpenAPI field attributes for min and max length
+
+        {'minLength': 6, 'maxLength': 36}
 
         :param Field field: A marshmallow field.
         :rtype: dict
+
+        Args:
+            field (types.BaseType): the field
+            **kwargs: Any kwargs
+
+        Returns:
+            dict: ie: {'minLength': 6, 'maxLength': 36}
         """
         attributes = {}
 
-        validators = [
-            validator
-            for validator in field.validators
-            if (
-                hasattr(validator, "min")
-                and hasattr(validator, "max")
-                and hasattr(validator, "equal")
-            )
-        ]
+        is_array = isinstance(field, types.ListType)
 
-        is_array = isinstance(
-            field, (marshmallow.fields.Nested, marshmallow.fields.List)
-        )
         min_attr = "minItems" if is_array else "minLength"
         max_attr = "maxItems" if is_array else "maxLength"
 
-        for validator in validators:
-            if validator.min is not None:
-                if hasattr(attributes, min_attr):
-                    attributes[min_attr] = max(attributes[min_attr], validator.min)
-                else:
-                    attributes[min_attr] = validator.min
-            if validator.max is not None:
-                if hasattr(attributes, max_attr):
-                    attributes[max_attr] = min(attributes[max_attr], validator.max)
-                else:
-                    attributes[max_attr] = validator.max
+        if hasattr(field, 'max_length') and field.max_length is not None:
+            attributes[max_attr] = field.max_length
 
-        for validator in validators:
-            if validator.equal is not None:
-                attributes[min_attr] = validator.equal
-                attributes[max_attr] = validator.equal
-        return attributes
-
-    def field2pattern(self, field, **kwargs):
-        """Return the dictionary of OpenAPI field attributes for a set of
-        :class:`Range <marshmallow.validators.Regexp>` validators.
-
-        :param Field field: A marshmallow field.
-        :rtype: dict
-        """
-        regex_validators = (
-            v
-            for v in field.validators
-            if isinstance(getattr(v, "regex", None), RegexType)
-        )
-        v = next(regex_validators, None)
-        attributes = {} if v is None else {"pattern": v.regex.pattern}
-
-        if next(regex_validators, None) is not None:
-            warnings.warn(
-                "More than one regex validator defined on {} field. Only the "
-                "first one will be used in the output spec.".format(type(field)),
-                UserWarning,
-            )
+        if hasattr(field, 'min_length') and field.min_length is not None:
+            attributes[min_attr] = field.min_length
 
         return attributes
 
-    def metadata2properties(self, field):
-        """Return a dictionary of properties extracted from field Metadata
+    # def field2pattern(self, field, **kwargs):
+    #     """Return the dictionary of OpenAPI field attributes for a set of
+    #     :class:`Range <marshmallow.validators.Regexp>` validators.
 
-        Will include field metadata that are valid properties of `OpenAPI schema
-        objects
-        <https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#schemaObject>`_
-        (e.g. “description”, “enum”, “example”).
+    #     :param Field field: A marshmallow field.
+    #     :rtype: dict
+    #     """
+    #     regex_validators = (
+    #         v
+    #         for v in field.validators
+    #         if isinstance(getattr(v, "regex", None), RegexType)
+    #     )
+    #     v = next(regex_validators, None)
+    #     attributes = {} if v is None else {"pattern": v.regex.pattern}
 
-        In addition, `specification extensions
-        <https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#specification-extensions>`_
-        are supported.  Prefix `x_` to the desired extension when passing the
-        keyword argument to the field constructor. apispec will convert `x_` to
-        `x-` to comply with OpenAPI.
+    #     if next(regex_validators, None) is not None:
+    #         warnings.warn(
+    #             "More than one regex validator defined on {} field. Only the "
+    #             "first one will be used in the output spec.".format(type(field)),
+    #             UserWarning,
+    #         )
 
-        :param Field field: A marshmallow field.
-        :rtype: dict
-        """
-        # Dasherize metadata that starts with x_
-        metadata = {
-            key.replace("_", "-") if key.startswith("x_") else key: value
-            for key, value in iteritems(field.metadata)
-        }
+    #     return attributes
 
-        # Avoid validation error with "Additional properties not allowed"
-        ret = {
-            key: value
-            for key, value in metadata.items()
-            if key in _VALID_PROPERTIES or key.startswith(_VALID_PREFIX)
-        }
-        return ret
+#    def metadata2properties(self, field):
+#        """Return a dictionary of properties extracted from field Metadata
+#
+#        Will include field metadata that are valid properties of `OpenAPI schema
+#        objects
+#        <https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#schemaObject>`_
+#        (e.g. “description”, “enum”, “example”).
+#
+#        In addition, `specification extensions
+#        <https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#specification-extensions>`_
+#        are supported.  Prefix `x_` to the desired extension when passing the
+#        keyword argument to the field constructor. apispec will convert `x_` to
+#        `x-` to comply with OpenAPI.
+#
+#        :param Field field: A marshmallow field.
+#        :rtype: dict
+#        """
+#        # Dasherize metadata that starts with x_
+#        metadata = {
+#            key.replace("_", "-") if key.startswith("x_") else key: value
+#            for key, value in iteritems(field.metadata)
+#        }
+#
+#        # Avoid validation error with "Additional properties not allowed"
+#        ret = {
+#            key: value
+#            for key, value in metadata.items()
+#            if key in _VALID_PROPERTIES or key.startswith(_VALID_PREFIX)
+#        }
+#        return ret
 
-    def field2property(self, field):
+    def field2property(self, field: types.BaseType) -> dict:
         """Return the JSON Schema property definition given a marshmallow
         :class:`Field <marshmallow.fields.Field>`.
 
@@ -393,38 +397,42 @@ class OpenAPIConverter(object):
 
         :param Field field: A marshmallow field.
         :rtype: dict, a Property Object
+
+        Args:
+            field (types.BaseType): The field
+
+        Returns:
+            dict: An updated dict
         """
-        ret = {}
+        ret: dict = {}
 
         for attr_func in (
             self.field2type_and_format,
             self.field2default,
             self.field2choices,
-            self.field2read_only,
-            self.field2write_only,
+            # self.field2read_only,
+            # self.field2write_only,
             self.field2nullable,
-            self.field2range,
+            # self.field2range,
             self.field2length,
-            self.field2pattern,
-            self.metadata2properties,
+            # self.field2pattern,
+            # self.metadata2properties,
         ):
-            ret.update(attr_func(field))
+            if callable(attr_func):
+                ret.update(attr_func(field))
 
-        if isinstance(field, marshmallow.fields.Nested):
-            del ret["type"]
-            schema_dict = self.resolve_nested_schema(field.schema)
-            if ret and "$ref" in schema_dict:
-                ret.update({"allOf": [schema_dict]})
-            else:
-                ret.update(schema_dict)
-        elif isinstance(field, marshmallow.fields.List):
-            ret["items"] = self.field2property(field.container)
-        elif isinstance(field, marshmallow.fields.Dict):
-            if MARSHMALLOW_VERSION_INFO[0] >= 3:
-                if field.value_container:
-                    ret["additionalProperties"] = self.field2property(
-                        field.value_container
-                    )
+        try:
+            if isinstance(field, types.ModelType):
+                del ret["type"]
+                schema_dict = self.resolve_nested_schema(field.model_class)
+                if ret and "$ref" in schema_dict:
+                    ret.update({"allOf": [schema_dict]})
+                else:
+                    ret.update(schema_dict)
+            elif isinstance(field, types.ListType):
+                ret["items"] = self.field2property(field.field)
+        except Exception as e:
+            console.error(e)
 
         return ret
 
@@ -453,7 +461,7 @@ class OpenAPIConverter(object):
                         "Name resolver returned None for schema {schema} which is "
                         "part of a chain of circular referencing schemas. Please"
                         " ensure that the schema_name_resolver passed to"
-                        " MarshmallowPlugin returns a string for all circular"
+                        " SchematicsPlugin returns a string for all circular"
                         " referencing schemas.".format(schema=schema)
                     )
                 if getattr(schema, "many", False):
@@ -464,12 +472,16 @@ class OpenAPIConverter(object):
         return self.get_ref_dict(schema_instance)
 
     def schema2parameters(
-        self, schema, default_in="body", name="body", required=False, description=None
-    ):
-        """Return an array of OpenAPI parameters given a given marshmallow
-        :class:`Schema <marshmallow.Schema>`. If `default_in` is "body", then return an array
-        of a single parameter; else return an array of a parameter for each included field in
-        the :class:`Schema <marshmallow.Schema>`.
+        self, schema: Model,
+        default_in: str = "body",
+        name: str = "body",
+        required: bool = False,
+        description: bool = None
+    ) -> list:
+        """Return an array of OpenAPI parameters given a given a schematics Model.
+        If `default_in` is "body", then return an array of a single parameter;
+        else return an array of a parameter for each included field in
+        the model.
 
         https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#parameterObject
         """
@@ -497,24 +509,24 @@ class OpenAPIConverter(object):
 
         return self.fields2parameters(fields, default_in=default_in)
 
-    def fields2parameters(self, fields, default_in="body"):
+    def fields2parameters(self, fields: types.BaseType, default_in: str = "body") -> list:
         """Return an array of OpenAPI parameters given a mapping between field names and
-        :class:`Field <marshmallow.Field>` objects. If `default_in` is "body", then return an array
+        ``types.BaseType`` objects. If ``default_in`` is "body", then return an array
         of a single parameter; else return an array of a parameter for each included field in
-        the :class:`Schema <marshmallow.Schema>`.
+        the Model.
 
-        In OpenAPI3, only "query", "header", "path" or "cookie" are allowed for the location
+        In OpenAPI 3, only "query", "header", "path" or "cookie" are allowed for the location
         of parameters. In OpenAPI 3, "requestBody" is used when fields are in the body.
 
         This function always returns a list, with a parameter
-        for each included field in the :class:`Schema <marshmallow.Schema>`.
+        for each included field in the Model.
 
         https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#parameterObject
         """
         parameters = []
         body_param = None
         for field_name, field_obj in iteritems(fields):
-            if field_obj.dump_only:
+            if hasattr(field_obj, 'dump_only') and field_obj.dump_only:
                 continue
             param = self.field2parameter(
                 field_obj,
@@ -538,9 +550,10 @@ class OpenAPIConverter(object):
                 parameters.append(param)
         return parameters
 
-    def field2parameter(self, field, name="body", default_in="body"):
-        """Return an OpenAPI parameter as a `dict`, given a marshmallow
-        :class:`Field <marshmallow.Field>`.
+    def field2parameter(
+            self, field: types.BaseType, name: str = "body", default_in: str = "body") -> dict:
+        """Return an OpenAPI parameter as a `dict`, given a schematics
+        ``types.BaseType``.
 
         https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#parameterObject
         """
@@ -550,19 +563,19 @@ class OpenAPIConverter(object):
             prop,
             name=name,
             required=field.required,
-            multiple=isinstance(field, marshmallow.fields.List),
+            multiple=isinstance(field, types.ListType),
             location=location,
             default_in=default_in,
         )
 
     def property2parameter(
         self,
-        prop,
-        name="body",
-        required=False,
-        multiple=False,
-        location=None,
-        default_in="body",
+        prop: dict,
+        name: str = "body",
+        required: bool = False,
+        multiple: bool = False,
+        location: str = None,
+        default_in: str = "body",
     ):
         """Return the Parameter Object definition for a JSON Schema property.
 
@@ -605,19 +618,16 @@ class OpenAPIConverter(object):
                 ret["schema"] = prop
         return ret
 
-    def schema2jsonschema(self, schema):
-        """Return the JSON Schema Object for a given marshmallow
-        :class:`Schema <marshmallow.Schema>` instance. Schema may optionally
-        provide the ``title`` and ``description`` class Meta options.
+    def schema2jsonschema(self, schema: Model):
+        """Return the JSON Schema Object for a given schematics Model instance.
+        Schema may optionally provide the ``title`` and ``description`` class Meta options.
 
         https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#schemaObject
 
-        Example: ::
-
-            class UserSchema(Schema):
-                _id = fields.Int()
-                email = fields.Email(description='email address of the user')
-                name = fields.Str()
+        Example:
+            class WorkExtensionOption(BaseModel, metaclass=ORMMeta):
+                works_location_ids = ListType(UUIDType())
+                works_locations = ListType(ModelType(WorksLocation))
 
                 class Meta:
                     title = 'User'
@@ -634,8 +644,12 @@ class OpenAPIConverter(object):
             #  'title': 'User',
             #  'type': 'object'}
 
-        :param Schema schema: A marshmallow Schema instance
-        :rtype: dict, a JSON Schema Object
+        Args:
+            schema (Model): The model you want a json schema for
+
+        Returns:
+            dict: A jsonschema dict
+
         """
         fields = get_fields(schema)
         Meta = getattr(schema, "Meta", None)
@@ -651,9 +665,14 @@ class OpenAPIConverter(object):
 
         return jsonschema
 
-    def fields2jsonschema(self, fields, ordered=False, partial=None):
+    def fields2jsonschema(
+        self,
+        fields: dict,
+        ordered: bool = False,
+        partial: Optional[Union[bool, tuple]] = None
+    ) -> dict:
         """Return the JSON Schema Object given a mapping between field names and
-        :class:`Field <marshmallow.Field>` objects.
+        types.BaseType objects.
 
         :param dict fields: A dictionary of field name field object pairs
         :param bool ordered: Whether to preserve the order in which fields were declared
@@ -662,7 +681,10 @@ class OpenAPIConverter(object):
             in the iterable will not be marked as required.
         :rtype: dict, a JSON Schema Object
         """
-        jsonschema = {"type": "object", "properties": OrderedDict() if ordered else {}}
+        jsonschema: dict = {
+            "type": "object",
+            "properties": OrderedDict() if ordered else {}
+        }
 
         for field_name, field_obj in iteritems(fields):
             observed_field_name = self._observed_name(field_obj, field_name)

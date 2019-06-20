@@ -17,12 +17,22 @@ from .connection import rconnect
 r = rethinkdb.RethinkDB()
 
 
+class RegistryError(Exception):
+    pass
+
+
 class ModelRegistry(object):
 
     def __init__(self):
         self._models = {}
         self._tables = []
         self._initialsed = False
+
+    def get_class(self, name):
+        if name in self._models:
+            return self._models[name]
+        else:
+            raise RegistryError(f'Model {name} not found')
 
     def add(self, name, model, meta):
         # console.info(f'Registering {name} (initialised: {self._initialsed})')
