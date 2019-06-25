@@ -12,7 +12,7 @@
 `additional_floor_area_units_id` : str(UUID)
 
     {
-        "additional_floor_area": 23.8
+        "additional_floor_area": 23.8,
         "additional_floor_area_units_id": "095bd097-f66e-4c66-bc1e-3521a0358e8d"
     }
 

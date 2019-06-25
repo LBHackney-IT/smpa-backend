@@ -15,7 +15,7 @@ We can now update our equipment proposal with the locations of equipment being i
                 {
                     "location_ids": [
                         "b36079c1-dc9f-4225-a94d-b7c54c83b86e"
-                    ]
+                    ],
                     "equipment_type_id": "9dc99f40-ac1d-421e-a408-c253d7ead671"
                 }
             ]
@@ -47,14 +47,14 @@ We can now update our equipment proposal with the locations of equipment being i
 ### Returns
 
     {
-      "id": "bcaa27fe-e5fa-4269-bc67-1d653b464f85",
-      "created_at": "2019-06-12T13:39:17.368124",
-      "updated_at": "2019-06-12T13:39:17.368218",
-      "application_id": "27388ac2-0880-48cd-8738-e198f86424b7",
+      "id": "f8d0d582-7b27-42e3-8015-93ed9988bd51",
+      "created_at": "2019-06-25T21:06:42.510825",
+      "updated_at": "2019-06-25T21:06:42.510875",
+      "application_id": "430ea7c1-7d94-49c8-bcef-773e9f4bf209",
       "equipment": {
         "id": null,
-        "created_at": "2019-06-12T13:39:17.368499",
-        "updated_at": "2019-06-12T13:39:17.368528",
+        "created_at": "2019-06-25T21:06:42.511058",
+        "updated_at": "2019-06-25T21:06:42.511102",
         "equipment_type_ids": [
           "b36079c1-dc9f-4225-a94d-b7c54c83b86e",
           "cc70f42f-dc59-4a03-bf7e-fbb2e7ff3b5b",
@@ -70,10 +70,12 @@ We can now update our equipment proposal with the locations of equipment being i
         "equipment_locations": [
           {
             "id": null,
-            "created_at": "2019-06-12T13:39:17.368762",
-            "updated_at": "2019-06-12T13:39:17.368791",
-            "location_id": "b36079c1-dc9f-4225-a94d-b7c54c83b86e",
-            "location": null,
+            "created_at": "2019-06-25T21:06:42.511351",
+            "updated_at": "2019-06-25T21:06:42.511385",
+            "location_ids": [
+              "b36079c1-dc9f-4225-a94d-b7c54c83b86e"
+            ],
+            "locations": null,
             "equipment_type_id": "9dc99f40-ac1d-421e-a408-c253d7ead671",
             "equipment_type": null
           }
