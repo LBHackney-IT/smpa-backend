@@ -8,7 +8,7 @@
 import os
 from .resources.swagger import ApiSpecResource
 
-from .resources.material import (
+from .resources.material import (  # NOQA
     # Options
     MaterialOptionRoofPost,
     MaterialOptionRoofPatch,
@@ -28,7 +28,7 @@ from .resources.material import (
     MaterialDoorPost,
     MaterialDoorPatch,
 )
-from .resources import (
+from .resources import (  # NOQA
     # Unit resources
     AreaUnitResource, AreaUnitListResource, LinearUnitResource, LinearUnitListResource,
     # User resources

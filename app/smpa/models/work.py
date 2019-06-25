@@ -314,8 +314,8 @@ class WorkExtensionParking(Work):
 
 class WorkEquipmentLocation(BaseModel, metaclass=ORMMeta):
 
-    location_id = UUIDType()
-    location = ModelType(WorksLocation)
+    location_ids = ListType(UUIDType())
+    locations = ListType(ModelType(WorksLocation))
 
     equipment_type_id = UUIDType()
     equipment_type = ModelType(EquipmentWorksType)

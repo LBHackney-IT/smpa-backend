@@ -13,7 +13,9 @@ We can now update our equipment proposal with the locations of equipment being i
         "equipment": {
             "equipment_locations": [
                 {
-                    "location_id": "b36079c1-dc9f-4225-a94d-b7c54c83b86e",
+                    "location_ids": [
+                        "b36079c1-dc9f-4225-a94d-b7c54c83b86e"
+                    ]
                     "equipment_type_id": "9dc99f40-ac1d-421e-a408-c253d7ead671"
                 }
             ]
@@ -27,11 +29,15 @@ We can now update our equipment proposal with the locations of equipment being i
         "equipment": {
             "equipment_locations": [
                 {
-                    "location_id": "b36079c1-dc9f-4225-a94d-b7c54c83b86e",
+                    "location_ids": [
+                        "b36079c1-dc9f-4225-a94d-b7c54c83b86e"
+                    ]
                     "equipment_type_id": "9dc99f40-ac1d-421e-a408-c253d7ead671"
                 },
                 {
-                    "location_id": "243d44e8-8a8b-44de-b2ed-e7caa0628e98",
+                    "location_ids": [
+                        "b36079c1-dc9f-4225-a94d-b7c54c83b86e"
+                    ]
                     "equipment_type_id": "cc70f42f-dc59-4a03-bf7e-fbb2e7ff3b5b"
                 }
             ]
