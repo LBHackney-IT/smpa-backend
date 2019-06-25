@@ -35,7 +35,7 @@ GET /api/v1/roof-works-types
     /api/v1/parking-works-scopes
     /api/v1//gate-fences-walls-types
     /api/v1/equipment-works-types
-    /api/v1/equipment-works-conservation
+    /api/v1/equipment-works-conservation-types
     /api/v1/area-units
     /api/v1/linear-units
     /api/v1/document-sizes

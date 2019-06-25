@@ -1,3 +1,4 @@
+import json
 import functools
 from smpa.helpers.console import console
 
@@ -24,3 +25,24 @@ def purger(services):
             return True
         return wrapper
     return decorator_purger
+
+
+def json_match(result: dict, body: str) -> bool:
+    """Test to see if the ``result`` from an API call contains all the
+    data sent to it in ``body``
+
+    Args:
+        result (str): The API call result
+        body (dict): The data we sent to the API
+    """
+    diffs = {}
+    body_dict = json.loads(body)
+    for k, v in body_dict.items():
+        if result[k] != v:
+            diffs[k] = {"wanted": v, "found": result[k]}
+
+    if len(diffs):
+        console.warn('JSON MATCH ERROR')
+        console.warn(diffs)
+        return False
+    return True
