@@ -841,3 +841,26 @@ def test_extension_proposal_materials_windows_not_applicable(session_client):
     result = json.loads(rv.body)
     assert result['materials']['windows']['matches_existing'] is False
     assert result['materials']['windows']['not_applicable'] is True
+
+
+def test_extension_proposal_other_materials(session_client):
+    body = """
+        {
+            "materials":{
+                "other": [
+                    "The chimney is made of diamonds",
+                    "The path is made of gold."
+                ]
+            }
+        }
+    """
+    rv = session_client.patch(
+        f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
+        body,
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    result = json.loads(rv.body)
+    print(rv.body)
+    assert "The chimney is made of diamonds" in result['materials']['other']
+    assert "The path is made of gold." in result['materials']['other']

@@ -91,8 +91,8 @@ class MaterialDoor(BaseMaterial):
     material_id = UUIDType()
 
 
-class OtherMaterial(BaseMaterial):
-    name = StringType(required=True)
+class OtherMaterial(BaseModel, metaclass=ORMMeta):
+    description = StringType(required=True)
 
 
 class ExternalBuildingMaterial(BaseModel, metaclass=ORMMeta):
@@ -141,3 +141,5 @@ class MaterialExtension(BaseModel, metaclass=ORMMeta):
     walls = ModelType(MaterialProposalWalls)
     windows = ModelType(MaterialProposalWindows)
     doors = ModelType(MaterialProposalDoors)
+
+    other = ListType(StringType)
