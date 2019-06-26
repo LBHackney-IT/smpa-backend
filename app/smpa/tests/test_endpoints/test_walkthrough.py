@@ -765,6 +765,7 @@ def test_extension_proposal_materials_details(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
+    print(rv.body)
     assert result['materials']['definitions_in_documents'] is False
     assert result['materials']['definitions_in_form'] is True
     assert result['materials']['definitions_to_follow'] is False
