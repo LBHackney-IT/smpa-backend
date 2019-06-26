@@ -1,65 +1,36 @@
 # 29. Specifying materials
 
-When we specify the materials for a particular work, we create a new MaterialX object, and then associate that to the extension proposal. So this is a minimum two step process.
-
-
-![](/static/screen31.png)
-
-### Step 1 - create the material record
-
-In the example below, the `material_id` key is an id retrieved from the list of possible options with `GET /api/v1/materials/options/roof`
-
-`POST /api/v1/materials/roof`
-
-    {
-        "material_id": "d470020f-984f-4acf-9e75-387f58db4604",
-        "colour_and_type": "Some lovely green roof tiles."
-    }
-
-
-### Returns
-
-This returns a newly saved MaterialsRoof object.
-
-    {
-      "id": "57d072b7-fe54-486c-bee0-7f8aad74bdcf",
-      "created_at": "2019-06-18T20:14:46.737193",
-      "updated_at": "2019-06-18T20:14:46.737231",
-      "colour_and_type": "Some lovely green roof tiles.",
-      "material_id": "d470020f-984f-4acf-9e75-387f58db4604"
-    }
-
-### Step 2
-
-Save the newly created material object(s) against the correct key in the extension proposal.
+For each of the materials types, we can patch a list of objects to the extension proposal's `materials` key.
 
 `PATCH /api/v1/extension-proposals/{id}`
 
     {
-        "original_house": {
-            "roof": {
-                "materials_ids": [
-                    "57d072b7-fe54-486c-bee0-7f8aad74bdcf"
-                ]
-            }
+        "materials":{
+            "roof": [
+                {
+                    "material_id": "d470020f-984f-4acf-9e75-387f58db4604",
+                    "colour_and_type": "Some lovely green roof tiles."
+                }
+            ]
         }
     }
+
 
 ### Returns
 
     {
-      "id": "d387e56e-9e8f-4298-8184-c1bf39bf6849",
-      "created_at": "2019-06-18T20:18:58.052571",
-      "updated_at": "2019-06-18T20:18:58.052614",
-      "application_id": "35a9f1af-a643-44d7-9de8-96be9b351abb",
+      "id": "44dd34ee-ce66-40ec-bf3b-65b59bc9cdfa",
+      "created_at": "2019-06-26T13:03:14.062964",
+      "updated_at": "2019-06-26T13:03:14.063007",
+      "application_id": "02c66b79-77f7-4c1c-b69f-8a811ea1c6b3",
       "original_house": {
         "id": null,
-        "created_at": "2019-06-18T20:18:58.052913",
-        "updated_at": "2019-06-18T20:18:58.052946",
+        "created_at": "2019-06-26T13:03:14.063170",
+        "updated_at": "2019-06-26T13:03:14.063203",
         "single_storey_extension": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.053081",
-          "updated_at": "2019-06-18T20:18:58.053114",
+          "created_at": "2019-06-26T13:03:14.063317",
+          "updated_at": "2019-06-26T13:03:14.063350",
           "works_location_ids": [
             "165c9046-f6f2-4144-b60c-f1ca24c94054",
             "b6b2cc59-f097-48bc-a9ad-14f263e9e036"
@@ -70,8 +41,8 @@ Save the newly created material object(s) against the correct key in the extensi
         "part_single_part_two_storey_extension": null,
         "basement": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.053350",
-          "updated_at": "2019-06-18T20:18:58.053384",
+          "created_at": "2019-06-26T13:03:14.063581",
+          "updated_at": "2019-06-26T13:03:14.063613",
           "works_location_ids": [
             "165c9046-f6f2-4144-b60c-f1ca24c94054",
             "b6b2cc59-f097-48bc-a9ad-14f263e9e036"
@@ -84,8 +55,8 @@ Save the newly created material object(s) against the correct key in the extensi
         },
         "roof": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.053617",
-          "updated_at": "2019-06-18T20:18:58.053650",
+          "created_at": "2019-06-26T13:03:14.063845",
+          "updated_at": "2019-06-26T13:03:14.063877",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e",
             "4e9f51cb-1c24-4993-be9e-350e0d395ecb"
@@ -95,16 +66,15 @@ Save the newly created material object(s) against the correct key in the extensi
             "19ec661e-4655-4a98-9492-bf8a323607bf"
           ],
           "works_types": null,
-          "materials_ids": [
-            "57d072b7-fe54-486c-bee0-7f8aad74bdcf"
-          ],
-          "materials_other_ids": null,
-          "materials": null
+          "materials_ids": null,
+          "materials": null,
+          "materials_not_applicable": false,
+          "materials_match_existing": false
         },
         "porch": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.053939",
-          "updated_at": "2019-06-18T20:18:58.053971",
+          "created_at": "2019-06-26T13:03:14.064169",
+          "updated_at": "2019-06-26T13:03:14.064202",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -112,8 +82,8 @@ Save the newly created material object(s) against the correct key in the extensi
         },
         "balcony_terrace": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.054144",
-          "updated_at": "2019-06-18T20:18:58.054176",
+          "created_at": "2019-06-26T13:03:14.064371",
+          "updated_at": "2019-06-26T13:03:14.064403",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -121,8 +91,8 @@ Save the newly created material object(s) against the correct key in the extensi
         },
         "staircase": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.054349",
-          "updated_at": "2019-06-18T20:18:58.054381",
+          "created_at": "2019-06-26T13:03:14.064573",
+          "updated_at": "2019-06-26T13:03:14.064606",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -130,8 +100,8 @@ Save the newly created material object(s) against the correct key in the extensi
         },
         "windows_doors": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.054560",
-          "updated_at": "2019-06-18T20:18:58.054593",
+          "created_at": "2019-06-26T13:03:14.064775",
+          "updated_at": "2019-06-26T13:03:14.064808",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -139,8 +109,8 @@ Save the newly created material object(s) against the correct key in the extensi
         },
         "cladding": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.054769",
-          "updated_at": "2019-06-18T20:18:58.054801",
+          "created_at": "2019-06-26T13:03:14.064976",
+          "updated_at": "2019-06-26T13:03:14.065008",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -149,14 +119,14 @@ Save the newly created material object(s) against the correct key in the extensi
       },
       "incidental_buildings": {
         "id": null,
-        "created_at": "2019-06-18T20:18:58.055348",
-        "updated_at": "2019-06-18T20:18:58.055402",
+        "created_at": "2019-06-26T13:03:14.065228",
+        "updated_at": "2019-06-26T13:03:14.065260",
         "removal_or_demolition": true,
         "details": "I'm knocking a shed down.",
         "outbuilding": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.055553",
-          "updated_at": "2019-06-18T20:18:58.055586",
+          "created_at": "2019-06-26T13:03:14.065381",
+          "updated_at": "2019-06-26T13:03:14.065413",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -165,12 +135,12 @@ Save the newly created material object(s) against the correct key in the extensi
       },
       "boundaries": {
         "id": null,
-        "created_at": "2019-06-18T20:18:58.055869",
-        "updated_at": "2019-06-18T20:18:58.055902",
+        "created_at": "2019-06-26T13:03:14.065612",
+        "updated_at": "2019-06-26T13:03:14.065645",
         "gates_fences_walls": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.056016",
-          "updated_at": "2019-06-18T20:18:58.056049",
+          "created_at": "2019-06-26T13:03:14.065749",
+          "updated_at": "2019-06-26T13:03:14.065781",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -185,8 +155,8 @@ Save the newly created material object(s) against the correct key in the extensi
       },
       "means_of_access": {
         "id": null,
-        "created_at": "2019-06-18T20:18:58.056383",
-        "updated_at": "2019-06-18T20:18:58.056416",
+        "created_at": "2019-06-26T13:03:14.066060",
+        "updated_at": "2019-06-26T13:03:14.066092",
         "access_works_scope_id": "4c75ce90-4616-4dd0-b70a-de5ca530a37d",
         "access_works_scope": null,
         "access_works_sub_type_ids": [
@@ -197,8 +167,8 @@ Save the newly created material object(s) against the correct key in the extensi
       },
       "parking": {
         "id": null,
-        "created_at": "2019-06-18T20:18:58.056696",
-        "updated_at": "2019-06-18T20:18:58.056730",
+        "created_at": "2019-06-26T13:03:14.066312",
+        "updated_at": "2019-06-26T13:03:14.066345",
         "parking_works_scope_id": "d17dea6b-20d8-46df-87d0-b41fc5ec08c3",
         "parking_works_scope": null,
         "parking_works_sub_type_ids": null,
@@ -210,17 +180,34 @@ Save the newly created material object(s) against the correct key in the extensi
       },
       "trees": {
         "id": null,
-        "created_at": "2019-06-18T20:18:58.057165",
-        "updated_at": "2019-06-18T20:18:58.057207",
+        "created_at": "2019-06-26T13:03:14.066574",
+        "updated_at": "2019-06-26T13:03:14.066607",
         "inside_boundry": true,
         "removed_or_pruned": true,
         "outside_boundry": true
       },
+      "materials": {
+        "id": null,
+        "created_at": "2019-06-26T13:03:14.066769",
+        "updated_at": "2019-06-26T13:03:14.066802",
+        "definitions_in_documents": false,
+        "definitions_in_form": true,
+        "definitions_to_follow": false,
+        "roof": [
+          {
+            "id": null,
+            "created_at": "2019-06-26T13:03:14.066937",
+            "updated_at": "2019-06-26T13:03:14.066970",
+            "colour_and_type": "Some lovely green roof tiles.",
+            "material_id": "d470020f-984f-4acf-9e75-387f58db4604"
+          }
+        ],
+        "walls": null,
+        "windows": null,
+        "doors": null
+      },
       "additional_floor_area": 23.8,
       "additional_floor_area_units_id": "095bd097-f66e-4c66-bc1e-3521a0358e8d",
       "new_single_bedrooms": 2,
-      "new_double_bedrooms": 3,
-      "materials_definitions_in_documents": false,
-      "materials_definitions_in_form": false,
-      "materials_definitions_to_follow": false
+      "new_double_bedrooms": 3
     }
