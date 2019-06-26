@@ -1,6 +1,6 @@
 # 30. Other materials options
 
-The user is allowed to select "This is not applicable" or "You're proposing a new material to be used" on each of the materials screens. In these cases, we just want to patch the extension-proposal.
+The user is allowed to select "This is not applicable" or "Material and finish match the existing" on each of the materials screens. These can be sent as booleans `not_applicable` and `matches_existing`.
 
 ![](/static/screen32.png)
 
@@ -11,11 +11,10 @@ Save the newly created material object(s) against the correct key in the extensi
 `PATCH /api/v1/extension-proposals/{id}`
 
     {
-        "original_house": {
-            "wall": {
-                "materials_ids": [
-                    "57d072b7-fe54-486c-bee0-7f8aad74bdcf"
-                ]
+        "materials":{
+            "walls": {
+                "matches_existing": true,
+                "not_applicable": false
             }
         }
     }
@@ -23,18 +22,18 @@ Save the newly created material object(s) against the correct key in the extensi
 ### Returns
 
     {
-      "id": "d387e56e-9e8f-4298-8184-c1bf39bf6849",
-      "created_at": "2019-06-18T20:18:58.052571",
-      "updated_at": "2019-06-18T20:18:58.052614",
-      "application_id": "35a9f1af-a643-44d7-9de8-96be9b351abb",
+      "id": "3deb35c8-b128-4d54-b76d-063945a88f13",
+      "created_at": "2019-06-26T14:19:34.211133",
+      "updated_at": "2019-06-26T14:19:34.211175",
+      "application_id": "00ce2e25-709c-42fb-96bf-cb97e7694e36",
       "original_house": {
         "id": null,
-        "created_at": "2019-06-18T20:18:58.052913",
-        "updated_at": "2019-06-18T20:18:58.052946",
+        "created_at": "2019-06-26T14:19:34.211342",
+        "updated_at": "2019-06-26T14:19:34.211379",
         "single_storey_extension": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.053081",
-          "updated_at": "2019-06-18T20:18:58.053114",
+          "created_at": "2019-06-26T14:19:34.211672",
+          "updated_at": "2019-06-26T14:19:34.211710",
           "works_location_ids": [
             "165c9046-f6f2-4144-b60c-f1ca24c94054",
             "b6b2cc59-f097-48bc-a9ad-14f263e9e036"
@@ -45,8 +44,8 @@ Save the newly created material object(s) against the correct key in the extensi
         "part_single_part_two_storey_extension": null,
         "basement": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.053350",
-          "updated_at": "2019-06-18T20:18:58.053384",
+          "created_at": "2019-06-26T14:19:34.211978",
+          "updated_at": "2019-06-26T14:19:34.212011",
           "works_location_ids": [
             "165c9046-f6f2-4144-b60c-f1ca24c94054",
             "b6b2cc59-f097-48bc-a9ad-14f263e9e036"
@@ -59,8 +58,8 @@ Save the newly created material object(s) against the correct key in the extensi
         },
         "roof": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.053617",
-          "updated_at": "2019-06-18T20:18:58.053650",
+          "created_at": "2019-06-26T14:19:34.212406",
+          "updated_at": "2019-06-26T14:19:34.212446",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e",
             "4e9f51cb-1c24-4993-be9e-350e0d395ecb"
@@ -70,16 +69,15 @@ Save the newly created material object(s) against the correct key in the extensi
             "19ec661e-4655-4a98-9492-bf8a323607bf"
           ],
           "works_types": null,
-          "materials_ids": [
-            "57d072b7-fe54-486c-bee0-7f8aad74bdcf"
-          ],
-          "materials_other_ids": null,
-          "materials": null
+          "materials_ids": null,
+          "materials": null,
+          "materials_not_applicable": false,
+          "materials_match_existing": false
         },
         "porch": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.053939",
-          "updated_at": "2019-06-18T20:18:58.053971",
+          "created_at": "2019-06-26T14:19:34.212792",
+          "updated_at": "2019-06-26T14:19:34.212833",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -87,8 +85,8 @@ Save the newly created material object(s) against the correct key in the extensi
         },
         "balcony_terrace": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.054144",
-          "updated_at": "2019-06-18T20:18:58.054176",
+          "created_at": "2019-06-26T14:19:34.213022",
+          "updated_at": "2019-06-26T14:19:34.213055",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -96,8 +94,8 @@ Save the newly created material object(s) against the correct key in the extensi
         },
         "staircase": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.054349",
-          "updated_at": "2019-06-18T20:18:58.054381",
+          "created_at": "2019-06-26T14:19:34.213231",
+          "updated_at": "2019-06-26T14:19:34.213264",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -105,8 +103,8 @@ Save the newly created material object(s) against the correct key in the extensi
         },
         "windows_doors": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.054560",
-          "updated_at": "2019-06-18T20:18:58.054593",
+          "created_at": "2019-06-26T14:19:34.213445",
+          "updated_at": "2019-06-26T14:19:34.213478",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -114,8 +112,8 @@ Save the newly created material object(s) against the correct key in the extensi
         },
         "cladding": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.054769",
-          "updated_at": "2019-06-18T20:18:58.054801",
+          "created_at": "2019-06-26T14:19:34.213672",
+          "updated_at": "2019-06-26T14:19:34.213706",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -124,14 +122,14 @@ Save the newly created material object(s) against the correct key in the extensi
       },
       "incidental_buildings": {
         "id": null,
-        "created_at": "2019-06-18T20:18:58.055348",
-        "updated_at": "2019-06-18T20:18:58.055402",
+        "created_at": "2019-06-26T14:19:34.213959",
+        "updated_at": "2019-06-26T14:19:34.213995",
         "removal_or_demolition": true,
         "details": "I'm knocking a shed down.",
         "outbuilding": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.055553",
-          "updated_at": "2019-06-18T20:18:58.055586",
+          "created_at": "2019-06-26T14:19:34.214140",
+          "updated_at": "2019-06-26T14:19:34.214173",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -140,12 +138,12 @@ Save the newly created material object(s) against the correct key in the extensi
       },
       "boundaries": {
         "id": null,
-        "created_at": "2019-06-18T20:18:58.055869",
-        "updated_at": "2019-06-18T20:18:58.055902",
+        "created_at": "2019-06-26T14:19:34.214399",
+        "updated_at": "2019-06-26T14:19:34.214441",
         "gates_fences_walls": {
           "id": null,
-          "created_at": "2019-06-18T20:18:58.056016",
-          "updated_at": "2019-06-18T20:18:58.056049",
+          "created_at": "2019-06-26T14:19:34.214555",
+          "updated_at": "2019-06-26T14:19:34.214594",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -160,8 +158,8 @@ Save the newly created material object(s) against the correct key in the extensi
       },
       "means_of_access": {
         "id": null,
-        "created_at": "2019-06-18T20:18:58.056383",
-        "updated_at": "2019-06-18T20:18:58.056416",
+        "created_at": "2019-06-26T14:19:34.214908",
+        "updated_at": "2019-06-26T14:19:34.214942",
         "access_works_scope_id": "4c75ce90-4616-4dd0-b70a-de5ca530a37d",
         "access_works_scope": null,
         "access_works_sub_type_ids": [
@@ -172,8 +170,8 @@ Save the newly created material object(s) against the correct key in the extensi
       },
       "parking": {
         "id": null,
-        "created_at": "2019-06-18T20:18:58.056696",
-        "updated_at": "2019-06-18T20:18:58.056730",
+        "created_at": "2019-06-26T14:19:34.215176",
+        "updated_at": "2019-06-26T14:19:34.215209",
         "parking_works_scope_id": "d17dea6b-20d8-46df-87d0-b41fc5ec08c3",
         "parking_works_scope": null,
         "parking_works_sub_type_ids": null,
@@ -185,17 +183,48 @@ Save the newly created material object(s) against the correct key in the extensi
       },
       "trees": {
         "id": null,
-        "created_at": "2019-06-18T20:18:58.057165",
-        "updated_at": "2019-06-18T20:18:58.057207",
+        "created_at": "2019-06-26T14:19:34.215467",
+        "updated_at": "2019-06-26T14:19:34.215500",
         "inside_boundry": true,
         "removed_or_pruned": true,
         "outside_boundry": true
       },
+      "materials": {
+        "id": null,
+        "created_at": "2019-06-26T14:19:34.215675",
+        "updated_at": "2019-06-26T14:19:34.215713",
+        "definitions_in_documents": false,
+        "definitions_in_form": true,
+        "definitions_to_follow": false,
+        "roof": {
+          "id": null,
+          "created_at": "2019-06-26T14:19:34.215851",
+          "updated_at": "2019-06-26T14:19:34.215886",
+          "proposals": [
+            {
+              "id": null,
+              "created_at": "2019-06-26T14:19:34.216005",
+              "updated_at": "2019-06-26T14:19:34.216042",
+              "colour_and_type": "Some lovely green roof tiles.",
+              "material_id": "d470020f-984f-4acf-9e75-387f58db4604"
+            }
+          ],
+          "matches_existing": false,
+          "not_applicable": false
+        },
+        "walls": {
+          "id": null,
+          "created_at": "2019-06-26T14:19:34.216263",
+          "updated_at": "2019-06-26T14:19:34.216296",
+          "proposals": null,
+          "matches_existing": true,
+          "not_applicable": false
+        },
+        "windows": null,
+        "doors": null
+      },
       "additional_floor_area": 23.8,
       "additional_floor_area_units_id": "095bd097-f66e-4c66-bc1e-3521a0358e8d",
       "new_single_bedrooms": 2,
-      "new_double_bedrooms": 3,
-      "materials_definitions_in_documents": false,
-      "materials_definitions_in_form": false,
-      "materials_definitions_to_follow": false
+      "new_double_bedrooms": 3
     }

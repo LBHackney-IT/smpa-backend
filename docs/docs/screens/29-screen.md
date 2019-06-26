@@ -2,6 +2,9 @@
 
 For each of the materials types, we can patch a list of objects to the extension proposal's `materials` key.
 
+There are four, materials specification keys we can patch to. `roof`, `walls`, `windows`, and `doors`.
+
+
 `PATCH /api/v1/extension-proposals/{id}`
 
     {

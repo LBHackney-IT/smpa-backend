@@ -792,8 +792,52 @@ def test_extension_proposal_materials_roof(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    print(rv.body)
     assert result['materials']['roof']['proposals'][0]['material_id'] == \
         "d470020f-984f-4acf-9e75-387f58db4604"
     assert result['materials']['roof']['proposals'][0]['colour_and_type'] == \
         "Some lovely green roof tiles."
+
+
+def test_extension_proposal_materials_walls_matches_existing(session_client):
+    body = """
+        {
+            "materials":{
+                "walls": {
+                    "matches_existing": true,
+                    "not_applicable": false
+                }
+            }
+        }
+    """
+    rv = session_client.patch(
+        f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
+        body,
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    result = json.loads(rv.body)
+    print(rv.body)
+    assert result['materials']['walls']['matches_existing'] is True
+    assert result['materials']['walls']['not_applicable'] is False
+
+
+def test_extension_proposal_materials_windows_not_applicable(session_client):
+    body = """
+        {
+            "materials":{
+                "windows": {
+                    "matches_existing": false,
+                    "not_applicable": true
+                }
+            }
+        }
+    """
+    rv = session_client.patch(
+        f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
+        body,
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    result = json.loads(rv.body)
+    assert result['materials']['windows']['matches_existing'] is False
+    assert result['materials']['windows']['not_applicable'] is True
