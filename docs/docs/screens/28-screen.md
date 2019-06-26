@@ -12,9 +12,11 @@ We're patching the extension proposal just to add where materials questions will
 `PATCH /api/v1/extension-proposals/{id}`
 
     {
-        "materials_definitions_in_documents": false,
-        "materials_definitions_in_form": true,
-        "materials_definitions_to_follow": false
+        "materials": {
+            "definitions_in_documents": false,
+            "definitions_in_form": true,
+            "definitions_to_follow": false
+        }
     }
 
 ### Returns

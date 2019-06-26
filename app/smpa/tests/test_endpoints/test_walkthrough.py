@@ -751,9 +751,11 @@ def test_extension_proposal_trees(session_client):
 def test_extension_proposal_materials_details(session_client):
     body = """
         {
-            "materials_definitions_in_documents": false,
-            "materials_definitions_in_form": true,
-            "materials_definitions_to_follow": false
+            "materials": {
+                "definitions_in_documents": false,
+                "definitions_in_form": true,
+                "definitions_to_follow": false
+            }
         }
     """
     rv = session_client.patch(
@@ -763,6 +765,6 @@ def test_extension_proposal_materials_details(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert result['materials_definitions_in_documents'] is False
-    assert result['materials_definitions_in_form'] is True
-    assert result['materials_definitions_to_follow'] is False
+    assert result['materials']['definitions_in_documents'] is False
+    assert result['materials']['definitions_in_form'] is True
+    assert result['materials']['definitions_to_follow'] is False

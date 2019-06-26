@@ -12,6 +12,7 @@ from schematics.types import (  # NOQA
     StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, FloatType, ModelType
 )
 
+
 ####################################################################################################
 # Material options are the predefined lists of materials
 ####################################################################################################
@@ -98,3 +99,21 @@ class ExternalBuildingMaterial(BaseModel, metaclass=ORMMeta):
     element = StringType(required=True)
     proposed_material = StringType(required=True)
     colour_and_type = StringType(required=True)
+
+
+####################################################################################################
+# MaterialProposal is the materials key in models.proposal.ExtensionProposal
+####################################################################################################
+
+class MaterialExtension(BaseModel, metaclass=ORMMeta):
+    # You will define materials on supporting documentation
+    definitions_in_documents = BooleanType(default=False)
+    # You will define materials using this form <- we can ignore
+    definitions_in_form = BooleanType(default=False)
+    # You don’t know yet and will submit an Approval of Conditions later
+    definitions_to_follow = BooleanType(default=False)
+
+    roof = ListType(ModelType(MaterialRoof))
+    walls = ListType(ModelType(MaterialWall))
+    windows = ListType(ModelType(MaterialWindow))
+    doors = ListType(ModelType(MaterialDoor))
