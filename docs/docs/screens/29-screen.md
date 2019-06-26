@@ -6,12 +6,14 @@ For each of the materials types, we can patch a list of objects to the extension
 
     {
         "materials":{
-            "roof": [
-                {
-                    "material_id": "d470020f-984f-4acf-9e75-387f58db4604",
-                    "colour_and_type": "Some lovely green roof tiles."
-                }
-            ]
+            "roof": {
+                "proposals": [
+                    {
+                        "material_id": "d470020f-984f-4acf-9e75-387f58db4604",
+                        "colour_and_type": "Some lovely green roof tiles."
+                    }
+                ]
+            }
         }
     }
 
@@ -19,18 +21,18 @@ For each of the materials types, we can patch a list of objects to the extension
 ### Returns
 
     {
-      "id": "44dd34ee-ce66-40ec-bf3b-65b59bc9cdfa",
-      "created_at": "2019-06-26T13:03:14.062964",
-      "updated_at": "2019-06-26T13:03:14.063007",
-      "application_id": "02c66b79-77f7-4c1c-b69f-8a811ea1c6b3",
+      "id": "b2f70564-dbcf-4eb3-be31-f9c3261bbfb2",
+      "created_at": "2019-06-26T13:55:30.654207",
+      "updated_at": "2019-06-26T13:55:30.654243",
+      "application_id": "a4a16477-9f93-4e48-a293-00f89fa5b406",
       "original_house": {
         "id": null,
-        "created_at": "2019-06-26T13:03:14.063170",
-        "updated_at": "2019-06-26T13:03:14.063203",
+        "created_at": "2019-06-26T13:55:30.654378",
+        "updated_at": "2019-06-26T13:55:30.654406",
         "single_storey_extension": {
           "id": null,
-          "created_at": "2019-06-26T13:03:14.063317",
-          "updated_at": "2019-06-26T13:03:14.063350",
+          "created_at": "2019-06-26T13:55:30.654504",
+          "updated_at": "2019-06-26T13:55:30.654532",
           "works_location_ids": [
             "165c9046-f6f2-4144-b60c-f1ca24c94054",
             "b6b2cc59-f097-48bc-a9ad-14f263e9e036"
@@ -41,8 +43,8 @@ For each of the materials types, we can patch a list of objects to the extension
         "part_single_part_two_storey_extension": null,
         "basement": {
           "id": null,
-          "created_at": "2019-06-26T13:03:14.063581",
-          "updated_at": "2019-06-26T13:03:14.063613",
+          "created_at": "2019-06-26T13:55:30.654722",
+          "updated_at": "2019-06-26T13:55:30.654750",
           "works_location_ids": [
             "165c9046-f6f2-4144-b60c-f1ca24c94054",
             "b6b2cc59-f097-48bc-a9ad-14f263e9e036"
@@ -55,8 +57,8 @@ For each of the materials types, we can patch a list of objects to the extension
         },
         "roof": {
           "id": null,
-          "created_at": "2019-06-26T13:03:14.063845",
-          "updated_at": "2019-06-26T13:03:14.063877",
+          "created_at": "2019-06-26T13:55:30.654982",
+          "updated_at": "2019-06-26T13:55:30.655010",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e",
             "4e9f51cb-1c24-4993-be9e-350e0d395ecb"
@@ -73,8 +75,8 @@ For each of the materials types, we can patch a list of objects to the extension
         },
         "porch": {
           "id": null,
-          "created_at": "2019-06-26T13:03:14.064169",
-          "updated_at": "2019-06-26T13:03:14.064202",
+          "created_at": "2019-06-26T13:55:30.655277",
+          "updated_at": "2019-06-26T13:55:30.655315",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -82,8 +84,8 @@ For each of the materials types, we can patch a list of objects to the extension
         },
         "balcony_terrace": {
           "id": null,
-          "created_at": "2019-06-26T13:03:14.064371",
-          "updated_at": "2019-06-26T13:03:14.064403",
+          "created_at": "2019-06-26T13:55:30.655461",
+          "updated_at": "2019-06-26T13:55:30.655488",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -91,8 +93,8 @@ For each of the materials types, we can patch a list of objects to the extension
         },
         "staircase": {
           "id": null,
-          "created_at": "2019-06-26T13:03:14.064573",
-          "updated_at": "2019-06-26T13:03:14.064606",
+          "created_at": "2019-06-26T13:55:30.655631",
+          "updated_at": "2019-06-26T13:55:30.655658",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -100,8 +102,8 @@ For each of the materials types, we can patch a list of objects to the extension
         },
         "windows_doors": {
           "id": null,
-          "created_at": "2019-06-26T13:03:14.064775",
-          "updated_at": "2019-06-26T13:03:14.064808",
+          "created_at": "2019-06-26T13:55:30.655800",
+          "updated_at": "2019-06-26T13:55:30.655827",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -109,8 +111,8 @@ For each of the materials types, we can patch a list of objects to the extension
         },
         "cladding": {
           "id": null,
-          "created_at": "2019-06-26T13:03:14.064976",
-          "updated_at": "2019-06-26T13:03:14.065008",
+          "created_at": "2019-06-26T13:55:30.655968",
+          "updated_at": "2019-06-26T13:55:30.655995",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -119,14 +121,14 @@ For each of the materials types, we can patch a list of objects to the extension
       },
       "incidental_buildings": {
         "id": null,
-        "created_at": "2019-06-26T13:03:14.065228",
-        "updated_at": "2019-06-26T13:03:14.065260",
+        "created_at": "2019-06-26T13:55:30.656181",
+        "updated_at": "2019-06-26T13:55:30.656209",
         "removal_or_demolition": true,
         "details": "I'm knocking a shed down.",
         "outbuilding": {
           "id": null,
-          "created_at": "2019-06-26T13:03:14.065381",
-          "updated_at": "2019-06-26T13:03:14.065413",
+          "created_at": "2019-06-26T13:55:30.656310",
+          "updated_at": "2019-06-26T13:55:30.656338",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -135,12 +137,12 @@ For each of the materials types, we can patch a list of objects to the extension
       },
       "boundaries": {
         "id": null,
-        "created_at": "2019-06-26T13:03:14.065612",
-        "updated_at": "2019-06-26T13:03:14.065645",
+        "created_at": "2019-06-26T13:55:30.656505",
+        "updated_at": "2019-06-26T13:55:30.656533",
         "gates_fences_walls": {
           "id": null,
-          "created_at": "2019-06-26T13:03:14.065749",
-          "updated_at": "2019-06-26T13:03:14.065781",
+          "created_at": "2019-06-26T13:55:30.656622",
+          "updated_at": "2019-06-26T13:55:30.656650",
           "works_location_ids": [
             "30d4874f-6570-403d-bfcc-d3c58cafe27e"
           ],
@@ -155,8 +157,8 @@ For each of the materials types, we can patch a list of objects to the extension
       },
       "means_of_access": {
         "id": null,
-        "created_at": "2019-06-26T13:03:14.066060",
-        "updated_at": "2019-06-26T13:03:14.066092",
+        "created_at": "2019-06-26T13:55:30.656880",
+        "updated_at": "2019-06-26T13:55:30.656907",
         "access_works_scope_id": "4c75ce90-4616-4dd0-b70a-de5ca530a37d",
         "access_works_scope": null,
         "access_works_sub_type_ids": [
@@ -167,8 +169,8 @@ For each of the materials types, we can patch a list of objects to the extension
       },
       "parking": {
         "id": null,
-        "created_at": "2019-06-26T13:03:14.066312",
-        "updated_at": "2019-06-26T13:03:14.066345",
+        "created_at": "2019-06-26T13:55:30.657091",
+        "updated_at": "2019-06-26T13:55:30.657119",
         "parking_works_scope_id": "d17dea6b-20d8-46df-87d0-b41fc5ec08c3",
         "parking_works_scope": null,
         "parking_works_sub_type_ids": null,
@@ -180,28 +182,35 @@ For each of the materials types, we can patch a list of objects to the extension
       },
       "trees": {
         "id": null,
-        "created_at": "2019-06-26T13:03:14.066574",
-        "updated_at": "2019-06-26T13:03:14.066607",
+        "created_at": "2019-06-26T13:55:30.657318",
+        "updated_at": "2019-06-26T13:55:30.657345",
         "inside_boundry": true,
         "removed_or_pruned": true,
         "outside_boundry": true
       },
       "materials": {
         "id": null,
-        "created_at": "2019-06-26T13:03:14.066769",
-        "updated_at": "2019-06-26T13:03:14.066802",
+        "created_at": "2019-06-26T13:55:30.657484",
+        "updated_at": "2019-06-26T13:55:30.657511",
         "definitions_in_documents": false,
         "definitions_in_form": true,
         "definitions_to_follow": false,
-        "roof": [
-          {
-            "id": null,
-            "created_at": "2019-06-26T13:03:14.066937",
-            "updated_at": "2019-06-26T13:03:14.066970",
-            "colour_and_type": "Some lovely green roof tiles.",
-            "material_id": "d470020f-984f-4acf-9e75-387f58db4604"
-          }
-        ],
+        "roof": {
+          "id": null,
+          "created_at": "2019-06-26T13:55:30.657623",
+          "updated_at": "2019-06-26T13:55:30.657650",
+          "proposals": [
+            {
+              "id": null,
+              "created_at": "2019-06-26T13:55:30.657748",
+              "updated_at": "2019-06-26T13:55:30.657776",
+              "colour_and_type": "Some lovely green roof tiles.",
+              "material_id": "d470020f-984f-4acf-9e75-387f58db4604"
+            }
+          ],
+          "matches_existing": false,
+          "not_applicable": false
+        },
         "walls": null,
         "windows": null,
         "doors": null

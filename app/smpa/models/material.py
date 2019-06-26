@@ -101,6 +101,30 @@ class ExternalBuildingMaterial(BaseModel, metaclass=ORMMeta):
     colour_and_type = StringType(required=True)
 
 
+class MaterialProposalRoof(BaseModel, metaclass=ORMMeta):
+    proposals = ListType(ModelType(MaterialRoof))
+    matches_existing = BooleanType(default=False)
+    not_applicable = BooleanType(default=False)
+
+
+class MaterialProposalWalls(BaseModel, metaclass=ORMMeta):
+    proposals = ListType(ModelType(MaterialRoof))
+    matches_existing = BooleanType(default=False)
+    not_applicable = BooleanType(default=False)
+
+
+class MaterialProposalWindows(BaseModel, metaclass=ORMMeta):
+    proposals = ListType(ModelType(MaterialRoof))
+    matches_existing = BooleanType(default=False)
+    not_applicable = BooleanType(default=False)
+
+
+class MaterialProposalDoors(BaseModel, metaclass=ORMMeta):
+    proposals = ListType(ModelType(MaterialRoof))
+    matches_existing = BooleanType(default=False)
+    not_applicable = BooleanType(default=False)
+
+
 ####################################################################################################
 # MaterialProposal is the materials key in models.proposal.ExtensionProposal
 ####################################################################################################
@@ -113,7 +137,7 @@ class MaterialExtension(BaseModel, metaclass=ORMMeta):
     # You don’t know yet and will submit an Approval of Conditions later
     definitions_to_follow = BooleanType(default=False)
 
-    roof = ListType(ModelType(MaterialRoof))
-    walls = ListType(ModelType(MaterialWall))
-    windows = ListType(ModelType(MaterialWindow))
-    doors = ListType(ModelType(MaterialDoor))
+    roof = ModelType(MaterialProposalRoof)
+    walls = ModelType(MaterialProposalWalls)
+    windows = ModelType(MaterialProposalWindows)
+    doors = ModelType(MaterialProposalDoors)
