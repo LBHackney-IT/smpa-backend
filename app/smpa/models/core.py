@@ -57,6 +57,7 @@ class RelConverter(Converter):
             return self._convert_list(field, value, context)
         if type(field) == RelType:
             return self._convert_fk(field, value, context)
+
         return field.export(value, format, context)
 
     def _convert_fk(self, field, value, context):
@@ -136,20 +137,12 @@ class BaseModel(Model):
                 raise ValidationError('Field `{}` must be unique'.format(field))
         return super(BaseModel, self).validate()
 
-    def OLD_exporter(self, field, value, context):
-        return field.export(value, PRIMITIVE, context)
-
-    def OLDexport(self):
-        return self.export(field_converter=self._exporter)
-
     def export(self):
+        if hasattr(self, 'backrefs'):
+            self._get_backrefs()
         return super(BaseModel, self).export(field_converter=rel_exporter)
 
     def to_primitive(self):
-        # if hasattr(self, 'related_lists'):
-        #     self._get_related_lists()
-        # if hasattr(self, 'related'):
-        #     self._get_related()
         if hasattr(self, 'backrefs'):
             self._get_backrefs()
 
@@ -157,53 +150,23 @@ class BaseModel(Model):
 
     #
     # Private methods for serializing relationships
+    #
 
-    def _get_related_lists(self):
-        for d in self.related_lists:
-            field, target, service_name = d[0], d[1], d[2]
-            module = import_module('smpa.services')
-            service_class = getattr(module, service_name)
-            if callable(service_class):
-                service = service_class()
-            else:
-                service = service_class
+    def _get_service_instance(self, service_name):
+        module = import_module('smpa.services')
+        service_class = getattr(module, service_name)
+        if callable(service_class):
+            service = service_class()
+        else:
+            service = service_class
 
-            prop = target
-            results = []
-            ids = getattr(self, field)
-            for id in ids:
-                results.append(service.get(id))
-            # console.log(f'Setting {prop} on {instance} to {related}')
-            setattr(self, prop, results)
-
-    def _get_related(self):
-        for field, service_name in self.related.items():
-            try:
-                module = import_module('smpa.services')
-                service_class = getattr(module, service_name)
-                if callable(service_class):
-                    service = service_class()
-                else:
-                    service = service_class
-
-                prop = field.replace('_id', '')
-                id = getattr(self, field)
-                related = service.get(id)
-                setattr(self, prop, related)
-            except Exception as e:
-                console.warn(e)
+        return service
 
     def _get_backrefs(self):
         for d in self.backrefs:
             field, service_name = d[0], d[1]
             try:
-                module = import_module('.'.join(__name__.split('.')[:-1]))
-                service_class = getattr(module, service_name)
-                if callable(service_class):
-                    service = service_class()
-                else:
-                    service = service_class
-
+                service = self._get_service_instance(service_name)
                 query = {field: str(self.id)}
                 related = service.first(**query)
                 prop = underscore(service.__model__.__name__)
