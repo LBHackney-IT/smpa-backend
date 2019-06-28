@@ -6,7 +6,7 @@
     Planning site related models.
 """
 
-from .core import BaseModel, ORMMeta
+from .core import BaseModel, ORMMeta, RelType
 from schematics.types.serializable import serializable
 from schematics.types import (  # NOQA
     StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, FloatType, ModelType
@@ -76,19 +76,39 @@ class BaseMaterial(BaseModel, metaclass=ORMMeta):
 
 
 class MaterialRoof(BaseMaterial):
-    material_id = UUIDType()
+    material_id = RelType(
+        UUIDType(),
+        to_field='material',
+        service='MaterialOptionRoofService'
+    )
+    material = ModelType(MaterialOptionRoof)
 
 
 class MaterialWall(BaseMaterial):
-    material_id = UUIDType()
+    material_id = RelType(
+        UUIDType(),
+        to_field='material',
+        service='MaterialOptionWallService'
+    )
+    material = ModelType(MaterialOptionWall)
 
 
 class MaterialWindow(BaseMaterial):
-    material_id = UUIDType()
+    material_id = RelType(
+        UUIDType(),
+        to_field='material',
+        service='MaterialOptionWindowService'
+    )
+    material = ModelType(MaterialOptionWindow)
 
 
 class MaterialDoor(BaseMaterial):
-    material_id = UUIDType()
+    material_id = RelType(
+        UUIDType(),
+        to_field='material',
+        service='MaterialOptionDoorService'
+    )
+    material = ModelType(MaterialOptionDoor)
 
 
 class OtherMaterial(BaseModel, metaclass=ORMMeta):

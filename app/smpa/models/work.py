@@ -306,7 +306,11 @@ class WorkExtensionMeansOfAccess(Work):
 
 
 class WorkExtensionParking(Work):
-    parking_works_scope_id = UUIDType()
+    parking_works_scope_id = RelType(
+        UUIDType(),
+        to_field='aparking_works_scope',
+        service='ParkingWorksScopeService'
+    )
     parking_works_scope = ModelType(ParkingWorksScope)
 
     # This looks unused?
@@ -338,16 +342,28 @@ class WorkEquipmentLocation(BaseModel, metaclass=ORMMeta):
     )
     locations = ListType(ModelType(WorksLocation))
 
-    equipment_type_id = UUIDType()
+    equipment_type_id = RelType(
+        UUIDType(),
+        to_field='equipment_type',
+        service='EquipmentWorksTypeService'
+    )
     equipment_type = ModelType(EquipmentWorksType)
 
 
 class WorkEquipmentConservationLocation(BaseModel, metaclass=ORMMeta):
 
-    location_id = UUIDType()
+    location_id = RelType(
+        UUIDType(),
+        to_field='location',
+        service='WorksLocationService'
+    )
     location = ModelType(WorksLocation)
 
-    equipment_type_id = UUIDType()
+    equipment_type_id = RelType(
+        UUIDType(),
+        to_field='equipment_type',
+        service='EquipmentWorksConservationTypeService'
+    )
     equipment_conservation_type = ModelType(EquipmentWorksConservationType)
 
 

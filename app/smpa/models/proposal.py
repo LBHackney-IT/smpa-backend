@@ -6,7 +6,7 @@
     Models for describing a planning proposal.
 """
 
-from .core import BaseModel, ORMMeta
+from .core import BaseModel, ORMMeta, RelType
 from typing import Type
 from schematics.types import (  # NOQA
     StringType, BooleanType, DateType, IntType, UUIDType, ListType, FloatType, ModelType
@@ -41,7 +41,12 @@ class ProposalExtension(WorksProposal):
         ModelType('smpa.models.material.MaterialExtension')
 
     additional_floor_area = FloatType()
-    additional_floor_area_units_id = UUIDType()
+    additional_floor_area_units_id = RelType(
+        UUIDType(),
+        to_field='additional_floor_area_units',
+        service='AreaUnitService'
+    )
+    additional_floor_area_units = ModelType('smpa.models.unit.AreaUnit')
 
     new_single_bedrooms = IntType()
     new_double_bedrooms = IntType()
