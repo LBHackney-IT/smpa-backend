@@ -11,13 +11,62 @@ from importlib import import_module
 from schematics.models import Model, ModelMeta
 from inflection import tableize, underscore
 from schematics.types import (
-    StringType, BooleanType, DateTimeType, IntType, UUIDType, BaseType
+    StringType, BooleanType, DateTimeType, IntType, UUIDType, BaseType, ListType
 )
 
 from schematics.exceptions import ValidationError
+from schematics.transforms import Converter, PRIMITIVE
 
 from ..rdb.registry import model_registry
 from ..helpers.console import console
+
+
+class ListRelType(BaseType):
+
+    """Provide a mechanism for getting related lists of objects.
+    """
+    def __init__(self, field, to_field, service, *args, **kwargs):
+        super().__init__(self, field, *args, **kwargs)
+        self._to_field = to_field
+        self._service = service
+
+    @property
+    def default(self):
+        return []
+
+
+class RelConverter(Converter):
+
+    def __call__(self, field, value, context):
+        format = PRIMITIVE
+        if type(field) == ListRelType:
+            return self._convert_list(field, value, context)
+        return field.export(value, format, context)
+
+    def _convert_list(self, field, value, context):
+        module = import_module('smpa.services')
+        service_class = getattr(module, field._service)
+        if callable(service_class):
+            service = service_class()
+        else:
+            service = service_class
+
+        results = []
+        ids = value
+        for id in ids:
+            results.append(service.get(id))
+
+        setattr(field.owner_model, field._to_field, results)
+        return value
+
+    def pre(self, model_class, instance_or_dict, context):
+        return instance_or_dict
+
+    def post(self, model_class, data, context):
+        return data
+
+
+rel_exporter = RelConverter()
 
 
 class ORMMeta(ModelMeta):
@@ -58,6 +107,15 @@ class BaseModel(Model):
                 raise ValidationError('Field `{}` must be unique'.format(field))
         return super(BaseModel, self).validate()
 
+    def OLD_exporter(self, field, value, context):
+        return field.export(value, PRIMITIVE, context)
+
+    def OLDexport(self):
+        return self.export(field_converter=self._exporter)
+
+    def export(self):
+        return super(BaseModel, self).export(field_converter=rel_exporter)
+
     def to_primitive(self):
         if hasattr(self, 'related_lists'):
             self._get_related_lists()
@@ -72,7 +130,6 @@ class BaseModel(Model):
     # Private methods for serializing relationships
 
     def _get_related_lists(self):
-        import ipdb; ipdb.set_trace()
         for d in self.related_lists:
             field, target, service_name = d[0], d[1], d[2]
             module = import_module('smpa.services')
@@ -103,7 +160,6 @@ class BaseModel(Model):
                 prop = field.replace('_id', '')
                 id = getattr(self, field)
                 related = service.get(id)
-                # console.log(f'Setting {prop} on {self} to {related}')
                 setattr(self, prop, related)
             except Exception as e:
                 console.warn(e)

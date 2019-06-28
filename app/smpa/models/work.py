@@ -6,7 +6,7 @@
     Works are discrete pieces of work being done as part of a WorksProposal
 """
 
-from .core import BaseModel, ORMMeta
+from .core import BaseModel, ORMMeta, ListRelType
 from schematics.types.serializable import serializable
 from schematics.types import (  # NOQA
     StringType, BooleanType, DateType, IntType, UUIDType, ListType, FloatType, ModelType
@@ -157,12 +157,12 @@ class WorkExtensionOption(BaseModel, metaclass=ORMMeta):
 
     """Base Work Extension sub-work.
     """
-    works_location_ids = ListType(UUIDType())
+    works_location_ids = ListRelType(
+        UUIDType(),
+        to_field='works_locations',
+        service='WorksLocationService'
+    )
     works_locations = ListType(ModelType(WorksLocation))
-
-    related_lists = [
-        ('works_location_ids', 'works_locations', 'WorksLocationService'),
-    ]
 
 
 class ExtensionOriginalHouseSingleStoreyExtension(WorkExtensionOption):
