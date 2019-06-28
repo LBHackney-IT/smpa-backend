@@ -889,6 +889,17 @@ def test_extension_proposal_other_materials(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    print(rv.body)
     assert "The chimney is made of diamonds" in result['materials']['other']
     assert "The path is made of gold." in result['materials']['other']
+
+
+def test_application_get(session_client):
+    rv = session_client.get(
+        f'/api/v1/applications/{APPLICATION_ID}',
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    print(rv.body)
+    assert j['works_started'] is True
+    assert j['date_works_started'] == "2018-01-01"
