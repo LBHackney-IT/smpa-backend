@@ -72,6 +72,7 @@ class BaseModel(Model):
     # Private methods for serializing relationships
 
     def _get_related_lists(self):
+        import ipdb; ipdb.set_trace()
         for d in self.related_lists:
             field, target, service_name = d[0], d[1], d[2]
             module = import_module('smpa.services')
@@ -92,7 +93,7 @@ class BaseModel(Model):
     def _get_related(self):
         for field, service_name in self.related.items():
             try:
-                module = import_module('.'.join(__name__.split('.')[:-1]))
+                module = import_module('smpa.services')
                 service_class = getattr(module, service_name)
                 if callable(service_class):
                     service = service_class()
