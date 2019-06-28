@@ -157,8 +157,8 @@ def test_extension_proposal_update_work_locations(session_client):
             "original_house": {
                 "single_storey_extension": {
                     "works_location_ids": [
-                        "0eee199e-5324-4180-b7a0-8100cb880a4f",
-                        "2263b74c-5c76-45d8-bb99-28b4172a59d8"
+                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
+                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
                     ]
                 },
                 "basement": {}
@@ -208,14 +208,14 @@ def test_extension_proposal_update_basement_work_locations(session_client):
             "original_house": {
                 "single_storey_extension": {
                     "works_location_ids": [
-                        "165c9046-f6f2-4144-b60c-f1ca24c94054",
-                        "b6b2cc59-f097-48bc-a9ad-14f263e9e036"
+                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
+                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
                     ]
                 },
                 "basement": {
                     "works_location_ids": [
-                        "165c9046-f6f2-4144-b60c-f1ca24c94054",
-                        "b6b2cc59-f097-48bc-a9ad-14f263e9e036"
+                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
+                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
                     ]
                 }
             },
@@ -263,8 +263,8 @@ def test_extension_proposal_update_roof_work_locations(session_client):
             "original_house": {
                 "roof": {
                     "works_location_ids": [
-                        "30d4874f-6570-403d-bfcc-d3c58cafe27e",
-                        "4e9f51cb-1c24-4993-be9e-350e0d395ecb"
+                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
+                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
                     ]
                 }
             }
@@ -277,9 +277,9 @@ def test_extension_proposal_update_roof_work_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "30d4874f-6570-403d-bfcc-d3c58cafe27e" in \
+    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
         result['original_house']['roof']['works_location_ids']
-    assert "4e9f51cb-1c24-4993-be9e-350e0d395ecb" in \
+    assert "243d44e8-8a8b-44de-b2ed-e7caa0628e98" in \
         result['original_house']['roof']['works_location_ids']
 
 
@@ -289,7 +289,7 @@ def test_extension_proposal_update_porch_work_locations(session_client):
             "original_house": {
                 "porch": {
                     "works_location_ids": [
-                        "30d4874f-6570-403d-bfcc-d3c58cafe27e"
+                        "9dc99f40-ac1d-421e-a408-c253d7ead671"
                     ]
                 }
             }
@@ -302,7 +302,7 @@ def test_extension_proposal_update_porch_work_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "30d4874f-6570-403d-bfcc-d3c58cafe27e" in \
+    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
         result['original_house']['porch']['works_location_ids']
 
 
@@ -312,7 +312,8 @@ def test_extension_proposal_update_balcony_work_locations(session_client):
             "original_house": {
                 "balcony_terrace": {
                     "works_location_ids": [
-                        "30d4874f-6570-403d-bfcc-d3c58cafe27e"
+                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
+                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
                     ]
                 }
             }
@@ -325,7 +326,7 @@ def test_extension_proposal_update_balcony_work_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "30d4874f-6570-403d-bfcc-d3c58cafe27e" in \
+    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
         result['original_house']['balcony_terrace']['works_location_ids']
 
 
@@ -335,7 +336,8 @@ def test_extension_proposal_update_staircase_work_locations(session_client):
             "original_house": {
                 "staircase": {
                     "works_location_ids": [
-                        "30d4874f-6570-403d-bfcc-d3c58cafe27e"
+                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
+                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
                     ]
                 }
             }
@@ -348,7 +350,7 @@ def test_extension_proposal_update_staircase_work_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "30d4874f-6570-403d-bfcc-d3c58cafe27e" in \
+    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
         result['original_house']['staircase']['works_location_ids']
 
 
@@ -358,7 +360,8 @@ def test_extension_proposal_update_windows_work_locations(session_client):
             "original_house": {
                 "windows_doors": {
                     "works_location_ids": [
-                        "30d4874f-6570-403d-bfcc-d3c58cafe27e"
+                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
+                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
                     ]
                 }
             }
@@ -371,7 +374,7 @@ def test_extension_proposal_update_windows_work_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "30d4874f-6570-403d-bfcc-d3c58cafe27e" in \
+    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
         result['original_house']['windows_doors']['works_location_ids']
 
 
@@ -381,7 +384,8 @@ def test_extension_proposal_update_cladding_work_locations(session_client):
             "original_house": {
                 "cladding": {
                     "works_location_ids": [
-                        "30d4874f-6570-403d-bfcc-d3c58cafe27e"
+                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
+                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
                     ]
                 }
             }
@@ -394,7 +398,7 @@ def test_extension_proposal_update_cladding_work_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "30d4874f-6570-403d-bfcc-d3c58cafe27e" in \
+    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
         result['original_house']['cladding']['works_location_ids']
 
 
@@ -404,7 +408,8 @@ def test_extension_proposal_update_outbuilding_work_locations(session_client):
             "incidental_buildings": {
                 "outbuilding": {
                     "works_location_ids": [
-                        "30d4874f-6570-403d-bfcc-d3c58cafe27e"
+                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
+                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
                     ]
                 }
             }
@@ -417,7 +422,7 @@ def test_extension_proposal_update_outbuilding_work_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "30d4874f-6570-403d-bfcc-d3c58cafe27e" in \
+    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
         result['incidental_buildings']['outbuilding']['works_location_ids']
 
 
@@ -470,7 +475,8 @@ def test_extension_proposal_update_gates_fences_walls_locations(session_client):
             "boundaries": {
                 "gates_fences_walls": {
                     "works_location_ids": [
-                        "30d4874f-6570-403d-bfcc-d3c58cafe27e"
+                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
+                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
                     ]
                 }
             }
@@ -483,7 +489,7 @@ def test_extension_proposal_update_gates_fences_walls_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "30d4874f-6570-403d-bfcc-d3c58cafe27e" in \
+    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
         result['boundaries']['gates_fences_walls']['works_location_ids']
 
 

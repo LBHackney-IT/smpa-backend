@@ -34,13 +34,13 @@ class Resource(object):
 
         if isinstance(data, list):
             try:
-                r = [_.to_primitive() for _ in data]
+                r = [_.export() for _ in data]
                 j = json.dumps(r)
             except Exception as e:
                 raise falcon.HTTPError(falcon.HTTP_400, 'Error', e)
         else:
             try:
-                j = json.dumps(data.to_primitive())
+                j = json.dumps(data.export())
             except Exception as e:
                 raise falcon.HTTPError(falcon.HTTP_400, 'Error', e)
 

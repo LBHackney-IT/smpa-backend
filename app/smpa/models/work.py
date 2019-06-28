@@ -178,30 +178,23 @@ class ExtensionOriginalHousePartSinglePartTwoStoreyExtension(WorkExtensionOption
 
 
 class ExtensionOriginalHouseBasement(WorkExtensionOption):
-    works_location_ids = ListType(UUIDType())
+    works_location_ids = ListRelType(
+        UUIDType(),
+        to_field='works_locations',
+        service='WorksLocationService'
+    )
     works_locations = ListType(ModelType(WorksLocation))
     works_type_ids = ListType(UUIDType())
     works_types = ListType(ModelType(BasementWorksType))
 
-    related_lists = [
-        ('works_location_ids', 'works_locations', 'WorksLocationService'),
-        ('works_type_ids', 'works_types', 'BasementWorksTypeService'),
-    ]
-
 
 class ExtensionOriginalHouseRoof(WorkExtensionOption):
-    works_type_ids = ListType(UUIDType())
+    works_type_ids = ListRelType(
+        UUIDType(),
+        to_field='works_types',
+        service='RoofWorksTypeService'
+    )
     works_types = ListType(ModelType(RoofWorksType))
-
-    materials_ids = ListType(UUIDType())
-    materials = ListType(ModelType('smpa.models.material.MaterialOptionRoof'))
-
-    materials_not_applicable = BooleanType(default=False)
-    materials_match_existing = BooleanType(default=False)
-
-    related_lists = [
-        ('works_type_ids', 'works_types', 'RoofWorksTypeService'),
-    ]
 
 
 class ExtensionOutbuilding(WorkExtensionOption):
@@ -229,15 +222,18 @@ class ExtensionOriginalHouseCladding(WorkExtensionOption):
 
 
 class ExtensionBoundaraiesGatesFencesWalls(WorkExtensionOption):
-    works_location_ids = ListType(UUIDType())
+    works_location_ids = ListRelType(
+        UUIDType(),
+        to_field='works_locations',
+        service='WorksLocationService'
+    )
     works_locations = ListType(ModelType(WorksLocation))
-    works_type_ids = ListType(UUIDType())
+    works_type_ids = ListRelType(
+        UUIDType(),
+        to_field='works_types',
+        service='GatesFencesWallsTypeService'
+    )
     works_types = ListType(ModelType(GatesFencesWallsType))
-
-    related_lists = [
-        ('works_location_ids', 'works_locations', 'WorksLocationService'),
-        ('works_type_ids', 'works_types', 'GatesFencesWallsTypeService'),
-    ]
 
 
 ####################################################################################################
