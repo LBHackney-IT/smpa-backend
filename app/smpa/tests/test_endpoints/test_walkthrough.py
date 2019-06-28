@@ -9,6 +9,28 @@ from ..util import json_match
 
 from smpa.helpers.console import console
 
+from smpa.config.defaults import (  # NOQA
+    AREA_UNITS,
+    LINEAR_UNITS,
+    DOCUMENT_SIZES,
+    WORKS_LOCATIONS,
+    BASEMENT_WORKS_TYPES,
+    ROOF_WORKS_TYPES,
+    BORDER_WORKS_TYPES,
+    ACCESS_WORKS_SCOPES,
+    ACCESS_WORKS_TYPES,
+    PARKING_WORKS_SCOPES,
+    EQUIPMENT_WORKS_TYPES,
+    EQUIPMENT_WORKS_CONSERVATION_TYPES,
+    GATES_FENCES_WALLS_TYPES,
+    MATERIALS_ROOF,
+    MATERIALS_WALL,
+    MATERIALS_WINDOW,
+    MATERIALS_DOOR,
+    ROLES,
+    SUPERADMIN_USERS
+)
+
 
 DEFAULT_DATA_ENDPOINTS = [
     "/api/v1/roof-works-types",

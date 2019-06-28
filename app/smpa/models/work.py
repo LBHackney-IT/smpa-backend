@@ -6,7 +6,7 @@
     Works are discrete pieces of work being done as part of a WorksProposal
 """
 
-from .core import BaseModel, ORMMeta, ListRelType
+from .core import BaseModel, ORMMeta, ListRelType, RelType
 from schematics.types.serializable import serializable
 from schematics.types import (  # NOQA
     StringType, BooleanType, DateType, IntType, UUIDType, ListType, FloatType, ModelType
@@ -290,7 +290,11 @@ class WorkExtensionBoundaries(Work):
 
 
 class WorkExtensionMeansOfAccess(Work):
-    access_works_scope_id = UUIDType()
+    access_works_scope_id = RelType(
+        UUIDType(),
+        to_field='access_works_scope',
+        service='BorderWorksTypeService'
+    )
     access_works_scope = ModelType(BorderWorksType)
 
     access_works_sub_type_ids = ListRelType(

@@ -26,6 +26,20 @@ class ListRelType(BaseType):
     """Provide a mechanism for getting related lists of objects.
     """
     def __init__(self, field, to_field, service, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self._to_field = to_field
+        self._service = service
+
+    @property
+    def default(self):
+        return []
+
+
+class RelType(BaseType):
+
+    """Provide a mechanism for getting an fk related object.
+    """
+    def __init__(self, field, to_field, service, *args, **kwargs):
         super().__init__(self, field, *args, **kwargs)
         self._to_field = to_field
         self._service = service
@@ -41,16 +55,21 @@ class RelConverter(Converter):
         format = PRIMITIVE
         if type(field) == ListRelType:
             return self._convert_list(field, value, context)
+        if type(field) == RelType:
+            return self._convert_fk(field, value, context)
         return field.export(value, format, context)
 
-    def _convert_list(self, field, value, context):
-        module = import_module('smpa.services')
-        service_class = getattr(module, field._service)
-        if callable(service_class):
-            service = service_class()
-        else:
-            service = service_class
+    def _convert_fk(self, field, value, context):
+        try:
+            service = self._get_service_instance(field)
+            setattr(field.owner_model, field._to_field, service.get(value))
+        except Exception as e:
+            console.warn(e)
 
+        return value
+
+    def _convert_list(self, field, value, context):
+        service = self._get_service_instance(field)
         results = []
         ids = value
         for id in ids:
@@ -58,6 +77,16 @@ class RelConverter(Converter):
 
         setattr(field.owner_model, field._to_field, results)
         return value
+
+    def _get_service_instance(self, field):
+        module = import_module('smpa.services')
+        service_class = getattr(module, field._service)
+        if callable(service_class):
+            service = service_class()
+        else:
+            service = service_class
+
+        return service
 
     def pre(self, model_class, instance_or_dict, context):
         return instance_or_dict
@@ -117,10 +146,10 @@ class BaseModel(Model):
         return super(BaseModel, self).export(field_converter=rel_exporter)
 
     def to_primitive(self):
-        if hasattr(self, 'related_lists'):
-            self._get_related_lists()
-        if hasattr(self, 'related'):
-            self._get_related()
+        # if hasattr(self, 'related_lists'):
+        #     self._get_related_lists()
+        # if hasattr(self, 'related'):
+        #     self._get_related()
         if hasattr(self, 'backrefs'):
             self._get_backrefs()
 
