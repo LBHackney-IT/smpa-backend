@@ -184,7 +184,11 @@ class ExtensionOriginalHouseBasement(WorkExtensionOption):
         service='WorksLocationService'
     )
     works_locations = ListType(ModelType(WorksLocation))
-    works_type_ids = ListType(UUIDType())
+    works_type_ids = ListRelType(
+        UUIDType(),
+        to_field='works_types',
+        service='BasementWorksTypeService'
+    )
     works_types = ListType(ModelType(BasementWorksType))
 
 
@@ -277,7 +281,11 @@ class WorkExtensionIncidentalBuildings(Work):
 class WorkExtensionBoundaries(Work):
     gates_fences_walls = ModelType(ExtensionBoundaraiesGatesFencesWalls)
     # TODO Probably removing
-    border_works_type_ids = ListType(UUIDType())
+    border_works_type_ids = ListRelType(
+        UUIDType(),
+        to_field='border_works_types',
+        service='BorderWorksTypeService'
+    )
     border_works_types = ListType(ModelType(BorderWorksType))
 
 
@@ -285,7 +293,11 @@ class WorkExtensionMeansOfAccess(Work):
     access_works_scope_id = UUIDType()
     access_works_scope = ModelType(BorderWorksType)
 
-    access_works_sub_type_ids = ListType(UUIDType())
+    access_works_sub_type_ids = ListRelType(
+        UUIDType(),
+        to_field='access_works_sub_types',
+        service='AccessWorksTypeService'
+    )
     access_works_sub_types = ListType(ModelType(AccessWorksType))
 
 
@@ -293,8 +305,13 @@ class WorkExtensionParking(Work):
     parking_works_scope_id = UUIDType()
     parking_works_scope = ModelType(ParkingWorksScope)
 
-    parking_works_sub_type_ids = ListType(UUIDType())
-    # parking_works_sub_types = ListType(ModelType())
+    # This looks unused?
+    # parking_works_sub_type_ids = ListRelType(
+    #     UUIDType(),
+    #     to_field='parking_works_sub_types',
+    #     service='ParkingWorksSubTypeService'
+    # )
+    # parking_works_sub_types = ListType(ModelType(ParkingWorksSubType))
 
     current_car_parking_spaces = IntType(default=0)
     planned_car_parking_spaces = IntType(default=0)
@@ -310,13 +327,15 @@ class WorkExtensionParking(Work):
 
 class WorkEquipmentLocation(BaseModel, metaclass=ORMMeta):
 
-    location_ids = ListType(UUIDType())
+    location_ids = ListRelType(
+        UUIDType(),
+        to_field='locations',
+        service='WorksLocationService'
+    )
     locations = ListType(ModelType(WorksLocation))
 
     equipment_type_id = UUIDType()
     equipment_type = ModelType(EquipmentWorksType)
-
-    # TODO Add relationships
 
 
 class WorkEquipmentConservationLocation(BaseModel, metaclass=ORMMeta):
@@ -327,21 +346,25 @@ class WorkEquipmentConservationLocation(BaseModel, metaclass=ORMMeta):
     equipment_type_id = UUIDType()
     equipment_conservation_type = ModelType(EquipmentWorksConservationType)
 
-    # TODO Add relationships
-
 
 class WorkEquipment(BaseModel, metaclass=ORMMeta):
 
-    equipment_type_ids = ListType(UUIDType())
+    equipment_type_ids = ListRelType(
+        UUIDType(),
+        to_field='equipment_types',
+        service='EquipmentWorksTypeService'
+    )
     equipment_types = ListType(ModelType(EquipmentWorksType))
 
-    equipment_conservation_type_ids = ListType(UUIDType())
+    equipment_conservation_type_ids = ListRelType(
+        UUIDType(),
+        to_field='equipment_conservation_types',
+        service='EquipmentWorksConservationTypeService'
+    )
     equipment_conservation_types = ListType(ModelType(EquipmentWorksConservationType))
 
     equipment_locations = ListType(ModelType(WorkEquipmentLocation))
     equipment_conservation_locations = ListType(ModelType(WorkEquipmentLocation))
-
-    # TODO Add relationships
 
 
 ####################################################################################################
