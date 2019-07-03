@@ -77,7 +77,7 @@ def test_get_default_data(session_client):
             console.error(rv.body)
 
 
-def test_walkthrough(session_client):
+def test_application_create(session_client):
     """
         Send a post request to create an application
     """
@@ -93,6 +93,7 @@ def test_walkthrough(session_client):
     j = json.loads(rv.body)
     APPLICATION_ID = j['id']
     assert APPLICATION_ID is not None
+    assert j['owner_id'] is not None
 
 
 def test_application_update(session_client):

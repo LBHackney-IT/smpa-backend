@@ -34,14 +34,3 @@ def test_get_application_404(session_client, token):
         headers={"Authorization": f"jwt {token}"}
     )
     assert rv.status == falcon.HTTP_404
-
-
-def test_applications_404(session_client, token):
-    """Sends a good uuid
-    """
-    rv = session_client.get(
-        '/api/v1/applications/9e7cf43a-6860-4061-b585-65b4fb778a30',
-        headers={"Authorization": f"jwt {token}"}
-    )
-    assert rv.status == falcon.HTTP_OK
-    assert rv.json['works_description'] == 'I did a thing to my house'

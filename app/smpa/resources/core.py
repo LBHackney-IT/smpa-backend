@@ -46,6 +46,12 @@ class Resource(object):
 
         return j
 
+    def _set_owner(self, req, instance):
+        user = req.context['user']
+        if hasattr(instance, 'owner_id') and instance.owner_id is None:
+            instance.owner_id = str(user.id)
+            self._service.save(instance)
+
     def on_get(self, req, resp, id=None):
         """Handles GET requests.
 
@@ -79,6 +85,7 @@ class Resource(object):
         Raises:
             falcon.HTTPError: Description
         """
+
         try:
             raw_json = req.stream.read()
         except Exception as e:
@@ -86,7 +93,6 @@ class Resource(object):
 
         try:
             result = json.loads(raw_json, encoding='utf-8')
-            console.info(result)
             rv = self._service.update(id, json=result)
 
             if not isinstance(rv, list):
@@ -113,6 +119,7 @@ class Resource(object):
         Raises:
             falcon.HTTPError: Description
         """
+
         try:
             raw_json = req.stream.read()
         except Exception as e:
@@ -122,6 +129,7 @@ class Resource(object):
             result = json.loads(raw_json, encoding='utf-8')
             console.info(result)
             rv = self._service.create(json=result)
+            self._set_owner(req, rv)
 
             if not isinstance(rv, list):
                 resp.body = self._json_or_404(rv)

@@ -21,8 +21,8 @@ def owner(f):
         if user.is_admin:
             return f(*args, **kwargs)
         user.export()  # <- This loads our related data
-        id = kwargs.pop('id')
-        obj = _service.get(id)
+        id = kwargs.get('id')
+        obj = _service.get_or_404(id)
         if hasattr(obj, 'owner_id') and str(obj.owner_id) != str(user.id):
             raise falcon.HTTPError(falcon.HTTP_403, 'Error')
         return f(*args, **kwargs)
