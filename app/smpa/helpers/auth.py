@@ -7,20 +7,23 @@ def authorise(*args):
     roles = args
 
 
-
 def owner(f):
     """An authorisation decorator that ensures the user
     requesting the resource is either the owner or an admin.
     """
     @wraps(f)
     def wrapper(*args, **kwargs):
-        authed = False
         resource = args[0]
         req = args[1]
         _service = resource._service
         user = req.context['user']
+        # Always allow admins
+        if user.is_admin:
+            return f(*args, **kwargs)
         user.export()  # <- This loads our related data
-        if not authed:
+        id = kwargs.pop('id')
+        obj = _service.get(id)
+        if hasattr(obj, 'owner_id') and str(obj.owner_id) != str(user.id):
             raise falcon.HTTPError(falcon.HTTP_403, 'Error')
         return f(*args, **kwargs)
     return wrapper
@@ -32,11 +35,9 @@ def admin(f):
     """
     @wraps(f)
     def wrapper(*args, **kwargs):
-        import ipdb; ipdb.set_trace()
         req = args[1]
         user = req.context['user']
-        user.export()  # <- This loads our related data
-        if not user.role.name != 'Admin' and user.role.name != 'SuperAdmin':
+        if not user.is_admin:
             raise falcon.HTTPError(falcon.HTTP_403, 'Error')
         return f(*args, **kwargs)
     return wrapper

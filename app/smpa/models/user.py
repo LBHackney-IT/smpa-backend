@@ -177,8 +177,11 @@ class User(BaseModel, metaclass=ORMMeta):
     profile: Type[UserProfile] = ModelType(UserProfile)
 
     @property
-    def role_name(self):
-        return self.role.name
+    def is_admin(self):
+        self.export()
+        if 'Admin' in self.role.name:
+            return True
+        return False
 
     def __str__(self):
         return f'<User: {self.email}>'
