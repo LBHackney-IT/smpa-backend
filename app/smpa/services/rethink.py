@@ -206,18 +206,20 @@ class RService(object):
         # id of None, which RethinkDB won't like. So if it's None,
         # generate a UUID for it. If the save fails, we should re-set
         # it to None.
-        with rconnect() as conn:
-            if instance.id is None:
-                instance.id = str(uuid.uuid4())
-                console.debug(instance.id)
+        if instance.id is None:
+            instance.id = str(uuid.uuid4())
+        elif isinstance(instance.id, uuid.UUID):
+            instance.id = str(instance.id)
 
+        instance = self._fix_uuids(instance)
+        with rconnect() as conn:
             try:
                 query = self.q.insert(
                     instance.to_primitive(),
                     conflict="replace"
                 )
-                rv = query.run(conn)
-                console.debug(rv)
+                rv = query.run(conn)  # NOQA
+                # console.debug(rv)
             except Exception as e:
                 console.error(e)
                 instance.id = None
@@ -335,6 +337,19 @@ class RService(object):
 
     # Private methods - these do not form part of the public API or method signature of the
     # service class.
+
+    def _fix_uuids(self, instance):
+        """Looks through the fields of the instance and if it finds any
+        instances of uuid.UUID it sets them to str
+
+        Args:
+            instance (BaseModel): The instance we're fixing
+        """
+        for atom in instance.atoms():
+            if isinstance(atom.value, uuid.UUID):
+                setattr(instance, atom.name, str(atom.value))
+
+        return instance
 
     def _purge(self):
         """Use with caution. Mostly here to help with tests cleanup.

@@ -3,6 +3,7 @@ import falcon
 
 from typing import Optional
 
+from smpa.helpers.auth import owner, admin, authorise
 from .core import Resource, ListResource
 from ..services.application import _applications
 
@@ -12,6 +13,8 @@ class ApplicationResourcePost(ListResource):
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         """
+        For an admin user, this endpoint returns all applications, for a user it
+        returns all of the applications they own.
         ---
         summary: Get all Applications from the DB
         tags:
@@ -30,7 +33,14 @@ class ApplicationResourcePost(ListResource):
             401:
                 description: Unauthorized
         """
-        super().on_get(req, resp)
+        user = req.context['user']
+        user.export()
+        if 'Admin' not in user.role.name:
+            rv = self._service.find(owner_id=str(user.id))
+            resp.body = self._json_or_404(rv)
+        else:
+            rv = self._service.all()
+            resp.body = self._json_or_404(rv)
 
     def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
         """
@@ -62,6 +72,7 @@ class ApplicationResourcePost(ListResource):
 class ApplicationResourcePatch(Resource):
     _service = _applications
 
+    @owner
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
         """
         ---
@@ -82,6 +93,7 @@ class ApplicationResourcePatch(Resource):
         """
         super().on_get(req, resp, id)
 
+    @owner
     def on_patch(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
         """
         ---

@@ -15,7 +15,7 @@
     }
 """
 
-from .core import BaseModel, ORMMeta
+from .core import BaseModel, ORMMeta, RelType
 from typing import (  # NOQA
     TYPE_CHECKING, Any, Callable, ClassVar, List, Dict, Generator, Optional,
     Set, Tuple, Type, Union, cast, no_type_check
@@ -157,23 +157,28 @@ class User(BaseModel, metaclass=ORMMeta):
 
     class Options:
         roles = {
-            'default': blacklist('password', 'profile_id', 'role_id')
+            'default': blacklist('password', )
         }
 
     email: str = StringType(max_length=200, required=True)
     password: str = StringType(max_length=100, required=True)
-    profile_id: str = UUIDType()
-    role_id: str = UUIDType()
+    profile_id = RelType(
+        UUIDType(),
+        to_field='profile',
+        service='UserProfileService'
+    )
+    role_id = RelType(
+        UUIDType(),
+        to_field='role',
+        service='RoleService'
+    )
 
-    #
-    # Dynamic relations
-    #
-    related = {
-        'profile_id': '_user_profiles',
-        'role_id': '_roles',
-    }
     role: Type[Role] = ModelType(Role)
     profile: Type[UserProfile] = ModelType(UserProfile)
+
+    @property
+    def role_name(self):
+        return self.role.name
 
     def __str__(self):
         return f'<User: {self.email}>'

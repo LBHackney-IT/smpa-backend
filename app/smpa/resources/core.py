@@ -60,6 +60,8 @@ class Resource(object):
         if id:
             rv = self._service.get(id)
             resp.body = self._json_or_404(rv)
+            req.context.id = id
+            req.context.obj = rv
         else:
             rv = self._service.all()
             resp.body = self._json_or_404(rv)

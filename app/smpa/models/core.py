@@ -46,13 +46,14 @@ class RelType(BaseType):
 
     @property
     def default(self):
-        return []
+        return None
 
 
 class RelConverter(Converter):
 
     def __call__(self, field, value, context):
         format = PRIMITIVE
+        # console.log(type(field))
         if type(field) == ListRelType:
             return self._convert_list(field, value, context)
         if type(field) == RelType:
@@ -170,7 +171,7 @@ class BaseModel(Model):
                 query = {field: str(self.id)}
                 related = service.first(**query)
                 prop = underscore(service.__model__.__name__)
-                console.log(f'Setting {prop} on {self} to {related}')
+                # console.log(f'Setting {prop} on {self} to {related}')
                 setattr(self, prop, related)
             except Exception as e:
                 console.warn(e)

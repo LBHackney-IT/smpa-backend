@@ -100,7 +100,6 @@ class ModelRegistry(object):
             self._init_model(name, model)
         self._initialsed = True
         console.reset()
-        console.success('READY')
 
     def _init_model(self, name, model):
         from smpa.app import config

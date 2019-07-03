@@ -133,7 +133,7 @@ class Startup:
         )
 
         if site_address is not None:
-            site_address.application_id = a.id
+            site_address.application_id = str(a.id)
             site_address.address_line_1 = "12 Stephen Mews"
             site_address.town_city = "London"
             site_address.postcode = "W1T 1AH"

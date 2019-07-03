@@ -27,7 +27,7 @@ def add_components(spec):
         try:
             spec.components.schema(k, schema=v)
         except DuplicateComponentNameError as e:
-            console.warn(e)
+            pass
             # import ipdb; ipdb.set_trace()
 
 

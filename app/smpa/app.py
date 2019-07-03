@@ -83,18 +83,20 @@ def create_app():
     global api
     global application
     settings = init_settings()
-    console.log(settings.base)
     config = settings
-    console.log(config.base)
 
     # Ensure the DB is set up
     db = RethinkDB()
     db.init()
     model_registry.init()
+
+    # Set up initial data and routes
     Startup.init_data()
     init_routes(api, config)
+
     return api
 
 
 create_app()
 spec = init_swagger(api, config)
+console.success('READY')
