@@ -157,12 +157,12 @@ def test_extension_proposal_create(session_client):
 
 
 def test_extension_proposal_update(session_client):
-    body = """
+    body = json.dumps(
         {
             "original_house": {},
             "incidental_buildings": {}
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -175,13 +175,13 @@ def test_extension_proposal_update(session_client):
 
 
 def test_extension_proposal_update_work_locations(session_client):
-    body = """
+    body = json.dumps(
         {
             "original_house": {
                 "single_storey_extension": {
                     "works_location_ids": [
-                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
-                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
+                        WORKS_LOCATIONS[0][0],
+                        WORKS_LOCATIONS[1][0]
                     ]
                 },
                 "basement": {}
@@ -190,7 +190,7 @@ def test_extension_proposal_update_work_locations(session_client):
 
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -200,20 +200,24 @@ def test_extension_proposal_update_work_locations(session_client):
     j = json.loads(rv.body)
     assert "original_house" in j
     assert "incidental_buildings" in j
+    assert WORKS_LOCATIONS[0][0] in \
+        j['original_house']['single_storey_extension']['works_location_ids']
+    assert WORKS_LOCATIONS[1][0] in \
+        j['original_house']['single_storey_extension']['works_location_ids']
 
 
 def test_extension_proposal_update_basement_work_types(session_client):
-    body = """
+    body = json.dumps(
         {
             "original_house": {
                 "basement": {
                     "works_type_ids": [
-                        "06a4181b-41f0-4b3f-9541-3357ff203998"
+                        BASEMENT_WORKS_TYPES[0][0]
                     ]
                 }
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -223,29 +227,31 @@ def test_extension_proposal_update_basement_work_types(session_client):
     j = json.loads(rv.body)
     assert "original_house" in j
     assert "incidental_buildings" in j
+    assert BASEMENT_WORKS_TYPES[0][0] in \
+        j['original_house']['basement']['works_type_ids']
 
 
 def test_extension_proposal_update_basement_work_locations(session_client):
-    body = """
+    body = json.dumps(
         {
             "original_house": {
                 "single_storey_extension": {
                     "works_location_ids": [
-                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
-                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
+                        WORKS_LOCATIONS[0][0],
+                        WORKS_LOCATIONS[1][0]
                     ]
                 },
                 "basement": {
                     "works_location_ids": [
-                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
-                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
+                        WORKS_LOCATIONS[0][0],
+                        WORKS_LOCATIONS[1][0]
                     ]
                 }
             },
             "incidental_buildings": {
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -255,20 +261,28 @@ def test_extension_proposal_update_basement_work_locations(session_client):
     j = json.loads(rv.body)
     assert "original_house" in j
     assert "incidental_buildings" in j
+    assert WORKS_LOCATIONS[0][0] in \
+        j['original_house']['single_storey_extension']['works_location_ids']
+    assert WORKS_LOCATIONS[1][0] in \
+        j['original_house']['single_storey_extension']['works_location_ids']
+    assert WORKS_LOCATIONS[0][0] in \
+        j['original_house']['basement']['works_location_ids']
+    assert WORKS_LOCATIONS[1][0] in \
+        j['original_house']['basement']['works_location_ids']
 
 
 def test_extension_proposal_update_roof_work_types(session_client):
-    body = """
+    body = json.dumps(
         {
             "original_house": {
                 "roof": {
                     "works_type_ids": [
-                        "19ec661e-4655-4a98-9492-bf8a323607bf"
+                        ROOF_WORKS_TYPES[0][0]
                     ]
                 }
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -276,23 +290,23 @@ def test_extension_proposal_update_roof_work_types(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "19ec661e-4655-4a98-9492-bf8a323607bf" in \
+    assert ROOF_WORKS_TYPES[0][0] in \
         result['original_house']['roof']['works_type_ids']
 
 
 def test_extension_proposal_update_roof_work_locations(session_client):
-    body = """
+    body = json.dumps(
         {
             "original_house": {
                 "roof": {
                     "works_location_ids": [
-                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
-                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
+                        WORKS_LOCATIONS[0][0],
+                        WORKS_LOCATIONS[1][0]
                     ]
                 }
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -300,24 +314,25 @@ def test_extension_proposal_update_roof_work_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
+    assert WORKS_LOCATIONS[0][0] in \
         result['original_house']['roof']['works_location_ids']
-    assert "243d44e8-8a8b-44de-b2ed-e7caa0628e98" in \
+    assert WORKS_LOCATIONS[1][0] in \
         result['original_house']['roof']['works_location_ids']
 
 
 def test_extension_proposal_update_porch_work_locations(session_client):
-    body = """
+    body = json.dumps(
         {
             "original_house": {
                 "porch": {
                     "works_location_ids": [
-                        "9dc99f40-ac1d-421e-a408-c253d7ead671"
+                        WORKS_LOCATIONS[0][0],
+                        WORKS_LOCATIONS[1][0]
                     ]
                 }
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -325,23 +340,25 @@ def test_extension_proposal_update_porch_work_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
+    assert WORKS_LOCATIONS[0][0] in \
+        result['original_house']['porch']['works_location_ids']
+    assert WORKS_LOCATIONS[1][0] in \
         result['original_house']['porch']['works_location_ids']
 
 
 def test_extension_proposal_update_balcony_work_locations(session_client):
-    body = """
+    body = json.dumps(
         {
             "original_house": {
                 "balcony_terrace": {
                     "works_location_ids": [
-                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
-                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
+                        WORKS_LOCATIONS[0][0],
+                        WORKS_LOCATIONS[1][0]
                     ]
                 }
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -349,23 +366,25 @@ def test_extension_proposal_update_balcony_work_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
+    assert WORKS_LOCATIONS[0][0] in \
+        result['original_house']['balcony_terrace']['works_location_ids']
+    assert WORKS_LOCATIONS[1][0] in \
         result['original_house']['balcony_terrace']['works_location_ids']
 
 
 def test_extension_proposal_update_staircase_work_locations(session_client):
-    body = """
+    body = json.dumps(
         {
             "original_house": {
                 "staircase": {
                     "works_location_ids": [
-                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
-                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
+                        WORKS_LOCATIONS[0][0],
+                        WORKS_LOCATIONS[1][0]
                     ]
                 }
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -373,23 +392,25 @@ def test_extension_proposal_update_staircase_work_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
+    assert WORKS_LOCATIONS[0][0] in \
+        result['original_house']['staircase']['works_location_ids']
+    assert WORKS_LOCATIONS[1][0] in \
         result['original_house']['staircase']['works_location_ids']
 
 
 def test_extension_proposal_update_windows_work_locations(session_client):
-    body = """
+    body = json.dumps(
         {
             "original_house": {
                 "windows_doors": {
                     "works_location_ids": [
-                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
-                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
+                        WORKS_LOCATIONS[0][0],
+                        WORKS_LOCATIONS[1][0],
                     ]
                 }
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -397,23 +418,25 @@ def test_extension_proposal_update_windows_work_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
+    assert WORKS_LOCATIONS[0][0] in \
+        result['original_house']['windows_doors']['works_location_ids']
+    assert WORKS_LOCATIONS[1][0] in \
         result['original_house']['windows_doors']['works_location_ids']
 
 
 def test_extension_proposal_update_cladding_work_locations(session_client):
-    body = """
+    body = json.dumps(
         {
             "original_house": {
                 "cladding": {
                     "works_location_ids": [
-                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
-                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
+                        WORKS_LOCATIONS[0][0],
+                        WORKS_LOCATIONS[1][0]
                     ]
                 }
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -421,23 +444,25 @@ def test_extension_proposal_update_cladding_work_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
+    assert WORKS_LOCATIONS[0][0] in \
+        result['original_house']['cladding']['works_location_ids']
+    assert WORKS_LOCATIONS[1][0] in \
         result['original_house']['cladding']['works_location_ids']
 
 
 def test_extension_proposal_update_outbuilding_work_locations(session_client):
-    body = """
+    body = json.dumps(
         {
             "incidental_buildings": {
                 "outbuilding": {
                     "works_location_ids": [
-                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
-                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
+                        WORKS_LOCATIONS[0][0],
+                        WORKS_LOCATIONS[1][0]
                     ]
                 }
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -445,19 +470,21 @@ def test_extension_proposal_update_outbuilding_work_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
+    assert WORKS_LOCATIONS[0][0] in \
+        result['incidental_buildings']['outbuilding']['works_location_ids']
+    assert WORKS_LOCATIONS[1][0] in \
         result['incidental_buildings']['outbuilding']['works_location_ids']
 
 
 def test_extension_proposal_update_outbuilding_details(session_client):
-    body = """
+    body = json.dumps(
         {
             "incidental_buildings": {
-                "removal_or_demolition": true,
+                "removal_or_demolition": True,
                 "details": "I'm knocking a shed down."
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -470,17 +497,17 @@ def test_extension_proposal_update_outbuilding_details(session_client):
 
 
 def test_extension_proposal_update_gates_fences_walls_types(session_client):
-    body = """
+    body = json.dumps(
         {
             "boundaries": {
                 "gates_fences_walls": {
                     "works_type_ids": [
-                        "30d4874f-6570-403d-bfcc-d3c58cafe27e"
+                        GATES_FENCES_WALLS_TYPES[0][0]
                     ]
                 }
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -488,23 +515,23 @@ def test_extension_proposal_update_gates_fences_walls_types(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "30d4874f-6570-403d-bfcc-d3c58cafe27e" in \
+    assert GATES_FENCES_WALLS_TYPES[0][0] in \
         result['boundaries']['gates_fences_walls']['works_type_ids']
 
 
 def test_extension_proposal_update_gates_fences_walls_locations(session_client):
-    body = """
+    body = json.dumps(
         {
             "boundaries": {
                 "gates_fences_walls": {
                     "works_location_ids": [
-                        "9dc99f40-ac1d-421e-a408-c253d7ead671",
-                        "243d44e8-8a8b-44de-b2ed-e7caa0628e98"
+                        WORKS_LOCATIONS[0][0],
+                        WORKS_LOCATIONS[1][0]
                     ]
                 }
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -512,18 +539,20 @@ def test_extension_proposal_update_gates_fences_walls_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "9dc99f40-ac1d-421e-a408-c253d7ead671" in \
+    assert WORKS_LOCATIONS[0][0] in \
+        result['boundaries']['gates_fences_walls']['works_location_ids']
+    assert WORKS_LOCATIONS[1][0] in \
         result['boundaries']['gates_fences_walls']['works_location_ids']
 
 
 def test_extension_proposal_update_means_of_access(session_client):
-    body = """
+    body = json.dumps(
         {
             "means_of_access": {
-                "access_works_scope_id": "4c75ce90-4616-4dd0-b70a-de5ca530a37d"
+                "access_works_scope_id": ACCESS_WORKS_SCOPES[0][0]
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -532,20 +561,20 @@ def test_extension_proposal_update_means_of_access(session_client):
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
     assert result['means_of_access']['access_works_scope_id'] \
-        == "4c75ce90-4616-4dd0-b70a-de5ca530a37d"
+        == ACCESS_WORKS_SCOPES[0][0]
 
 
 def test_extension_proposal_update_means_of_access_subtypes(session_client):
-    body = """
+    body = json.dumps(
         {
             "means_of_access": {
                 "access_works_sub_type_ids": [
-                    "590a7e3d-87ab-4b44-8406-fe0fb369aa81",
-                    "181deec8-d26f-4796-a036-c66528536de9"
+                    ACCESS_WORKS_TYPES[0][0],
+                    ACCESS_WORKS_TYPES[1][0]
                 ]
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -554,21 +583,21 @@ def test_extension_proposal_update_means_of_access_subtypes(session_client):
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
     assert result['means_of_access']['access_works_scope_id'] \
-        == "4c75ce90-4616-4dd0-b70a-de5ca530a37d"
-    assert "590a7e3d-87ab-4b44-8406-fe0fb369aa81" in \
+        == ACCESS_WORKS_SCOPES[0][0]
+    assert ACCESS_WORKS_TYPES[0][0] in \
         result['means_of_access']['access_works_sub_type_ids']
-    assert "181deec8-d26f-4796-a036-c66528536de9" in \
+    assert ACCESS_WORKS_TYPES[1][0] in \
         result['means_of_access']['access_works_sub_type_ids']
 
 
 def test_extension_proposal_update_parking_scope(session_client):
-    body = """
+    body = json.dumps(
         {
             "parking": {
-                "parking_works_scope_id": "d17dea6b-20d8-46df-87d0-b41fc5ec08c3"
+                "parking_works_scope_id": PARKING_WORKS_SCOPES[0][0]
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -577,7 +606,7 @@ def test_extension_proposal_update_parking_scope(session_client):
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
     assert result['parking']['parking_works_scope_id'] \
-        == "d17dea6b-20d8-46df-87d0-b41fc5ec08c3"
+        == PARKING_WORKS_SCOPES[0][0]
 
 
 def test_extension_proposal_update_parking_counts(session_client):
@@ -658,22 +687,22 @@ def test_equipment_proposal_create(session_client):
 
 
 def test_equipment_proposal_update_scope(session_client):
-    body = """
+    body = json.dumps(
         {
             "equipment":{
                 "equipment_type_ids": [
-                    "b36079c1-dc9f-4225-a94d-b7c54c83b86e",
-                    "cc70f42f-dc59-4a03-bf7e-fbb2e7ff3b5b",
-                    "fa6f8957-a775-4dc0-adfc-4c3ddfd42698"
+                    EQUIPMENT_WORKS_TYPES[0][0],
+                    EQUIPMENT_WORKS_TYPES[1][0],
+                    EQUIPMENT_WORKS_TYPES[2][0]
                 ],
                 "equipment_conservation_type_ids": [
-                    "4b2aa4a1-e01e-49ff-aedc-ddd638695839",
-                    "9f9390fa-f175-4d7a-8599-48c40644f0c3",
-                    "510e6d41-168d-45e6-ad7e-329a578961d2"
+                    EQUIPMENT_WORKS_CONSERVATION_TYPES[0][0],
+                    EQUIPMENT_WORKS_CONSERVATION_TYPES[1][0],
+                    EQUIPMENT_WORKS_CONSERVATION_TYPES[2][0]
                 ]
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/equipment-proposals/{EQUIPMENT_PROPOSAL_ID}',
         body,
@@ -681,35 +710,35 @@ def test_equipment_proposal_update_scope(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "b36079c1-dc9f-4225-a94d-b7c54c83b86e" in \
+    assert EQUIPMENT_WORKS_TYPES[0][0] in \
         result['equipment']['equipment_type_ids']
-    assert "cc70f42f-dc59-4a03-bf7e-fbb2e7ff3b5b" in \
+    assert EQUIPMENT_WORKS_TYPES[1][0] in \
         result['equipment']['equipment_type_ids']
-    assert "fa6f8957-a775-4dc0-adfc-4c3ddfd42698" in \
+    assert EQUIPMENT_WORKS_TYPES[2][0] in \
         result['equipment']['equipment_type_ids']
-    assert "4b2aa4a1-e01e-49ff-aedc-ddd638695839" in \
+    assert EQUIPMENT_WORKS_CONSERVATION_TYPES[0][0] in \
         result['equipment']['equipment_conservation_type_ids']
-    assert "9f9390fa-f175-4d7a-8599-48c40644f0c3" in \
+    assert EQUIPMENT_WORKS_CONSERVATION_TYPES[1][0] in \
         result['equipment']['equipment_conservation_type_ids']
-    assert "510e6d41-168d-45e6-ad7e-329a578961d2" in \
+    assert EQUIPMENT_WORKS_CONSERVATION_TYPES[2][0] in \
         result['equipment']['equipment_conservation_type_ids']
 
 
 def test_equipment_proposal_update_locations(session_client):
-    body = """
+    body = json.dumps(
         {
             "equipment": {
                 "equipment_locations": [
                     {
                         "location_ids": [
-                            "b36079c1-dc9f-4225-a94d-b7c54c83b86e"
+                            WORKS_LOCATIONS[3][0]
                         ],
-                        "equipment_type_id": "9dc99f40-ac1d-421e-a408-c253d7ead671"
+                        "equipment_type_id": EQUIPMENT_WORKS_TYPES[0][1]
                     }
                 ]
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/equipment-proposals/{EQUIPMENT_PROPOSAL_ID}',
         body,
@@ -717,17 +746,19 @@ def test_equipment_proposal_update_locations(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert "b36079c1-dc9f-4225-a94d-b7c54c83b86e" in \
+    assert WORKS_LOCATIONS[3][0] in \
         result['equipment']['equipment_locations'][0]['location_ids']
+    assert result['equipment']['equipment_locations'][0]['equipment_type_id'] == \
+        EQUIPMENT_WORKS_TYPES[0][1]
 
 
 def test_extension_proposal_floor_area(session_client):
-    body = """
+    body = json.dumps(
         {
             "additional_floor_area": 23.8,
-            "additional_floor_area_units_id": "095bd097-f66e-4c66-bc1e-3521a0358e8d"
+            "additional_floor_area_units_id": AREA_UNITS[1][0]
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -800,20 +831,20 @@ def test_extension_proposal_materials_details(session_client):
 
 
 def test_extension_proposal_materials_roof(session_client):
-    body = """
+    body = json.dumps(
         {
-            "materials":{
+            "materials": {
                 "roof": {
                     "proposals": [
                         {
-                            "material_id": "d470020f-984f-4acf-9e75-387f58db4604",
+                            "material_id": MATERIALS_ROOF[0][0],
                             "colour_and_type": "Some lovely green roof tiles."
                         }
                     ]
                 }
             }
         }
-    """
+    )
     rv = session_client.patch(
         f'/api/v1/extension-proposals/{EXTENSION_PROPOSAL_ID}',
         body,
@@ -822,7 +853,7 @@ def test_extension_proposal_materials_roof(session_client):
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
     assert result['materials']['roof']['proposals'][0]['material_id'] == \
-        "d470020f-984f-4acf-9e75-387f58db4604"
+        MATERIALS_ROOF[0][0]
     assert result['materials']['roof']['proposals'][0]['colour_and_type'] == \
         "Some lovely green roof tiles."
 
