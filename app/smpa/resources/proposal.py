@@ -2,6 +2,7 @@ import falcon
 
 from typing import Optional
 
+from smpa.helpers.auth import owner
 from ..schemas.core import CoreListSchema, CoreGetSchema  # NOQA
 from .core import Resource, ListResource
 from ..services.proposal import _proposals_extension, _proposals_equipment
@@ -62,6 +63,7 @@ class ProposalExtensionPostResource(ListResource):
 class ProposalExtensionPatchResource(Resource):
     _service = _proposals_extension
 
+    @owner
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
         """
         ---
@@ -82,6 +84,7 @@ class ProposalExtensionPatchResource(Resource):
         """
         super().on_get(req, resp, id)
 
+    @owner
     def on_patch(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
         """
         ---
@@ -164,6 +167,7 @@ class ProposalEquipmentPostResource(ListResource):
 class ProposalEquipmentPatchResource(Resource):
     _service = _proposals_equipment
 
+    @owner
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
         """
         ---
@@ -184,6 +188,7 @@ class ProposalEquipmentPatchResource(Resource):
         """
         super().on_get(req, resp, id)
 
+    @owner
     def on_patch(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
         """
         ---

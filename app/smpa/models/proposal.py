@@ -51,7 +51,21 @@ class ProposalExtension(WorksProposal):
     new_single_bedrooms = IntType()
     new_double_bedrooms = IntType()
 
+    owner_id = RelType(
+        UUIDType(),
+        to_field='owner',
+        service='UserService'
+    )
+    owner: Type['smpa.models.user.User'] = ModelType('smpa.models.user.User')
+
 
 class ProposalEquipment(WorksProposal):
     equipment: Type['smpa.models.work.WorkEquipment'] = \
         ModelType('smpa.models.work.WorkEquipment')
+
+    owner_id = RelType(
+        UUIDType(),
+        to_field='owner',
+        service='UserService'
+    )
+    owner: Type['smpa.models.user.User'] = ModelType('smpa.models.user.User')

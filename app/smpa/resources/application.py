@@ -3,7 +3,7 @@ import falcon
 
 from typing import Optional
 
-from smpa.helpers.auth import owner, admin, authorise
+from smpa.helpers.auth import owner
 from .core import Resource, ListResource
 from ..services.application import _applications
 
