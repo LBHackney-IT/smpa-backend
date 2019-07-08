@@ -12,10 +12,54 @@ from typing import (  # NOQA
     Set, Tuple, Type, Union, cast, no_type_check
 )
 from schematics.types import (  # NOQA
-    StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, FloatType, ModelType
+    StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, FloatType, ModelType,
+    GeoPointType, DictType
 )
 
 from .application import Application
+
+
+class GeoFeatureGeometry(BaseModel, metaclass=ORMMeta):
+    type: str = StringType()
+    coordinates: str = ListType(ListType(GeoPointType()))
+
+
+class GeoFeatureProperties(BaseModel, metaclass=ORMMeta):
+    uprn: int = IntType()
+    has_boundary: str = StringType()
+    nb_a4d: int = IntType()
+    a4d_name: str = StringType()
+    nb_conarea: int = IntType()
+    conarea_name: str = StringType()
+    nb_tpo: int = IntType()
+    tpo_name: str = StringType()
+    is_listed_building: str = StringType()
+    is_floodzone_2: str = StringType()
+    is_floodzone_3a: str = StringType()
+    is_floodzone_3b: str = StringType()
+
+
+class GeoFeature(BaseModel, metaclass=ORMMeta):
+    id: str = StringType()  # This is an embedded id, not the UUID pk
+    type: str = StringType()
+    geometry_name: str = StringType()
+    geometry: GeoFeatureGeometry = ModelType(GeoFeatureGeometry)
+    properties: GeoFeatureProperties = ModelType(GeoFeatureProperties)
+
+
+class GeoCRS(BaseModel, metaclass=ORMMeta):
+    type: str = StringType()
+    properties: dict = DictType(StringType())
+
+
+class GeoJSON(BaseModel, metaclass=ORMMeta):
+    type: str = StringType()
+    features: list = ListType(ModelType(GeoFeature))
+    totalFeatures: int = IntType()
+    numberMatched: int = IntType()
+    numberReturned: int = IntType()
+    timeStamp: str = StringType()
+    crs: GeoCRS = ModelType(GeoCRS)
 
 
 class BaseAddress(BaseModel):
@@ -67,6 +111,8 @@ class SiteAddress(BaseAddress, metaclass=ORMMeta):
     uprn = StringType(max_length=255)
     property_type = StringType(max_length=255)
     description = StringType(max_length=255)
+
+    geojson = ModelType(GeoJSON)
 
     # backref ids
     application_id: str = UUIDType()

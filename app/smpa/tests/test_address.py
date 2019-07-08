@@ -1,3 +1,4 @@
+import simplejson as json
 import falcon
 import pytest
 from smpa.services.address import _addresses, _site_addresses
@@ -337,6 +338,113 @@ def test_bad_limit_exception():
             postcode='N1 1NN'
         )
         _addresses.all(limit='no')
+
+
+@purger(_addresses)
+def test_address_geojson(site_address):
+    geo = """
+        {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "id": "lu_blpu_planning_constraint.100021065242",
+              "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                  [
+                    [
+                      -0.04593036,
+                      51.543539
+                    ],
+                    [
+                      -0.04596475,
+                      51.54352948
+                    ],
+                    [
+                      -0.04606828,
+                      51.54350083
+                    ],
+                    [
+                      -0.04607099,
+                      51.54350492
+                    ],
+                    [
+                      -0.04609884,
+                      51.54354495
+                    ],
+                    [
+                      -0.04603026,
+                      51.54356359
+                    ],
+                    [
+                      -0.04600761,
+                      51.54357041
+                    ],
+                    [
+                      -0.04596092,
+                      51.54358312
+                    ],
+                    [
+                      -0.04589232,
+                      51.54360221
+                    ],
+                    [
+                      -0.04585953,
+                      51.54361021
+                    ],
+                    [
+                      -0.0458274,
+                      51.54361956
+                    ],
+                    [
+                      -0.04579682,
+                      51.54357589
+                    ],
+                    [
+                      -0.04582893,
+                      51.54356698
+                    ],
+                    [
+                      -0.04593036,
+                      51.543539
+                    ]
+                  ]
+                ]
+              },
+              "geometry_name": "geom",
+              "properties": {
+                "uprn": 100021065242,
+                "has_boundary": "yes",
+                "nb_a4d": 2,
+                "a4d_name": "Storage and Distribution to Residential, Light Industrial to Residential",
+                "nb_conarea": 1,
+                "conarea_name": "Victoria Park",
+                "nb_tpo": 0,
+                "tpo_name": "",
+                "is_listed_building": "0",
+                "is_floodzone_2": "0",
+                "is_floodzone_3a": "0",
+                "is_floodzone_3b": "0"
+              }
+            }
+          ],
+          "totalFeatures": 1,
+          "numberMatched": 1,
+          "numberReturned": 1,
+          "timeStamp": "2019-07-05T14:10:20.720Z",
+          "crs": {
+            "type": "name",
+            "properties": {
+              "name": "urn:ogc:def:crs:EPSG::4326"
+            }
+          }
+        }
+    """
+    site_address.geojson = json.loads(geo)
+    _site_addresses.save(site_address)
+    assert site_address.geojson is not None
+    assert site_address.geojson.crs.type == 'name'
 
 
 # def test_first_and_last():
