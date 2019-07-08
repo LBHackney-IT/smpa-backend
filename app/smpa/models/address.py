@@ -112,7 +112,7 @@ class SiteAddress(BaseAddress, metaclass=ORMMeta):
     property_type = StringType(max_length=255)
     description = StringType(max_length=255)
 
-    geojson = ModelType(GeoJSON)
+    siteGeoJson: GeoJSON = ModelType(GeoJSON)
 
     # backref ids
     application_id: str = UUIDType()

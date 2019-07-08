@@ -441,10 +441,10 @@ def test_address_geojson(site_address):
           }
         }
     """
-    site_address.geojson = json.loads(geo)
+    site_address.siteGeoJson = json.loads(geo)
     _site_addresses.save(site_address)
-    assert site_address.geojson is not None
-    assert site_address.geojson.crs.type == 'name'
+    assert site_address.siteGeoJson is not None
+    assert site_address.siteGeoJson.crs.type == 'name'
 
 
 # def test_first_and_last():
