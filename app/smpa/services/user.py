@@ -28,7 +28,20 @@ class UserService(RService):
 
     @staticmethod
     def verify(user, password):
+        if user is None:
+            raise falcon.HTTPError(falcon.HTTP_404)
+        if password is None:
+            raise falcon.HTTPError(falcon.HTTP_400, "Can't verify a blank password")
+        if user.password is None:
+            raise falcon.HTTPError(falcon.HTTP_400, "User has no password set")
         return bcrypt.verify(password, user.password)
+
+    def verify_token(self, token):
+        u = _users.first_or_404(verification_token=token)
+        u.verified_at = arrow.now().datetime
+        u.verification_token = None
+        self.save(u)
+        return u
 
     def authenticate(self, data: dict) -> Optional[User]:
         email = data.get('email', None)
@@ -64,7 +77,7 @@ class UserService(RService):
         kwargs = self._preprocess(**kwargs)
         input_pass = kwargs.pop('password', None)
         if input_pass is None:
-            return falcon.HTTP_403
+            return falcon.HTTP_400
 
         hashed = self._hash(input_pass)
         kwargs['password'] = hashed
@@ -86,6 +99,10 @@ class UserService(RService):
             return existing_user
 
         return self.create(**kwargs)
+
+    def set_password(self, user, password):
+        user.password = self._hash(password)
+        self.save(user)
 
     # Private methods
 

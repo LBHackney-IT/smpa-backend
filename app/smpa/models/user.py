@@ -14,6 +14,7 @@
         ]
     }
 """
+import arrow
 
 from .core import BaseModel, ORMMeta, RelType
 from typing import (  # NOQA
@@ -79,6 +80,19 @@ class Email(BaseModel, metaclass=ORMMeta):
     # user = relationship('User', backref=backref('email_addresses', uselist=True))
 
 
+class CompanyProfile(BaseModel, metaclass=ORMMeta):
+
+    """A Company Profile
+    """
+    company_name: str = StringType(max_length=255)
+    address_line_1: str = StringType(max_length=255)
+    address_line_2: str = StringType(max_length=255)
+    city: str = StringType(max_length=255)
+    postcode: str = StringType(max_length=255)
+    phone: str = StringType(max_length=255)
+    email: str = ModelType(Email)
+
+
 class UserProfile(BaseModel, metaclass=ORMMeta):
 
     """A User object.
@@ -89,12 +103,13 @@ class UserProfile(BaseModel, metaclass=ORMMeta):
         person_name (PersonName): The PersonName instance for this user
         title (Unicode): proxy to PersonName.title
     """
-
+    company = ModelType(CompanyProfile)
     name: Type[PersonName] = ModelType(PersonName)
-    preferred_contact_method: Type[ContactMethod] = ModelType(ContactMethod)
     email_addresses: List[Type[Email]] = ListType(ModelType(Email))
     primary_email_id: str = UUIDType()
     primary_phone_id: str = UUIDType()
+
+    preferred_contact_method: Type[ContactMethod] = ModelType(ContactMethod)
 
 
 class TelephoneNumber(BaseModel, metaclass=ORMMeta):
@@ -157,7 +172,7 @@ class User(BaseModel, metaclass=ORMMeta):
 
     class Options:
         roles = {
-            'default': blacklist('password', )
+            'default': blacklist('password', 'verification_key')
         }
 
     email: str = StringType(max_length=200, required=True)
@@ -175,6 +190,24 @@ class User(BaseModel, metaclass=ORMMeta):
 
     role: Type[Role] = ModelType(Role)
     profile: Type[UserProfile] = ModelType(UserProfile)
+
+    verified_at = DateTimeType()
+    verification_key = UUIDType()
+
+    @property
+    def verified(self):
+        """Tries to get an arrow datetime from self.verified_at
+        Returns True if it succeeds, false if not
+
+        Returns:
+            bool: Whether or not the user's account is verified
+        """
+        try:
+            arrow.get(self.verified_at)
+        except Exception:
+            return False
+        else:
+            return True
 
     @property
     def is_admin(self):

@@ -5,7 +5,7 @@
 import simplejson as json
 import falcon
 from .test_auth import get_token
-from ..util import json_match
+from ..util import json_match, reset_test_user
 
 from smpa.helpers.console import console
 
@@ -57,6 +57,9 @@ EXTENSION_PROPOSAL_ID = None
 EQUIPMENT_PROPOSAL_ID = None
 SITE_ADDRESS_ID = None
 TOKEN = None
+
+
+reset_test_user()
 
 
 def test_get_default_data(session_client):
@@ -876,7 +879,6 @@ def test_extension_proposal_materials_walls_matches_existing(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    print(rv.body)
     assert result['materials']['walls']['matches_existing'] is True
     assert result['materials']['walls']['not_applicable'] is False
 

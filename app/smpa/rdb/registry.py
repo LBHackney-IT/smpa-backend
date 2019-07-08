@@ -91,15 +91,16 @@ class ModelRegistry(object):
         return True
 
     def init(self):
-        total = len(self._models)
-        count = 0
-        for name, model in self._models.items():
-            count += 1
-            progress = count / total * 100
-            console.progress('Registering models', progress)
-            self._init_model(name, model)
-        self._initialsed = True
-        console.reset()
+        if not self._initialsed:
+            total = len(self._models)
+            count = 0
+            for name, model in self._models.items():
+                count += 1
+                progress = count / total * 100
+                console.progress('Registering models', progress)
+                self._init_model(name, model)
+            self._initialsed = True
+            console.reset()
 
     def _init_model(self, name, model):
         from smpa.app import config

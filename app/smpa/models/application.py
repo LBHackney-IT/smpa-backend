@@ -52,3 +52,6 @@ class Application(BaseModel, metaclass=ORMMeta):
         ModelType('smpa.models.proposal.ProposalExtension')
     proposal_equipment: Type['smpa.models.proposal.ProposalEquipment'] = \
         ModelType('smpa.models.proposal.ProposalEquipment')
+
+    # This is Ana's Application state
+    proposalFlow: str = StringType()

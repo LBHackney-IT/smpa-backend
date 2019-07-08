@@ -3,6 +3,17 @@ import functools
 from smpa.helpers.console import console
 
 
+def reset_test_user():
+    # Set the test user's email address
+    from smpa.services.user import _users
+    u = _users.get("b7d623db-5b4a-43df-b3f1-2bfca845d657")
+    u.email = 'test@example.com'
+    _users.save(u)
+    _users.set_password(u, 'secretpassword')
+    _users.save(u)
+    assert u.password is not None
+
+
 def purger(services):
     """A decorator for purging all objects in one or
     more services before and after a test.

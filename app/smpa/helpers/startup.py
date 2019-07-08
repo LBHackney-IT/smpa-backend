@@ -114,6 +114,7 @@ class Startup:
             password="secretpassword",
             role_id=str(user_role.id)
         )
+        assert u.password is not None
         a = _applications.get_or_create(
             id='9e7cf43a-6860-4061-b585-65b4fb778a30'
         )

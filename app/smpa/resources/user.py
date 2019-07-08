@@ -1,15 +1,17 @@
-import json
 import falcon
 
 from typing import Optional
+from smpa.helpers.auth import owner, admin, admin_or_self  # NOQA
 
-from .core import Resource
+from .core import Resource, ListResource
+from ..schemas.auth import login_schema
 from ..services.user import _users, _agents, _applicants
 
 
-class UserResource(Resource):
+class UserResourcePatch(Resource):
     _service = _users
 
+    @admin_or_self
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
         """
         ---
@@ -23,7 +25,7 @@ class UserResource(Resource):
             - application/json
         responses:
             200:
-                description: One or more Users
+                description: Get one user
                 schema:
                     type: array
                     items: User
@@ -32,6 +34,7 @@ class UserResource(Resource):
         """
         super().on_get(req, resp, id)
 
+    @admin_or_self
     def on_patch(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
         """
         ---
@@ -58,6 +61,40 @@ class UserResource(Resource):
         """
         super().on_patch(req, resp, id)
 
+
+class UserResourceList(ListResource):
+    _service = _users
+
+    @admin
+    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Get all Users from the DB
+        tags:
+            - User
+        parameters:
+            - in: query
+              schema: CoreListSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: All Users
+                schema:
+                    type: array
+                    items: User
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp)
+
+
+class UserResourcePost:
+    _service = _users
+
+    auth = {"auth_disabled": True}
+    deserializers = {"post": login_schema}
+
     def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
         """
         ---
@@ -80,7 +117,156 @@ class UserResource(Resource):
             422:
                 description: Input body formatting issue
         """
-        super().on_post(req, resp)
+        user = self._service.create(**req._params)
+        resp.status = falcon.HTTP_OK
+        resp.media = {"message": "User created"}
+
+
+class UserVerifyResource:
+    _service = _users
+
+    auth = {"auth_disabled": True}
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response, token: str):
+        """
+        Args:
+            req (falcon.Request): Description
+            resp (falcon.Response): Description
+            token (str): Description
+        ---
+        summary: Verify a user's account and log them in
+        tags:
+            - User
+        parameters:
+            - in: path
+              schema: CoreGetSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: User verified and logged in
+                schema:
+                    type: object
+                    properties:
+                        message:
+                            type: string
+                        jwt:
+                            type: string
+            401:
+                description: Unauthorized
+        """
+        from ..app import auth_backend
+        user = self._service.verify_token(token)
+        jwt_token = auth_backend.get_auth_token({"id": str(user.id)})
+
+        resp.status = falcon.HTTP_OK
+        resp.media = {"message": "login successful!", "jwt": jwt_token}
+
+
+class UserProfileResourcePatch(Resource):
+    _service = _users
+
+    @admin_or_self
+    def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
+        """
+        ---
+        summary: Get one or more UserProfiles from the database
+        tags:
+            - UserProfile
+        parameters:
+            - in: path
+              schema: CoreGetSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: Get one user
+                schema:
+                    type: array
+                    items: UserProfile
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp, id)
+
+    @admin_or_self
+    def on_patch(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
+        """
+        ---
+        summary: Update a UserProfile in the database
+        tags:
+            - UserProfile
+        parameters:
+            - in: body
+              schema: UserProfile
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            200:
+                description: Returns updated UserProfile
+                schema: UserProfile
+            401:
+                description: Unauthorized
+            404:
+                description: Object does not exist
+            422:
+                description: Input body formatting issue
+        """
+        super().on_patch(req, resp, id)
+
+# We probably don't need this resource
+# class UserProfileResourcePost(ListResource):
+#     _service = _users
+
+#     @admin
+#     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+#         """
+#         ---
+#         summary: Get all UserProfiles from the DB
+#         tags:
+#             - User
+#         parameters:
+#             - in: query
+#               schema: CoreListSchema
+#         produces:
+#             - application/json
+#         responses:
+#             200:
+#                 description: All UserProfiles
+#                 schema:
+#                     type: array
+#                     items: User
+#             401:
+#                 description: Unauthorized
+#         """
+#         super().on_get(req, resp)
+
+#     @admin
+#     def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
+#         """
+#         ---
+#         summary: Add new UserProfile to the database
+#         tags:
+#             - UserProfile
+#         parameters:
+#             - in: body
+#               schema: UserProfile
+#         consumes:
+#             - application/json
+#         produces:
+#             - application/json
+#         responses:
+#             201:
+#                 description: UserProfile created successfully
+#                 schema: UserProfile
+#             401:
+#                 description: Unauthorized
+#             422:
+#                 description: Input body formatting issue
+#         """
+#         super().on_post(req, resp)
 
 
 class AgentResource(Resource):

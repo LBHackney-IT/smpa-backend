@@ -32,7 +32,8 @@ from .resources import (  # NOQA
     # Unit resources
     AreaUnitResource, AreaUnitListResource, LinearUnitResource, LinearUnitListResource,
     # User resources
-    UserResource, AgentResource, ApplicantResource, AuthResource,
+    UserResourcePost, UserResourceList, UserResourcePatch, AgentResource,
+    ApplicantResource, AuthResource,
     # Address resources
     AddressPatch, AddressPost, SiteAddressPatch, SiteAddressPost,
     BS7666AddressResource, ExternalAddressResource, InternationalAddressResource,
@@ -57,7 +58,8 @@ from .resources import (  # NOQA
 
 EXEMPT_ROUTES = [
     '/auth',
-    '/docs'
+    '/docs',
+    '/users/create'
 ]
 
 
@@ -103,13 +105,15 @@ def init_routes(api, config):
     gates_fences_walls_type_post = GatesFencesWallsTypePost()
     applications_post = ApplicationResourcePost()
     applications_patch = ApplicationResourcePatch()
+    users_post = UserResourcePost()
+    users_list = UserResourceList()
+    users_patch = UserResourcePatch()
 
     # To fix
     area_units = AreaUnitResource()
     area_units_list = AreaUnitListResource()
     linear_units = LinearUnitResource()
     linear_units_list = LinearUnitListResource()
-    users = UserResource()
     agents = AgentResource()
     # applicants = ApplicantResource()
     documentsizes = DocumentSizeResource()
@@ -200,8 +204,9 @@ def init_routes(api, config):
     add_route(api, '/applications', applications_post)
     add_route(api, '/applications/{id}', applications_patch)
 
-    add_route(api, '/users', users)
-    add_route(api, '/users/{id}', users)
+    add_route(api, '/users/create', users_post)
+    add_route(api, '/users', users_list)
+    add_route(api, '/users/{id}', users_patch)
 
     add_route(api, '/agents', agents)
     add_route(api, '/agents/{id}', agents)
@@ -264,6 +269,11 @@ def init_routes(api, config):
         material_window_patch,
         material_door_post,
         material_door_patch,
+        users_patch,
+        users_post,
+        users_list,
+        applications_post,
+        applications_patch,
 
         ########################################
         # FUTURE ROUTES FOR AN ADMIN INTERFACE #
@@ -288,11 +298,8 @@ def init_routes(api, config):
         area_units_list,
         linear_units_list,
         linear_units,
-        users,
         agents,
         # applicants,
         documentsizes,
         auth,
-        applications_post,
-        applications_patch,
     ]
