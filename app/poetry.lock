@@ -609,6 +609,17 @@ falcon = ">=0.3.0"
 pytest = "*"
 
 [[package]]
+category = "main"
+description = "Plugin for generating Markdown reports for pytest results"
+name = "pytest-md"
+optional = false
+python-versions = ">=3.6"
+version = "0.1.1"
+
+[package.dependencies]
+pytest = ">=4.2.1"
+
+[[package]]
 category = "dev"
 description = "pytest-sugar is a plugin for pytest that changes the default look and feel of pytest (e.g. progressbar, show tests that fail instantly)."
 name = "pytest-sugar"
@@ -826,7 +837,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "15cba3de25095f1e84f3c495fd8bc75faf23d1c1ba6e21114b1e80cf1a40a15c"
+content-hash = "3d9b7080de500ef3d884a6371a87a552863e0545c1ee649a4049e1537e1179de"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -889,6 +900,7 @@ pytest = ["1a8aa4fa958f8f451ac5441f3ac130d9fc86ea38780dd2715e6d5c5882700b24", "b
 pytest-cov = ["2b097cde81a302e1047331b48cadacf23577e431b61e9c6f49a1170bbe3d3da6", "e00ea4fdde970725482f1f35630d12f074e121a23801aabf2ae154ec6bdd343a"]
 pytest-env = ["7e94956aef7f2764f3c147d216ce066bf6c42948bb9e293169b1b1c880a580c2"]
 pytest-falcon = ["b196d169ad756cfae46b39c48196af5ebb6e3f7d3c2a5f59cd5979462dcf7dfa", "d4c54c89f6c83b0ef12db5dc4fd129c2255aeabb20467190696a57ffd9bde394"]
+pytest-md = ["40a0cf94c4d3f4888aee1e3bb09a8668858a7d76154c17e19f4038310793aecc", "e52f84ef23dd3bc52fd98718a540ea1105673c17d718466ba9dd233450519840"]
 pytest-sugar = ["26cf8289fe10880cbbc130bd77398c4e6a8b936d8393b116a5c16121d95ab283", "fcd87a74b2bce5386d244b49ad60549bfbc4602527797fac167da147983f58ab"]
 pytest-variables = ["59c00b95779657532ac5f8209b28b5d447c8b4bc4210c1d6bdf9a42aa201f9b0", "7808b77b643b9f8a24f1ee1c32132648b1c62ab93956f20fe101dde66db6d09a"]
 python-dateutil = ["7e6584c74aeed623791615e26efd690f29817a27c73085b78e4bad02493df2fb", "c89805f6f4d64db21ed966fda138f8a5ed7a4fdbc1a8ee329ce1b74e3c74da9e"]

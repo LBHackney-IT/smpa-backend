@@ -8,11 +8,11 @@
 
 import arrow
 import falcon
-from typing import Optional
 from passlib.hash import bcrypt
-from ..models.user import Role, User, Agent, Applicant, UserProfile
-from ..helpers.console import console  # NOQA
+from typing import Optional
 
+from smpa.helpers.console import console  # NOQA
+from smpa.models.user import Agent, Applicant, Role, User, UserProfile
 from .rethink import RService
 
 

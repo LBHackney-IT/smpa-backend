@@ -31,6 +31,7 @@ passlib = {version = "^1.7",extras = ["bcrypt"]}
 falcon-auth = {version = "^1.1",extras = ["backend-hawk", "backend-jwt"]}
 pytest-env = "^0.6.2"
 falcon-cors = "^1.1"
+pytest-md = "^0.1.1"
 
 
 [tool.poetry.dev-dependencies]

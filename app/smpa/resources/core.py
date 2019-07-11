@@ -1,7 +1,8 @@
 import json
+
 import falcon
-from typing import List, Union
 from marshmallow import MarshalResult
+from typing import List, Union
 
 from ..helpers.console import console
 
