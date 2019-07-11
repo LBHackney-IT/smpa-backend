@@ -12,7 +12,7 @@ from passlib.hash import bcrypt
 from typing import Optional
 
 from smpa.helpers.console import console  # NOQA
-from smpa.models.user import Agent, Applicant, Role, User, UserProfile
+from smpa.models.user import Agent, Applicant, Role, User, UserProfile, TelephoneNumberType
 from .rethink import RService
 
 
@@ -124,7 +124,12 @@ class RoleService(RService):
     __model__ = Role
 
 
+class TelephoneNumberTypeService(RService):
+    __model__ = TelephoneNumberType
+
+
 _users = UserService()
 _roles = RoleService()
 _agents = AgentService()
 _applicants = ApplicantService()
+_telephone_number_types = TelephoneNumberTypeService()

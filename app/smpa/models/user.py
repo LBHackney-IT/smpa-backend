@@ -15,16 +15,17 @@
     }
 """
 import arrow
-
-from .core import BaseModel, ORMMeta, RelType
-from typing import (  # NOQA
-    TYPE_CHECKING, Any, Callable, ClassVar, List, Dict, Generator, Optional,
-    Set, Tuple, Type, Union, cast, no_type_check
-)
 from schematics.transforms import blacklist
 from schematics.types import (  # NOQA
-    StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, ModelType
+    BooleanType, DateTimeType, IntType,
+    ListType, ModelType, StringType, UUIDType
 )
+from typing import (  # NOQA
+    TYPE_CHECKING, Any, Callable, ClassVar, Dict,
+    Generator, List, Optional, Set, Tuple, Type, Union, cast, no_type_check
+)
+
+from .core import BaseModel, ORMMeta, RelType
 
 
 class Role(BaseModel, metaclass=ORMMeta):
@@ -90,26 +91,7 @@ class CompanyProfile(BaseModel, metaclass=ORMMeta):
     city: str = StringType(max_length=255)
     postcode: str = StringType(max_length=255)
     phone: str = StringType(max_length=255)
-    email: str = ModelType(Email)
-
-
-class UserProfile(BaseModel, metaclass=ORMMeta):
-
-    """A User object.
-
-    Attributes:
-        family_name (Unicode): proxy to PersonName.family_name
-        given_name (Unicode): proxy to PersonName.given_name
-        person_name (PersonName): The PersonName instance for this user
-        title (Unicode): proxy to PersonName.title
-    """
-    company = ModelType(CompanyProfile)
-    name: Type[PersonName] = ModelType(PersonName)
-    email_addresses: List[Type[Email]] = ListType(ModelType(Email))
-    primary_email_id: str = UUIDType()
-    primary_phone_id: str = UUIDType()
-
-    preferred_contact_method: Type[ContactMethod] = ModelType(ContactMethod)
+    email: Type[Email] = ModelType(Email)
 
 
 class TelephoneNumber(BaseModel, metaclass=ORMMeta):
@@ -121,7 +103,12 @@ class TelephoneNumber(BaseModel, metaclass=ORMMeta):
         tel_type (TYPE): Description
     """
     tel_number: str = StringType(max_length=100, required=True)
-    tel_type_id: str = UUIDType()
+    tel_type_id = RelType(
+        UUIDType(),
+        to_field='tel_type',
+        service='TelephoneNumberTypeService'
+    )
+    owner: Type['smpa.models.user.User'] = ModelType('smpa.models.user.User')
 
 
 class TelephoneNumberType(BaseModel, metaclass=ORMMeta):
@@ -132,6 +119,17 @@ class TelephoneNumberType(BaseModel, metaclass=ORMMeta):
         name (Unicode): The name of this type
     """
     name: str = StringType(max_length=100, required=True)
+
+
+class UserProfile(BaseModel, metaclass=ORMMeta):
+
+    """A User profile object.
+
+    """
+    company = ModelType(CompanyProfile)
+    name: Type[PersonName] = ModelType(PersonName)
+    email_addresses: List[Type[Email]] = ListType(ModelType(Email))
+    phone: Type[TelephoneNumber] = ModelType(TelephoneNumber)
 
 
 class BasePerson(BaseModel):

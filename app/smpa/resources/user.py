@@ -5,7 +5,7 @@ from smpa.helpers.auth import owner, admin, admin_or_self  # NOQA
 
 from .core import Resource, ListResource
 from ..schemas.auth import login_schema
-from ..services.user import _users, _agents, _applicants
+from ..services.user import _users, _agents, _applicants, _user_profiles
 
 
 class UserResourcePatch(Resource):
@@ -164,7 +164,7 @@ class UserVerifyResource:
 
 
 class UserProfileResourcePatch(Resource):
-    _service = _users
+    _service = _user_profiles
 
     @admin_or_self
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:

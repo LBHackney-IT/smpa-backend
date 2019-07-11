@@ -12,6 +12,7 @@ def reset_test_user():
     _users.set_password(u, 'secretpassword')
     _users.save(u)
     assert u.password is not None
+    return u
 
 
 def purger(services):

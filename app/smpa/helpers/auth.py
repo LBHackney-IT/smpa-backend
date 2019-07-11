@@ -44,15 +44,15 @@ def admin(f):
 
 
 def admin_or_self(f):
-    """Auth decorator specific to users to ensure the authenticated user is
-    the user being operated on or an admin.
+    """Auth decorator specific to users and user profiles to ensure the
+    authenticated user is the user being operated on or an admin.
     """
     @wraps(f)
     def wrapper(*args, **kwargs):
         req = args[1]
         user = req.context['user']
         id = kwargs.get('id')
-        if str(id) != str(user.id) and not user.is_admin:
+        if str(id) != str(user.id) and str(id) != str(user.profile_id) and not user.is_admin:
             raise falcon.HTTPError(falcon.HTTP_401, 'Error')
         return f(*args, **kwargs)
     return wrapper

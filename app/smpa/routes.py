@@ -33,7 +33,7 @@ from .resources import (  # NOQA
     AreaUnitResource, AreaUnitListResource, LinearUnitResource, LinearUnitListResource,
     # User resources
     UserResourcePost, UserResourceList, UserResourcePatch, AgentResource,
-    ApplicantResource, AuthResource,
+    ApplicantResource, AuthResource, UserProfileResourcePatch,
     # Address resources
     AddressPatch, AddressPost, SiteAddressPatch, SiteAddressPost,
     BS7666AddressResource, ExternalAddressResource, InternationalAddressResource,
@@ -108,6 +108,7 @@ def init_routes(api, config):
     users_post = UserResourcePost()
     users_list = UserResourceList()
     users_patch = UserResourcePatch()
+    user_profiles_patch = UserProfileResourcePatch()
 
     # To fix
     area_units = AreaUnitResource()
@@ -174,6 +175,7 @@ def init_routes(api, config):
     add_route(api, '/site-constraints/{id}', site_constraints_patch)
     add_route(api, '/works-locations', works_location_post)
     add_route(api, '/works-locations/{id}', works_location_patch)
+    add_route(api, '/user-profiles/{id}', user_profiles_patch)
 
     # Working on
     add_route(api, '/materials/options/roof', material_option_roof_post)
@@ -256,6 +258,7 @@ def init_routes(api, config):
         equipment_works_type_post,
         equipment_works_conservation_type_post,
         gates_fences_walls_type_post,
+        user_profiles_patch,
         # Materials
         material_option_roof_post,
         material_option_wall_post,
