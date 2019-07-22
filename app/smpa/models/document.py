@@ -7,7 +7,7 @@
 """
 from typing import Type
 
-from .core import BaseModel, ORMMeta, RelType
+from .core import BaseModel, ORMMeta, RelType, ListRelType
 from schematics.types import (  # NOQA
     StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType, FloatType, ModelType
 )
@@ -24,6 +24,10 @@ class DocumentSize(BaseModel, metaclass=ORMMeta):
     name = StringType(max_length=20, required=True)
 
 
+class DocumentType(BaseModel, metaclass=ORMMeta):
+    name = StringType(max_length=255, required=True)
+
+
 class DocumentFile(BaseModel, metaclass=ORMMeta):
     original_name = StringType(required=True)
     storage_path = StringType(required=True)
@@ -35,3 +39,17 @@ class DocumentFile(BaseModel, metaclass=ORMMeta):
         service='DocumentSizeService'
     )
     document_size: Type[DocumentSize] = ModelType(DocumentSize)
+
+    document_types_existing_ids = ListRelType(
+        UUIDType(),
+        to_field='document_types_existing',
+        service='DocumentTypeService'
+    )
+    document_types_existing = ListType(ModelType(DocumentType))
+
+    document_types_proposed_ids = ListRelType(
+        UUIDType(),
+        to_field='document_types_proposed',
+        service='DocumentTypeService'
+    )
+    document_types_proposed = ListType(ModelType(DocumentType))

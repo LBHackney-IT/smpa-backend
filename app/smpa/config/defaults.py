@@ -33,6 +33,20 @@ DOCUMENT_SIZES = [
     ("1b3b842c-70e7-413c-b6c7-4503b12dd417", "A4"),
     ("bb71f138-d5ff-4699-a3af-cf0298136a8c", "A5"),
 ]
+
+DOCUMENT_TYPES = [
+    ('a8dd4e62-5e6f-438c-82c1-9a15b3483ba5', 'Location plan'),
+    ('d6658515-a5a5-4a2c-9d49-67e74037ab9c', 'Design statement'),
+    ('2af46301-ef5e-48ef-bc6a-369d54dc54f1', 'Heritage statement'),
+    ('793d3caa-68d3-4166-99d1-d29be390228a', 'Block plan'),
+    ('7090f4a9-2386-45a9-8fd6-0729e98de96b', 'Elevations'),
+    ('8b80d334-e24a-4d15-b9a5-8356000ee760', 'Sections'),
+    ('9ca5b818-38a0-43d8-90db-6de0f94f3a78', 'Site layout plan'),
+    ('00d40b18-bbd3-4aa5-8dbc-d1b8a0c4c8ea', 'Roof plans'),
+    ('cbddcfc8-d062-4202-b350-f875c04c6aa0', 'Floor plans'),
+    ('f1ff39d9-aab3-46e3-8749-dad11c04e3b8', 'Other'),
+]
+
 WORKS_LOCATIONS = [
     ("66d1b304-5729-4654-91df-d6306e249e54", "Rear"),
     ("4f464424-ca54-4bc4-b980-c5d957a5ad1a", "Side"),

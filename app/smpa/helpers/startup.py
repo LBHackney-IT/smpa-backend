@@ -12,10 +12,10 @@ from ..config.defaults import (
     BASEMENT_WORKS_TYPES, MATERIALS_ROOF, MATERIALS_WALL, MATERIALS_WINDOW, MATERIALS_DOOR,
     ROOF_WORKS_TYPES, BORDER_WORKS_TYPES, ACCESS_WORKS_TYPES, ACCESS_WORKS_SCOPES,
     PARKING_WORKS_SCOPES, EQUIPMENT_WORKS_TYPES, EQUIPMENT_WORKS_CONSERVATION_TYPES,
-    GATES_FENCES_WALLS_TYPES
+    GATES_FENCES_WALLS_TYPES, DOCUMENT_TYPES
 )
 from ..services.unit import _area_units, _linear_units
-from ..services.document import _document_sizes
+from ..services.document import _document_sizes, _document_types
 from ..services.user import _roles, _users
 from ..services.work import (
     _works_locations, _basement_works_types, _roof_works_types, _border_works_types,
@@ -42,6 +42,8 @@ class Startup:
             _linear_units.get_or_create(id=_[0], name=_[1])
         for _ in DOCUMENT_SIZES:
             _document_sizes.get_or_create(id=_[0], name=_[1])
+        for _ in DOCUMENT_TYPES:
+            _document_types.get_or_create(id=_[0], name=_[1])
         for _ in ROLES:
             _roles.get_or_create(id=_[0], name=_[1])
         for _ in WORKS_LOCATIONS:

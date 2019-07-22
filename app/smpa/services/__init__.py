@@ -30,7 +30,7 @@ from .address import (  # NOQA
     _addresses, _site_addresses, _bs7666_addresses, _external_addresses, _international_addresses
 )
 from .document import *  # NOQA
-from .document import _document_sizes  # NOQA
+from .document import _document_sizes, _document_files, _document_types  # NOQA
 from .material import *  # NOQA
 from .material import (  # NOQA
     _base_materials, _materials_door, _materials_roof, _materials_wall,

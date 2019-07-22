@@ -11,7 +11,7 @@ import mimetypes
 from .rethink import RService
 
 from smpa.helpers.s3 import s3
-from smpa.models.document import DocumentSize, DocumentFile
+from smpa.models.document import DocumentSize, DocumentFile, DocumentType
 
 
 class DocumentSizeService(RService):
@@ -19,6 +19,13 @@ class DocumentSizeService(RService):
 
 
 _document_sizes = DocumentSizeService()
+
+
+class DocumentTypeService(RService):
+    __model__ = DocumentType
+
+
+_document_types = DocumentTypeService()
 
 
 class DocumentFileService(RService):
@@ -29,6 +36,10 @@ class DocumentFileService(RService):
         d.id = uuid.uuid4()
         d.application_id = application_id
         d.document_size_id = req.get_param('document_size_id')
+        existing_str = req.get_param('existing')
+        proposed_str = req.get_param('proposed')
+        d.document_types_existing_ids = existing_str.strip().split(',')
+        d.document_types_proposed_ids = proposed_str.strip().split(',')
         ext = mimetypes.guess_extension(req.content_type)
         path = f"{application_id}/{d.id}.{ext}"
 
