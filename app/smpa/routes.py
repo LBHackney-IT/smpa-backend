@@ -37,8 +37,8 @@ from .resources import (  # NOQA
     # Address resources
     AddressPatch, AddressPost, SiteAddressPatch, SiteAddressPost,
     BS7666AddressResource, ExternalAddressResource, InternationalAddressResource,
-    # Document size resources
-    DocumentSizeResource,
+    # Document resources
+    DocumentSizeResource, DocumentFilePostResource,
     # Application resources
     ApplicationResourcePost, ApplicationResourcePatch,
     # Site resources
@@ -109,6 +109,7 @@ def init_routes(api, config):
     users_list = UserResourceList()
     users_patch = UserResourcePatch()
     user_profiles_patch = UserProfileResourcePatch()
+    document_file_post = DocumentFilePostResource()
 
     # To fix
     area_units = AreaUnitResource()
@@ -205,6 +206,7 @@ def init_routes(api, config):
 
     add_route(api, '/applications', applications_post)
     add_route(api, '/applications/{id}', applications_patch)
+    add_route(api, '/documents/upload/{application_id}', document_file_post)
 
     add_route(api, '/users/create', users_post)
     add_route(api, '/users', users_list)

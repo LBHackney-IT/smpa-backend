@@ -32,6 +32,10 @@ falcon-auth = {version = "^1.1",extras = ["backend-hawk", "backend-jwt"]}
 pytest-env = "^0.6.2"
 falcon-cors = "^1.1"
 pytest-md = "^0.1.1"
+boto3 = "^1.9"
+localstack-client = "^0.9.0"
+falcon-multipart = "^0.2.0"
+streaming_form_data = "^1.4"
 
 
 [tool.poetry.dev-dependencies]

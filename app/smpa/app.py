@@ -29,6 +29,7 @@ from .rdb.connection import RethinkDB
 from .rdb.registry import model_registry
 from .routes import init_routes, EXEMPT_ROUTES
 
+from falcon_multipart.middleware import MultipartMiddleware
 from falcon_auth import FalconAuthMiddleware, JWTAuthBackend
 
 
@@ -68,7 +69,8 @@ cors = CORS(
 # api = application = falcon.API()  # NO AUTH
 api = application = falcon.API(middleware=[
     auth_middleware,
-    cors.middleware
+    cors.middleware,
+    MultipartMiddleware()
 ])
 api.req_options.auto_parse_form_urlencoded = True
 

@@ -43,6 +43,7 @@ class Application(BaseModel, metaclass=ORMMeta):
         ('application_id', 'SiteConstraintsService'),
         ('application_id', 'ProposalExtensionService'),
         ('application_id', 'ProposalEquipmentService'),
+        ('application_id', 'DocumentFileService'),
     ]
     site_address: Type['smpa.models.address.SiteAddress'] = \
         ModelType('smpa.models.address.SiteAddress')

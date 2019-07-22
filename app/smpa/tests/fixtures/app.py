@@ -1,4 +1,5 @@
 import pytest
+from falcon import testing
 from smpa.app import create_app
 
 from pytest_falcon.plugin import Client
@@ -9,6 +10,11 @@ def app():
     application = create_app()
     application.req_options.auto_parse_form_urlencoded = True
     return application
+
+
+@pytest.fixture
+def mock_client(app):
+    return testing.TestClient(app)
 
 
 @pytest.fixture(scope="session")

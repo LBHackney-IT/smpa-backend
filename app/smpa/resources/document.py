@@ -1,9 +1,45 @@
+import os
 import falcon
+import tempfile
 
 from typing import Optional
 
-from .core import Resource
-from ..services.document import _document_sizes
+from smpa.resources.core import Resource
+from smpa.services.document import _document_sizes, _document_files
+from smpa.schemas.document import document_upload_schema
+
+
+class DocumentFilePostResource(Resource):
+
+    _service = _document_files
+    deserializers = {"post": document_upload_schema}
+
+    def on_post(self, req, resp, application_id: str):
+        """
+        ---
+        summary: Add new DocumentFile to the database and upload a file
+        tags:
+            - DocumentFile
+        parameters:
+            - in: body
+              schema: DocumentFile
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            201:
+                description: DocumentFile created successfully
+                schema: DocumentFile
+            401:
+                description: Unauthorized
+            422:
+                description: Input body formatting issue
+        """
+        rv = _document_files.create(req, application_id)
+
+        resp.status = falcon.HTTP_201
+        resp.body = self._json_or_404(rv)
 
 
 class DocumentSizeResource(Resource):

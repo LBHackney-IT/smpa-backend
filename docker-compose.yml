@@ -2,8 +2,24 @@ version: '3.3'
 
 volumes:
   media: {}
+  localstack-data: {}
 
 services:
+
+  # S3
+  localstack-s3:
+    image: localstack/localstack:latest
+    container_name: localstack-s3
+    environment:
+     - SERVICES=s3:5002
+     - DEFAULT_REGION=eu-west-2
+     - DATA_DIR=/tmp/localstack/data
+    ports:
+     - "5002:5002"
+     - "9999:8080"
+    volumes:
+      - ./docker/localstack-data:/tmp/localstack
+
   # RethinkDB
   rethink:
     image: rethinkdb:2.3
@@ -32,6 +48,10 @@ services:
       - SERVER_ENV=development
       - ENVKEY=${ENVKEY}
       - INDOCKER=1
+      # Service fails if we don't do this, see: https://github.com/localstack/localstack/issues/528
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_DEFAULT_REGION=eu-west-2
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     restart: always
     build:
       context: ./app

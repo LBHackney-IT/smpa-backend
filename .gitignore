@@ -1,5 +1,5 @@
 .env
-
+app/smpa.egg-info/**/*
 
 # Hactar's Fabfile
 fabfile/**/*
@@ -23,6 +23,7 @@ docs/build/**/*
 
 # Redis data folder
 docker/redis/**/*
+docker/localstack-data/**/*
 
 # MyPy cache
 .mypy_cache/**/*
