@@ -68,8 +68,8 @@ cors = CORS(
 # Create the Falcon app
 # api = application = falcon.API()  # NO AUTH
 api = application = falcon.API(middleware=[
-    auth_middleware,
     cors.middleware,
+    auth_middleware,
     MultipartMiddleware()
 ])
 api.req_options.auto_parse_form_urlencoded = True

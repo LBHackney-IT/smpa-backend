@@ -175,15 +175,28 @@ class RService(object):
             query = self.q.insert(j)
             rv = query.run(conn)
             data = []
+            out = None
+
+            if rv['errors'] > 0:
+                error = rv['first_error'].split(':')[0]
+                raise ReqlOpFailedError(error)
+
             if 'generated_keys' in rv:
                 for _ in rv['generated_keys']:
                     data.append(self.get(_))
 
             if len(data) > 1:
-                return data
+                out = data
 
-            if len(data):
-                return self.__model__(data[0])
+            elif len(data):
+                out = self.__model__(data[0])
+
+            elif rv['inserted'] > 0 and j['id'] is not None:
+                out = self.get(j['id'])
+            if out is not None:
+                return out
+            else:
+                raise ReqlOpFailedError("Failed to create object")
 
     def save(self, instance: BaseModel):
         """Saves a specific instance.

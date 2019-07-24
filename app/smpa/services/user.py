@@ -82,7 +82,8 @@ class UserService(RService):
         hashed = self._hash(input_pass)
         kwargs['password'] = hashed
         kwargs['profile_id'] = str(_user_profiles.create().id)
-        return super().create(**kwargs)
+        user = super().create(**kwargs)
+        return user
 
     def get_or_create(self, **kwargs):
         """Overriden because we need to compare UUIDs to UUIDs and bcrypt can produce
@@ -98,7 +99,13 @@ class UserService(RService):
         if existing_user is not None:
             return existing_user
 
-        return self.create(**kwargs)
+        # try getting by id
+        existing_user = self.get(kwargs['id'])
+        if existing_user is not None:
+            return existing_user
+
+        user = self.create(**kwargs)
+        return user
 
     def set_password(self, user, password):
         user.password = self._hash(password)

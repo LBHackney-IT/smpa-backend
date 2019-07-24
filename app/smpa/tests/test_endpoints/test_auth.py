@@ -7,6 +7,7 @@ from ..util import json_match, reset_test_user
 
 def get_token(user=None):
     if not user:
+        reset_test_user()
         user = _users.first(email='test@example.com')
     token = _users.gen_token(user)
     return token

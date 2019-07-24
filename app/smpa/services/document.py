@@ -36,14 +36,14 @@ class DocumentFileService(RService):
         d.id = uuid.uuid4()
         d.application_id = application_id
         d.document_size_id = req.get_param('document_size_id')
-        existing_str = req.get_param('existing')
-        proposed_str = req.get_param('proposed')
+        existing_str = str(req.get_param('existing'))
+        proposed_str = str(req.get_param('proposed'))
         d.document_types_existing_ids = existing_str.strip().split(',')
         d.document_types_proposed_ids = proposed_str.strip().split(',')
         ext = mimetypes.guess_extension(req.content_type)
         path = f"{application_id}/{d.id}.{ext}"
 
-        file_obj = req.get_param('body')
+        file_obj = req.get_param('document')
         uploaded = s3.save(file_obj, path)
 
         if not uploaded:

@@ -71,9 +71,23 @@ def test_get_value_error():
 
 @purger(_addresses)
 def test_get_stringify_id():
+    site_address = _site_addresses.get_or_create(
+        id='dcde565b-ff0b-4177-9c0b-f3d8d131ce02'
+    )
+
+    assert site_address is not None
+    site_address.address_line_1 = "12 Stephen Mews"
+    site_address.town_city = "London"
+    site_address.postcode = "W1T 1AH"
+    site_address.description = "Hactar Towers"
+    _site_addresses.save(site_address)
+
     import uuid
     id = uuid.UUID(SITE_ADDRESS_UUID)
-    assert _site_addresses.get(id=id) is not None
+    uuid_address = _site_addresses.get(id=id)
+    str_address = _site_addresses.get(id=str(id))
+    assert str_address is not None
+    assert uuid_address is not None
 
 
 @purger(_addresses)

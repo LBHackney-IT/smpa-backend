@@ -53,6 +53,8 @@ class Application(BaseModel, metaclass=ORMMeta):
         ModelType('smpa.models.proposal.ProposalExtension')
     proposal_equipment: Type['smpa.models.proposal.ProposalEquipment'] = \
         ModelType('smpa.models.proposal.ProposalEquipment')
+    document_files: Type['smpa.models.document.DocumentFile'] = \
+        ModelType('smpa.models.document.DocumentFile')
 
     # This is Ana's Application state
     proposalFlow: str = StringType()
