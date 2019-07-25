@@ -4,8 +4,8 @@ import tempfile
 
 from typing import Optional
 
-from smpa.resources.core import Resource
-from smpa.services.document import _document_sizes, _document_files
+from smpa.resources.core import Resource, ListResource
+from smpa.services.document import _document_sizes, _document_files, _document_types
 from smpa.schemas.document import document_upload_schema
 
 
@@ -118,3 +118,59 @@ class DocumentSizeResource(Resource):
                 description: Input body formatting issue
         """
         super().on_post(req, resp)
+
+
+class DocumentTypePostResource(ListResource):
+    _service = _document_types
+    auth = {
+        'exempt_methods': ['OPTIONS', 'GET']
+    }
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Get all DocumentTypes from the DB
+        tags:
+            - DocumentType
+        parameters:
+            - in: query
+              schema: CoreListSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: All DocumentTypes
+                schema:
+                    type: array
+                    items: DocumentType
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp)
+
+
+class DocumentTypePatchResource(Resource):
+    _service = _document_types
+    auth = {
+        'exempt_methods': ['OPTIONS', 'GET']
+    }
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response, id: str = None) -> None:
+        """
+        ---
+        summary: Get one DocumentType from the database
+        tags:
+            - DocumentType
+        parameters:
+            - in: path
+              schema: CoreGetSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: One DocumentType
+                schema: DocumentType
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp, id)

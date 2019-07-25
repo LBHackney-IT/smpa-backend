@@ -145,6 +145,30 @@ class LinearUnitListResource(ListResource):
         """
         super().on_get(req, resp)
 
+    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Add new LinearUnit to the database
+        tags:
+            - LinearUnit
+        parameters:
+            - in: body
+              schema: LinearUnit
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            201:
+                description: LinearUnit created successfully
+                schema: LinearUnit
+            401:
+                description: Unauthorized
+            422:
+                description: Input body formatting issue
+        """
+        super().on_post(req, resp)
+
 
 class LinearUnitResource(Resource):
     _service = _linear_units
@@ -197,27 +221,3 @@ class LinearUnitResource(Resource):
                 description: Input body formatting issue
         """
         super().on_patch(req, resp, id)
-
-    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
-        """
-        ---
-        summary: Add new LinearUnit to the database
-        tags:
-            - LinearUnit
-        parameters:
-            - in: body
-              schema: LinearUnit
-        consumes:
-            - application/json
-        produces:
-            - application/json
-        responses:
-            201:
-                description: LinearUnit created successfully
-                schema: LinearUnit
-            401:
-                description: Unauthorized
-            422:
-                description: Input body formatting issue
-        """
-        super().on_post(req, resp)
