@@ -206,7 +206,7 @@ def init_routes(api, config):
 
     add_route(api, '/applications', applications_post)
     add_route(api, '/applications/{id}', applications_patch)
-    add_route(api, '/documents/upload/{application_id}', document_file_post)
+    add_route(api, '/documents', document_file_post)
 
     add_route(api, '/users/create', users_post)
     add_route(api, '/users', users_list)

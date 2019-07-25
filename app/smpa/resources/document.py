@@ -12,9 +12,8 @@ from smpa.schemas.document import document_upload_schema
 class DocumentFilePostResource(Resource):
 
     _service = _document_files
-    deserializers = {"post": document_upload_schema}
 
-    def on_post(self, req, resp, application_id: str):
+    def on_post(self, req: falcon.Request, resp: falcon.Response):
         """
         ---
         summary: Add new DocumentFile to the database and upload a file
@@ -36,7 +35,7 @@ class DocumentFilePostResource(Resource):
             422:
                 description: Input body formatting issue
         """
-        rv = _document_files.create(req, application_id)
+        rv = _document_files.create(req)
 
         resp.status = falcon.HTTP_201
         resp.body = self._json_or_404(rv)
