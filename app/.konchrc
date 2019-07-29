@@ -46,6 +46,9 @@ from smpa.services.application import _applications  # NOQA
 from smpa.services.proposal import *  # NOQA
 from smpa.services.proposal import _proposals_extension, _proposals_equipment  # NOQA
 
+# Other imports
+from smpa.helpers.govpay.client import GovPayClient
+
 
 konch.config({
     "banner": "<<<< SmPA >>>>",
