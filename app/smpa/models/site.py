@@ -32,7 +32,7 @@ class SiteConstraints(BaseModel, metaclass=ORMMeta):
     """Planning constraints on the site. These field names come from the
     geoserver.
     """
-    has_boundry: str = StringType()
+    has_boundary: str = StringType()
     nb_a4d: int = IntType()
     a4d_name: str = StringType()
     nb_conarea: int = IntType()
