@@ -9,7 +9,10 @@
 import datetime
 from importlib import import_module
 from schematics.models import Model, ModelMeta
+from schematics.transforms import blacklist
 from inflection import tableize, underscore
+from bson.objectid import ObjectId
+from schematics.contrib.mongo import ObjectIdType
 from schematics.types import (
     StringType, BooleanType, DateTimeType, IntType, UUIDType, BaseType, ListType
 )
@@ -124,8 +127,8 @@ class BaseModel(Model):
     _uniques = []
 
     id: str = UUIDType()
-    created_at: datetime = DateTimeType(default=datetime.datetime.now)
-    updated_at: datetime = DateTimeType(default=datetime.datetime.now)
+    created_at: datetime.datetime = DateTimeType()
+    updated_at: datetime.datetime = DateTimeType()
 
     def validate(self):
         console.debug('VALIDATING')
@@ -188,6 +191,11 @@ class BaseModel(Model):
         return u'<{}: {} object>'.format(self.__class__.__name__, self.__class__.__name__)
 
 
-###################################
-# Types
-###################################
+class MongoModel(BaseModel):
+
+    class Options:
+        roles = {
+            'default': blacklist('_id', )
+        }
+
+    _id: ObjectId = ObjectIdType()

@@ -24,6 +24,7 @@ docs/build/**/*
 # Redis data folder
 docker/redis/**/*
 docker/localstack-data/**/*
+docker/mongo/**/*
 
 # MyPy cache
 .mypy_cache/**/*

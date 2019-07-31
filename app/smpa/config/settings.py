@@ -12,6 +12,11 @@ class Config(object):
     RDB_DB = os.environ.get('RDB_DB')
     RDB_PASSWORD = os.environ.get('RDB_PASSWORD')
 
+    DOCUMENT_DB_HOST = os.environ.get('DOCUMENT_DB_HOST')
+    DOCUMENT_DB_PORT = os.environ.get('DOCUMENT_DB_PORT')
+    DOCUMENT_DB_DB = os.environ.get('DOCUMENT_DB_DB')
+    DOCUMENT_DB_PASSWORD = os.environ.get('DOCUMENT_DB_PASSWORD', '')
+
 
 class ConfigTest(Config):
 
@@ -21,6 +26,7 @@ class ConfigTest(Config):
     debug = True
 
     RDB_DB = 'test_' + str(os.environ.get('RDB_DB'))
+    DOC_DB = 'test_' + str(os.environ.get('DOCUMENT_DB_NAME'))
 
 
 class ConfigDevelopment(Config):

@@ -37,6 +37,7 @@ localstack-client = "^0.9.0"
 falcon-multipart = "^0.2.0"
 streaming_form_data = "^1.4"
 notifications-python-client = "^5.3"
+pymongo = "^3.8"
 
 
 [tool.poetry.dev-dependencies]

@@ -24,6 +24,7 @@ from .config.settings import init_settings
 from .helpers.swagger import init_swagger
 from .helpers.startup import Startup
 from .helpers.console import console
+from .helpers.document_db import DocumentDB
 from .config.settings import Config
 from .rdb.connection import RethinkDB
 from .rdb.registry import model_registry
@@ -77,6 +78,7 @@ api.req_options.auto_parse_form_urlencoded = True
 
 config: Config
 db: RethinkDB
+db: DocumentDB
 
 
 def create_app():
@@ -91,6 +93,10 @@ def create_app():
     db = RethinkDB()
     db.init()
     model_registry.init()
+
+    # Ensure the DocumentDB is set up
+    db = DocumentDB(config)
+    db = db.init()
 
     # Set up initial data and routes
     Startup.init_data()
