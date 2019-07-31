@@ -28,12 +28,12 @@ class S3:
 
     def save(self, file_obj, path):
 
+        buffer = BytesIO()
         while True:
             chunk = file_obj.file.read(self._CHUNK_SIZE_BYTES)
             if not chunk:
                 break
 
-            buffer = BytesIO()
             buffer.write(chunk)
 
         buffer.seek(0)
