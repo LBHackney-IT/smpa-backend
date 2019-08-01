@@ -9,7 +9,7 @@ services:
   # S3
   localstack-s3:
     image: localstack/localstack:latest
-    container_name: localstack-s3
+    container_name: smpa_s3
     environment:
      - SERVICES=s3:5002
      - DEFAULT_REGION=eu-west-2
@@ -23,7 +23,7 @@ services:
   # MongoDB (for AWS DocumentDB compatibility)
   mongo:
     image: mvertes/alpine-mongo:3.6.5-0
-    container_name: mongo
+    container_name: smpa_mongo
     ports:
       - "27017:27017"
     volumes:

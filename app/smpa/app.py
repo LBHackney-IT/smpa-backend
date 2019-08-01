@@ -24,10 +24,10 @@ from .config.settings import init_settings
 from .helpers.swagger import init_swagger
 from .helpers.startup import Startup
 from .helpers.console import console
-from .helpers.document_db import DocumentDB
 from .config.settings import Config
-from .rdb.connection import RethinkDB
-from .rdb.registry import model_registry
+from .db.documentdb.connection import DocumentDB
+from .db.documentdb.registry import model_registry
+
 from .routes import init_routes, EXEMPT_ROUTES
 
 from falcon_multipart.middleware import MultipartMiddleware
@@ -77,7 +77,7 @@ api.req_options.auto_parse_form_urlencoded = True
 
 
 config: Config
-db: RethinkDB
+# db: RethinkDB
 db: DocumentDB
 
 
@@ -90,13 +90,14 @@ def create_app():
     config = settings
 
     # Ensure the DB is set up
-    db = RethinkDB()
-    db.init()
-    model_registry.init()
+    # db = RethinkDB()
+    # db.init()
+    # model_registry.init()
 
     # Ensure the DocumentDB is set up
     db = DocumentDB(config)
     db = db.init()
+    model_registry.init()
 
     # Set up initial data and routes
     Startup.init_data()

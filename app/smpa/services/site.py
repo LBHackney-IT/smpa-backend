@@ -6,16 +6,16 @@
     Services for site models.
 """
 
-from .rethink import RService
+from .mongo import DService
 
 from ..models.site import SiteArea, SiteConstraints
 
 
-class SiteAreaService(RService):
+class SiteAreaService(DService):
     __model__ = SiteArea
 
 
-class SiteConstraintsService(RService):
+class SiteConstraintsService(DService):
     __model__ = SiteConstraints
 
 

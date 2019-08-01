@@ -1,4 +1,12 @@
-import os
+# -*- coding: utf-8 -*-
+
+"""
+    smpa.db.documentdb.connection
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    DocumentDB connection class
+"""
+
+
 from pymongo import MongoClient
 
 

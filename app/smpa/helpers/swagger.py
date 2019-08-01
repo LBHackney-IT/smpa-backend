@@ -3,8 +3,8 @@ from apispec.exceptions import DuplicateComponentNameError
 from falcon_apispec import FalconPlugin
 
 from ..openapi.schematics import SchematicsPlugin
-from ..rdb.registry import model_registry
 from smpa.helpers.console import console
+from smpa.db.documentdb.registry import model_registry
 
 
 def create_spec(app):

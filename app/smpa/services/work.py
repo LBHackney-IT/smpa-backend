@@ -39,126 +39,126 @@ from ..models.work import (
     GatesFencesWallsType,
 )
 
-from .rethink import RService
+from .mongo import DService
 
 
-class WorksLocationService(RService):
+class WorksLocationService(DService):
     __model__ = WorksLocation
 
 
-class BasementWorksTypeService(RService):
+class BasementWorksTypeService(DService):
     __model__ = BasementWorksType
 
 
-class RoofWorksTypeService(RService):
+class RoofWorksTypeService(DService):
     __model__ = RoofWorksType
 
 
-class BorderWorksTypeService(RService):
+class BorderWorksTypeService(DService):
     __model__ = BorderWorksType
 
 
-class AccessWorksScopeService(RService):
+class AccessWorksScopeService(DService):
     __model__ = AccessWorksScope
 
 
-class AccessWorksTypeService(RService):
+class AccessWorksTypeService(DService):
     __model__ = AccessWorksType
 
 
-class ParkingWorksScopeService(RService):
+class ParkingWorksScopeService(DService):
     __model__ = ParkingWorksScope
 
 
-class EquipmentWorksTypeService(RService):
+class EquipmentWorksTypeService(DService):
     __model__ = EquipmentWorksType
 
 
-class EquipmentWorksConservationTypeService(RService):
+class EquipmentWorksConservationTypeService(DService):
     __model__ = EquipmentWorksConservationType
 
 
-class WorkExtensionOptionService(RService):
+class WorkExtensionOptionService(DService):
     __model__ = WorkExtensionOption
 
 
-class ExtensionOriginalHouseSingleStoreyExtensionService(RService):
+class ExtensionOriginalHouseSingleStoreyExtensionService(DService):
     __model__ = ExtensionOriginalHouseSingleStoreyExtension
 
 
-class ExtensionOriginalHouseTwoStoreyExtensionService(RService):
+class ExtensionOriginalHouseTwoStoreyExtensionService(DService):
     __model__ = ExtensionOriginalHouseTwoStoreyExtension
 
 
-class ExtensionOriginalHousePartSinglePartTwoStoreyExtensionService(RService):
+class ExtensionOriginalHousePartSinglePartTwoStoreyExtensionService(DService):
     __model__ = ExtensionOriginalHousePartSinglePartTwoStoreyExtension
 
 
-class ExtensionOriginalHouseBasementService(RService):
+class ExtensionOriginalHouseBasementService(DService):
     __model__ = ExtensionOriginalHouseBasement
 
 
-class ExtensionOriginalHouseRoofService(RService):
+class ExtensionOriginalHouseRoofService(DService):
     __model__ = ExtensionOriginalHouseRoof
 
 
-class ExtensionOutbuildingService(RService):
+class ExtensionOutbuildingService(DService):
     __model__ = ExtensionOutbuilding
 
 
-class ExtensionOriginalHousePorchService(RService):
+class ExtensionOriginalHousePorchService(DService):
     __model__ = ExtensionOriginalHousePorch
 
 
-class ExtensionOriginalHouseBalconyTerraceService(RService):
+class ExtensionOriginalHouseBalconyTerraceService(DService):
     __model__ = ExtensionOriginalHouseBalconyTerrace
 
 
-class ExtensionOriginalHouseStaircaseService(RService):
+class ExtensionOriginalHouseStaircaseService(DService):
     __model__ = ExtensionOriginalHouseStaircase
 
 
-class ExtensionOriginalHouseWindowsDoorsService(RService):
+class ExtensionOriginalHouseWindowsDoorsService(DService):
     __model__ = ExtensionOriginalHouseWindowsDoors
 
 
-class ExtensionOriginalHouseCladdingService(RService):
+class ExtensionOriginalHouseCladdingService(DService):
     __model__ = ExtensionOriginalHouseCladding
 
 
-class WorkService(RService):
+class WorkService(DService):
     __model__ = Work
 
 
-class WorkExtensionOriginalHouseService(RService):
+class WorkExtensionOriginalHouseService(DService):
     __model__ = WorkExtensionOriginalHouse
 
 
-class WorkExtensionIncidentalBuildingsService(RService):
+class WorkExtensionIncidentalBuildingsService(DService):
     __model__ = WorkExtensionIncidentalBuildings
 
 
-class WorkExtensionBoundariesService(RService):
+class WorkExtensionBoundariesService(DService):
     __model__ = WorkExtensionBoundaries
 
 
-class WorkExtensionMeansOfAccessService(RService):
+class WorkExtensionMeansOfAccessService(DService):
     __model__ = WorkExtensionMeansOfAccess
 
 
-class WorkExtensionParkingService(RService):
+class WorkExtensionParkingService(DService):
     __model__ = WorkExtensionParking
 
 
-class WorkEquipmentService(RService):
+class WorkEquipmentService(DService):
     __model__ = WorkEquipment
 
 
-class WorkTreesService(RService):
+class WorkTreesService(DService):
     __model__ = WorkTrees
 
 
-class GatesFencesWallsTypeService(RService):
+class GatesFencesWallsTypeService(DService):
     __model__ = GatesFencesWallsType
 
 

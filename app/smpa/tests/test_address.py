@@ -57,7 +57,9 @@ def test_new(address):
 
 
 @pytest.mark.slow
-def test_first():
+@purger(_addresses)
+def test_first(address):
+    _site_addresses.get_or_create(postcode='W1T 1AH', town_city='London')
     sa = _site_addresses.first(postcode='W1T 1AH')
     assert sa is not None
     assert sa.town_city == 'London'
@@ -69,7 +71,7 @@ def test_get_value_error():
         _addresses.get(id=None)
 
 
-@purger(_addresses)
+@purger([_addresses, _site_addresses])
 def test_get_stringify_id():
     site_address = _site_addresses.get_or_create(
         id='dcde565b-ff0b-4177-9c0b-f3d8d131ce02'
@@ -92,22 +94,26 @@ def test_get_stringify_id():
 
 @purger(_addresses)
 def test_get_or_404_good():
+    _site_addresses.get_or_create(id=SITE_ADDRESS_UUID)
     assert _site_addresses.get_or_404(SITE_ADDRESS_UUID) is not None
 
 
 @purger(_addresses)
 def test_get_or_404_bad():
+    _site_addresses.get_or_create(id=SITE_ADDRESS_UUID)
     with pytest.raises(falcon.HTTPError) as e:
         res = _site_addresses.get_or_404(id='a3c09c6f-3774-4c2a-b425-3f300bc6b287')
 
 
 @purger(_addresses)
 def test_first_or_404_good():
-    assert _site_addresses.first_or_404(SITE_ADDRESS_UUID) is not None
+    _site_addresses.get_or_create(id=SITE_ADDRESS_UUID)
+    assert _site_addresses.first_or_404(id=SITE_ADDRESS_UUID) is not None
 
 
 @purger(_addresses)
 def test_first_or_404_bad():
+    _site_addresses.get_or_create(id=SITE_ADDRESS_UUID)
     with pytest.raises(falcon.HTTPError) as e:
         res = _site_addresses.first_or_404(id='a3c09c6f-3774-4c2a-b425-3f300bc6b287')
 
@@ -347,7 +353,7 @@ def test_update_with_no_changes():
 
 @purger(_addresses)
 def test_bad_limit_exception():
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         a = _addresses.get_or_create(
             postcode='N1 1NN'
         )

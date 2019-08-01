@@ -26,7 +26,7 @@ class ConfigTest(Config):
     debug = True
 
     RDB_DB = 'test_' + str(os.environ.get('RDB_DB'))
-    DOC_DB = 'test_' + str(os.environ.get('DOCUMENT_DB_NAME'))
+    DOCUMENT_DB_DB = 'test_' + str(os.environ.get('DOCUMENT_DB_DB'))
 
 
 class ConfigDevelopment(Config):

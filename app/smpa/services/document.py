@@ -8,7 +8,7 @@
 import falcon
 import uuid
 import mimetypes
-from .rethink import RService
+from .mongo import DService
 
 from typing import Optional, List
 
@@ -16,21 +16,21 @@ from smpa.helpers.s3 import s3
 from smpa.models.document import DocumentSize, DocumentFile, DocumentType
 
 
-class DocumentSizeService(RService):
+class DocumentSizeService(DService):
     __model__ = DocumentSize
 
 
 _document_sizes = DocumentSizeService()
 
 
-class DocumentTypeService(RService):
+class DocumentTypeService(DService):
     __model__ = DocumentType
 
 
 _document_types = DocumentTypeService()
 
 
-class DocumentFileService(RService):
+class DocumentFileService(DService):
     __model__ = DocumentFile
 
     def create(self, req):

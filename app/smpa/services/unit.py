@@ -6,16 +6,16 @@
     Services for units of measurement.
 """
 
-from .rethink import RService
+from .mongo import DService
 
 from ..models.unit import AreaUnit, LinearUnit
 
 
-class AreaUnitService(RService):
+class AreaUnitService(DService):
     __model__ = AreaUnit
 
 
-class LinearUnitService(RService):
+class LinearUnitService(DService):
     __model__ = LinearUnit
 
 

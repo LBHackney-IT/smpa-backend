@@ -20,8 +20,9 @@ from schematics.types import (
 from schematics.exceptions import ValidationError
 from schematics.transforms import Converter, PRIMITIVE
 
-from ..rdb.registry import model_registry
-from ..helpers.console import console
+# from ..rdb.registry import model_registry
+from smpa.db.documentdb.registry import model_registry
+from smpa.helpers.console import console
 
 
 class ListRelType(BaseType):
@@ -122,7 +123,7 @@ class ORMMeta(ModelMeta):
         return new_class
 
 
-class BaseModel(Model):
+class RDBModel(Model):
 
     _uniques = []
 
@@ -139,12 +140,12 @@ class BaseModel(Model):
             _ = self.query.get_by(column=field, value=self._data.get(field, None))
             if _ is not None and _.id != self.id:
                 raise ValidationError('Field `{}` must be unique'.format(field))
-        return super(BaseModel, self).validate()
+        return super().validate()
 
     def export(self):
         if hasattr(self, 'backrefs'):
             self._get_backrefs()
-        return super(BaseModel, self).export(field_converter=rel_exporter)
+        return super().export(field_converter=rel_exporter)
 
     def to_primitive(self):
         if hasattr(self, 'backrefs'):
@@ -191,7 +192,7 @@ class BaseModel(Model):
         return u'<{}: {} object>'.format(self.__class__.__name__, self.__class__.__name__)
 
 
-class MongoModel(BaseModel):
+class MongoModel(RDBModel):
 
     class Options:
         roles = {
@@ -199,3 +200,7 @@ class MongoModel(BaseModel):
         }
 
     _id: ObjectId = ObjectIdType()
+
+
+class BaseModel(MongoModel):
+    pass

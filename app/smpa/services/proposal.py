@@ -6,16 +6,16 @@
     Services for proposal classes
 """
 
-from .rethink import RService
+from .mongo import DService
 
 from ..models.proposal import ProposalExtension, ProposalEquipment
 
 
-class ProposalExtensionService(RService):
+class ProposalExtensionService(DService):
     __model__ = ProposalExtension
 
 
-class ProposalEquipmentService(RService):
+class ProposalEquipmentService(DService):
     __model__ = ProposalEquipment
 
 

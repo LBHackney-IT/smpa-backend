@@ -8,10 +8,10 @@
 
 from ..models.application import Application
 
-from .rethink import RService
+from .mongo import DService
 
 
-class ApplicationService(RService):
+class ApplicationService(DService):
     __model__ = Application
 
 

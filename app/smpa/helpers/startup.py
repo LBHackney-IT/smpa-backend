@@ -100,13 +100,15 @@ class Startup:
     @classmethod
     def _add_users(self):
         super_admin = _roles.first(name='SuperAdmin')
+        role_id = str(super_admin.id)
         for _ in SUPERADMIN_USERS:
             _users.get_or_create(
                 id=_['id'],
                 email=_['email'],
                 password=_['password'],
-                role_id=str(super_admin.id)
+                role_id=role_id
             )
+        console.log('Added admin users')
 
     @classmethod
     def _dummy_data(self):

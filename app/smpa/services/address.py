@@ -10,7 +10,7 @@ from ..models.address import (
     Address, SiteAddress, BS7666Address, InternationalAddress, ExternalAddress
 )
 
-from .rethink import RService as Service
+from .mongo import DService as Service
 
 
 class AddressService(Service):

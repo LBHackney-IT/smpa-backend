@@ -62,14 +62,17 @@ class DService(object):
 
         return m
 
-    def get(self, id: Optional[str] = None, _id: Optional[ObjectId] = None) -> BaseModel:
-        if _id is not None:
-            key = '_id'
-            id = ObjectId(_id)
+    def get(self, id: Optional[str] = None, oid: Optional[ObjectId] = None) -> BaseModel:
+        if id is None and oid is None:
+            raise ValueError('You must supply an id or oid')
+        if oid is not None:
+            rv = self.q.find_one({'_id': oid})
         else:
-            key = 'id'
-        rv = self.q.find_one({key: id})
-        return self.__model__(rv)
+            rv = self.q.find_one({'id': str(id)})
+
+        if rv is not None:
+            return self.__model__(rv)
+        return None
 
     def get_or_404(self, id: str):
         instance = self.get(id=id)
@@ -78,12 +81,10 @@ class DService(object):
 
         return instance
 
-    def first(self, order_by: Optional[str] = '<created_at', **kwargs):
+    def first(self, **kwargs):
         """Fetch the first item that matches your filter.
-        To set the sorting direction prepend with `<` or `>`
 
         Args:
-            order_by (str, optional): column on which to order the results
             **kwargs: keyword args on which to filter, column=value
 
         Returns:
@@ -92,48 +93,37 @@ class DService(object):
         Raises:
             ValueError: Description
         """
+        kwargs = self._preprocess(**kwargs)
         rv = self.q.find(kwargs).sort("created_at", pymongo.ASCENDING).limit(1)
         try:
             return self.__model__(rv[0])
         except Exception:
             return None
 
-    def first_or_404(self, order_by: Optional[str] = None, **kwargs):
-        kwargs = self._preprocess(**kwargs)
-        rv = self.q.find(kwargs).sort("created_at", pymongo.ASCENDING).limit(1)
+    def first_or_404(self, **kwargs):
+        rv = self.first(**kwargs)
         if not rv:
             raise falcon.HTTPError(falcon.HTTP_404, 'Object not found')
 
-        try:
-            return self.__model__(rv[0])
-        except Exception:
-            return None
+        return rv
 
     def last(self, **kwargs):
         rv = self.q.find(kwargs).sort("created_at", pymongo.DESCENDING).limit(1)
         return self.__model__(rv[0])
 
     def create(self, **kwargs):
-        """Creates one record from the json data. You can pass json directly to
+        """Creates one or more records from the json data. You can pass json directly to
         the method by using `json` as a keyword arg.
-
-        Args:
-            kwargs (dict): The data
-
-        Returns:
-            __model__: Single model instance
         """
         kwargs = self._preprocess(**kwargs)
-        kwargs = self._set_id(kwargs)
         j = self._jsonify(kwargs)
-        j['created_at'] = arrow.now().datetime
-        try:
-            rv = self.q.insert_one(j)
-        except Exception as e:
-            console.error(e)
+        j = self._set_id(j)
+        if isinstance(j, list):
+            rv = self._insert_some(j)
         else:
-            obj = self.get(_id=rv.inserted_id)
-            return obj
+            rv = self._insert_one(j)
+
+        return rv
 
     def save(self, instance: BaseModel):
         """Save an instance.
@@ -152,14 +142,19 @@ class DService(object):
         except Exception as e:
             console.error(e)
         else:
-            obj = self.get(_id=rv.inserted_id)
+            obj = self.get(oid=rv.inserted_id)
             return obj
 
     def count(self):
         return self.q.find({}).count()
 
-    def all(self):
-        rv = [self.__model__(obj) for obj in self.q.find({})]
+    def all(self, order_by: Optional[str] = None, limit: Optional[int] = None) -> list:
+        query = self.q.find({})
+        if order_by is not None:
+            query = self._order_by(query, order_by)
+        if limit:
+            query = query.limit(limit)
+        rv = [self.__model__(obj) for obj in query]
         return rv
 
     def find(self, order_by: Optional[str] = None, limit: Optional[int] = None, **kwargs):
@@ -172,12 +167,8 @@ class DService(object):
         kwargs = self._preprocess(**kwargs)
         j = self._jsonify(kwargs)
         query = self.q.find(j)
-        sort_order = pymongo.ASCENDING
         if order_by is not None:
-            if order_by.startswith('>'):
-                sort_order = pymongo.ASCENDING
-            order_by = order_by.replace('<', '').replace('>', '')
-            query = query.sort(order_by, sort_order)
+            query = self._order_by(query, order_by)
         if limit is not None:
             query = query.limit(limit)
 
@@ -221,16 +212,50 @@ class DService(object):
         """
             Delete an instance from the DB.
         """
-        self.q.delete_one({'id': instance.id})
-        return True
+        rv = self.q.delete_one({'id': str(instance.id)})
+        return rv
 
     ################################################################################################
     # PRIVATE METHODS
     ################################################################################################
 
+    def _order_by(self, query, order_by):
+        sort_order = pymongo.ASCENDING
+        if order_by.startswith('>'):
+            sort_order = pymongo.DESCENDING
+        order_by = order_by.replace('<', '').replace('>', '')
+        query = query.sort(order_by, sort_order)
+        return query
+
+    def _insert_one(self, data):
+        data['created_at'] = arrow.now().datetime
+        try:
+            rv = self.q.insert_one(data)
+        except Exception as e:
+            console.error(e)
+        else:
+            obj = self.get(oid=rv.inserted_id)
+            return obj
+
+    def _insert_some(self, data):
+        for item in data:
+            item['created_at'] = arrow.now().datetime
+        try:
+            rv = self.q.insert_many(data)
+        except Exception as e:
+            console.error(e)
+        else:
+            return [self.get(oid=oid) for oid in rv.inserted_ids]
+
     def _set_id(self, data) -> dict:
-        if not data.get('id', None):
-            data['id'] = str(uuid.uuid4())
+        if isinstance(data, list):
+            for item in data:
+                if not item.get('id', None):
+                    item['id'] = str(uuid.uuid4())
+        else:
+            if not data.get('id', None):
+                data['id'] = str(uuid.uuid4())
+
         return data
 
     def _purge(self):
@@ -270,6 +295,10 @@ class DService(object):
             return j
         if j is None:
             for k, v in data.items():
+                if isinstance(v, ObjectId):
+                    data[k] = str(v)
+                if isinstance(v, uuid.UUID):
+                    data[k] = str(v)
                 if isinstance(v, datetime) or isinstance(v, date):
                     data[k] = arrow.get(v).isoformat()
 

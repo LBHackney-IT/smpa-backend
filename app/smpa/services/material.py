@@ -6,7 +6,7 @@
     Material services.
 """
 
-from .rethink import RService
+from .mongo import DService
 from ..models.material import (
     MaterialOptionRoof, MaterialOptionWall, MaterialOptionWindow,
     MaterialOptionDoor, BaseMaterial, MaterialRoof, MaterialWall,
@@ -14,47 +14,47 @@ from ..models.material import (
 )
 
 
-class MaterialOptionRoofService(RService):
+class MaterialOptionRoofService(DService):
     __model__ = MaterialOptionRoof
 
 
-class MaterialOptionWallService(RService):
+class MaterialOptionWallService(DService):
     __model__ = MaterialOptionWall
 
 
-class MaterialOptionWindowService(RService):
+class MaterialOptionWindowService(DService):
     __model__ = MaterialOptionWindow
 
 
-class MaterialOptionDoorService(RService):
+class MaterialOptionDoorService(DService):
     __model__ = MaterialOptionDoor
 
 
-class BaseMaterialService(RService):
+class BaseMaterialService(DService):
     __model__ = BaseMaterial
 
 
-class MaterialRoofService(RService):
+class MaterialRoofService(DService):
     __model__ = MaterialRoof
 
 
-class MaterialWallService(RService):
+class MaterialWallService(DService):
     __model__ = MaterialWall
 
 
-class MaterialWindowService(RService):
+class MaterialWindowService(DService):
     __model__ = MaterialWindow
 
 
-class MaterialDoorService(RService):
+class MaterialDoorService(DService):
     __model__ = MaterialDoor
 
 
-class OtherMaterialService(RService):
+class OtherMaterialService(DService):
     __model__ = OtherMaterial
 
 
-class ExternalBuildingMaterialService(RService):
+class ExternalBuildingMaterialService(DService):
     __model__ = ExternalBuildingMaterial
 
 

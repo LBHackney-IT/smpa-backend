@@ -13,17 +13,17 @@ from typing import Optional
 
 from smpa.helpers.console import console  # NOQA
 from smpa.models.user import Agent, Applicant, Role, User, UserProfile, TelephoneNumberType
-from .rethink import RService
+from .mongo import DService
 
 
-class UserProfileService(RService):
+class UserProfileService(DService):
     __model__ = UserProfile
 
 
 _user_profiles = UserProfileService()
 
 
-class UserService(RService):
+class UserService(DService):
     __model__ = User
 
     @staticmethod
@@ -119,19 +119,19 @@ class UserService(RService):
         return hashed
 
 
-class AgentService(RService):
+class AgentService(DService):
     __model__ = Agent
 
 
-class ApplicantService(RService):
+class ApplicantService(DService):
     __model__ = Applicant
 
 
-class RoleService(RService):
+class RoleService(DService):
     __model__ = Role
 
 
-class TelephoneNumberTypeService(RService):
+class TelephoneNumberTypeService(DService):
     __model__ = TelephoneNumberType
 
 

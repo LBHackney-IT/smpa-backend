@@ -14,7 +14,7 @@ from collections import namedtuple, OrderedDict
 from typing import Union
 
 from smpa.models.core import BaseModel
-from smpa.rdb.registry import RegistryError, model_registry
+from smpa.db.documentdb.registry import RegistryError, model_registry
 
 # import marshmallow
 
