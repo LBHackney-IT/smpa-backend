@@ -585,8 +585,6 @@ def test_extension_proposal_update_means_of_access_subtypes(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert result['means_of_access']['access_works_scope_id'] \
-        == ACCESS_WORKS_SCOPES[0][0]
     assert ACCESS_WORKS_TYPES[0][0] in \
         result['means_of_access']['access_works_sub_type_ids']
     assert ACCESS_WORKS_TYPES[1][0] in \

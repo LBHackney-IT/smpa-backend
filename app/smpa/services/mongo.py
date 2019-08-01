@@ -131,12 +131,19 @@ class DService(object):
         Args:
             instance (BaseModel): The model we're saving.
         """
+        updating = False
+        if instance._id is not None and instance.id is not None:
+            updating = True
         data = instance.to_primitive()
         data = self._set_id(data)
         j = self._jsonify(data)
         if j.get('created_at', None) is None:
             j['created_at'] = arrow.now().datetime
         j['updated_at'] = arrow.now().datetime
+        if updating:
+            j.pop('id', None)
+            j.pop('_id', None)
+            self.update(str(instance.id), **j)
         try:
             rv = self.q.insert_one(j)
         except Exception as e:

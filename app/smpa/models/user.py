@@ -168,6 +168,8 @@ class User(BaseModel, metaclass=ORMMeta):
     Passwords are stored bcrypt hashed via passlib
     """
 
+    _uniques: list = ['email', ]
+
     class Options:
         roles = {
             'default': blacklist('password', 'verification_key')

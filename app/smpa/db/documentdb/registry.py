@@ -99,7 +99,11 @@ class ModelRegistry(object):
         pass
 
     def _add_indexes(self, name, model):
-        model._db[model._table].create_index('id', background=True, unique=True)
+        if model._uniques:
+            for key in model._uniques:
+                model._db[model._table].create_index(key, background=True, sparse=True, unique=True)
+
+        model._db[model._table].create_index('id', background=True, sparse=True, unique=True)
 
 
 model_registry = ModelRegistry()
