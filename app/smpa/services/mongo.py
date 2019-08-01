@@ -141,9 +141,8 @@ class DService(object):
             j['created_at'] = arrow.now().datetime
         j['updated_at'] = arrow.now().datetime
         if updating:
-            j.pop('id', None)
             j.pop('_id', None)
-            self.update(str(instance.id), **j)
+            return self.update(str(instance.id), json=j)
         try:
             rv = self.q.insert_one(j)
         except Exception as e:
