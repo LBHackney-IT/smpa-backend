@@ -51,6 +51,8 @@ class Application(BaseModel, metaclass=ORMMeta):
     )
     owner: Type[User] = ModelType(User)
 
+    ownership_declaration = BooleanType(default=False)
+
     #
     # Dynamic relations
     #

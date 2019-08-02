@@ -1141,6 +1141,22 @@ def test_application_update_ownership(session_client):
     assert j['ownership_type']['name'] == "The applicant is the sole owner of the land"
 
 
+def test_application_update_ownership_declaration(session_client):
+    body = json.dumps(
+        {
+            "ownership_declaration": True
+        }
+    )
+    rv = session_client.patch(
+        f'/api/v1/applications/{APPLICATION_ID}',
+        body,
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert j['ownership_declaration'] is True
+
+
 #
 
 ####################################################################################################
