@@ -8,6 +8,7 @@ import falcon
 from .test_auth import get_token
 from ..util import json_match, reset_test_user
 
+from smpa.services.document import _document_files
 from smpa.helpers.console import console
 
 from smpa.config.defaults import (  # NOQA
@@ -1039,6 +1040,44 @@ def test_get_documents_for_application(session_client):
         assert item['document_size']['name'] == 'A1'
         assert item['document_types_proposed'] != []
         assert item['document_types_proposed_ids'] != []
+
+
+def test_delete_document(session_client):
+    # upload a new one first
+    here = os.path.dirname(os.path.realpath(__file__))
+    filepath = os.path.join('..', here, 'images', 'test-image.png')
+    image = open(filepath, 'rb')
+    rv = session_client.post(
+        f'/api/v1/documents',
+        data={
+            "application_id": APPLICATION_ID,
+            "document_size_id": "a3ec6180-a863-43e9-8f6c-de7a171ce489",
+            "existing": ID_STR,
+            "proposed": ID_STR
+        },
+        files={
+            "document": image
+        },
+        headers={
+            'content-type': 'image/png',
+            "Authorization": f"jwt {TOKEN}"
+        }
+    )
+
+    assert rv.status == falcon.HTTP_CREATED
+    j = json.loads(rv.body)
+    assert j['id'] is not None
+    document_id = j['id']
+    # Now delete it
+    rv = session_client.delete(
+        f'/api/v1/documents/{document_id}',
+        headers={
+            "Authorization": f"jwt {TOKEN}"
+        }
+    )
+    assert rv is not None
+    console.log(rv)
+    assert _document_files.count() == 2
 
 
 #

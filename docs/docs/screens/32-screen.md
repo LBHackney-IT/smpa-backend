@@ -167,3 +167,17 @@ Post vars:
         ]
       }
     ]
+
+
+## Delete a document
+
+`DELETE /api/v1/documents/{document_id}`
+
+## Returns
+
+    {
+      "success": true,
+      "message": "Deleted 1"
+    }
+
+If the document_id does not exist it will raise a 404.

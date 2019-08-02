@@ -9,6 +9,37 @@ from smpa.services.document import _document_sizes, _document_files, _document_t
 from smpa.schemas.document import document_upload_schema
 
 
+class DocumentFileDeleteResource(Resource):
+
+    _service = _document_files
+
+    def on_delete(self, req: falcon.Request, resp: falcon.Response, id: str = None) -> None:
+        """
+        ---
+        summary: Delete a DocumentFile record from the database
+        tags:
+            - DocumentFile
+        parameters:
+            - in: body
+              schema: DocumentFile
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            200:
+                description: DocumentFile deleted successfully
+                schema: DocumentFile
+            401:
+                description: Unauthorized
+            422:
+                description: Input body formatting issue
+        """
+        rv = _document_files.delete_by_id(id)
+        resp.status = falcon.HTTP_200
+        resp.body = rv
+
+
 class DocumentFilePostResource(Resource):
 
     _service = _document_files

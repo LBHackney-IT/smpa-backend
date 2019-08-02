@@ -39,7 +39,7 @@ from .resources import (  # NOQA
     BS7666AddressResource, ExternalAddressResource, InternationalAddressResource,
     # Document resources
     DocumentSizeResource, DocumentFilePostResource, DocumentTypePostResource,
-    DocumentTypePatchResource, DocumentFileApplicationResource,
+    DocumentTypePatchResource, DocumentFileApplicationResource, DocumentFileDeleteResource,
     # Application resources
     ApplicationResourcePost, ApplicationResourcePatch,
     # Site resources
@@ -110,6 +110,7 @@ def init_routes(api, config):
     users_list = UserResourceList()
     users_patch = UserResourcePatch()
     user_profiles_patch = UserProfileResourcePatch()
+    document_file_delete = DocumentFileDeleteResource()
     document_file_post = DocumentFilePostResource()
     document_file_application = DocumentFileApplicationResource()
     document_type_post = DocumentTypePostResource()
@@ -212,6 +213,7 @@ def init_routes(api, config):
     add_route(api, '/applications/{id}', applications_patch)
     add_route(api, '/applications/{id}/documents', document_file_application)
     add_route(api, '/documents', document_file_post)
+    add_route(api, '/documents/{id}', document_file_delete)
 
     add_route(api, '/users/create', users_post)
     add_route(api, '/users', users_list)
@@ -290,6 +292,7 @@ def init_routes(api, config):
         document_type_post,
         document_type_patch,
         document_file_application,
+        document_file_delete,
 
         ########################################
         # FUTURE ROUTES FOR AN ADMIN INTERFACE #

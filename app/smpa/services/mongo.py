@@ -222,6 +222,20 @@ class DService(object):
         rv = self.q.delete_one({'id': str(instance.id)})
         return rv
 
+    def delete_by_id(self, id: str):
+        """
+            Delete an instance from the DB.
+        """
+        rv = self.q.delete_one({'id': str(id)})
+        if rv.deleted_count > 0:
+            msg = {
+                "success": True,
+                "message": f"Deleted {rv.deleted_count}"
+            }
+        else:
+            raise falcon.HTTPError(falcon.HTTP_404, 'Object not found')
+        return json.dumps(msg)
+
     ################################################################################################
     # PRIVATE METHODS
     ################################################################################################
