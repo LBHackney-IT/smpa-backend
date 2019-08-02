@@ -20,3 +20,13 @@ class Declaration(BaseModel, metaclass=ORMMeta):
         name (TYPE): The name of the declaration
     """
     name: str = StringType(max_length=255, required=True)
+
+
+class OwnershipType(BaseModel, metaclass=ORMMeta):
+
+    """Various types of ownership
+
+    Attributes:
+        name (TYPE): The name of the type
+    """
+    name: str = StringType(max_length=255, required=True)

@@ -31,7 +31,8 @@ from smpa.config.defaults import (  # NOQA
     MATERIALS_DOOR,
     ROLES,
     SUPERADMIN_USERS,
-    DECLARATIONS
+    DECLARATIONS,
+    OWNERSHIP_TYPES,
 )
 
 TEXT_BLOB = """Praesent commodo cursus magna,
@@ -1117,10 +1118,27 @@ def test_application_update_declaration(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     j = json.loads(rv.body)
-    print(rv.body)
     assert j['declaration_id'] == "e0bbf434-9c28-4fe8-b4ae-892b3e359479"
     assert j['declaration'] is not None
     assert j['declaration']['name'] == "None of the above"
+
+
+def test_application_update_ownership(session_client):
+    body = """
+        {
+            "ownership_type_id": "784e54c7-d6da-4613-ac5a-046a27278f4b"
+        }
+    """
+    rv = session_client.patch(
+        f'/api/v1/applications/{APPLICATION_ID}',
+        body,
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert j['ownership_type_id'] == "784e54c7-d6da-4613-ac5a-046a27278f4b"
+    assert j['ownership_type'] is not None
+    assert j['ownership_type']['name'] == "The applicant is the sole owner of the land"
 
 
 #

@@ -15,7 +15,7 @@ from schematics.types import (  # NOQA
 )
 
 from .user import User
-from .meta import Declaration
+from .meta import Declaration, OwnershipType
 # from .address import SiteAddress
 
 
@@ -36,6 +36,13 @@ class Application(BaseModel, metaclass=ORMMeta):
         service='DeclarationService'
     )
     declaration: Type[Declaration] = ModelType(Declaration)
+
+    ownership_type_id = RelType(
+        UUIDType(),
+        to_field='ownership_type',
+        service='OwnershipTypeService'
+    )
+    ownership_type: Type[OwnershipType] = ModelType(OwnershipType)
 
     owner_id = RelType(
         UUIDType(),

@@ -8,7 +8,7 @@
 
 from .mongo import DService
 
-from ..models.meta import Declaration
+from ..models.meta import Declaration, OwnershipType
 
 
 class DeclarationService(DService):
@@ -16,3 +16,10 @@ class DeclarationService(DService):
 
 
 _declarations = DeclarationService()
+
+
+class OwnershipTypeService(DService):
+    __model__ = OwnershipType
+
+
+_ownership_types = OwnershipTypeService()

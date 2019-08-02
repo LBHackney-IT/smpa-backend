@@ -56,7 +56,7 @@ from .resources import (  # NOQA
     EquipmentWorksConservationTypePost, EquipmentWorksConservationTypePatch,
     GatesFencesWallsTypePost, GatesFencesWallsTypePatch,
     # Meta
-    DeclarationListResource
+    DeclarationListResource, OwnershipTypeListResource
 )
 
 EXEMPT_ROUTES = [
@@ -118,6 +118,7 @@ def init_routes(api, config):
     document_type_post = DocumentTypePostResource()
     document_type_patch = DocumentTypePatchResource()
     declarations_list = DeclarationListResource()
+    ownership_types_list = OwnershipTypeListResource()
 
     # To fix
     area_units = AreaUnitResource()
@@ -218,6 +219,7 @@ def init_routes(api, config):
     add_route(api, '/documents', document_file_post)
     add_route(api, '/documents/{id}', document_file_delete)
     add_route(api, '/declarations', declarations_list)
+    add_route(api, '/ownership-types', ownership_types_list)
 
     add_route(api, '/users/create', users_post)
     add_route(api, '/users', users_list)
@@ -298,6 +300,7 @@ def init_routes(api, config):
         document_file_application,
         document_file_delete,
         declarations_list,
+        ownership_types_list,
 
         ########################################
         # FUTURE ROUTES FOR AN ADMIN INTERFACE #

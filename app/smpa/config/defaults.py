@@ -20,6 +20,17 @@ DECLARATIONS = [
 ]
 
 
+OWNERSHIP_TYPES = [
+    ("784e54c7-d6da-4613-ac5a-046a27278f4b",
+        "The applicant is the sole owner of the land"),
+    ("5b82763c-b4b1-44d5-b657-a12ed6e3e589",
+        "The applicant does not own all of the land and has notified all other owners"),
+    ("b1a704bc-86c1-493a-b396-d406b7ca8438",
+        "The applicant does not own all of the land and has notified some of the owners"),
+    ("4d618804-ccc3-478e-be36-4746000a67d8",
+        "The applicant does not own all of the land and has been unable to notify any other onwers")
+]
+
 ####################################################################################################
 # Units / locations
 ####################################################################################################
