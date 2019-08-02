@@ -29,6 +29,8 @@ class Application(BaseModel, metaclass=ORMMeta):
     works_description: str = StringType()
 
     free_text_description: str = StringType()
+    ownership_declaration = BooleanType(default=False)
+    reduction_eligible = BooleanType(default=False)
 
     declaration_id = RelType(
         UUIDType(),
@@ -50,8 +52,6 @@ class Application(BaseModel, metaclass=ORMMeta):
         service='UserService'
     )
     owner: Type[User] = ModelType(User)
-
-    ownership_declaration = BooleanType(default=False)
 
     #
     # Dynamic relations
