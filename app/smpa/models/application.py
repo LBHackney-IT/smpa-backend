@@ -27,6 +27,8 @@ class Application(BaseModel, metaclass=ORMMeta):
     date_works_completed: date = DateType()
     works_description: str = StringType()
 
+    free_text_description: str = StringType()
+
     owner_id = RelType(
         UUIDType(),
         to_field='owner',

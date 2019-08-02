@@ -33,6 +33,12 @@ from smpa.config.defaults import (  # NOQA
     SUPERADMIN_USERS
 )
 
+TEXT_BLOB = """Praesent commodo cursus magna,
+vel scelerisque nisl consectetur et. Praesent commodo cursus
+magna, vel scelerisque nisl consectetur et. Donec sed odio dui.
+Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis
+natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+"""
 
 DEFAULT_DATA_ENDPOINTS = [
     "/api/v1/roof-works-types",
@@ -147,6 +153,23 @@ def test_application_update(session_client):
     j = json.loads(rv.body)
     assert j['works_started'] is True
     assert j['date_works_started'] == "2018-01-01"
+
+
+def test_application_free_text(session_client):
+    body = json.dumps(
+        {
+            "free_text_description": TEXT_BLOB
+        }
+    )
+    rv = session_client.patch(
+        f'/api/v1/applications/{APPLICATION_ID}',
+        body,
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert j['free_text_description'] is not None
+    assert j['free_text_description'] == TEXT_BLOB
 
 
 def test_site_address_create(session_client):
