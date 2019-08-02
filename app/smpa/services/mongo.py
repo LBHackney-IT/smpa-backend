@@ -151,8 +151,9 @@ class DService(object):
             obj = self.get(oid=rv.inserted_id)
             return obj
 
-    def count(self):
-        return self.q.find({}).count()
+    def count(self, **kwargs):
+        j = self._jsonify(kwargs)
+        return self.q.count_documents(j)
 
     def all(self, order_by: Optional[str] = None, limit: Optional[int] = None) -> list:
         query = self.q.find({})

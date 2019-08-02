@@ -41,6 +41,34 @@ class DocumentFilePostResource(Resource):
         resp.body = self._json_or_404(rv)
 
 
+class DocumentFileApplicationResource(ListResource):
+
+    _service = _document_files
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response, application_id: Optional[str] = None) -> None:
+        """
+        ---
+        summary: Get an application's documents from the database
+        tags:
+            - Address
+        parameters:
+            - in: path
+              schema: CoreGetSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: All documents associated with an application
+                schema:
+                    type: array
+                    items: Address
+            401:
+                description: Unauthorized
+        """
+        rv = self._service.find(application_id=application_id)
+        resp.body = self._json_or_404(rv)
+
+
 class DocumentSizeResource(Resource):
     _service = _document_sizes
     auth = {
