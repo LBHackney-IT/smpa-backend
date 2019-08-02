@@ -939,8 +939,8 @@ def test_posted_image_gets_saved(session_client, monkeypatch):
         data={
             "application_id": APPLICATION_ID,
             "document_size_id": "a3ec6180-a863-43e9-8f6c-de7a171ce489",
-            "existing_str": ID_STR,
-            "proposed_str": ID_STR
+            "existing": ID_STR,
+            "proposed": ID_STR
         },
         files={
             "document": image
@@ -957,6 +957,10 @@ def test_posted_image_gets_saved(session_client, monkeypatch):
     assert j['original_name'] == 'test-image.png'
     assert '.png' in j['storage_path']
     assert j['document_size']['name'] == 'A1'
+    assert j['document_types_existing'] != []
+    assert j['document_types_existing_ids'] != []
+    assert j['document_types_proposed'] != []
+    assert j['document_types_proposed_ids'] != []
 
 
 def test_empty_existing_str(session_client, monkeypatch):
@@ -968,8 +972,8 @@ def test_empty_existing_str(session_client, monkeypatch):
         data={
             "application_id": APPLICATION_ID,
             "document_size_id": "a3ec6180-a863-43e9-8f6c-de7a171ce489",
-            "existing_str": "",
-            "proposed_str": ID_STR
+            "existing": "",
+            "proposed": ID_STR
         },
         files={
             "document": image
@@ -988,6 +992,8 @@ def test_empty_existing_str(session_client, monkeypatch):
     assert j['document_size']['name'] == 'A1'
     assert j['document_types_existing'] == []
     assert j['document_types_existing_ids'] == []
+    assert j['document_types_proposed'] != []
+    assert j['document_types_proposed_ids'] != []
 
 
 def test_get_documents_for_application(session_client):
@@ -997,15 +1003,22 @@ def test_get_documents_for_application(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     j = json.loads(rv.body)
+    print(rv.body)
     for item in j:
         assert item['original_name'] == 'test-image.png'
         assert '.png' in item['storage_path']
         assert item['document_size']['name'] == 'A1'
+        assert item['document_types_proposed'] != []
+        assert item['document_types_proposed_ids'] != []
 
+
+#
 
 ####################################################################################################
 # Leave this one till last as it outputs our completed application if you pytest -s
 ####################################################################################################
+
+#
 
 
 def test_application_get(session_client):

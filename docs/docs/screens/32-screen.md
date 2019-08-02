@@ -68,3 +68,102 @@ Post vars:
         }
       ]
     }
+
+
+## Fetch documents for an application
+
+### Example
+
+`GET /api/v1/applications/{application_id}/documents`
+
+### Returns
+
+
+    [
+      {
+        "id": "17c03191-f8a5-45eb-be68-c1f694d757cb",
+        "created_at": "2019-08-02T09:56:38.009000",
+        "updated_at": "2019-08-02T09:56:38.009000",
+        "original_name": "test-image.png",
+        "storage_path": "602c59c4-c8c5-41c9-b525-ad316fe9c136/17c03191-f8a5-45eb-be68-c1f694d757cb.png",
+        "application_id": "602c59c4-c8c5-41c9-b525-ad316fe9c136",
+        "document_size_id": "a3ec6180-a863-43e9-8f6c-de7a171ce489",
+        "document_size": {
+          "id": "a3ec6180-a863-43e9-8f6c-de7a171ce489",
+          "created_at": "2019-08-02T09:56:35.153000",
+          "updated_at": null,
+          "name": "A1"
+        },
+        "document_types_existing_ids": [
+          "cbddcfc8-d062-4202-b350-f875c04c6aa0",
+          "f1ff39d9-aab3-46e3-8749-dad11c04e3b8"
+        ],
+        "document_types_existing": [
+          {
+            "id": "cbddcfc8-d062-4202-b350-f875c04c6aa0",
+            "created_at": "2019-08-02T09:56:35.226000",
+            "updated_at": null,
+            "name": "Floor plans"
+          },
+          {
+            "id": "f1ff39d9-aab3-46e3-8749-dad11c04e3b8",
+            "created_at": "2019-08-02T09:56:35.229000",
+            "updated_at": null,
+            "name": "Other"
+          }
+        ],
+        "document_types_proposed_ids": [
+          "cbddcfc8-d062-4202-b350-f875c04c6aa0",
+          "f1ff39d9-aab3-46e3-8749-dad11c04e3b8"
+        ],
+        "document_types_proposed": [
+          {
+            "id": "cbddcfc8-d062-4202-b350-f875c04c6aa0",
+            "created_at": "2019-08-02T09:56:35.226000",
+            "updated_at": null,
+            "name": "Floor plans"
+          },
+          {
+            "id": "f1ff39d9-aab3-46e3-8749-dad11c04e3b8",
+            "created_at": "2019-08-02T09:56:35.229000",
+            "updated_at": null,
+            "name": "Other"
+          }
+        ]
+      },
+      {
+        "id": "bcd2a3a3-1986-4de4-8b00-a2a96538984f",
+        "created_at": "2019-08-02T09:56:38.122000",
+        "updated_at": "2019-08-02T09:56:38.122000",
+        "original_name": "test-image.png",
+        "storage_path": "602c59c4-c8c5-41c9-b525-ad316fe9c136/bcd2a3a3-1986-4de4-8b00-a2a96538984f.png",
+        "application_id": "602c59c4-c8c5-41c9-b525-ad316fe9c136",
+        "document_size_id": "a3ec6180-a863-43e9-8f6c-de7a171ce489",
+        "document_size": {
+          "id": "a3ec6180-a863-43e9-8f6c-de7a171ce489",
+          "created_at": "2019-08-02T09:56:35.153000",
+          "updated_at": null,
+          "name": "A1"
+        },
+        "document_types_existing_ids": [],
+        "document_types_existing": [],
+        "document_types_proposed_ids": [
+          "cbddcfc8-d062-4202-b350-f875c04c6aa0",
+          "f1ff39d9-aab3-46e3-8749-dad11c04e3b8"
+        ],
+        "document_types_proposed": [
+          {
+            "id": "cbddcfc8-d062-4202-b350-f875c04c6aa0",
+            "created_at": "2019-08-02T09:56:35.226000",
+            "updated_at": null,
+            "name": "Floor plans"
+          },
+          {
+            "id": "f1ff39d9-aab3-46e3-8749-dad11c04e3b8",
+            "created_at": "2019-08-02T09:56:35.229000",
+            "updated_at": null,
+            "name": "Other"
+          }
+        ]
+      }
+    ]
