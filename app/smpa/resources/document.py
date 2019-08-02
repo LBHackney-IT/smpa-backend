@@ -45,7 +45,7 @@ class DocumentFileApplicationResource(ListResource):
 
     _service = _document_files
 
-    def on_get(self, req: falcon.Request, resp: falcon.Response, application_id: Optional[str] = None) -> None:
+    def on_get(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None) -> None:
         """
         ---
         summary: Get an application's documents from the database
@@ -65,6 +65,7 @@ class DocumentFileApplicationResource(ListResource):
             401:
                 description: Unauthorized
         """
+        application_id = id
         rv = self._service.find(application_id=application_id)
         resp.body = self._json_or_404(rv)
 

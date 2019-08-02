@@ -930,11 +930,11 @@ def test_extension_proposal_other_materials(session_client):
     assert "The path is made of gold." in result['materials']['other']
 
 
-def test_posted_image_gets_saved(client, monkeypatch):
+def test_posted_image_gets_saved(session_client, monkeypatch):
     here = os.path.dirname(os.path.realpath(__file__))
     filepath = os.path.join('..', here, 'images', 'test-image.png')
     image = open(filepath, 'rb')
-    rv = client.post(
+    rv = session_client.post(
         f'/api/v1/documents',
         data={
             "application_id": APPLICATION_ID,
@@ -959,11 +959,11 @@ def test_posted_image_gets_saved(client, monkeypatch):
     assert j['document_size']['name'] == 'A1'
 
 
-def test_empty_existing_str(client, monkeypatch):
+def test_empty_existing_str(session_client, monkeypatch):
     here = os.path.dirname(os.path.realpath(__file__))
     filepath = os.path.join('..', here, 'images', 'test-image.png')
     image = open(filepath, 'rb')
-    rv = client.post(
+    rv = session_client.post(
         f'/api/v1/documents',
         data={
             "application_id": APPLICATION_ID,
@@ -988,6 +988,19 @@ def test_empty_existing_str(client, monkeypatch):
     assert j['document_size']['name'] == 'A1'
     assert j['document_types_existing'] == []
     assert j['document_types_existing_ids'] == []
+
+
+def test_get_documents_for_application(session_client):
+    rv = session_client.get(
+        f'/api/v1/applications/{APPLICATION_ID}/documents',
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    for item in j:
+        assert item['original_name'] == 'test-image.png'
+        assert '.png' in item['storage_path']
+        assert item['document_size']['name'] == 'A1'
 
 
 ####################################################################################################
