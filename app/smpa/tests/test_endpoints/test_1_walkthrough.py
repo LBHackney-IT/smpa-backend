@@ -101,6 +101,35 @@ def test_application_create(session_client):
     assert j['owner_id'] is not None
 
 
+def test_site_contraints(session_client):
+    body = json.dumps(
+        {
+            "uprn": 10008300829,
+            "has_boundary": "yes",
+            "nb_a4d": 2,
+            "a4d_name": "Storage and Distribution to Residential, Light Industrial to Residential",
+            "nb_conarea": 1,
+            "conarea_name": "Victoria Park",
+            "nb_tpo": 0,
+            "tpo_name": "",
+            "is_listed_building": "0",
+            "is_floodzone_2": "0",
+            "is_floodzone_3a": "0",
+            "is_floodzone_3b": "0",
+            "application_id": APPLICATION_ID
+        }
+    )
+    rv = session_client.post(
+        f'/api/v1/site-constraints',
+        body,
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert j['uprn'] == 10008300829
+    assert j['has_boundary'] == "yes"
+
+
 def test_application_update(session_client):
     body = """
         {

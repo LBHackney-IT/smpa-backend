@@ -44,6 +44,7 @@ class SiteConstraints(BaseModel, metaclass=ORMMeta):
     is_floodzone_3a: str = StringType()
     is_floodzone_3b: str = StringType()
     geom: str = StringType()  # JSON blob
+    uprn: int = IntType()
 
     # See backrefs on Application
     application_id: str = UUIDType()
