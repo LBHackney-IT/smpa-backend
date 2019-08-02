@@ -30,7 +30,8 @@ from smpa.config.defaults import (  # NOQA
     MATERIALS_WINDOW,
     MATERIALS_DOOR,
     ROLES,
-    SUPERADMIN_USERS
+    SUPERADMIN_USERS,
+    DECLARATIONS
 )
 
 TEXT_BLOB = """Praesent commodo cursus magna,
@@ -1101,6 +1102,25 @@ def test_delete_document(session_client):
     assert rv is not None
     console.log(rv)
     assert _document_files.count() == 2
+
+
+def test_application_update_declaration(session_client):
+    body = """
+        {
+            "declaration_id": "e0bbf434-9c28-4fe8-b4ae-892b3e359479"
+        }
+    """
+    rv = session_client.patch(
+        f'/api/v1/applications/{APPLICATION_ID}',
+        body,
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    print(rv.body)
+    assert j['declaration_id'] == "e0bbf434-9c28-4fe8-b4ae-892b3e359479"
+    assert j['declaration'] is not None
+    assert j['declaration']['name'] == "None of the above"
 
 
 #

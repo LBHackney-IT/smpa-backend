@@ -43,6 +43,7 @@ GET /api/v1/roof-works-types
     /api/v1/materials/options/wall
     /api/v1/materials/options/door
     /api/v1/materials/options/window
+    /api/v1/declarations
 ```
 
 These all return a list along the lines of...
@@ -81,43 +82,52 @@ These all return a list along the lines of...
 A GET for a completed application currently returns JSON like this...
 
     {
-      "id": "e7c134ed-16d7-4df7-a7e2-ee02ec16d0c5",
-      "created_at": "2019-07-04T10:06:57.037074",
-      "updated_at": "2019-07-04T10:06:57.037114",
+      "id": "a839ce47-2299-4208-9530-259b55100bdf",
+      "created_at": "2019-08-02T14:00:55.826000",
+      "updated_at": "2019-08-02T14:00:55.836000",
       "works_started": true,
       "date_works_started": "2018-01-01",
       "works_completed": false,
       "date_works_completed": null,
       "works_description": null,
+      "free_text_description": "Praesent commodo cursus magna,\nvel scelerisque nisl consectetur et. Praesent commodo cursus\nmagna, vel scelerisque nisl consectetur et. Donec sed odio dui.\nNullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis\nnatoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.\n",
+      "declaration_id": "e0bbf434-9c28-4fe8-b4ae-892b3e359479",
+      "declaration": {
+        "id": "e0bbf434-9c28-4fe8-b4ae-892b3e359479",
+        "created_at": "2019-08-02T14:00:54.665000",
+        "updated_at": null,
+        "name": "None of the above"
+      },
       "owner_id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
       "owner": {
         "id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
-        "created_at": "2019-07-04T10:07:21.646454",
-        "updated_at": "2019-07-04T10:07:21.646476",
+        "created_at": "2019-08-02T14:00:55.299000",
+        "updated_at": "2019-08-02T14:00:55.814000",
+        "_id": "5d444217991ac51fa129ea92",
         "email": "test@example.com",
-        "profile_id": "4de4485a-dac8-486d-bf2c-817314df39df",
+        "profile_id": "868d82ac-a87b-49da-9dc2-7446259a4d5d",
         "role_id": "831083f5-b7c9-4967-8561-ac4011be54e4",
         "role": {
           "id": "831083f5-b7c9-4967-8561-ac4011be54e4",
-          "created_at": "2019-07-04T10:07:21.700707",
-          "updated_at": "2019-07-04T10:07:21.700747",
+          "created_at": "2019-08-02T14:00:54.520000",
+          "updated_at": null,
           "name": "User"
         },
         "profile": {
-          "id": "4de4485a-dac8-486d-bf2c-817314df39df",
-          "created_at": "2019-07-04T10:07:21.675728",
-          "updated_at": "2019-07-04T10:07:21.675767",
+          "id": "868d82ac-a87b-49da-9dc2-7446259a4d5d",
+          "created_at": "2019-08-02T14:00:55.296000",
+          "updated_at": null,
+          "company": null,
           "name": null,
-          "preferred_contact_method": null,
           "email_addresses": null,
-          "primary_email_id": null,
-          "primary_phone_id": null
-        }
+          "phone": null
+        },
+        "verified_at": null
       },
       "site_address": {
-        "id": "fd7593b5-e161-4047-8866-9ff6195eb33a",
-        "created_at": "2019-07-04T10:07:21.492670",
-        "updated_at": "2019-07-04T10:07:21.492718",
+        "id": "c0e08cf6-1744-4842-a10b-6435eb15f057",
+        "created_at": "2019-08-02T14:00:55.974000",
+        "updated_at": null,
         "number": null,
         "property_name": null,
         "address_line_1": "12 Stephen Mews",
@@ -132,207 +142,50 @@ A GET for a completed application currently returns JSON like this...
         "uprn": null,
         "property_type": null,
         "description": "Hactar Towers",
-        "application_id": "e7c134ed-16d7-4df7-a7e2-ee02ec16d0c5"
+        "siteGeoJson": null,
+        "application_id": "a839ce47-2299-4208-9530-259b55100bdf"
       },
-      "site_constraints": null,
+      "site_constraints": {
+        "id": "1dad4008-8935-4d7a-b2d9-2367265a64c7",
+        "created_at": "2019-08-02T14:00:55.870000",
+        "updated_at": null,
+        "has_boundary": "yes",
+        "nb_a4d": 2,
+        "a4d_name": "Storage and Distribution to Residential, Light Industrial to Residential",
+        "nb_conarea": 1,
+        "conarea_name": "Victoria Park",
+        "nb_tpo": 0,
+        "tpo_name": "",
+        "is_listed_building": "0",
+        "is_floodzone_2": "0",
+        "is_floodzone_3a": "0",
+        "is_floodzone_3b": "0",
+        "geom": null,
+        "uprn": 10008300829,
+        "application_id": "a839ce47-2299-4208-9530-259b55100bdf"
+      },
       "proposal_extension": {
-        "id": "4c9aede3-2af8-4619-8938-96107def5daa",
-        "created_at": "2019-07-04T10:06:58.161362",
-        "updated_at": "2019-07-04T10:06:58.161389",
-        "application_id": "e7c134ed-16d7-4df7-a7e2-ee02ec16d0c5",
+        "id": "9989ba08-82fe-4c9f-b56c-4a042a7cc3af",
+        "created_at": "2019-08-02T14:00:55.994000",
+        "updated_at": "2019-08-02T14:00:55.997000",
+        "application_id": "a839ce47-2299-4208-9530-259b55100bdf",
         "original_house": {
           "id": null,
-          "created_at": "2019-07-04T10:07:21.577135",
-          "updated_at": "2019-07-04T10:07:21.577169",
-          "single_storey_extension": {
-            "id": null,
-            "created_at": "2019-07-04T10:07:21.577276",
-            "updated_at": "2019-07-04T10:07:21.577306",
-            "works_location_ids": [
-              "66d1b304-5729-4654-91df-d6306e249e54",
-              "4f464424-ca54-4bc4-b980-c5d957a5ad1a"
-            ],
-            "works_locations": [
-              {
-                "id": "66d1b304-5729-4654-91df-d6306e249e54",
-                "created_at": "2019-07-04T10:07:21.725033",
-                "updated_at": "2019-07-04T10:07:21.725067",
-                "name": "Rear"
-              },
-              {
-                "id": "4f464424-ca54-4bc4-b980-c5d957a5ad1a",
-                "created_at": "2019-07-04T10:07:21.755490",
-                "updated_at": "2019-07-04T10:07:21.755517",
-                "name": "Side"
-              }
-            ]
-          },
+          "created_at": null,
+          "updated_at": null,
+          "single_storey_extension": null,
           "two_storey_extension": null,
           "part_single_part_two_storey_extension": null,
-          "basement": {
-            "id": null,
-            "created_at": "2019-07-04T10:07:21.577493",
-            "updated_at": "2019-07-04T10:07:21.577523",
-            "works_location_ids": [
-              "66d1b304-5729-4654-91df-d6306e249e54",
-              "4f464424-ca54-4bc4-b980-c5d957a5ad1a"
-            ],
-            "works_locations": [
-              {
-                "id": "66d1b304-5729-4654-91df-d6306e249e54",
-                "created_at": "2019-07-04T10:07:21.776162",
-                "updated_at": "2019-07-04T10:07:21.776200",
-                "name": "Rear"
-              },
-              {
-                "id": "4f464424-ca54-4bc4-b980-c5d957a5ad1a",
-                "created_at": "2019-07-04T10:07:21.800683",
-                "updated_at": "2019-07-04T10:07:21.800723",
-                "name": "Side"
-              }
-            ],
-            "works_type_ids": [
-              "c1d2ba2b-78d3-4826-80e1-517a90b448fd"
-            ],
-            "works_types": [
-              {
-                "id": "c1d2ba2b-78d3-4826-80e1-517a90b448fd",
-                "created_at": "2019-07-04T10:07:21.823816",
-                "updated_at": "2019-07-04T10:07:21.823848",
-                "name": "Excavation of a new basement"
-              }
-            ]
-          },
-          "roof": {
-            "id": null,
-            "created_at": "2019-07-04T10:07:21.577691",
-            "updated_at": "2019-07-04T10:07:21.577720",
-            "works_location_ids": [
-              "66d1b304-5729-4654-91df-d6306e249e54",
-              "4f464424-ca54-4bc4-b980-c5d957a5ad1a"
-            ],
-            "works_locations": [
-              {
-                "id": "66d1b304-5729-4654-91df-d6306e249e54",
-                "created_at": "2019-07-04T10:07:21.846241",
-                "updated_at": "2019-07-04T10:07:21.846275",
-                "name": "Rear"
-              },
-              {
-                "id": "4f464424-ca54-4bc4-b980-c5d957a5ad1a",
-                "created_at": "2019-07-04T10:07:21.866644",
-                "updated_at": "2019-07-04T10:07:21.866679",
-                "name": "Side"
-              }
-            ],
-            "works_type_ids": [
-              "f7adf884-760a-4896-9202-0f36394c191c"
-            ],
-            "works_types": [
-              {
-                "id": "f7adf884-760a-4896-9202-0f36394c191c",
-                "created_at": "2019-07-04T10:07:21.888240",
-                "updated_at": "2019-07-04T10:07:21.888274",
-                "name": "Addition of a dormer extension"
-              }
-            ]
-          },
-          "porch": {
-            "id": null,
-            "created_at": "2019-07-04T10:07:21.577886",
-            "updated_at": "2019-07-04T10:07:21.577916",
-            "works_location_ids": [
-              "66d1b304-5729-4654-91df-d6306e249e54",
-              "4f464424-ca54-4bc4-b980-c5d957a5ad1a"
-            ],
-            "works_locations": [
-              {
-                "id": "66d1b304-5729-4654-91df-d6306e249e54",
-                "created_at": "2019-07-04T10:07:21.908439",
-                "updated_at": "2019-07-04T10:07:21.908471",
-                "name": "Rear"
-              },
-              {
-                "id": "4f464424-ca54-4bc4-b980-c5d957a5ad1a",
-                "created_at": "2019-07-04T10:07:21.928424",
-                "updated_at": "2019-07-04T10:07:21.928457",
-                "name": "Side"
-              }
-            ]
-          },
-          "balcony_terrace": {
-            "id": null,
-            "created_at": "2019-07-04T10:07:21.578055",
-            "updated_at": "2019-07-04T10:07:21.578085",
-            "works_location_ids": [
-              "66d1b304-5729-4654-91df-d6306e249e54",
-              "4f464424-ca54-4bc4-b980-c5d957a5ad1a"
-            ],
-            "works_locations": [
-              {
-                "id": "66d1b304-5729-4654-91df-d6306e249e54",
-                "created_at": "2019-07-04T10:07:21.949400",
-                "updated_at": "2019-07-04T10:07:21.949434",
-                "name": "Rear"
-              },
-              {
-                "id": "4f464424-ca54-4bc4-b980-c5d957a5ad1a",
-                "created_at": "2019-07-04T10:07:21.969727",
-                "updated_at": "2019-07-04T10:07:21.969761",
-                "name": "Side"
-              }
-            ]
-          },
-          "staircase": {
-            "id": null,
-            "created_at": "2019-07-04T10:07:21.578222",
-            "updated_at": "2019-07-04T10:07:21.578252",
-            "works_location_ids": [
-              "66d1b304-5729-4654-91df-d6306e249e54",
-              "4f464424-ca54-4bc4-b980-c5d957a5ad1a"
-            ],
-            "works_locations": [
-              {
-                "id": "66d1b304-5729-4654-91df-d6306e249e54",
-                "created_at": "2019-07-04T10:07:21.990479",
-                "updated_at": "2019-07-04T10:07:21.990511",
-                "name": "Rear"
-              },
-              {
-                "id": "4f464424-ca54-4bc4-b980-c5d957a5ad1a",
-                "created_at": "2019-07-04T10:07:22.010685",
-                "updated_at": "2019-07-04T10:07:22.010717",
-                "name": "Side"
-              }
-            ]
-          },
-          "windows_doors": {
-            "id": null,
-            "created_at": "2019-07-04T10:07:21.578390",
-            "updated_at": "2019-07-04T10:07:21.578420",
-            "works_location_ids": [
-              "66d1b304-5729-4654-91df-d6306e249e54",
-              "4f464424-ca54-4bc4-b980-c5d957a5ad1a"
-            ],
-            "works_locations": [
-              {
-                "id": "66d1b304-5729-4654-91df-d6306e249e54",
-                "created_at": "2019-07-04T10:07:22.032025",
-                "updated_at": "2019-07-04T10:07:22.032058",
-                "name": "Rear"
-              },
-              {
-                "id": "4f464424-ca54-4bc4-b980-c5d957a5ad1a",
-                "created_at": "2019-07-04T10:07:22.059599",
-                "updated_at": "2019-07-04T10:07:22.059633",
-                "name": "Side"
-              }
-            ]
-          },
+          "basement": null,
+          "roof": null,
+          "porch": null,
+          "balcony_terrace": null,
+          "staircase": null,
+          "windows_doors": null,
           "cladding": {
             "id": null,
-            "created_at": "2019-07-04T10:07:21.578557",
-            "updated_at": "2019-07-04T10:07:21.578587",
+            "created_at": null,
+            "updated_at": null,
             "works_location_ids": [
               "66d1b304-5729-4654-91df-d6306e249e54",
               "4f464424-ca54-4bc4-b980-c5d957a5ad1a"
@@ -340,14 +193,14 @@ A GET for a completed application currently returns JSON like this...
             "works_locations": [
               {
                 "id": "66d1b304-5729-4654-91df-d6306e249e54",
-                "created_at": "2019-07-04T10:07:22.083340",
-                "updated_at": "2019-07-04T10:07:22.083380",
+                "created_at": "2019-08-02T14:00:54.524000",
+                "updated_at": null,
                 "name": "Rear"
               },
               {
                 "id": "4f464424-ca54-4bc4-b980-c5d957a5ad1a",
-                "created_at": "2019-07-04T10:07:22.106370",
-                "updated_at": "2019-07-04T10:07:22.106403",
+                "created_at": "2019-08-02T14:00:54.527000",
+                "updated_at": null,
                 "name": "Side"
               }
             ]
@@ -355,42 +208,20 @@ A GET for a completed application currently returns JSON like this...
         },
         "incidental_buildings": {
           "id": null,
-          "created_at": "2019-07-04T10:07:21.578775",
-          "updated_at": "2019-07-04T10:07:21.578805",
+          "created_at": null,
+          "updated_at": null,
           "removal_or_demolition": true,
           "details": "I'm knocking a shed down.",
-          "outbuilding": {
-            "id": null,
-            "created_at": "2019-07-04T10:07:21.578917",
-            "updated_at": "2019-07-04T10:07:21.578947",
-            "works_location_ids": [
-              "66d1b304-5729-4654-91df-d6306e249e54",
-              "4f464424-ca54-4bc4-b980-c5d957a5ad1a"
-            ],
-            "works_locations": [
-              {
-                "id": "66d1b304-5729-4654-91df-d6306e249e54",
-                "created_at": "2019-07-04T10:07:22.128415",
-                "updated_at": "2019-07-04T10:07:22.128448",
-                "name": "Rear"
-              },
-              {
-                "id": "4f464424-ca54-4bc4-b980-c5d957a5ad1a",
-                "created_at": "2019-07-04T10:07:22.149778",
-                "updated_at": "2019-07-04T10:07:22.149813",
-                "name": "Side"
-              }
-            ]
-          }
+          "outbuilding": null
         },
         "boundaries": {
           "id": null,
-          "created_at": "2019-07-04T10:07:21.579115",
-          "updated_at": "2019-07-04T10:07:21.579145",
+          "created_at": null,
+          "updated_at": null,
           "gates_fences_walls": {
             "id": null,
-            "created_at": "2019-07-04T10:07:21.579242",
-            "updated_at": "2019-07-04T10:07:21.579271",
+            "created_at": null,
+            "updated_at": null,
             "works_location_ids": [
               "66d1b304-5729-4654-91df-d6306e249e54",
               "4f464424-ca54-4bc4-b980-c5d957a5ad1a"
@@ -398,36 +229,27 @@ A GET for a completed application currently returns JSON like this...
             "works_locations": [
               {
                 "id": "66d1b304-5729-4654-91df-d6306e249e54",
-                "created_at": "2019-07-04T10:07:22.176342",
-                "updated_at": "2019-07-04T10:07:22.176379",
+                "created_at": "2019-08-02T14:00:54.524000",
+                "updated_at": null,
                 "name": "Rear"
               },
               {
                 "id": "4f464424-ca54-4bc4-b980-c5d957a5ad1a",
-                "created_at": "2019-07-04T10:07:22.197889",
-                "updated_at": "2019-07-04T10:07:22.197924",
+                "created_at": "2019-08-02T14:00:54.527000",
+                "updated_at": null,
                 "name": "Side"
               }
             ],
-            "works_type_ids": [
-              "3f583868-33bb-4296-b924-2903f4d6ec1b"
-            ],
-            "works_types": [
-              {
-                "id": "3f583868-33bb-4296-b924-2903f4d6ec1b",
-                "created_at": "2019-07-04T10:07:22.219916",
-                "updated_at": "2019-07-04T10:07:22.219957",
-                "name": "Addition of a new gate"
-              }
-            ]
+            "works_type_ids": [],
+            "works_types": []
           },
           "border_works_type_ids": [],
           "border_works_types": []
         },
         "means_of_access": {
           "id": null,
-          "created_at": "2019-07-04T10:07:21.579488",
-          "updated_at": "2019-07-04T10:07:21.579517",
+          "created_at": null,
+          "updated_at": null,
           "access_works_scope_id": "44c566ba-95dc-4cff-b0a9-53de934d309e",
           "access_works_scope": null,
           "access_works_sub_type_ids": [
@@ -437,83 +259,48 @@ A GET for a completed application currently returns JSON like this...
           "access_works_sub_types": [
             {
               "id": "f09b702e-c3c6-4db4-9faa-b70288176cac",
-              "created_at": "2019-07-04T10:07:22.270783",
-              "updated_at": "2019-07-04T10:07:22.270817",
+              "created_at": "2019-08-02T14:00:54.590000",
+              "updated_at": null,
               "name": "Addition of a new entrance"
             },
             {
               "id": "679143a9-0ee5-478e-984f-11c990979061",
-              "created_at": "2019-07-04T10:07:22.292078",
-              "updated_at": "2019-07-04T10:07:22.292112",
+              "created_at": "2019-08-02T14:00:54.593000",
+              "updated_at": null,
               "name": "Removal of an entrance"
             }
           ]
         },
         "parking": {
           "id": null,
-          "created_at": "2019-07-04T10:07:21.579689",
-          "updated_at": "2019-07-04T10:07:21.579719",
-          "parking_works_scope_id": "c4358d0e-c649-4b48-9a05-405d6ee90c0c",
+          "created_at": null,
+          "updated_at": null,
+          "parking_works_scope_id": null,
           "parking_works_scope": null,
-          "current_car_parking_spaces": 10,
-          "planned_car_parking_spaces": 20,
-          "current_bike_parking_spaces": 10,
-          "planned_bike_parking_spaces": 20,
+          "current_car_parking_spaces": 0,
+          "planned_car_parking_spaces": 0,
+          "current_bike_parking_spaces": 0,
+          "planned_bike_parking_spaces": 0,
           "new_ev_charging_points": 10
         },
         "trees": {
           "id": null,
-          "created_at": "2019-07-04T10:07:21.579911",
-          "updated_at": "2019-07-04T10:07:21.579941",
+          "created_at": null,
+          "updated_at": null,
           "inside_boundry": true,
           "removed_or_pruned": true,
           "outside_boundry": true
         },
         "materials": {
           "id": null,
-          "created_at": "2019-07-04T10:07:21.580095",
-          "updated_at": "2019-07-04T10:07:21.580125",
+          "created_at": null,
+          "updated_at": null,
           "definitions_in_documents": false,
-          "definitions_in_form": true,
+          "definitions_in_form": false,
           "definitions_to_follow": false,
-          "roof": {
-            "id": null,
-            "created_at": "2019-07-04T10:07:21.580535",
-            "updated_at": "2019-07-04T10:07:21.580566",
-            "proposals": [
-              {
-                "id": null,
-                "created_at": "2019-07-04T10:07:21.580679",
-                "updated_at": "2019-07-04T10:07:21.580709",
-                "colour_and_type": "Some lovely green roof tiles.",
-                "material_id": "d470020f-984f-4acf-9e75-387f58db4604",
-                "material": {
-                  "id": "d470020f-984f-4acf-9e75-387f58db4604",
-                  "created_at": "2019-07-04T10:07:22.341402",
-                  "updated_at": "2019-07-04T10:07:22.341440",
-                  "name": "Tiles"
-                }
-              }
-            ],
-            "matches_existing": false,
-            "not_applicable": false
-          },
-          "walls": {
-            "id": null,
-            "created_at": "2019-07-04T10:07:21.580910",
-            "updated_at": "2019-07-04T10:07:21.580940",
-            "proposals": null,
-            "matches_existing": true,
-            "not_applicable": false
-          },
-          "windows": {
-            "id": null,
-            "created_at": "2019-07-04T10:07:21.581093",
-            "updated_at": "2019-07-04T10:07:21.581123",
-            "proposals": null,
-            "matches_existing": false,
-            "not_applicable": true
-          },
+          "roof": null,
+          "walls": null,
+          "windows": null,
           "doors": null,
           "other": [
             "The chimney is made of diamonds",
@@ -524,8 +311,8 @@ A GET for a completed application currently returns JSON like this...
         "additional_floor_area_units_id": "095bd097-f66e-4c66-bc1e-3521a0358e8d",
         "additional_floor_area_units": {
           "id": "095bd097-f66e-4c66-bc1e-3521a0358e8d",
-          "created_at": "2019-07-04T10:07:22.365581",
-          "updated_at": "2019-07-04T10:07:22.365616",
+          "created_at": "2019-08-02T14:00:54.441000",
+          "updated_at": null,
           "name": "sq metres"
         },
         "new_single_bedrooms": 2,
@@ -533,101 +320,56 @@ A GET for a completed application currently returns JSON like this...
         "owner_id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
         "owner": {
           "id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
-          "created_at": "2019-07-04T10:07:22.386475",
-          "updated_at": "2019-07-04T10:07:22.386509",
+          "created_at": "2019-08-02T14:00:55.299000",
+          "updated_at": "2019-08-02T14:00:55.814000",
+          "_id": "5d444217991ac51fa129ea92",
           "email": "test@example.com",
-          "profile_id": "4de4485a-dac8-486d-bf2c-817314df39df",
+          "profile_id": "868d82ac-a87b-49da-9dc2-7446259a4d5d",
           "role_id": "831083f5-b7c9-4967-8561-ac4011be54e4",
           "role": {
             "id": "831083f5-b7c9-4967-8561-ac4011be54e4",
-            "created_at": "2019-07-04T10:07:22.426890",
-            "updated_at": "2019-07-04T10:07:22.426923",
+            "created_at": "2019-08-02T14:00:54.520000",
+            "updated_at": null,
             "name": "User"
           },
           "profile": {
-            "id": "4de4485a-dac8-486d-bf2c-817314df39df",
-            "created_at": "2019-07-04T10:07:22.407112",
-            "updated_at": "2019-07-04T10:07:22.407146",
+            "id": "868d82ac-a87b-49da-9dc2-7446259a4d5d",
+            "created_at": "2019-08-02T14:00:55.296000",
+            "updated_at": null,
+            "company": null,
             "name": null,
-            "preferred_contact_method": null,
             "email_addresses": null,
-            "primary_email_id": null,
-            "primary_phone_id": null
-          }
+            "phone": null
+          },
+          "verified_at": null
         }
       },
       "proposal_equipment": {
-        "id": "01c478b8-445e-4a75-b868-2d56a18688a4",
-        "created_at": "2019-07-04T10:07:12.465808",
-        "updated_at": "2019-07-04T10:07:12.465848",
-        "application_id": "e7c134ed-16d7-4df7-a7e2-ee02ec16d0c5",
+        "id": "edeb3ef4-b8f2-4900-8925-f39187691658",
+        "created_at": "2019-08-02T14:00:56.727000",
+        "updated_at": "2019-08-02T14:00:56.730000",
+        "application_id": "a839ce47-2299-4208-9530-259b55100bdf",
         "equipment": {
           "id": null,
-          "created_at": "2019-07-04T10:07:21.622281",
-          "updated_at": "2019-07-04T10:07:21.622316",
-          "equipment_type_ids": [
-            "fa6f8957-a775-4dc0-adfc-4c3ddfd42698",
-            "cc70f42f-dc59-4a03-bf7e-fbb2e7ff3b5b",
-            "b36079c1-dc9f-4225-a94d-b7c54c83b86e"
-          ],
-          "equipment_types": [
-            {
-              "id": "fa6f8957-a775-4dc0-adfc-4c3ddfd42698",
-              "created_at": "2019-07-04T10:07:22.448744",
-              "updated_at": "2019-07-04T10:07:22.448770",
-              "name": "Satellite dish or antenna"
-            },
-            {
-              "id": "cc70f42f-dc59-4a03-bf7e-fbb2e7ff3b5b",
-              "created_at": "2019-07-04T10:07:22.471248",
-              "updated_at": "2019-07-04T10:07:22.471287",
-              "name": "Air conditioning unit"
-            },
-            {
-              "id": "b36079c1-dc9f-4225-a94d-b7c54c83b86e",
-              "created_at": "2019-07-04T10:07:22.496336",
-              "updated_at": "2019-07-04T10:07:22.496379",
-              "name": "Tank"
-            }
-          ],
-          "equipment_conservation_type_ids": [
-            "4b2aa4a1-e01e-49ff-aedc-ddd638695839",
-            "510e6d41-168d-45e6-ad7e-329a578961d2",
-            "9f9390fa-f175-4d7a-8599-48c40644f0c3"
-          ],
-          "equipment_conservation_types": [
-            {
-              "id": "4b2aa4a1-e01e-49ff-aedc-ddd638695839",
-              "created_at": "2019-07-04T10:07:22.520522",
-              "updated_at": "2019-07-04T10:07:22.520573",
-              "name": "CCTV"
-            },
-            {
-              "id": "510e6d41-168d-45e6-ad7e-329a578961d2",
-              "created_at": "2019-07-04T10:07:22.542016",
-              "updated_at": "2019-07-04T10:07:22.542042",
-              "name": "Security alarm"
-            },
-            {
-              "id": "9f9390fa-f175-4d7a-8599-48c40644f0c3",
-              "created_at": "2019-07-04T10:07:22.563026",
-              "updated_at": "2019-07-04T10:07:22.563060",
-              "name": "Solar panel or other sustainable energy equipment"
-            }
-          ],
+          "created_at": null,
+          "updated_at": null,
+          "equipment_type_ids": [],
+          "equipment_types": [],
+          "equipment_conservation_type_ids": [],
+          "equipment_conservation_types": [],
           "equipment_locations": [
             {
               "id": null,
-              "created_at": "2019-07-04T10:07:21.622484",
-              "updated_at": "2019-07-04T10:07:21.622515",
+              "created_at": null,
+              "updated_at": null,
               "location_ids": [
                 "9dc99f40-ac1d-421e-a408-c253d7ead671"
               ],
               "locations": [
                 {
                   "id": "9dc99f40-ac1d-421e-a408-c253d7ead671",
-                  "created_at": "2019-07-04T10:07:22.584320",
-                  "updated_at": "2019-07-04T10:07:22.584353",
+                  "created_at": "2019-08-02T14:00:54.533000",
+                  "updated_at": null,
                   "name": "Rear / side wrap-around"
                 }
               ],
@@ -640,27 +382,30 @@ A GET for a completed application currently returns JSON like this...
         "owner_id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
         "owner": {
           "id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
-          "created_at": "2019-07-04T10:07:22.629054",
-          "updated_at": "2019-07-04T10:07:22.629094",
+          "created_at": "2019-08-02T14:00:55.299000",
+          "updated_at": "2019-08-02T14:00:55.814000",
+          "_id": "5d444217991ac51fa129ea92",
           "email": "test@example.com",
-          "profile_id": "4de4485a-dac8-486d-bf2c-817314df39df",
+          "profile_id": "868d82ac-a87b-49da-9dc2-7446259a4d5d",
           "role_id": "831083f5-b7c9-4967-8561-ac4011be54e4",
           "role": {
             "id": "831083f5-b7c9-4967-8561-ac4011be54e4",
-            "created_at": "2019-07-04T10:07:22.674242",
-            "updated_at": "2019-07-04T10:07:22.674280",
+            "created_at": "2019-08-02T14:00:54.520000",
+            "updated_at": null,
             "name": "User"
           },
           "profile": {
-            "id": "4de4485a-dac8-486d-bf2c-817314df39df",
-            "created_at": "2019-07-04T10:07:22.651505",
-            "updated_at": "2019-07-04T10:07:22.651540",
+            "id": "868d82ac-a87b-49da-9dc2-7446259a4d5d",
+            "created_at": "2019-08-02T14:00:55.296000",
+            "updated_at": null,
+            "company": null,
             "name": null,
-            "preferred_contact_method": null,
             "email_addresses": null,
-            "primary_email_id": null,
-            "primary_phone_id": null
-          }
+            "phone": null
+          },
+          "verified_at": null
         }
-      }
+      },
+      "document_files": null,
+      "proposalFlow": null
     }

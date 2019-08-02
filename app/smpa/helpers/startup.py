@@ -12,11 +12,12 @@ from ..config.defaults import (
     BASEMENT_WORKS_TYPES, MATERIALS_ROOF, MATERIALS_WALL, MATERIALS_WINDOW, MATERIALS_DOOR,
     ROOF_WORKS_TYPES, BORDER_WORKS_TYPES, ACCESS_WORKS_TYPES, ACCESS_WORKS_SCOPES,
     PARKING_WORKS_SCOPES, EQUIPMENT_WORKS_TYPES, EQUIPMENT_WORKS_CONSERVATION_TYPES,
-    GATES_FENCES_WALLS_TYPES, DOCUMENT_TYPES
+    GATES_FENCES_WALLS_TYPES, DOCUMENT_TYPES, DECLARATIONS
 )
 from ..services.unit import _area_units, _linear_units
 from ..services.document import _document_sizes, _document_types
 from ..services.user import _roles, _users
+from ..services.meta import _declarations
 from ..services.work import (
     _works_locations, _basement_works_types, _roof_works_types, _border_works_types,
     _access_works_scopes, _access_works_types, _parking_works_scopes, _equipment_works_types,
@@ -66,6 +67,8 @@ class Startup:
             _equipment_works_conservation_types.get_or_create(id=_[0], name=_[1])
         for _ in GATES_FENCES_WALLS_TYPES:
             _gates_fences_walls_types.get_or_create(id=_[0], name=_[1])
+        for _ in DECLARATIONS:
+            _declarations.get_or_create(id=_[0], name=_[1])
 
         self._add_materials()
 

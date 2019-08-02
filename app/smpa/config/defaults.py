@@ -10,6 +10,16 @@ import os
 import envkey  # NOQA
 
 
+DECLARATIONS = [
+    ("746b41c8-54b3-4cd6-89d7-2d41d1c55fbe", "You are a Hackney Council member of staff"),
+    ("d6e9d822-27cf-4b43-b9df-5eafa6cde526", "You are an elected member in Hackney"),
+    ("6051e8c2-846c-4a10-9863-f82ed67e001e",
+        "You are related to a Hackney Council member of staff"),
+    ("e55d3e13-09b7-4a58-9989-2f097df5f266", "You are related to an elected member in Hackney"),
+    ("e0bbf434-9c28-4fe8-b4ae-892b3e359479", "None of the above")
+]
+
+
 ####################################################################################################
 # Units / locations
 ####################################################################################################

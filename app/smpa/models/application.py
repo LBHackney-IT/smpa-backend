@@ -15,6 +15,7 @@ from schematics.types import (  # NOQA
 )
 
 from .user import User
+from .meta import Declaration
 # from .address import SiteAddress
 
 
@@ -28,6 +29,13 @@ class Application(BaseModel, metaclass=ORMMeta):
     works_description: str = StringType()
 
     free_text_description: str = StringType()
+
+    declaration_id = RelType(
+        UUIDType(),
+        to_field='declaration',
+        service='DeclarationService'
+    )
+    declaration: Type[Declaration] = ModelType(Declaration)
 
     owner_id = RelType(
         UUIDType(),
