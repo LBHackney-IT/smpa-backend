@@ -64,6 +64,7 @@ class PaymentService(DService):
 
         """
         from smpa.app import config
+        from .application import _applications
         govpay = GovPayClient(config.GOV_PAY_API_KEY)
         yyyy = arrow.now().year
         nnnn = 5000 + self.count()
@@ -82,6 +83,10 @@ class PaymentService(DService):
             payment.application_id = str(application_id)
             payment.next_url = j['_links']['next_url']['href']
             payment = _payments.save(payment)
+            # Update the application with a status of submitted and a reference
+            application = _applications.get(str(application_id))
+            application.reference = ref
+            application.status_id = "5aa415fa-9b25-4828-ac06-cb1ab9b000ea"
             return payment
         else:
             response = {

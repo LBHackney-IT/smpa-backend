@@ -10,6 +10,17 @@ import os
 import envkey  # NOQA
 
 
+APPLICATION_STATUSES = [
+    ("68e32fcc-5898-4bd1-bfad-d2f14c1d6306", "Draft"),
+    ("5aa415fa-9b25-4828-ac06-cb1ab9b000ea", "Submitted"),
+    ("5ac4eda1-98b2-4b75-9694-d977c6a97127", "Registered"),
+    ("5ac07812-42fd-46c7-a2d8-dc6fd11f7c6a", "Invalid"),
+    ("5f375a74-3bd7-4154-9056-dcb024e12313", "Consultation"),
+    ("04ebd658-118a-4b3d-b98e-3e48aa148df6", "Rejected"),
+    ("7e93706b-e40b-48ab-8fbe-35dda18fa3dd", "Approved")
+]
+
+
 DECLARATIONS = [
     ("746b41c8-54b3-4cd6-89d7-2d41d1c55fbe", "You are a Hackney Council member of staff"),
     ("d6e9d822-27cf-4b43-b9df-5eafa6cde526", "You are an elected member in Hackney"),

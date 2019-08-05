@@ -128,8 +128,8 @@ class Payment(BaseModel, metaclass=ORMMeta):
     provider_id: str = StringType()
     card_brand: str = StringType()
     card_details: Type[PaymentCardDetails] = ModelType(PaymentCardDetails)
-    metadata: str = JSONBlobType()
-    _links: str = JSONBlobType()
+    metadata: str = JSONBlobType()  # These could contain _anything_
+    _links: str = JSONBlobType()  # These could contain _anything_
 
     # _links: List[dict] = ListType(DictType())  # Don't think we need to be storing all of these
 

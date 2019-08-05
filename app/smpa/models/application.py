@@ -19,7 +19,22 @@ from .meta import Declaration, OwnershipType
 # from .address import SiteAddress
 
 
+class ApplicationStatus(BaseModel, metaclass=ORMMeta):
+    name = StringType(max_length=255)
+
+
 class Application(BaseModel, metaclass=ORMMeta):
+
+    _uniques: list = ['reference', ]
+
+    # Set by the payments service
+    status_id = RelType(
+        UUIDType(default="68e32fcc-5898-4bd1-bfad-d2f14c1d6306"),
+        to_field='status',
+        service='ApplicationStatusService'
+    )
+    status: Type[ApplicationStatus] = ModelType(ApplicationStatus)
+    reference: str = StringType()
 
     # First screen when starting a new application
     works_started: bool = BooleanType(default=False)
