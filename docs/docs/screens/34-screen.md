@@ -91,6 +91,157 @@ Errors from the payment gateway will return a 422 response with a JSON response 
     }
 
 
+## Check Payment status
+
+`GET /api/v1/payments/{id}/check`
+
+This triggers a call to GovUK Pay to check the status of a payment.
+
+### Returns
+
+This returns an updated payment instance
+
+    {
+      "id": "b70e30a5-b126-4906-a98f-64f8448adab9",
+      "created_at": "2019-08-05T14:15:31.440000",
+      "updated_at": "2019-08-05T14:15:31.440000",
+      "amount": 1200,
+      "description": "Your Service Description",
+      "reference": "your-reference",
+      "state": {
+        "id": null,
+        "created_at": null,
+        "updated_at": null,
+        "status": "created",
+        "finished": true,
+        "message": "User cancelled the payment",
+        "code": "P010"
+      },
+      "refund_summary": {
+        "id": null,
+        "created_at": null,
+        "updated_at": null,
+        "status": "available",
+        "amount_available": 100,
+        "amount_submitted": 0
+      },
+      "payment_id": "hu20sqlact5260q2nanm0q8u93",
+      "payment_provider": "worldpay",
+      "created_date": "2016-01-21T17:15:00+00:00",
+      "settlement_summary": {
+        "id": null,
+        "created_at": null,
+        "updated_at": null,
+        "capture_submit_time": "2016-01-21T17:15:00+00:00",
+        "captured_date": "2016-01-21"
+      },
+      "delayed_capture": false,
+      "return_url": "http://your.service.domain/your-reference",
+      "next_url": "https://www.payments.service.gov.uk/secure/SOME_UUID",
+      "email": "your email",
+      "language": "en",
+      "corporate_card_surcharge": 250,
+      "total_amount": 1450,
+      "fee": 5,
+      "net_amount": 1195,
+      "provider_id": "reference-from-payment-gateway",
+      "card_brand": "Visa",
+      "card_details": {
+        "id": null,
+        "created_at": null,
+        "updated_at": null,
+        "last_digits_card_number": "1234",
+        "first_digits_card_number": "123456",
+        "cardholder_name": "Mr. Card holder",
+        "expiry_date": "12/20",
+        "billing_address": {
+          "id": null,
+          "created_at": null,
+          "updated_at": null,
+          "line1": "address line 1",
+          "line2": "address line 2",
+          "postcode": "AB1 2CD",
+          "city": "address city",
+          "country": "GB"
+        },
+        "card_brand": "Visa"
+      },
+      "metadata": {
+        "property1": "string",
+        "property2": "string"
+      },
+      "_links": {
+        "self": {
+          "href": "https://an.example.link/from/payment/platform",
+          "method": "GET"
+        },
+        "next_url": {
+          "href": "https://an.example.link/from/payment/platform",
+          "method": "GET"
+        },
+        "next_url_post": {
+          "type": "application/x-www-form-urlencoded",
+          "params": {
+            "description": "This is a value for a parameter called description"
+          },
+          "href": "https://an.example.link/from/payment/platform",
+          "method": "POST"
+        },
+        "events": {
+          "href": "https://an.example.link/from/payment/platform",
+          "method": "GET"
+        },
+        "refunds": {
+          "href": "https://an.example.link/from/payment/platform",
+          "method": "GET"
+        },
+        "cancel": {
+          "type": "application/x-www-form-urlencoded",
+          "params": {
+            "description": "This is a value for a parameter called description"
+          },
+          "href": "https://an.example.link/from/payment/platform",
+          "method": "POST"
+        },
+        "capture": {
+          "type": "application/x-www-form-urlencoded",
+          "params": {
+            "description": "This is a value for a parameter called description"
+          },
+          "href": "https://an.example.link/from/payment/platform",
+          "method": "POST"
+        }
+      },
+      "owner_id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
+      "owner": {
+        "id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
+        "created_at": "2019-08-05T14:15:28.778000",
+        "updated_at": "2019-08-05T14:15:29.328000",
+        "_id": "5d483a004c820ff0cf14f694",
+        "email": "test@example.com",
+        "profile_id": "ecf39f20-f8f9-4eea-9467-2adb0fbdbd5c",
+        "role_id": "831083f5-b7c9-4967-8561-ac4011be54e4",
+        "role": {
+          "id": "831083f5-b7c9-4967-8561-ac4011be54e4",
+          "created_at": "2019-08-05T14:15:27.960000",
+          "updated_at": null,
+          "name": "User"
+        },
+        "profile": {
+          "id": "ecf39f20-f8f9-4eea-9467-2adb0fbdbd5c",
+          "created_at": "2019-08-05T14:15:28.775000",
+          "updated_at": null,
+          "company": null,
+          "name": null,
+          "email_addresses": null,
+          "phone": null
+        },
+        "verified_at": null
+      },
+      "application_id": "385c40e9-edbd-444a-8224-8b9d5ecca257"
+    }
+
+
 ## List Payments
 
 `GET /api/v1/payments`

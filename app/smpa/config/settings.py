@@ -7,9 +7,12 @@ class Config(object):
     base: str = 'config'
     debug = False
 
+    BASE_URL = 'http://0.0.0.0:5000'
+
     PAYMENT_AMOUNT = 20600
     PAYMENT_DESCRIPTION = "Submit my Planning Application payment"
     GOV_PAY_API_KEY = os.environ.get('GOV_PAY_API_KEY')
+    PAYMENT_RETURN_URL = '/applications/payment/check'
 
     RDB_HOST = os.environ.get('RDB_HOST')
     RDB_PORT = os.environ.get('RDB_PORT')
@@ -20,6 +23,9 @@ class Config(object):
     DOCUMENT_DB_PORT = os.environ.get('DOCUMENT_DB_PORT')
     DOCUMENT_DB_DB = os.environ.get('DOCUMENT_DB_DB')
     DOCUMENT_DB_PASSWORD = os.environ.get('DOCUMENT_DB_PASSWORD', '')
+
+    def get_payment_return_url(self):
+        return f"{self.BASE_URL}{self.PAYMENT_RETURN_URL}"
 
 
 class ConfigTest(Config):

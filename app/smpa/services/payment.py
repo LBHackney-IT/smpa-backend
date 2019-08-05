@@ -17,6 +17,32 @@ from smpa.helpers.govpay.client import GovPayClient
 class PaymentService(DService):
     __model__ = Payment
 
+    def check(self, id):
+        """Checks the status of a payment on GovPay
+        """
+        from smpa.app import config
+        govpay = GovPayClient(config.GOV_PAY_API_KEY)
+        payment = _payments.get(str(id))
+        if payment.payment_id is None:
+            raise falcon.HTTPError(falcon.HTTP_404, 'Payment not found')
+
+        rv = govpay.check_payment(payment.payment_id)
+        j = rv.json()
+        if rv.status_code == 200:
+            payment = _payments.update(id=payment.id, json=j)
+            return payment
+
+        else:
+            response = {
+                "success": False
+            }
+            if j.get('description', None) is not None:
+                response["message"] = j.get('description')
+            if j.get('code', None) is not None:
+                response["code"] = j.get('code')
+
+            raise falcon.HTTPError(falcon.HTTP_422, response)
+
     def create(self, req, application_id):
         """
         Errors from GovPay look like this...

@@ -13,7 +13,7 @@ from schematics.types import (  # NOQA
 )
 
 
-from .core import BaseModel, ORMMeta, RelType, ArrowDTType
+from .core import BaseModel, ORMMeta, RelType, ArrowDTType, JSONBlobType
 from .user import User
 
 
@@ -21,11 +21,16 @@ class PaymentState(BaseModel, metaclass=ORMMeta):
     """
     'state': {
         'status': 'created',
-        'finished': False
+        'finished': False,
+        # We might get these back with the check status step
+        "message": "User cancelled the payment",
+        "code": "P010"
     }
     """
     status: str = StringType()
     finished: bool = BooleanType(default=False)
+    message: str = StringType()
+    code: str = StringType()
 
 
 class PaymentRefundSummary(BaseModel, metaclass=ORMMeta):
@@ -48,8 +53,50 @@ class PaymentSettlementSummary(BaseModel, metaclass=ORMMeta):
       "captured_date": "2016-01-21"
     }
     """
-    capture_submit_time: datetime = DateTimeType()
+    capture_submit_time: datetime = ArrowDTType()
     captured_date: date = DateType()
+
+
+class PaymentBillingAddress(BaseModel, metaclass=ORMMeta):
+    """
+    "billing_address": {
+      "line1": "address line 1",
+      "line2": "address line 2",
+      "postcode": "AB1 2CD",
+      "city": "address city",
+      "country": "GB"
+    },
+    """
+    line1: str = StringType()
+    line2: str = StringType()
+    postcode: str = StringType()
+    city: str = StringType()
+    country: str = StringType()
+
+
+class PaymentCardDetails(BaseModel, metaclass=ORMMeta):
+    """
+    "card_details": {
+      "last_digits_card_number": "1234",
+      "first_digits_card_number": "123456",
+      "cardholder_name": "Mr. Card holder",
+      "expiry_date": "12/20",
+      "billing_address": {
+        "line1": "address line 1",
+        "line2": "address line 2",
+        "postcode": "AB1 2CD",
+        "city": "address city",
+        "country": "GB"
+      },
+      "card_brand": "Visa"
+    },
+    """
+    last_digits_card_number: str = StringType()
+    first_digits_card_number: str = StringType()
+    cardholder_name: str = StringType()
+    expiry_date: str = StringType()
+    billing_address: Type[PaymentBillingAddress] = ModelType(PaymentBillingAddress)
+    card_brand: str = StringType()
 
 
 class Payment(BaseModel, metaclass=ORMMeta):
@@ -70,8 +117,21 @@ class Payment(BaseModel, metaclass=ORMMeta):
     delayed_capture: bool = BooleanType(default=False)
     return_url: str = StringType()
     next_url: str = StringType()
-    # _links: List[dict] = ListType(DictType())  # Don't think we need to be storing all of these
 
+    # These extra fields come back when we check the status of the payment
+    email: str = StringType()
+    language: str = StringType()
+    corporate_card_surcharge: int = IntType()  # Amount in pennies
+    total_amount: int = IntType()  # Amount in pennies
+    fee: int = IntType()  # Amount in pennies
+    net_amount: int = IntType()  # Amount in pennies
+    provider_id: str = StringType()
+    card_brand: str = StringType()
+    card_details: Type[PaymentCardDetails] = ModelType(PaymentCardDetails)
+    metadata: str = JSONBlobType()
+    _links: str = JSONBlobType()
+
+    # _links: List[dict] = ListType(DictType())  # Don't think we need to be storing all of these
 
     owner_id = RelType(
         UUIDType(),

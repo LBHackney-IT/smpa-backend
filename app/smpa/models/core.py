@@ -6,6 +6,7 @@
     BaseModel class
 """
 
+import json
 import arrow
 import datetime
 from importlib import import_module
@@ -24,6 +25,17 @@ from schematics.transforms import Converter, PRIMITIVE
 # from ..rdb.registry import model_registry
 from smpa.db.documentdb.registry import model_registry
 from smpa.helpers.console import console
+
+
+class JSONBlobType(BaseType):
+    """Because sometimes we need to save a blob of json for which we have no idea
+    what the format will be.
+    """
+    def to_native(self, value, context=None):
+        return json.loads(json.dumps(value))
+
+    def to_primitive(self, value, context=None):
+        return json.dumps(value)
 
 
 class ListRelType(BaseType):

@@ -90,3 +90,99 @@ class GovPayClient:
         }
         rv = requests.post(f'{self.url}{endpoint}', json=data, headers=self.headers)
         return rv
+
+    def check_payment(self, payment_id):
+        """Checks the status of a payment.
+
+        {
+          "amount": 1200,
+          "description": "Your Service Description",
+          "reference": "your-reference",
+          "language": "en",
+          "metadata": {
+            "property1": "string",
+            "property2": "string"
+          },
+          "email": "your email",
+          "state": {
+            "status": "created",
+            "finished": true,
+            "message": "User cancelled the payment",
+            "code": "P010"
+          },
+          "payment_id": "hu20sqlact5260q2nanm0q8u93",
+          "payment_provider": "worldpay",
+          "created_date": "2016-01-21T17:15:000Z",
+          "refund_summary": {
+            "status": "available",
+            "amount_available": 100,
+            "amount_submitted": 0
+          },
+          "settlement_summary": {
+            "capture_submit_time": "2016-01-21T17:15:000Z",
+            "captured_date": "2016-01-21"
+          },
+          "card_details": {
+            "last_digits_card_number": "1234",
+            "first_digits_card_number": "123456",
+            "cardholder_name": "Mr. Card holder",
+            "expiry_date": "12/20",
+            "billing_address": {
+              "line1": "address line 1",
+              "line2": "address line 2",
+              "postcode": "AB1 2CD",
+              "city": "address city",
+              "country": "GB"
+            },
+            "card_brand": "Visa"
+          },
+          "delayed_capture": false,
+          "corporate_card_surcharge": 250,
+          "total_amount": 1450,
+          "fee": 5,
+          "net_amount": 1195,
+          "provider_id": "reference-from-payment-gateway",
+          "return_url": "http://your.service.domain/your-reference",
+          "_links": {
+            "self": {
+              "href": "https://an.example.link/from/payment/platform",
+              "method": "GET"
+            },
+            "next_url": {
+              "href": "https://an.example.link/from/payment/platform",
+              "method": "GET"
+            },
+            "next_url_post": {
+              "type": "application/x-www-form-urlencoded",
+              "params": "\"description\":\"This is a value for a parameter called description\"",
+              "href": "https://an.example.link/from/payment/platform",
+              "method": "POST"
+            },
+            "events": {
+              "href": "https://an.example.link/from/payment/platform",
+              "method": "GET"
+            },
+            "refunds": {
+              "href": "https://an.example.link/from/payment/platform",
+              "method": "GET"
+            },
+            "cancel": {
+              "type": "application/x-www-form-urlencoded",
+              "params": "\"description\":\"This is a value for a parameter called description\"",
+              "href": "https://an.example.link/from/payment/platform",
+              "method": "POST"
+            },
+            "capture": {
+              "type": "application/x-www-form-urlencoded",
+              "params": "\"description\":\"This is a value for a parameter called description\"",
+              "href": "https://an.example.link/from/payment/platform",
+              "method": "POST"
+            }
+          },
+          "card_brand": "Visa"
+        }
+
+        """
+        endpoint = f'/payments/{payment_id}'
+        rv = requests.get(f'{self.url}{endpoint}', headers=self.headers)
+        return rv

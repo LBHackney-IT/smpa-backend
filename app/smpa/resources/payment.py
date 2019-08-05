@@ -64,6 +64,33 @@ class PaymentPostResource(ListResource):
         resp.body = self._json_or_404(rv)
 
 
+class PaymentCheckResource(ListResource):
+    _service = _payments
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response, id: str) -> None:
+        """
+        ---
+        summary: Get all payments for the specified application
+        tags:
+            - Payment
+        parameters:
+            - in: query
+              schema: CoreListSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: All Payments
+                schema:
+                    type: array
+                    items: Payment
+            401:
+                description: Unauthorized
+        """
+        rv = self._service.check(id=str(id))
+        resp.body = self._json_or_404(rv)
+
+
 class PaymentListResource(ListResource):
     _service = _payments
 

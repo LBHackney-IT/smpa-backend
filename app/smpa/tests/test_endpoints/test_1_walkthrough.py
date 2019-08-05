@@ -2,6 +2,7 @@
     Test a walk through of hitting each endpoint in order.
 """
 
+import re
 import os
 import responses
 
@@ -44,6 +45,103 @@ magna, vel scelerisque nisl consectetur et. Donec sed odio dui.
 Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis
 natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
 """
+
+CHECK_PAYMENT_RESPONSE = {
+    'amount': 1200,
+    'description': 'Your Service Description',
+    'reference': 'your-reference',
+    'language': 'en',
+    'metadata': {
+        'property1': 'string',
+        'property2': 'string'
+    },
+    'email': 'your email',
+    'state': {
+        'status': 'created',
+        'finished': True,
+        'message': 'User cancelled the payment',
+        'code': 'P010'
+    },
+    'payment_id': 'hu20sqlact5260q2nanm0q8u93',
+    'payment_provider': 'worldpay',
+    'created_date': '2016-01-21T17:15:000Z',
+    'refund_summary': {
+        'status': 'available',
+        'amount_available': 100,
+        'amount_submitted': 0
+    },
+    'settlement_summary': {
+        'capture_submit_time': '2016-01-21T17:15:000Z',
+        'captured_date': '2016-01-21'
+    },
+    'card_details': {
+        'last_digits_card_number': '1234',
+        'first_digits_card_number': '123456',
+        'cardholder_name': 'Mr. Card holder',
+        'expiry_date': '12/20',
+        'billing_address': {
+            'line1': 'address line 1',
+            'line2': 'address line 2',
+            'postcode': 'AB1 2CD',
+            'city': 'address city',
+            'country': 'GB'
+        },
+        'card_brand': 'Visa'
+    },
+    'delayed_capture': False,
+    'corporate_card_surcharge': 250,
+    'total_amount': 1450,
+    'fee': 5,
+    'net_amount': 1195,
+    'provider_id': 'reference-from-payment-gateway',
+    'return_url': 'http://your.service.domain/your-reference',
+    '_links': {
+        'self': {
+            'href': 'https://an.example.link/from/payment/platform',
+            'method': 'GET'
+        },
+        'next_url': {
+            'href': 'https://an.example.link/from/payment/platform',
+            'method': 'GET'
+        },
+        'next_url_post': {
+            'type': 'application/x-www-form-urlencoded',
+            'params': {
+                'description':
+                'This is a value for a parameter called description'
+            },
+            'href': 'https://an.example.link/from/payment/platform',
+            'method': 'POST'
+        },
+        'events': {
+            'href': 'https://an.example.link/from/payment/platform',
+            'method': 'GET'
+        },
+        'refunds': {
+            'href': 'https://an.example.link/from/payment/platform',
+            'method': 'GET'
+        },
+        'cancel': {
+            'type': 'application/x-www-form-urlencoded',
+            'params': {
+                'description':
+                'This is a value for a parameter called description'
+            },
+            'href': 'https://an.example.link/from/payment/platform',
+            'method': 'POST'
+        },
+        'capture': {
+            'type': 'application/x-www-form-urlencoded',
+            'params': {
+                'description':
+                'This is a value for a parameter called description'
+            },
+            'href': 'https://an.example.link/from/payment/platform',
+            'method': 'POST'
+        }
+    },
+    'card_brand': 'Visa'
+}
 
 CREATE_PAYMENT_FAILURE_RESPONSE = {
     "field": "amount",
@@ -129,6 +227,7 @@ EXTENSION_PROPOSAL_ID = None
 EQUIPMENT_PROPOSAL_ID = None
 SITE_ADDRESS_ID = None
 TOKEN = None
+PAYMENT_ID = None
 
 
 reset_test_user()
@@ -811,7 +910,7 @@ def test_equipment_proposal_create(session_client):
 def test_equipment_proposal_update_scope(session_client):
     body = json.dumps(
         {
-            "equipment":{
+            "equipment": {
                 "equipment_type_ids": [
                     EQUIPMENT_WORKS_TYPES[0][0],
                     EQUIPMENT_WORKS_TYPES[1][0],
@@ -1236,6 +1335,7 @@ def test_application_update_reduction_eligible(session_client):
 
 @responses.activate
 def test_create_payment(session_client):
+    global PAYMENT_ID
     responses.add(
         responses.POST,
         'https://publicapi.payments.service.gov.uk/v1/payments',
@@ -1249,6 +1349,7 @@ def test_create_payment(session_client):
     assert rv.status == falcon.HTTP_CREATED
     j = json.loads(rv.body)
     assert j['id'] is not None
+    PAYMENT_ID = j['id']
     assert j['application_id'] is not None
     assert j['owner_id'] is not None
     assert j['owner']['email'] == 'test@example.com'
@@ -1304,11 +1405,32 @@ def test_get_payments_for_application(session_client):
     assert j[0]['next_url'] == 'https://www.payments.service.gov.uk/secure/SOME_UUID'
 
 
+@responses.activate
+def test_check_payment_status(session_client):
+    comp = re.compile(r'^https://publicapi.payments.service.gov.uk/v1/payments/[a-zA-Z0-9]*$')
+    responses.add(
+        responses.GET,
+        comp,
+        json=CHECK_PAYMENT_RESPONSE,
+        status=200
+    )
+    rv = session_client.get(
+        f'/api/v1/payments/{PAYMENT_ID}/check',
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert j['id'] is not None
+    assert j['application_id'] is not None
+    assert j['owner_id'] is not None
+    assert j['owner']['email'] == 'test@example.com'
+    assert j['state']['finished'] is True
+
 #
 
-####################################################################################################
+##########################################################################
 # Leave this one till last as it outputs our completed application if you pytest -s
-####################################################################################################
+##########################################################################
 
 #
 
