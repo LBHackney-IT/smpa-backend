@@ -49,5 +49,7 @@ nav:
   - 'screens/30-screen.md'
   - 'screens/31-screen.md'
   - 'screens/32-screen.md'
+  - 'screens/33-screen.md'
+  - 'screens/34-screen.md'
   - 'screens/user/user-endpoints.md'
 - tests.md
