@@ -41,7 +41,7 @@ from .resources import (  # NOQA
     DocumentSizeResource, DocumentFilePostResource, DocumentTypePostResource,
     DocumentTypePatchResource, DocumentFileApplicationResource, DocumentFileDeleteResource,
     # Application resources
-    ApplicationResourcePost, ApplicationResourcePatch,
+    ApplicationResourcePost, ApplicationResourcePatch, ApplicationStatusListResource,
     # Site resources
     SiteAreaPostResource, SiteAreaPatchResource, SiteConstraintsPostResource,
     SiteConstraintsPatchResource,
@@ -110,6 +110,7 @@ def init_routes(api, config):
     gates_fences_walls_type_post = GatesFencesWallsTypePost()
     applications_post = ApplicationResourcePost()
     applications_patch = ApplicationResourcePatch()
+    application_status_list = ApplicationStatusListResource()
     users_post = UserResourcePost()
     users_list = UserResourceList()
     users_patch = UserResourcePatch()
@@ -222,6 +223,7 @@ def init_routes(api, config):
     add_route(api, '/applications/{id}', applications_patch)
     add_route(api, '/applications/{id}/documents', document_file_application)
     add_route(api, '/applications/{id}/payments', payment_post)
+    add_route(api, '/application-statuses', application_status_list)
     add_route(api, '/payments', payment_list)
     add_route(api, '/payments/{id}/check', payment_check)
     add_route(api, '/documents', document_file_post)
@@ -285,6 +287,7 @@ def init_routes(api, config):
         equipment_works_conservation_type_post,
         gates_fences_walls_type_post,
         user_profiles_patch,
+        application_status_list,
         # Materials
         material_option_roof_post,
         material_option_wall_post,
@@ -298,6 +301,7 @@ def init_routes(api, config):
         material_window_patch,
         material_door_post,
         material_door_patch,
+        #
         users_patch,
         users_post,
         users_list,

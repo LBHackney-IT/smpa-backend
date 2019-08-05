@@ -5,7 +5,37 @@ from typing import Optional
 
 from smpa.helpers.auth import owner
 from .core import Resource, ListResource
-from ..services.application import _applications
+from ..services.application import _applications, _application_statuses
+
+
+class ApplicationStatusListResource(ListResource):
+    _service = _application_statuses
+
+    auth = {
+        'exempt_methods': ['OPTIONS', 'GET']
+    }
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Get all ApplicationStatuses from the DB
+        tags:
+            - ApplicationStatus
+        parameters:
+            - in: query
+              schema: CoreListSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: All ApplicationStatuses
+                schema:
+                    type: array
+                    items: ApplicationStatus
+            401:
+                description: Unauthorized
+        """
+        super().on_get(req, resp)
 
 
 class ApplicationResourcePost(ListResource):

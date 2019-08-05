@@ -37,6 +37,7 @@ from smpa.config.defaults import (  # NOQA
     SUPERADMIN_USERS,
     DECLARATIONS,
     OWNERSHIP_TYPES,
+    APPLICATION_STATUSES
 )
 
 TEXT_BLOB = """Praesent commodo cursus magna,
@@ -219,6 +220,7 @@ DEFAULT_DATA_ENDPOINTS = [
     "/api/v1/materials/options/wall",
     "/api/v1/materials/options/door",
     "/api/v1/materials/options/window",
+    "/api/v1/application-statuses",
 ]
 
 ID_STR = "cbddcfc8-d062-4202-b350-f875c04c6aa0,f1ff39d9-aab3-46e3-8749-dad11c04e3b8"
