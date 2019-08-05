@@ -23,12 +23,17 @@ def create_spec(app):
 
 def add_components(spec):
     console.log('ADD COMPONENTS CALLED')
-    for k, v in model_registry._models.items():
-        try:
-            spec.components.schema(k, schema=v)
-        except DuplicateComponentNameError as e:
-            pass
-            # import ipdb; ipdb.set_trace()
+    models = model_registry.get_models()
+    try:
+        for k, v in models.items():
+            try:
+                spec.components.schema(k, schema=v)
+            except DuplicateComponentNameError as e:
+                pass
+            except Exception as e:
+                console.error(e)
+    except Exception as e:
+        console.error(e)
 
 
 def add_resources(spec, config):

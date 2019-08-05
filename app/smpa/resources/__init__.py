@@ -13,3 +13,4 @@ from .unit import *  # NOQA
 from .work import *  # NOQA
 from .user import *  # NOQA
 from .meta import *  # NOQA
+from .payment import *  # NOQA

@@ -22,6 +22,11 @@ class ModelRegistry(object):
         self._tables = []
         self._initialsed = False
 
+    def get_models(self):
+        """Generator that yields the dict of models that we have registered.
+        """
+        return self._models.copy()
+
     def get_class(self, name):
         if name in self._models:
             return self._models[name]

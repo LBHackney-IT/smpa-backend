@@ -6,6 +6,7 @@
     BaseModel class
 """
 
+import arrow
 import datetime
 from importlib import import_module
 from schematics.models import Model, ModelMeta
@@ -51,6 +52,18 @@ class RelType(BaseType):
     @property
     def default(self):
         return None
+
+
+class ArrowDTType(BaseType):
+
+    primitive_type = str
+    native_type = datetime.datetime
+
+    def to_native(self, value, context=None):
+        return arrow.get(value).datetime
+
+    def to_primitive(self, value, context=None):
+        return arrow.get(value).isoformat()
 
 
 class RelConverter(Converter):
@@ -145,12 +158,15 @@ class RDBModel(Model):
     def export(self):
         if hasattr(self, 'backrefs'):
             self._get_backrefs()
+        if hasattr(self, 'list_backrefs'):
+            self._get_list_backrefs()
         return super().export(field_converter=rel_exporter)
 
     def to_primitive(self):
         if hasattr(self, 'backrefs'):
             self._get_backrefs()
-
+        if hasattr(self, 'list_backrefs'):
+            self._get_list_backrefs()
         return super().to_primitive()
 
     #
@@ -176,6 +192,17 @@ class RDBModel(Model):
                 related = service.first(**query)
                 prop = underscore(service.__model__.__name__)
                 # console.log(f'Setting {prop} on {self} to {related}')
+                setattr(self, prop, related)
+            except Exception as e:
+                console.warn(e)
+
+    def _get_list_backrefs(self):
+        for d in self.list_backrefs:
+            field, service_name, prop = d[0], d[1], d[2]
+            try:
+                service = self._get_service_instance(service_name)
+                query = {field: str(self.id)}
+                related = service.find(**query)
                 setattr(self, prop, related)
             except Exception as e:
                 console.warn(e)

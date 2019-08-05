@@ -439,7 +439,6 @@ class OpenAPIConverter(object):
         ):
             if callable(attr_func):
                 ret.update(attr_func(field))
-
         try:
             if isinstance(field, types.ModelType):
                 del ret["type"]

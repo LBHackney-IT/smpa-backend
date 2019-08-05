@@ -7,7 +7,7 @@
 """
 
 from .core import BaseModel, ORMMeta, RelType
-from typing import Type
+from typing import Type, List
 from datetime import date
 from schematics.types import (  # NOQA
     StringType, BooleanType, DateTimeType, IntType, UUIDType, ListType,
@@ -31,6 +31,9 @@ class Application(BaseModel, metaclass=ORMMeta):
     free_text_description: str = StringType()
     ownership_declaration = BooleanType(default=False)
     reduction_eligible = BooleanType(default=False)
+
+    # This is Ana's Application state
+    proposalFlow: str = StringType()
 
     declaration_id = RelType(
         UUIDType(),
@@ -62,7 +65,6 @@ class Application(BaseModel, metaclass=ORMMeta):
         ('application_id', 'SiteConstraintsService'),
         ('application_id', 'ProposalExtensionService'),
         ('application_id', 'ProposalEquipmentService'),
-        ('application_id', 'DocumentFileService'),
     ]
     site_address: Type['smpa.models.address.SiteAddress'] = \
         ModelType('smpa.models.address.SiteAddress')
@@ -72,8 +74,12 @@ class Application(BaseModel, metaclass=ORMMeta):
         ModelType('smpa.models.proposal.ProposalExtension')
     proposal_equipment: Type['smpa.models.proposal.ProposalEquipment'] = \
         ModelType('smpa.models.proposal.ProposalEquipment')
-    document_files: Type['smpa.models.document.DocumentFile'] = \
-        ModelType('smpa.models.document.DocumentFile')
 
-    # This is Ana's Application state
-    proposalFlow: str = StringType()
+    list_backrefs = [
+        ('application_id', 'DocumentFileService', 'document_files'),
+        ('application_id', 'PaymentService', 'payments'),
+    ]
+    document_files: List[Type['smpa.models.document.DocumentFile']] = \
+        ListType(ModelType('smpa.models.document.DocumentFile'))
+    payments: List[Type['smpa.models.payment.Payment']] = \
+        ListType(ModelType('smpa.models.payment.Payment'))

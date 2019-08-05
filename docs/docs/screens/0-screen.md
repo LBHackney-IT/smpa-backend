@@ -82,47 +82,50 @@ These all return a list along the lines of...
 A GET for a completed application currently returns JSON like this...
 
     {
-      "id": "b988e9c7-2c64-445c-b995-94df09242d88",
-      "created_at": "2019-08-02T14:19:20.179000",
-      "updated_at": "2019-08-02T14:19:20.187000",
+      "id": "42e726d4-0cee-43b6-90ec-ce5b32fadb2d",
+      "created_at": "2019-08-05T10:41:50.294000",
+      "updated_at": "2019-08-05T10:41:50.307000",
       "works_started": true,
       "date_works_started": "2018-01-01",
       "works_completed": false,
       "date_works_completed": null,
       "works_description": null,
       "free_text_description": "Praesent commodo cursus magna,\nvel scelerisque nisl consectetur et. Praesent commodo cursus\nmagna, vel scelerisque nisl consectetur et. Donec sed odio dui.\nNullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis\nnatoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.\n",
+      "ownership_declaration": true,
+      "reduction_eligible": true,
+      "proposalFlow": null,
       "declaration_id": "e0bbf434-9c28-4fe8-b4ae-892b3e359479",
       "declaration": {
         "id": "e0bbf434-9c28-4fe8-b4ae-892b3e359479",
-        "created_at": "2019-08-02T14:19:19.013000",
+        "created_at": "2019-08-05T10:41:49.094000",
         "updated_at": null,
         "name": "None of the above"
       },
       "ownership_type_id": "784e54c7-d6da-4613-ac5a-046a27278f4b",
       "ownership_type": {
         "id": "784e54c7-d6da-4613-ac5a-046a27278f4b",
-        "created_at": "2019-08-02T14:19:19.016000",
+        "created_at": "2019-08-05T10:41:49.097000",
         "updated_at": null,
         "name": "The applicant is the sole owner of the land"
       },
       "owner_id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
       "owner": {
         "id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
-        "created_at": "2019-08-02T14:19:19.650000",
-        "updated_at": "2019-08-02T14:19:20.167000",
-        "_id": "5d444667283a2ca5ffa4356e",
+        "created_at": "2019-08-05T10:41:49.738000",
+        "updated_at": "2019-08-05T10:41:50.281000",
+        "_id": "5d4807ed4d4739c881c2ac29",
         "email": "test@example.com",
-        "profile_id": "963009ba-a550-4cdf-bae2-81a08c7b6b9b",
+        "profile_id": "ac863647-7220-4d04-b326-2c4129959b12",
         "role_id": "831083f5-b7c9-4967-8561-ac4011be54e4",
         "role": {
           "id": "831083f5-b7c9-4967-8561-ac4011be54e4",
-          "created_at": "2019-08-02T14:19:18.850000",
+          "created_at": "2019-08-05T10:41:48.937000",
           "updated_at": null,
           "name": "User"
         },
         "profile": {
-          "id": "963009ba-a550-4cdf-bae2-81a08c7b6b9b",
-          "created_at": "2019-08-02T14:19:19.648000",
+          "id": "ac863647-7220-4d04-b326-2c4129959b12",
+          "created_at": "2019-08-05T10:41:49.736000",
           "updated_at": null,
           "company": null,
           "name": null,
@@ -132,8 +135,8 @@ A GET for a completed application currently returns JSON like this...
         "verified_at": null
       },
       "site_address": {
-        "id": "e708b69d-1440-42df-82c5-3adf4cd76645",
-        "created_at": "2019-08-02T14:19:20.298000",
+        "id": "e53541b3-0922-4a01-8f11-78de7e3c0022",
+        "created_at": "2019-08-05T10:41:50.427000",
         "updated_at": null,
         "number": null,
         "property_name": null,
@@ -150,11 +153,11 @@ A GET for a completed application currently returns JSON like this...
         "property_type": null,
         "description": "Hactar Towers",
         "siteGeoJson": null,
-        "application_id": "b988e9c7-2c64-445c-b995-94df09242d88"
+        "application_id": "42e726d4-0cee-43b6-90ec-ce5b32fadb2d"
       },
       "site_constraints": {
-        "id": "815416af-ee7d-48eb-a232-c25d82e904a7",
-        "created_at": "2019-08-02T14:19:20.211000",
+        "id": "fd14c557-bb21-4080-b4a7-793939855a31",
+        "created_at": "2019-08-05T10:41:50.337000",
         "updated_at": null,
         "has_boundary": "yes",
         "nb_a4d": 2,
@@ -169,13 +172,13 @@ A GET for a completed application currently returns JSON like this...
         "is_floodzone_3b": "0",
         "geom": null,
         "uprn": 10008300829,
-        "application_id": "b988e9c7-2c64-445c-b995-94df09242d88"
+        "application_id": "42e726d4-0cee-43b6-90ec-ce5b32fadb2d"
       },
       "proposal_extension": {
-        "id": "15eb3ce9-6b3d-455e-ad16-d9f796c7be00",
-        "created_at": "2019-08-02T14:19:20.315000",
-        "updated_at": "2019-08-02T14:19:20.319000",
-        "application_id": "b988e9c7-2c64-445c-b995-94df09242d88",
+        "id": "3c02fc0a-38e5-44ef-8767-f3d7b559fc84",
+        "created_at": "2019-08-05T10:41:50.447000",
+        "updated_at": "2019-08-05T10:41:50.451000",
+        "application_id": "42e726d4-0cee-43b6-90ec-ce5b32fadb2d",
         "original_house": {
           "id": null,
           "created_at": null,
@@ -200,13 +203,13 @@ A GET for a completed application currently returns JSON like this...
             "works_locations": [
               {
                 "id": "66d1b304-5729-4654-91df-d6306e249e54",
-                "created_at": "2019-08-02T14:19:18.853000",
+                "created_at": "2019-08-05T10:41:48.940000",
                 "updated_at": null,
                 "name": "Rear"
               },
               {
                 "id": "4f464424-ca54-4bc4-b980-c5d957a5ad1a",
-                "created_at": "2019-08-02T14:19:18.857000",
+                "created_at": "2019-08-05T10:41:48.944000",
                 "updated_at": null,
                 "name": "Side"
               }
@@ -236,13 +239,13 @@ A GET for a completed application currently returns JSON like this...
             "works_locations": [
               {
                 "id": "66d1b304-5729-4654-91df-d6306e249e54",
-                "created_at": "2019-08-02T14:19:18.853000",
+                "created_at": "2019-08-05T10:41:48.940000",
                 "updated_at": null,
                 "name": "Rear"
               },
               {
                 "id": "4f464424-ca54-4bc4-b980-c5d957a5ad1a",
-                "created_at": "2019-08-02T14:19:18.857000",
+                "created_at": "2019-08-05T10:41:48.944000",
                 "updated_at": null,
                 "name": "Side"
               }
@@ -266,13 +269,13 @@ A GET for a completed application currently returns JSON like this...
           "access_works_sub_types": [
             {
               "id": "f09b702e-c3c6-4db4-9faa-b70288176cac",
-              "created_at": "2019-08-02T14:19:18.932000",
+              "created_at": "2019-08-05T10:41:49.017000",
               "updated_at": null,
               "name": "Addition of a new entrance"
             },
             {
               "id": "679143a9-0ee5-478e-984f-11c990979061",
-              "created_at": "2019-08-02T14:19:18.936000",
+              "created_at": "2019-08-05T10:41:49.021000",
               "updated_at": null,
               "name": "Removal of an entrance"
             }
@@ -318,7 +321,7 @@ A GET for a completed application currently returns JSON like this...
         "additional_floor_area_units_id": "095bd097-f66e-4c66-bc1e-3521a0358e8d",
         "additional_floor_area_units": {
           "id": "095bd097-f66e-4c66-bc1e-3521a0358e8d",
-          "created_at": "2019-08-02T14:19:18.763000",
+          "created_at": "2019-08-05T10:41:48.846000",
           "updated_at": null,
           "name": "sq metres"
         },
@@ -327,21 +330,21 @@ A GET for a completed application currently returns JSON like this...
         "owner_id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
         "owner": {
           "id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
-          "created_at": "2019-08-02T14:19:19.650000",
-          "updated_at": "2019-08-02T14:19:20.167000",
-          "_id": "5d444667283a2ca5ffa4356e",
+          "created_at": "2019-08-05T10:41:49.738000",
+          "updated_at": "2019-08-05T10:41:50.281000",
+          "_id": "5d4807ed4d4739c881c2ac29",
           "email": "test@example.com",
-          "profile_id": "963009ba-a550-4cdf-bae2-81a08c7b6b9b",
+          "profile_id": "ac863647-7220-4d04-b326-2c4129959b12",
           "role_id": "831083f5-b7c9-4967-8561-ac4011be54e4",
           "role": {
             "id": "831083f5-b7c9-4967-8561-ac4011be54e4",
-            "created_at": "2019-08-02T14:19:18.850000",
+            "created_at": "2019-08-05T10:41:48.937000",
             "updated_at": null,
             "name": "User"
           },
           "profile": {
-            "id": "963009ba-a550-4cdf-bae2-81a08c7b6b9b",
-            "created_at": "2019-08-02T14:19:19.648000",
+            "id": "ac863647-7220-4d04-b326-2c4129959b12",
+            "created_at": "2019-08-05T10:41:49.736000",
             "updated_at": null,
             "company": null,
             "name": null,
@@ -352,10 +355,10 @@ A GET for a completed application currently returns JSON like this...
         }
       },
       "proposal_equipment": {
-        "id": "aec62ffd-16f0-482b-8f65-1cca58dce470",
-        "created_at": "2019-08-02T14:19:21.087000",
-        "updated_at": "2019-08-02T14:19:21.091000",
-        "application_id": "b988e9c7-2c64-445c-b995-94df09242d88",
+        "id": "a0ad9926-20a1-486c-8a62-5a039f3f6b91",
+        "created_at": "2019-08-05T10:41:51.228000",
+        "updated_at": "2019-08-05T10:41:51.231000",
+        "application_id": "42e726d4-0cee-43b6-90ec-ce5b32fadb2d",
         "equipment": {
           "id": null,
           "created_at": null,
@@ -375,7 +378,7 @@ A GET for a completed application currently returns JSON like this...
               "locations": [
                 {
                   "id": "9dc99f40-ac1d-421e-a408-c253d7ead671",
-                  "created_at": "2019-08-02T14:19:18.864000",
+                  "created_at": "2019-08-05T10:41:48.952000",
                   "updated_at": null,
                   "name": "Rear / side wrap-around"
                 }
@@ -389,21 +392,21 @@ A GET for a completed application currently returns JSON like this...
         "owner_id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
         "owner": {
           "id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
-          "created_at": "2019-08-02T14:19:19.650000",
-          "updated_at": "2019-08-02T14:19:20.167000",
-          "_id": "5d444667283a2ca5ffa4356e",
+          "created_at": "2019-08-05T10:41:49.738000",
+          "updated_at": "2019-08-05T10:41:50.281000",
+          "_id": "5d4807ed4d4739c881c2ac29",
           "email": "test@example.com",
-          "profile_id": "963009ba-a550-4cdf-bae2-81a08c7b6b9b",
+          "profile_id": "ac863647-7220-4d04-b326-2c4129959b12",
           "role_id": "831083f5-b7c9-4967-8561-ac4011be54e4",
           "role": {
             "id": "831083f5-b7c9-4967-8561-ac4011be54e4",
-            "created_at": "2019-08-02T14:19:18.850000",
+            "created_at": "2019-08-05T10:41:48.937000",
             "updated_at": null,
             "name": "User"
           },
           "profile": {
-            "id": "963009ba-a550-4cdf-bae2-81a08c7b6b9b",
-            "created_at": "2019-08-02T14:19:19.648000",
+            "id": "ac863647-7220-4d04-b326-2c4129959b12",
+            "created_at": "2019-08-05T10:41:49.736000",
             "updated_at": null,
             "company": null,
             "name": null,
@@ -413,6 +416,156 @@ A GET for a completed application currently returns JSON like this...
           "verified_at": null
         }
       },
-      "document_files": null,
-      "proposalFlow": null
-    }
+      "document_files": [
+        {
+          "id": "09305508-bafc-4a36-a904-b9017606075e",
+          "created_at": "2019-08-05T10:41:51.785000",
+          "updated_at": "2019-08-05T10:41:51.785000",
+          "original_name": "test-image.png",
+          "storage_path": "42e726d4-0cee-43b6-90ec-ce5b32fadb2d/09305508-bafc-4a36-a904-b9017606075e.png",
+          "application_id": "42e726d4-0cee-43b6-90ec-ce5b32fadb2d",
+          "document_size_id": "a3ec6180-a863-43e9-8f6c-de7a171ce489",
+          "document_size": {
+            "id": "a3ec6180-a863-43e9-8f6c-de7a171ce489",
+            "created_at": "2019-08-05T10:41:48.873000",
+            "updated_at": null,
+            "name": "A1"
+          },
+          "document_types_existing_ids": [
+            "cbddcfc8-d062-4202-b350-f875c04c6aa0",
+            "f1ff39d9-aab3-46e3-8749-dad11c04e3b8"
+          ],
+          "document_types_existing": [
+            {
+              "id": "cbddcfc8-d062-4202-b350-f875c04c6aa0",
+              "created_at": "2019-08-05T10:41:48.922000",
+              "updated_at": null,
+              "name": "Floor plans"
+            },
+            {
+              "id": "f1ff39d9-aab3-46e3-8749-dad11c04e3b8",
+              "created_at": "2019-08-05T10:41:48.925000",
+              "updated_at": null,
+              "name": "Other"
+            }
+          ],
+          "document_types_proposed_ids": [
+            "cbddcfc8-d062-4202-b350-f875c04c6aa0",
+            "f1ff39d9-aab3-46e3-8749-dad11c04e3b8"
+          ],
+          "document_types_proposed": [
+            {
+              "id": "cbddcfc8-d062-4202-b350-f875c04c6aa0",
+              "created_at": "2019-08-05T10:41:48.922000",
+              "updated_at": null,
+              "name": "Floor plans"
+            },
+            {
+              "id": "f1ff39d9-aab3-46e3-8749-dad11c04e3b8",
+              "created_at": "2019-08-05T10:41:48.925000",
+              "updated_at": null,
+              "name": "Other"
+            }
+          ]
+        },
+        {
+          "id": "73112739-6771-42ec-833b-1ef8a5274706",
+          "created_at": "2019-08-05T10:41:51.905000",
+          "updated_at": "2019-08-05T10:41:51.905000",
+          "original_name": "test-image.png",
+          "storage_path": "42e726d4-0cee-43b6-90ec-ce5b32fadb2d/73112739-6771-42ec-833b-1ef8a5274706.png",
+          "application_id": "42e726d4-0cee-43b6-90ec-ce5b32fadb2d",
+          "document_size_id": "a3ec6180-a863-43e9-8f6c-de7a171ce489",
+          "document_size": {
+            "id": "a3ec6180-a863-43e9-8f6c-de7a171ce489",
+            "created_at": "2019-08-05T10:41:48.873000",
+            "updated_at": null,
+            "name": "A1"
+          },
+          "document_types_existing_ids": [],
+          "document_types_existing": [],
+          "document_types_proposed_ids": [
+            "cbddcfc8-d062-4202-b350-f875c04c6aa0",
+            "f1ff39d9-aab3-46e3-8749-dad11c04e3b8"
+          ],
+          "document_types_proposed": [
+            {
+              "id": "cbddcfc8-d062-4202-b350-f875c04c6aa0",
+              "created_at": "2019-08-05T10:41:48.922000",
+              "updated_at": null,
+              "name": "Floor plans"
+            },
+            {
+              "id": "f1ff39d9-aab3-46e3-8749-dad11c04e3b8",
+              "created_at": "2019-08-05T10:41:48.925000",
+              "updated_at": null,
+              "name": "Other"
+            }
+          ]
+        }
+      ],
+      "payments": [
+        {
+          "id": "f6591ad1-2c6c-4001-bc5c-0ff4ca55078d",
+          "created_at": "2019-08-05T10:41:52.403000",
+          "updated_at": "2019-08-05T10:41:52.403000",
+          "amount": 10000,
+          "description": "SmPA test",
+          "reference": "2019/1234",
+          "state": {
+            "id": null,
+            "created_at": null,
+            "updated_at": null,
+            "status": "created",
+            "finished": false
+          },
+          "refund_summary": {
+            "id": null,
+            "created_at": null,
+            "updated_at": null,
+            "status": "pending",
+            "amount_available": 10000,
+            "amount_submitted": 0
+          },
+          "payment_id": "PID",
+          "payment_provider": "sandbox",
+          "created_date": "2019-07-29T15:34:21.541000+00:00",
+          "settlement_summary": {
+            "id": null,
+            "created_at": null,
+            "updated_at": null,
+            "capture_submit_time": null,
+            "captured_date": null
+          },
+          "delayed_capture": false,
+          "return_url": "http://0.0.0.0:5000",
+          "owner_id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
+          "owner": {
+            "id": "b7d623db-5b4a-43df-b3f1-2bfca845d657",
+            "created_at": "2019-08-05T10:41:49.738000",
+            "updated_at": "2019-08-05T10:41:50.281000",
+            "_id": "5d4807ed4d4739c881c2ac29",
+            "email": "test@example.com",
+            "profile_id": "ac863647-7220-4d04-b326-2c4129959b12",
+            "role_id": "831083f5-b7c9-4967-8561-ac4011be54e4",
+            "role": {
+              "id": "831083f5-b7c9-4967-8561-ac4011be54e4",
+              "created_at": "2019-08-05T10:41:48.937000",
+              "updated_at": null,
+              "name": "User"
+            },
+            "profile": {
+              "id": "ac863647-7220-4d04-b326-2c4129959b12",
+              "created_at": "2019-08-05T10:41:49.736000",
+              "updated_at": null,
+              "company": null,
+              "name": null,
+              "email_addresses": null,
+              "phone": null
+            },
+            "verified_at": null
+          },
+          "application_id": "42e726d4-0cee-43b6-90ec-ce5b32fadb2d"
+        }
+      ]
+}

@@ -54,9 +54,10 @@ class DService(object):
 
     def new(self, *args, **kwargs):
         kwargs = self._preprocess(**kwargs)
+        j = self._jsonify(kwargs)
         m = self.__model__()
 
-        for k, v in kwargs.items():
+        for k, v in j.items():
             if hasattr(m, k):
                 setattr(m, k, v)
 
@@ -135,11 +136,11 @@ class DService(object):
         if instance._id is not None and instance.id is not None:
             updating = True
         data = instance.to_primitive()
-        data = self._set_id(data)
         j = self._jsonify(data)
         if j.get('created_at', None) is None:
             j['created_at'] = arrow.now().datetime
         j['updated_at'] = arrow.now().datetime
+        j = self._set_id(j)
         if updating:
             j.pop('_id', None)
             return self.update(str(instance.id), json=j)

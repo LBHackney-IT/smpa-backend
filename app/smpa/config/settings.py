@@ -7,6 +7,10 @@ class Config(object):
     base: str = 'config'
     debug = False
 
+    PAYMENT_AMOUNT = 20600
+    PAYMENT_DESCRIPTION = "Submit my Planning Application payment"
+    GOV_PAY_API_KEY = os.environ.get('GOV_PAY_API_KEY')
+
     RDB_HOST = os.environ.get('RDB_HOST')
     RDB_PORT = os.environ.get('RDB_PORT')
     RDB_DB = os.environ.get('RDB_DB')

@@ -43,3 +43,5 @@ from .application import *  # NOQA
 from .application import _applications  # NOQA
 from .proposal import *  # NOQA
 from .proposal import _proposals_extension, _proposals_equipment  # NOQA
+from .payment import *  # NOQA
+from .payment import _payments  # NOQA
