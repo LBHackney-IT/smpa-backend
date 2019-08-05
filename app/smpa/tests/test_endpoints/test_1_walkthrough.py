@@ -45,6 +45,12 @@ Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis
 natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
 """
 
+CREATE_PAYMENT_FAILURE_RESPONSE = {
+    "field": "amount",
+    "code": "P0102",
+    "description": "Invalid attribute value: amount. Must be less than or equal to 10000000"
+}
+
 CREATE_PAYMENT_SUCCESS_RESPONSE = {
     'amount': 10000,
     'description': 'SmPA test',
@@ -1246,6 +1252,56 @@ def test_create_payment(session_client):
     assert j['application_id'] is not None
     assert j['owner_id'] is not None
     assert j['owner']['email'] == 'test@example.com'
+    assert j['next_url'] == 'https://www.payments.service.gov.uk/secure/SOME_UUID'
+
+
+@responses.activate
+def test_create_payment_failure(session_client):
+    responses.add(
+        responses.POST,
+        'https://publicapi.payments.service.gov.uk/v1/payments',
+        json=CREATE_PAYMENT_FAILURE_RESPONSE,
+        status=401
+    )
+    rv = session_client.post(
+        f'/api/v1/applications/{APPLICATION_ID}/payments',
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status != falcon.HTTP_CREATED
+    j = json.loads(rv.body)
+    assert j['title']['success'] is False
+    assert j['title']['message'] == CREATE_PAYMENT_FAILURE_RESPONSE['description']
+    assert j['title']['code'] == CREATE_PAYMENT_FAILURE_RESPONSE['code']
+
+
+def test_get_payments(session_client):
+    rv = session_client.get(
+        f'/api/v1/payments',
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert j is not None
+    assert j[0]['id'] is not None
+    assert j[0]['application_id'] is not None
+    assert j[0]['owner_id'] is not None
+    assert j[0]['owner']['email'] == 'test@example.com'
+    assert j[0]['next_url'] == 'https://www.payments.service.gov.uk/secure/SOME_UUID'
+
+
+def test_get_payments_for_application(session_client):
+    rv = session_client.get(
+        f'/api/v1/applications/{APPLICATION_ID}/payments',
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert j is not None
+    assert j[0]['id'] is not None
+    assert j[0]['application_id'] is not None
+    assert j[0]['owner_id'] is not None
+    assert j[0]['owner']['email'] == 'test@example.com'
+    assert j[0]['next_url'] == 'https://www.payments.service.gov.uk/secure/SOME_UUID'
 
 
 #

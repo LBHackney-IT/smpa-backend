@@ -52,17 +52,6 @@ class PaymentSettlementSummary(BaseModel, metaclass=ORMMeta):
     captured_date: date = DateType()
 
 
-class PaymentLink(BaseModel, metaclass=ORMMeta):
-    """
-    {
-      "capture_submit_time": "2016-01-21T17:15:000Z",
-      "captured_date": "2016-01-21"
-    }
-    """
-    capture_submit_time: datetime = DateTimeType()
-    captured_date: date = DateType()
-
-
 class Payment(BaseModel, metaclass=ORMMeta):
 
     """These are payment objects within our system. We create them on submit
@@ -80,7 +69,9 @@ class Payment(BaseModel, metaclass=ORMMeta):
     settlement_summary: PaymentSettlementSummary = ModelType(PaymentSettlementSummary)
     delayed_capture: bool = BooleanType(default=False)
     return_url: str = StringType()
-    # _links: List[dict] = ListType(DictType())  # Don't think we need to be storing these
+    next_url: str = StringType()
+    # _links: List[dict] = ListType(DictType())  # Don't think we need to be storing all of these
+
 
     owner_id = RelType(
         UUIDType(),

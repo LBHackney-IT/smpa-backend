@@ -54,14 +54,18 @@ class PaymentService(DService):
             payment = self.new(json=j)
             payment.owner_id = str(user.id)
             payment.application_id = str(application_id)
+            payment.next_url = j['_links']['next_url']['href']
             payment = _payments.save(payment)
             return payment
         else:
             response = {
-                "success": False,
-                "message": j['description'],
-                'code': j['code']
+                "success": False
             }
+            if j.get('description', None) is not None:
+                response["message"] = j.get('description')
+            if j.get('code', None) is not None:
+                response["code"] = j.get('code')
+
             raise falcon.HTTPError(falcon.HTTP_422, response)
 
 

@@ -58,7 +58,7 @@ from .resources import (  # NOQA
     # Meta
     DeclarationListResource, OwnershipTypeListResource,
     # Payment
-    PaymentPostResource
+    PaymentPostResource, PaymentListResource
 )
 
 EXEMPT_ROUTES = [
@@ -122,6 +122,7 @@ def init_routes(api, config):
     declarations_list = DeclarationListResource()
     ownership_types_list = OwnershipTypeListResource()
     payment_post = PaymentPostResource()
+    payment_list = PaymentListResource()
 
     # To fix
     area_units = AreaUnitResource()
@@ -220,6 +221,7 @@ def init_routes(api, config):
     add_route(api, '/applications/{id}', applications_patch)
     add_route(api, '/applications/{id}/documents', document_file_application)
     add_route(api, '/applications/{id}/payments', payment_post)
+    add_route(api, '/payments', payment_list)
     add_route(api, '/documents', document_file_post)
     add_route(api, '/documents/{id}', document_file_delete)
     add_route(api, '/declarations', declarations_list)
@@ -306,6 +308,7 @@ def init_routes(api, config):
         declarations_list,
         ownership_types_list,
         payment_post,
+        payment_list,
 
         ########################################
         # FUTURE ROUTES FOR AN ADMIN INTERFACE #
