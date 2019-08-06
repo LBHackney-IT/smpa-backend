@@ -15,7 +15,9 @@ class GovPayClient:
             "Content-Type": "application/json"
         }
 
-    def create_payment(self, amount: int, description: str, reference: str, application_id: str):
+    def create_payment(
+            self, amount: int, description: str, reference: str,
+            application_id: str, payment_id: str):
         """
         Payload should look something like this.
             {
@@ -81,7 +83,7 @@ class GovPayClient:
 
         """
         from smpa.app import config
-        return_url = config.get_payment_return_url(application_id)
+        return_url = config.get_payment_return_url(application_id, payment_id)
         endpoint = '/payments'
         data = {
             "amount": amount,

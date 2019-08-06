@@ -24,8 +24,9 @@ class Config(object):
     DOCUMENT_DB_DB = os.environ.get('DOCUMENT_DB_DB')
     DOCUMENT_DB_PASSWORD = os.environ.get('DOCUMENT_DB_PASSWORD', '')
 
-    def get_payment_return_url(self, application_id):
-        return f"{self.BASE_URL}/applications/{application_id}{self.PAYMENT_RETURN_URL}"
+    def get_payment_return_url(self, application_id, payment_id):
+        p_id = payment_id
+        return f"{self.BASE_URL}/applications/{application_id}{self.PAYMENT_RETURN_URL}/{p_id}"
 
 
 class ConfigTest(Config):

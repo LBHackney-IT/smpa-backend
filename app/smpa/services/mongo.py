@@ -206,7 +206,7 @@ class DService(object):
             json (json): The data
 
         Returns:
-            __model__ or list: Single model instance or list of them.
+            __model__: Single model instance
         """
         kwargs = self._preprocess(**kwargs)
         j = self._jsonify(kwargs)

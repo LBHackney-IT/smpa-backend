@@ -74,15 +74,23 @@ class PaymentService(DService):
         user = req.context['user']
         user.export()
 
+        # Create a local payment object first so we have an ID
+        payment = self.new()
+        payment.owner_id = str(user.id)
+        payment.application_id = str(application_id)
+        payment = _payments.save(payment)
+
         # Create the payment
         rv = govpay.create_payment(
-            amount=amount, description=description, reference=ref, application_id=application_id
+            amount=amount,
+            description=description,
+            reference=ref,
+            application_id=application_id,
+            payment_id=payment.id
         )
         j = rv.json()
         if rv.status_code == 201:
-            payment = self.new(json=j)
-            payment.owner_id = str(user.id)
-            payment.application_id = str(application_id)
+            payment = _payments.update(id=payment.id, json=j)
             payment.next_url = j['_links']['next_url']['href']
             payment = _payments.save(payment)
             # Update the application with a status of submitted and a reference
