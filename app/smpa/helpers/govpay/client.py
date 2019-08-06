@@ -5,7 +5,6 @@ import requests
 class GovPayClient:
 
     def __init__(self, api_key: str) -> None:
-        self.return_url = "http://0.0.0.0:5000"
         self.base_url = 'https://publicapi.payments.service.gov.uk'
         self.api_version = 'v1'
         self.url = f"{self.base_url}/{self.api_version}"
@@ -16,7 +15,7 @@ class GovPayClient:
             "Content-Type": "application/json"
         }
 
-    def create_payment(self, amount: int, description: str, reference: str):
+    def create_payment(self, amount: int, description: str, reference: str, application_id: str):
         """
         Payload should look something like this.
             {
@@ -81,12 +80,14 @@ class GovPayClient:
         }
 
         """
+        from smpa.app import config
+        return_url = config.get_payment_return_url(application_id)
         endpoint = '/payments'
         data = {
             "amount": amount,
             "reference": reference,
             "description": description,
-            "return_url": self.return_url
+            "return_url": return_url
         }
         rv = requests.post(f'{self.url}{endpoint}', json=data, headers=self.headers)
         return rv

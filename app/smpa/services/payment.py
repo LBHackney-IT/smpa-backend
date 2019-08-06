@@ -75,7 +75,9 @@ class PaymentService(DService):
         user.export()
 
         # Create the payment
-        rv = govpay.create_payment(amount=amount, description=description, reference=ref)
+        rv = govpay.create_payment(
+            amount=amount, description=description, reference=ref, application_id=application_id
+        )
         j = rv.json()
         if rv.status_code == 201:
             payment = self.new(json=j)

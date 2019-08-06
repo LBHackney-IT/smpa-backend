@@ -20,7 +20,7 @@ Run all tests with log / print output but stop when the first one fails...
 
 Run all tests and drop into a debugger if any fail.
 
-    pytest --ipdb smpa
+    pytest --pdb smpa
 
 
 ## Test Coverage
