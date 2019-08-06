@@ -90,7 +90,6 @@ class PaymentService(DService):
         )
         j = rv.json()
         if rv.status_code == 201:
-            import ipdb; ipdb.set_trace()
             payment = _payments.update(id=str(payment.id), json=j)
             payment.next_url = j['_links']['next_url']['href']
             payment = _payments.save(payment)
