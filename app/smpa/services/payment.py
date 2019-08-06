@@ -86,11 +86,12 @@ class PaymentService(DService):
             description=description,
             reference=ref,
             application_id=application_id,
-            payment_id=payment.id
+            payment_id=str(payment.id)
         )
         j = rv.json()
         if rv.status_code == 201:
-            payment = _payments.update(id=payment.id, json=j)
+            import ipdb; ipdb.set_trace()
+            payment = _payments.update(id=str(payment.id), json=j)
             payment.next_url = j['_links']['next_url']['href']
             payment = _payments.save(payment)
             # Update the application with a status of submitted and a reference

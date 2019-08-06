@@ -83,7 +83,7 @@ class GovPayClient:
 
         """
         from smpa.app import config
-        return_url = config.get_payment_return_url(application_id, payment_id)
+        return_url = config.get_payment_return_url(str(application_id), str(payment_id))
         endpoint = '/payments'
         data = {
             "amount": amount,
