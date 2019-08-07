@@ -39,9 +39,11 @@ class UserService(DService):
         return bcrypt.verify(password, user.password)
 
     def verify_account(self, token):
-        u = _users.first_or_404(verification_token=token)
-        if u.verified is True:
-            raise falcon.HTTPError(falcon.HTTP_401, "Account already verified")
+        u = _users.first(verification_token=token)
+        if u is None:
+            raise falcon.HTTPError(falcon.HTTP_400, "Invalid verification token")
+        elif u.verified is True:
+            raise falcon.HTTPError(falcon.HTTP_400, "Account already verified")
         u.verified_at = arrow.now().datetime
         u = self.save(u)
         return u

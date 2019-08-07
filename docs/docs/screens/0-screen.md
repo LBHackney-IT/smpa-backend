@@ -19,6 +19,37 @@ Post form-encoded `email` and `password` to the auth endpoint and receive a JSON
     }
 
 
+## Sign up
+
+Post form-encoded `email`, `password` and `password_confirm` to the `users/create` endpoint. This will create an UNVERIFIED user who is unable to log in until they have completed the verification process. It will also send them an email with the verification link in.
+
+`POST /api/v1/users/create`
+
+### Example
+
+    email: test@example.com
+    password: secretpassword
+    password_confirm: secretpassword
+
+
+## Verify
+
+The email that gets sent to the user will contain a verifcation link of the format {BASE_URL}/accounts/verify/{VERIFICATION_TOKEN} where BASE_URL is the URL that the front end application is running at. When the user clicks on that link, the front end should send a `GET` request to the verification endpoint...
+
+`GET /api/v1/users/verify/{VERIFICATION_TOKEN}`
+
+If this is successful, you will receive a similar payload to a login attempt.
+
+    {
+      "message": "Account verified and logged in",
+      "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjp7ImlkIjoiZWYwY2Q5NDktMzFiYS00MjhlLWE3ZTQtMTk0MzczOWIxN2YwIn0sImlhdCI6MTU1NDQ2MDQ0MSwibmJmIjoxNTU0NDYwNDQxLCJleHAiOjE1NTQ1NDY4NDF9.4bIuU99dFXVb3nmEpohvkCl_etOJ0bDm3OT916Suyxo"
+    }
+
+Unsuccessful verifications, ie: user is already verified or the token is not valid should return a 400 with an error message...
+
+    {
+      "title": "Account already verified"
+    }
 
 
 ## Default data

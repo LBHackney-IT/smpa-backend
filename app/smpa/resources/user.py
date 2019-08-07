@@ -180,16 +180,9 @@ class UserVerifyResource(Resource):
         """
         from ..app import auth_backend
         user = self._service.verify_account(token)
-        if user is None:
-            resp.status = falcon.HTTP_401
-            resp.body = {
-                'success': False,
-                'message': 'Email is already registered'
-            }
-        else:
-            jwt_token = auth_backend.get_auth_token({"id": str(user.id)})
-            resp.status = falcon.HTTP_OK
-            resp.media = {"message": "Account verified and logged in", "jwt": jwt_token}
+        jwt_token = auth_backend.get_auth_token({"id": str(user.id)})
+        resp.status = falcon.HTTP_OK
+        resp.media = {"message": "Account verified and logged in", "jwt": jwt_token}
 
 
 class UserProfileResourcePatch(Resource):

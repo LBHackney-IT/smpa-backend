@@ -168,6 +168,27 @@ def test_verify_endpoint(session_client):
     assert j['jwt'] is not None
 
 
+def test_verify_endpoint_already_verified(session_client):
+    vtoken = _users.first(email='test101@example.com').verification_token
+    rv = session_client.get(
+        f'/api/v1/users/verify/{vtoken}'
+    )
+    assert rv is not None
+    assert rv.status == falcon.HTTP_400
+    j = rv.json
+    assert j['title'] == 'Account already verified'
+
+
+def test_verify_endpoint_bad_token(session_client):
+    rv = session_client.get(
+        f'/api/v1/users/verify/aljdlafjlkjflkfjd'
+    )
+    assert rv is not None
+    assert rv.status == falcon.HTTP_400
+    j = rv.json
+    assert j['title'] == 'Invalid verification token'
+
+
 def test_log_in_now_verified_again(app, session_client):
     rv = session_client.post(
         '/api/v1/auth',
