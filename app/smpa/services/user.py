@@ -6,6 +6,8 @@
     User services.
 """
 
+import uuid
+import json
 import arrow
 import falcon
 from passlib.hash import bcrypt
@@ -36,24 +38,29 @@ class UserService(DService):
             raise falcon.HTTPError(falcon.HTTP_400, "User has no password set")
         return bcrypt.verify(password, user.password)
 
-    def verify_token(self, token):
+    def verify_account(self, token):
         u = _users.first_or_404(verification_token=token)
+        if u.verified is True:
+            raise falcon.HTTPError(falcon.HTTP_401, "Account already verified")
         u.verified_at = arrow.now().datetime
-        u.verification_token = None
-        self.save(u)
+        u = self.save(u)
         return u
 
     def authenticate(self, data: dict) -> Optional[User]:
         email = data.get('email', None)
         password = data.get('password', None)
-        if email is None or password is None:
-            return falcon.HTTP_403
-
         user = _users.first(email=email)
+        # Check if this user's account is verified
+        if user.verified is False:
+            raise falcon.HTTPError(falcon.HTTP_401, "Account is not yet verified")
+
+        if email is None or password is None:
+            raise falcon.HTTPError(falcon.HTTP_401, "Email or password incomplete")
+
         if _users.verify(user, password):
             return user
 
-        return falcon.HTTP_403
+        return falcon.HTTP_401
 
     def gen_token(self, user):
         from smpa.app import auth_backend
@@ -84,6 +91,20 @@ class UserService(DService):
         kwargs['profile_id'] = str(_user_profiles.create().id)
         user = super().create(**kwargs)
         return user
+
+    def register(self, email: str, password: str):
+        # Logic for whether we should be allowed to create the user is handled
+        # inside resources.auth.SignupResource
+
+        # Create an unvierified account with a verification_token which is used
+        # in the account verification step
+        rv = self.create(
+            email=email,
+            password=password,
+            verified_at=None,
+            verification_token=uuid.uuid4()
+        )
+        return rv
 
     def get_or_create(self, **kwargs):
         """Overriden because we need to compare UUIDs to UUIDs and bcrypt can produce

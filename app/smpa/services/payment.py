@@ -11,7 +11,6 @@ import arrow
 from .mongo import DService
 
 from smpa.models.payment import Payment
-from smpa.helpers.govpay.client import GovPayClient
 
 
 class PaymentService(DService):
@@ -20,8 +19,7 @@ class PaymentService(DService):
     def check(self, id):
         """Checks the status of a payment on GovPay
         """
-        from smpa.app import config
-        govpay = GovPayClient(config.GOV_PAY_API_KEY)
+        from smpa.app import govpay
         payment = _payments.get(str(id))
         if payment.payment_id is None:
             raise falcon.HTTPError(falcon.HTTP_404, 'Payment not found')
@@ -63,9 +61,8 @@ class PaymentService(DService):
             **kwargs: Description
 
         """
-        from smpa.app import config
+        from smpa.app import config, govpay
         from .application import _applications
-        govpay = GovPayClient(config.GOV_PAY_API_KEY)
         yyyy = arrow.now().year
         nnnn = 5000 + self.count()
         ref = f"{yyyy}/{nnnn}"

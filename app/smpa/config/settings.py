@@ -9,20 +9,27 @@ class Config(object):
 
     BASE_URL = 'http://localhost:8080'
 
+    # Payments
     PAYMENT_AMOUNT = 20600
     PAYMENT_DESCRIPTION = "Submit my Planning Application payment"
     GOV_PAY_API_KEY = os.environ.get('GOV_PAY_API_KEY')
     PAYMENT_RETURN_URL = '/payment/check'
 
+    # RethinkDB Database (deprecated)
     RDB_HOST = os.environ.get('RDB_HOST')
     RDB_PORT = os.environ.get('RDB_PORT')
     RDB_DB = os.environ.get('RDB_DB')
     RDB_PASSWORD = os.environ.get('RDB_PASSWORD')
 
+    # DocumentDB database
     DOCUMENT_DB_HOST = os.environ.get('DOCUMENT_DB_HOST')
     DOCUMENT_DB_PORT = os.environ.get('DOCUMENT_DB_PORT')
     DOCUMENT_DB_DB = os.environ.get('DOCUMENT_DB_DB')
     DOCUMENT_DB_PASSWORD = os.environ.get('DOCUMENT_DB_PASSWORD', '')
+
+    # Notifications
+    GOV_NOTIFY_API_KEY = os.environ.get('GOV_NOTIFY_API_KEY')
+    NOTIFICATIONS_REPLY_TO = 'andy+smpa@hactar.is'
 
     def get_payment_return_url(self, application_id, payment_id):
         p_id = payment_id

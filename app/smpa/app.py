@@ -24,6 +24,8 @@ from .config.settings import init_settings
 from .helpers.swagger import init_swagger
 from .helpers.startup import Startup
 from .helpers.console import console
+from .helpers.govpay.client import GovPayClient
+from .helpers.govnotify.client import GovNotifyClient
 from .config.settings import Config
 from .db.documentdb.connection import DocumentDB
 from .db.documentdb.registry import model_registry
@@ -79,6 +81,8 @@ api.req_options.auto_parse_form_urlencoded = True
 config: Config
 # db: RethinkDB
 db: DocumentDB
+govnotify: GovNotifyClient
+govpay: GovPayClient
 
 
 def create_app():
@@ -86,6 +90,9 @@ def create_app():
     global db
     global api
     global application
+    global govpay
+    global govnotify
+
     settings = init_settings()
     config = settings
 
@@ -102,6 +109,10 @@ def create_app():
     # Set up initial data and routes
     Startup.init_data()
     init_routes(api, config)
+
+    # Set up external service clients
+    govpay = GovPayClient(config.GOV_PAY_API_KEY)
+    govnotify = GovNotifyClient(config.GOV_NOTIFY_API_KEY)
 
     return api
 

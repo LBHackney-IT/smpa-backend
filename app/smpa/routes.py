@@ -33,7 +33,7 @@ from .resources import (  # NOQA
     AreaUnitResource, AreaUnitListResource, LinearUnitResource, LinearUnitListResource,
     # User resources
     UserResourcePost, UserResourceList, UserResourcePatch, AgentResource,
-    ApplicantResource, AuthResource, UserProfileResourcePatch,
+    ApplicantResource, AuthResource, UserProfileResourcePatch, UserVerifyResource,
     # Address resources
     AddressPatch, AddressPost, SiteAddressPatch, SiteAddressPost,
     BS7666AddressResource, ExternalAddressResource, InternationalAddressResource,
@@ -112,6 +112,7 @@ def init_routes(api, config):
     applications_patch = ApplicationResourcePatch()
     application_status_list = ApplicationStatusListResource()
     users_post = UserResourcePost()
+    users_verify = UserVerifyResource()
     users_list = UserResourceList()
     users_patch = UserResourcePatch()
     user_profiles_patch = UserProfileResourcePatch()
@@ -232,6 +233,7 @@ def init_routes(api, config):
     add_route(api, '/ownership-types', ownership_types_list)
 
     add_route(api, '/users/create', users_post)
+    add_route(api, '/users/verify/{token}', users_verify)
     add_route(api, '/users', users_list)
     add_route(api, '/users/{id}', users_patch)
 
@@ -305,6 +307,7 @@ def init_routes(api, config):
         users_patch,
         users_post,
         users_list,
+        users_verify,
         applications_post,
         applications_patch,
         document_type_post,

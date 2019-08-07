@@ -60,20 +60,6 @@ def test_profile_update(session_client):
     assert j['company']['company_name'] == "Acme Architecture"
 
 
-def test_create_user(session_client):
-    global USER2_ID
-    rv = session_client.post(
-        f'/api/v1/users/create',
-        {
-            'email': 'test3@example.com',
-            'password': 'password123'
-        }
-    )
-    assert rv.status == falcon.HTTP_OK
-    j = json.loads(rv.body)
-    assert j['message'] == "User created"
-
-
 def test_update_email(session_client):
     global TOKEN
     global USER_ID

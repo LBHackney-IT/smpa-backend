@@ -89,7 +89,7 @@ class UserResourceList(ListResource):
         super().on_get(req, resp)
 
 
-class UserResourcePost:
+class UserResourcePost(Resource):
     _service = _users
 
     auth = {"auth_disabled": True}
@@ -117,12 +117,35 @@ class UserResourcePost:
             422:
                 description: Input body formatting issue
         """
-        user = self._service.create(**req._params)
-        resp.status = falcon.HTTP_OK
-        resp.media = {"message": "User created"}
+        email = req.get_param('email')
+        password = req.get_param('password')
+        password_confirm = req.get_param('password_confirm')
+        if password_confirm != password:
+            resp.status = falcon.HTTP_422
+            resp.media = {
+                'success': False,
+                'message': 'Passwords do not match'
+            }
+        elif len(password) < 8:
+            resp.status = falcon.HTTP_422
+            resp.media = {
+                'success': False,
+                'message': 'Passwords must be at least 8 characters'
+            }
+        elif _users.first(email=email) is not None:
+            resp.status = falcon.HTTP_401
+            resp.media = {
+                'success': False,
+                'message': 'Email is already registered'
+            }
+        else:
+            user = _users.register(email, password)
+            rv = self._json_or_404(user)
+            resp.status = falcon.HTTP_201
+            resp.body = rv
 
 
-class UserVerifyResource:
+class UserVerifyResource(Resource):
     _service = _users
 
     auth = {"auth_disabled": True}
@@ -156,11 +179,17 @@ class UserVerifyResource:
                 description: Unauthorized
         """
         from ..app import auth_backend
-        user = self._service.verify_token(token)
-        jwt_token = auth_backend.get_auth_token({"id": str(user.id)})
-
-        resp.status = falcon.HTTP_OK
-        resp.media = {"message": "login successful!", "jwt": jwt_token}
+        user = self._service.verify_account(token)
+        if user is None:
+            resp.status = falcon.HTTP_401
+            resp.body = {
+                'success': False,
+                'message': 'Email is already registered'
+            }
+        else:
+            jwt_token = auth_backend.get_auth_token({"id": str(user.id)})
+            resp.status = falcon.HTTP_OK
+            resp.media = {"message": "Account verified and logged in", "jwt": jwt_token}
 
 
 class UserProfileResourcePatch(Resource):

@@ -127,7 +127,8 @@ class Startup:
             id="b7d623db-5b4a-43df-b3f1-2bfca845d657",
             email="test@example.com",
             password="secretpassword",
-            role_id=str(user_role.id)
+            role_id=str(user_role.id),
+            verified_at=arrow.now().datetime
         )
         a = _applications.get_or_create(
             id='9e7cf43a-6860-4061-b585-65b4fb778a30'

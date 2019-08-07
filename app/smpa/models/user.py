@@ -172,7 +172,7 @@ class User(BaseModel, metaclass=ORMMeta):
 
     class Options:
         roles = {
-            'default': blacklist('password', 'verification_key')
+            'default': blacklist('password', 'verification_token')
         }
 
     email: str = StringType(max_length=200, required=True)
@@ -192,19 +192,16 @@ class User(BaseModel, metaclass=ORMMeta):
     profile: Type[UserProfile] = ModelType(UserProfile)
 
     verified_at = DateTimeType()
-    verification_key = UUIDType()
+    verification_token = UUIDType()
 
     @property
     def verified(self):
-        """Tries to get an arrow datetime from self.verified_at
-        Returns True if it succeeds, false if not
+        """Checks if the user's account is verified or not
 
         Returns:
             bool: Whether or not the user's account is verified
         """
-        try:
-            arrow.get(self.verified_at)
-        except Exception:
+        if self.verified_at is None:
             return False
         else:
             return True
