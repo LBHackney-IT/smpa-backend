@@ -41,6 +41,25 @@ class GovNotifyClient:
     def _send_email(self, email: str, template: str, data: dict):
         """Send an email via Gov.UK Notify
 
+        client returns...
+
+        {
+            'content': {
+                'body': email body goes here
+                'from_email': 'submit.my.planning.application@notifications.service.gov.uk',
+                'subject': 'Confirm your Submit my Planning Application account'
+            },
+            'id': '91626a62-4557-46d8-90a1-7303b75f9f78',
+            'reference': None,
+            'scheduled_for': None,
+            'template': {
+                'id': 'd4c144d2-3cb6-400e-bdb6-6b0dd5dbd087',
+                'uri': template url goes here
+                'version': 1
+            },
+            'uri': some other url goes here
+        }
+
         Args:
             data (dict): Dict of k,v pairs for inserting vairables into the message template
         """

@@ -31,6 +31,9 @@ class Config(object):
     GOV_NOTIFY_API_KEY = os.environ.get('GOV_NOTIFY_API_KEY')
     NOTIFICATIONS_REPLY_TO = 'andy+smpa@hactar.is'
 
+    def get_verification_url(self, verification_token: str):
+        return f"{self.BASE_URL}/accounts/verify/{verification_token}"
+
     def get_payment_return_url(self, application_id, payment_id):
         p_id = payment_id
         return f"{self.BASE_URL}/applications/{application_id}{self.PAYMENT_RETURN_URL}/{p_id}"

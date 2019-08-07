@@ -1,8 +1,30 @@
 import falcon
+import responses
 
 from smpa.services.user import _users
 
 from ..util import json_match, reset_test_user
+
+
+# https://api.notifications.service.gov.uk/v2/notifications/email
+
+
+SEND_VERIFICATION_EMAIL_RESPONSE = {
+    'content': {
+        'body': 'email body goes here',
+        'from_email': 'submit.my.planning.application@notifications.service.gov.uk',
+        'subject': 'Confirm your Submit my Planning Application account'
+    },
+    'id': '91626a62-4557-46d8-90a1-7303b75f9f78',
+    'reference': None,
+    'scheduled_for': None,
+    'template': {
+        'id': 'd4c144d2-3cb6-400e-bdb6-6b0dd5dbd087',
+        'uri': 'template url goes here',
+        'version': 1
+    },
+    'uri': 'some other url goes here'
+}
 
 
 def get_token(user=None):
@@ -56,7 +78,14 @@ def test_log_in(app, client):
     assert rv.status == falcon.HTTP_OK
 
 
+@responses.activate
 def test_register_service(session_client):
+    responses.add(
+        responses.POST,
+        'https://api.notifications.service.gov.uk/v2/notifications/email',
+        json=SEND_VERIFICATION_EMAIL_RESPONSE,
+        status=200
+    )
     rv = _users.register('test99@example.com', 'secretpassword')
     assert rv is not None
     assert rv.email == 'test99@example.com'
@@ -77,7 +106,14 @@ def test_log_in_fails_for_unverified_account(app, session_client):
     assert rv.json['title'] == 'Account is not yet verified'
 
 
+@responses.activate
 def test_verify_account_service(session_client):
+    responses.add(
+        responses.POST,
+        'https://api.notifications.service.gov.uk/v2/notifications/email',
+        json=SEND_VERIFICATION_EMAIL_RESPONSE,
+        status=200
+    )
     user = _users.first(email='test99@example.com')
     assert user is not None
     assert user.verified_at is None
@@ -99,7 +135,14 @@ def test_log_in_now_verified(app, session_client):
     assert rv.status == falcon.HTTP_OK
 
 
+@responses.activate
 def test_register_endpoint(session_client):
+    responses.add(
+        responses.POST,
+        'https://api.notifications.service.gov.uk/v2/notifications/email',
+        json=SEND_VERIFICATION_EMAIL_RESPONSE,
+        status=200
+    )
     rv = session_client.post(
         '/api/v1/users/create',
         {
