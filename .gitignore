@@ -8,7 +8,7 @@ fabfile/**/*
 *.scssc
 *.pyc
 .DS_Store
-.notifier
+.notifier/**/*
 *.sublime-workspace
 .vscode/**/*
 **/__pycache__/**/*

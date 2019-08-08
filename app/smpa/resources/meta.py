@@ -2,7 +2,7 @@ import falcon
 
 from ..schemas.core import CoreListSchema, CoreGetSchema  # NOQA
 from .core import ListResource
-from ..services.meta import _declarations
+from ..services.meta import _declarations, _ownership_types
 
 
 class DeclarationListResource(ListResource):
@@ -35,7 +35,7 @@ class DeclarationListResource(ListResource):
 
 
 class OwnershipTypeListResource(ListResource):
-    _service = _declarations
+    _service = _ownership_types
     auth = {
         'exempt_methods': ['OPTIONS', 'GET']
     }
