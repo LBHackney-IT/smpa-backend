@@ -947,6 +947,31 @@ def test_equipment_proposal_update_scope(session_client):
         result['equipment']['equipment_conservation_type_ids']
 
 
+def test_equipment_proposal_update_scope_anas_payload(session_client):
+    body = json.dumps(
+        {
+            "equipment": {
+                "equipment_type_ids": [
+                    "fa6f8957-a775-4dc0-adfc-4c3ddfd42698"
+                ],
+                "equipment_conservation_type_ids": [
+                    "4b2aa4a1-e01e-49ff-aedc-ddd638695839"
+                ]
+            }
+        }
+    )
+    rv = session_client.patch(
+        f'/api/v1/equipment-proposals/{EQUIPMENT_PROPOSAL_ID}',
+        body,
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    result = json.loads(rv.body)
+    assert result['equipment']['equipment_type_ids'] == ["fa6f8957-a775-4dc0-adfc-4c3ddfd42698"]
+    assert result['equipment']['equipment_conservation_type_ids'] == \
+        ["4b2aa4a1-e01e-49ff-aedc-ddd638695839"]
+
+
 def test_equipment_proposal_update_locations(session_client):
     body = json.dumps(
         {
@@ -1337,6 +1362,7 @@ def test_application_update_reduction_eligible(session_client):
 
 @responses.activate
 def test_create_payment(session_client):
+    from smpa.services import _applications
     global PAYMENT_ID
     responses.add(
         responses.POST,
@@ -1356,6 +1382,8 @@ def test_create_payment(session_client):
     assert j['owner_id'] is not None
     assert j['owner']['email'] == 'test@example.com'
     assert j['next_url'] == 'https://www.payments.service.gov.uk/secure/SOME_UUID'
+    a = _applications.get(j['application_id'])
+    assert 'DRAFT' not in a.reference
 
 
 @responses.activate
@@ -1427,6 +1455,30 @@ def test_check_payment_status(session_client):
     assert j['owner_id'] is not None
     assert j['owner']['email'] == 'test@example.com'
     assert j['state']['finished'] is True
+
+
+@responses.activate
+def test_submit_application(session_client):
+    from .test_auth import SEND_VERIFICATION_EMAIL_RESPONSE
+    responses.add(
+        responses.POST,
+        'https://api.notifications.service.gov.uk/v2/notifications/email',
+        json=SEND_VERIFICATION_EMAIL_RESPONSE,
+        status=200
+    )
+    body = json.dumps(
+        {
+            "submitted": True
+        }
+    )
+    rv = session_client.patch(
+        f'/api/v1/applications/{APPLICATION_ID}/submit',
+        body,
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert j['submitted_at'] is not None
 
 #
 

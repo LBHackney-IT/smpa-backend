@@ -63,9 +63,7 @@ class PaymentService(DService):
         """
         from smpa.app import config, govpay
         from .application import _applications
-        yyyy = arrow.now().year
-        nnnn = 5000 + self.count()
-        ref = f"{yyyy}/{nnnn}"
+        ref = _applications.next_reference()
         amount = config.PAYMENT_AMOUNT
         description = config.PAYMENT_DESCRIPTION
         user = req.context['user']
@@ -90,10 +88,10 @@ class PaymentService(DService):
             payment = _payments.update(id=str(payment.id), json=j)
             payment.next_url = j['_links']['next_url']['href']
             payment = _payments.save(payment)
-            # Update the application with a status of submitted and a reference
+            # Update the application with a reference
             application = _applications.get(str(application_id))
             application.reference = ref
-            application.status_id = "5aa415fa-9b25-4828-ac06-cb1ab9b000ea"
+            _applications.save(application)
             return payment
         else:
             response = {

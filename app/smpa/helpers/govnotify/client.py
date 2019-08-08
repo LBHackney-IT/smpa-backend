@@ -1,13 +1,17 @@
 import os
 import falcon
+import arrow
 import envkey  # NOQA
 from typing import Type, List, Dict
 from notifications_python_client.notifications import NotificationsAPIClient
 
+from smpa.models.application import Application
+
 
 TEMPLATE_IDS: Dict[str, str] = {
     'password_reset': 'fda4a110-5ad3-40d8-9185-11a627f70766',
-    'account_verify': 'd4c144d2-3cb6-400e-bdb6-6b0dd5dbd087'
+    'account_verify': 'd4c144d2-3cb6-400e-bdb6-6b0dd5dbd087',
+    'submission_received': '4743ee3d-1858-4497-9256-acce5150594e'
 }
 
 
@@ -20,6 +24,19 @@ class GovNotifyClient:
 
     def __init__(self, api_key: str) -> None:
         self.client = NotificationsAPIClient(api_key)
+
+    def send_submission_received(self, application: Application):
+        from smpa.app import config
+        email = config.NOTIFICATIONS_NOTIFY
+        data = {
+            'reference': application.reference,
+            'submitted_at': arrow.get(application.submitted_at).isoformat(),
+            'address': application.short_address,
+            'view_link': config.get_view_application_url(str(application.id))
+        }
+        template = TEMPLATE_IDS['submission_received']
+        rv = self._send_email(email, template, data)
+        return rv
 
     def send_password_reset(self, email: str, name: str, reset_link: str):
         data = {

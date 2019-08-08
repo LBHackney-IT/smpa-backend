@@ -42,6 +42,7 @@ from .resources import (  # NOQA
     DocumentTypePatchResource, DocumentFileApplicationResource, DocumentFileDeleteResource,
     # Application resources
     ApplicationResourcePost, ApplicationResourcePatch, ApplicationStatusListResource,
+    ApplicationSubmitResource,
     # Site resources
     SiteAreaPostResource, SiteAreaPatchResource, SiteConstraintsPostResource,
     SiteConstraintsPatchResource,
@@ -111,6 +112,7 @@ def init_routes(api, config):
     applications_post = ApplicationResourcePost()
     applications_patch = ApplicationResourcePatch()
     application_status_list = ApplicationStatusListResource()
+    application_submit = ApplicationSubmitResource()
     users_post = UserResourcePost()
     users_verify = UserVerifyResource()
     users_list = UserResourceList()
@@ -222,6 +224,7 @@ def init_routes(api, config):
 
     add_route(api, '/applications', applications_post)
     add_route(api, '/applications/{id}', applications_patch)
+    add_route(api, '/applications/{id}/submit', application_submit)
     add_route(api, '/applications/{id}/documents', document_file_application)
     add_route(api, '/applications/{id}/payments', payment_post)
     add_route(api, '/application-statuses', application_status_list)
@@ -310,6 +313,7 @@ def init_routes(api, config):
         users_verify,
         applications_post,
         applications_patch,
+        application_submit,
         document_type_post,
         document_type_patch,
         document_file_application,

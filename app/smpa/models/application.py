@@ -6,7 +6,8 @@
     Application is our root model. Everything else is part of this.
 """
 
-from .core import BaseModel, ORMMeta, RelType
+from datetime import datetime
+from .core import BaseModel, ORMMeta, RelType, ArrowDTType
 from typing import Type, List
 from datetime import date
 from schematics.types import (  # NOQA
@@ -33,8 +34,11 @@ class Application(BaseModel, metaclass=ORMMeta):
         to_field='status',
         service='ApplicationStatusService'
     )
-    status: Type[ApplicationStatus] = ModelType(ApplicationStatus)
     reference: str = StringType()
+
+    # Set by the service.submit method
+    status: Type[ApplicationStatus] = ModelType(ApplicationStatus)
+    submitted_at: datetime = ArrowDTType()
 
     # First screen when starting a new application
     works_started: bool = BooleanType(default=False)
@@ -98,3 +102,16 @@ class Application(BaseModel, metaclass=ORMMeta):
         ListType(ModelType('smpa.models.document.DocumentFile'))
     payments: List[Type['smpa.models.payment.Payment']] = \
         ListType(ModelType('smpa.models.payment.Payment'))
+
+    @property
+    def short_address(self):
+        address = [
+            self.site_address.number,
+            self.site_address.property_name,
+            self.site_address.address_line_1,
+            self.site_address.address_line_2,
+            self.site_address.address_line_3,
+            self.site_address.town_city,
+            self.site_address.postcode
+        ]
+        return ', '.join([x for x in address if x is not None])

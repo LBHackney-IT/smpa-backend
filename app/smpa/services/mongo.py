@@ -143,7 +143,9 @@ class DService(object):
         j = self._set_id(j)
         if updating:
             j.pop('_id', None)
-            return self.update(str(instance.id), json=j)
+            self.update(str(instance.id), json=j)
+            obj = self.get(instance.id)
+            return obj
         try:
             rv = self.q.insert_one(j)
         except Exception as e:

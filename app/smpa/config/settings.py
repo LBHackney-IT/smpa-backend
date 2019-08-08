@@ -30,13 +30,17 @@ class Config(object):
     # Notifications
     GOV_NOTIFY_API_KEY = os.environ.get('GOV_NOTIFY_API_KEY')
     NOTIFICATIONS_REPLY_TO = 'andy+smpa@hactar.is'
+    NOTIFICATIONS_NOTIFY = 'andy@hactar.is'
 
-    def get_verification_url(self, verification_token: str):
+    def get_verification_url(self, verification_token: str) -> str:
         return f"{self.BASE_URL}/accounts/verify/{verification_token}"
 
-    def get_payment_return_url(self, application_id, payment_id):
+    def get_payment_return_url(self, application_id, payment_id) -> str:
         p_id = payment_id
         return f"{self.BASE_URL}/applications/{application_id}{self.PAYMENT_RETURN_URL}/{p_id}"
+
+    def get_view_application_url(self, application_id: str) -> str:
+        return f"{self.BASE_URL}/applications/{application_id}/view"
 
 
 class ConfigTest(Config):
@@ -56,10 +60,14 @@ class ConfigDevelopment(Config):
 
 class ConfigStaging(Config):
     base = 'stage'
+    NOTIFICATIONS_REPLY_TO = 'planning@hackney.gov.uk'
+    NOTIFICATIONS_NOTIFY = 'planning@hackney.gov.uk'
 
 
 class ConfigProduction(Config):
     base = 'production'
+    NOTIFICATIONS_REPLY_TO = 'planning@hackney.gov.uk'
+    NOTIFICATIONS_NOTIFY = 'planning@hackney.gov.uk'
 
 
 CONF_MAP = {

@@ -5,7 +5,7 @@
     ~~~~~~~~~~~~~~~~
     Planning Application services.
 """
-
+import arrow
 from ..models.application import Application, ApplicationStatus
 
 from .mongo import DService
@@ -32,6 +32,29 @@ class ApplicationService(DService):
             rv = self._insert_one(j)
 
         return rv
+
+    def submit(self, id: str) -> Application:
+        """Submit an application to the planning department.
+
+        Args:
+            id (str): The id of the application we want to submit
+        """
+        application = self.get(id)
+        application.status_id = "5aa415fa-9b25-4828-ac06-cb1ab9b000ea"
+        application.submitted_at = arrow.now().datetime
+        if 'DRAFT' in application.reference:
+            application.reference = self.next_reference()
+        rv = _applications.save(application)
+        # Send a notification to the planning team
+        from smpa.app import govnotify
+        govnotify.send_submission_received(rv)
+        return rv
+
+    def next_reference(self):
+        yyyy = arrow.now().year
+        nnnn = 5000 + _applications.count(status_id="5aa415fa-9b25-4828-ac06-cb1ab9b000ea")
+        ref = f"{yyyy}/{nnnn}"
+        return ref
 
 
 _applications = ApplicationService()

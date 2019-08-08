@@ -72,4 +72,6 @@ services:
       - mongo
       - localstack-s3
 
+    # command: [ "python", "wsgi.py" ]
     command: sleep 1000000
+

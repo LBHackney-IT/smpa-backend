@@ -8,6 +8,47 @@ from .core import Resource, ListResource
 from ..services.application import _applications, _application_statuses
 
 
+class ApplicationSubmitResource(Resource):
+    _service = _applications
+
+    @owner
+    def on_patch(self, req: falcon.Request, resp: falcon.Response, id: Optional[str] = None):
+        """
+        {
+            "submitted": true
+        }
+        ---
+        summary: Submit an application to the planning department. This endpoint should only ever
+        receive "submitted": true
+
+        tags:
+            - Application
+        parameters:
+            - in: path
+              schema: CoreGetSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: The Application
+                schema: Application
+            401:
+                description: Unauthorized
+            422:
+                description: Input body formatting issue
+        """
+        if req.media != {'submitted': True}:
+            raise falcon.HTTPError(falcon.HTTP_422, "Incorrect input")
+        else:
+            application = self._service.get(id)
+            if application.submitted_at is not None:
+                raise falcon.HTTPError(falcon.HTTP_422, "Application is already submitted")
+
+        application = self._service.submit(id)
+        resp.status = falcon.HTTP_200
+        resp.body = self._json_or_404(application)
+
+
 class ApplicationStatusListResource(ListResource):
     _service = _application_statuses
 
