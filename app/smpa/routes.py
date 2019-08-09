@@ -34,6 +34,7 @@ from .resources import (  # NOQA
     # User resources
     UserResourcePost, UserResourceList, UserResourcePatch, AgentResource,
     ApplicantResource, AuthResource, UserProfileResourcePatch, UserVerifyResource,
+    PasswordResetResource,
     # Address resources
     AddressPatch, AddressPost, SiteAddressPatch, SiteAddressPost,
     BS7666AddressResource, ExternalAddressResource, InternationalAddressResource,
@@ -117,6 +118,7 @@ def init_routes(api, config):
     users_verify = UserVerifyResource()
     users_list = UserResourceList()
     users_patch = UserResourcePatch()
+    password_reset = PasswordResetResource()
     user_profiles_patch = UserProfileResourcePatch()
     document_file_delete = DocumentFileDeleteResource()
     document_file_post = DocumentFilePostResource()
@@ -237,6 +239,7 @@ def init_routes(api, config):
 
     add_route(api, '/users/create', users_post)
     add_route(api, '/users/verify/{token}', users_verify)
+    add_route(api, '/users/reset-password', password_reset)
     add_route(api, '/users', users_list)
     add_route(api, '/users/{id}', users_patch)
 
@@ -311,6 +314,7 @@ def init_routes(api, config):
         users_post,
         users_list,
         users_verify,
+        password_reset,
         applications_post,
         applications_patch,
         application_submit,

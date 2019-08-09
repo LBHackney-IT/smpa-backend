@@ -136,7 +136,15 @@ class UserService(DService):
 
     def set_password(self, user, password):
         user.password = self._hash(password)
-        self.save(user)
+        return self.save(user)
+
+    def verify_passwords(self, password: str, password_confirm: str):
+        if password_confirm != password:
+            raise falcon.HTTPError(falcon.HTTP_422, 'Passwords do not match')
+        elif len(password) < 8:
+            raise falcon.HTTPError(falcon.HTTP_422, 'Passwords must be at least 8 characters')
+
+        return True
 
     # Private methods
 

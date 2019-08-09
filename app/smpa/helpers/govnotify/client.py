@@ -38,9 +38,8 @@ class GovNotifyClient:
         rv = self._send_email(email, template, data)
         return rv
 
-    def send_password_reset(self, email: str, name: str, reset_link: str):
+    def send_password_reset(self, email: str, reset_link: str):
         data = {
-            'name': name,
             'link': reset_link
         }
         template = TEMPLATE_IDS['password_reset']

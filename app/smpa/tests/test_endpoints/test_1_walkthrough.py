@@ -4,6 +4,7 @@
 
 import re
 import os
+import arrow
 import responses
 
 import simplejson as json
@@ -1479,6 +1480,83 @@ def test_submit_application(session_client):
     assert rv.status == falcon.HTTP_OK
     j = json.loads(rv.body)
     assert j['submitted_at'] is not None
+
+
+RESET_TOKEN = None
+
+
+@responses.activate
+def test_trigger_password_reset(session_client):
+    global RESET_TOKEN
+    from .test_auth import SEND_VERIFICATION_EMAIL_RESPONSE
+    from smpa.services.user import _users
+    responses.add(
+        responses.POST,
+        'https://api.notifications.service.gov.uk/v2/notifications/email',
+        json=SEND_VERIFICATION_EMAIL_RESPONSE,
+        status=200
+    )
+    body = json.dumps(
+        {
+            "email": "test@example.com"
+        }
+    )
+    rv = session_client.post(
+        f'/api/v1/users/reset-password',
+        body
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert j['message'] == 'Password reset initiated'
+    u = _users.first(email='test@example.com')
+    assert u.reset_token is not None
+    assert arrow.get(u.reset_token_expires) > arrow.now()
+    RESET_TOKEN = str(u.reset_token)
+
+
+def test_confirm_reset_password_mismatched(session_client):
+    from smpa.services.user import _users
+    global RESET_TOKEN
+    body = json.dumps(
+        {
+            "token": str(RESET_TOKEN),
+            "password": "newpassword",
+            "password_confirm": "mismatched"
+        }
+    )
+    rv = session_client.post(
+        f'/api/v1/users/reset-password',
+        body
+    )
+    assert rv.status == falcon.HTTP_422
+    j = json.loads(rv.body)
+    assert j['title'] == 'Passwords do not match'
+    u = _users.first(email='test@example.com')
+    assert u.reset_token is not None
+    assert u.reset_token_expires is not None
+
+
+def test_confirm_reset_password(session_client):
+    from smpa.services.user import _users
+    global RESET_TOKEN
+    body = json.dumps(
+        {
+            "token": str(RESET_TOKEN),
+            "password": "newpassword",
+            "password_confirm": "newpassword"
+        }
+    )
+    rv = session_client.post(
+        f'/api/v1/users/reset-password',
+        body
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert j['message'] == 'Password reset successful'
+    u = _users.first(email='test@example.com')
+    assert u.reset_token is None
+    assert u.reset_token_expires is None
+
 
 #
 

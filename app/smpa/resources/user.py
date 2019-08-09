@@ -1,3 +1,5 @@
+import uuid
+import arrow
 import falcon
 
 from typing import Optional
@@ -120,19 +122,8 @@ class UserResourcePost(Resource):
         email = req.get_param('email')
         password = req.get_param('password')
         password_confirm = req.get_param('password_confirm')
-        if password_confirm != password:
-            resp.status = falcon.HTTP_422
-            resp.media = {
-                'success': False,
-                'message': 'Passwords do not match'
-            }
-        elif len(password) < 8:
-            resp.status = falcon.HTTP_422
-            resp.media = {
-                'success': False,
-                'message': 'Passwords must be at least 8 characters'
-            }
-        elif _users.first(email=email) is not None:
+        self._service.verify_passwords(password, password_confirm)
+        if _users.first(email=email) is not None:
             resp.status = falcon.HTTP_401
             resp.media = {
                 'success': False,
@@ -143,6 +134,101 @@ class UserResourcePost(Resource):
             rv = self._json_or_404(user)
             resp.status = falcon.HTTP_201
             resp.body = rv
+
+
+class PasswordResetResource(Resource):
+    _service = _users
+
+    auth = {"auth_disabled": True}
+
+    def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
+        """
+        ---
+        summary: Reset a user's password
+        tags:
+            - User
+        parameters:
+            - in: body
+              schema: User
+        consumes:
+            - application/json
+        produces:
+            - application/json
+        responses:
+            200:
+                description: Password reset success
+                schema: User
+            401:
+                description: Unauthorized
+            422:
+                description: Input body formatting issue
+        """
+        from smpa.app import config, govnotify
+        if 'email' in req.media:
+            email = req.media.get('email')
+            user = self._validate_reset(email)
+            # This is step 1. We set a reset token against the user
+            # and then send an email with their reset link.
+            token = uuid.uuid4()
+            user.reset_token = str(token)
+            user.reset_token_expires = arrow.now().shift(hours=24)
+            user = self._service.save(user)
+            reset_link = config.get_password_reset_url(token)
+            govnotify.send_password_reset(email, reset_link)
+            resp.status = falcon.HTTP_OK
+            resp.media = {
+                'success': True,
+                'message': "Password reset initiated"
+            }
+        elif 'token' in req.media:
+            token = req.media.get('token')
+            password = req.media.get('password')
+            password_confirm = req.media.get('password_confirm')
+            user = self._validate_token(token, password, password_confirm)
+            self._service.verify_passwords(password, password_confirm)
+            user = self._service.set_password(user, password)
+            user.reset_token = None
+            user.reset_token_expires = None
+            _users.save(user)
+            resp.status = falcon.HTTP_OK
+            resp.media = {
+                'success': True,
+                'message': "Password reset successful"
+            }
+        else:
+            raise falcon.HTTPError(falcon.HTTP_422, "Unable to process request")
+
+    def _validate_reset(self, email: str):
+        """Run some checks and return a user if they pass
+
+        Args:
+            email (str): The email address we're validating
+
+        Raises:
+            falcon.HTTPError: Various errors
+        """
+        if not isinstance(email, str):
+            raise falcon.HTTPError(falcon.HTTP_422, 'Invalid input')
+        user = self._service.first_or_404(email=email)
+        return user
+
+    def _validate_token(self, token: str, password: str, password_confirm: str):
+        """Run some checks and return a user if they pass
+
+        Args:
+            token (str): The token we're validating
+
+        Raises:
+            falcon.HTTPError: Various errors
+        """
+        if not isinstance(token, str):
+            raise falcon.HTTPError(falcon.HTTP_422, 'Invalid input')
+        user = self._service.first_or_404(reset_token=token)
+        if arrow.get(user.reset_token_expires) < arrow.now():
+            raise falcon.HTTPError(falcon.HTTP_400, 'Reset token has expired')
+        self._service.verify_passwords(password, password_confirm)
+
+        return user
 
 
 class UserVerifyResource(Resource):

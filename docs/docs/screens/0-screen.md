@@ -52,6 +52,54 @@ Unsuccessful verifications, ie: user is already verified or the token is not val
     }
 
 
+## Reset password
+
+### Step 1
+
+`POST /api/v1/users/reset-password/`
+
+The payload should be just the email address we want to trigger a reset for.
+
+    {
+        "email": "test@example.com"
+    }
+
+
+#### Success Response
+
+    {
+      "success": true,
+      "message": "Password reset initiated"
+    }
+
+This endpoint triggers an email with instructions for resetting a user's password. It will contain a link to `{BASE_URL}/accounts/reset-password/{TOKEN}`
+
+### Step 2
+
+From this URL, send a new `POST` with the details of the password reset...
+
+`POST /api/v1/users/reset-password`
+
+    {
+        "token": {TOKEN},
+        "password": "secretpassword",
+        "password_confirm": "secretpassword"
+    }
+
+#### Success Response
+
+    {
+      "success": true,
+      "message": "Password reset successful"
+    }
+
+Both steps will return a `4XX` response if there is anything wrong, with a message about what was wrong.
+
+    {
+        "title": "Passwords do not match"
+    }
+
+
 ## Default data
 
 There are a bunch of endpoints that you can use to grab default data and associated ids.

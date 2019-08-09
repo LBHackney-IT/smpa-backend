@@ -42,6 +42,9 @@ class Config(object):
     def get_view_application_url(self, application_id: str) -> str:
         return f"{self.BASE_URL}/applications/{application_id}/view"
 
+    def get_password_reset_url(self, token: str) -> str:
+        return f"{self.BASE_URL}/accounts/reset-password/{token}"
+
 
 class ConfigTest(Config):
 

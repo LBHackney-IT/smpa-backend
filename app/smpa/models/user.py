@@ -15,6 +15,7 @@
     }
 """
 import arrow
+from datetime import datetime
 from schematics.transforms import blacklist
 from schematics.types import (  # NOQA
     BooleanType, DateTimeType, IntType,
@@ -191,8 +192,11 @@ class User(BaseModel, metaclass=ORMMeta):
     role: Type[Role] = ModelType(Role)
     profile: Type[UserProfile] = ModelType(UserProfile)
 
-    verified_at = DateTimeType()
-    verification_token = UUIDType()
+    verified_at: datetime = DateTimeType()
+    verification_token: str = UUIDType()
+
+    reset_token: str = UUIDType()
+    reset_token_expires: datetime = DateTimeType()
 
     @property
     def verified(self):
