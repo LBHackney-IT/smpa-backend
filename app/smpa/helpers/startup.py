@@ -110,12 +110,15 @@ class Startup:
         super_admin = _roles.first(name='SuperAdmin')
         role_id = str(super_admin.id)
         for _ in SUPERADMIN_USERS:
-            _users.get_or_create(
+            u = _users.get_or_create(
                 id=_['id'],
                 email=_['email'],
                 password=_['password'],
                 role_id=role_id
             )
+            u.verified_at = arrow.now().datetime
+            _users.save(u)
+
         console.log('Added admin users')
 
     @classmethod
