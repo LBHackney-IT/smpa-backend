@@ -22,6 +22,7 @@ class Config(object):
     RDB_PASSWORD = os.environ.get('RDB_PASSWORD')
 
     # DocumentDB database
+    DOCUMENT_DB_USER = None  # Overridden in remote configs
     DOCUMENT_DB_HOST = os.environ.get('DOCUMENT_DB_HOST')
     DOCUMENT_DB_PORT = os.environ.get('DOCUMENT_DB_PORT')
     DOCUMENT_DB_DB = os.environ.get('DOCUMENT_DB_DB')
@@ -63,12 +64,14 @@ class ConfigDevelopment(Config):
 
 class ConfigStaging(Config):
     base = 'stage'
+    DOCUMENT_DB_USER = os.environ.get('DOCUMENT_DB_USER')
     NOTIFICATIONS_REPLY_TO = 'planning@hackney.gov.uk'
     NOTIFICATIONS_NOTIFY = 'planning@hackney.gov.uk'
 
 
 class ConfigProduction(Config):
     base = 'production'
+    DOCUMENT_DB_USER = os.environ.get('DOCUMENT_DB_USER')
     NOTIFICATIONS_REPLY_TO = 'planning@hackney.gov.uk'
     NOTIFICATIONS_NOTIFY = 'planning@hackney.gov.uk'
 
