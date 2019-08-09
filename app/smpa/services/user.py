@@ -135,8 +135,9 @@ class UserService(DService):
         return user
 
     def set_password(self, user, password):
-        user.password = self._hash(password)
-        return self.save(user)
+        password = self._hash(password)
+        user = self.update(str(user.id), json={'password': password})
+        return user
 
     def verify_passwords(self, password: str, password_confirm: str):
         if password_confirm != password:

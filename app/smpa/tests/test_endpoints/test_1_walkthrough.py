@@ -1584,6 +1584,17 @@ def test_confirm_reset_password(session_client):
     assert u.reset_token_expires is None
 
 
+def test_login_with_new_password(session_client):
+    rv = session_client.post(
+        '/api/v1/auth',
+        {
+            'email': 'test@example.com',
+            'password': 'newpassword'
+        }
+    )
+    assert rv.status == falcon.HTTP_OK
+
+
 #
 
 ##########################################################################
