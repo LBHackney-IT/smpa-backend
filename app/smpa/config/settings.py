@@ -28,6 +28,8 @@ class Config(object):
     DOCUMENT_DB_PORT = os.environ.get('DOCUMENT_DB_PORT', 27017)
     DOCUMENT_DB_DB = os.environ.get('DOCUMENT_DB_DB')
     DOCUMENT_DB_PASSWORD = os.environ.get('DOCUMENT_DB_PASSWORD', '')
+    DOCUMENT_DB_SUPERUSER = os.environ.get('DOCUMENT_DB_SUPERUSER', '')
+    DOCUMENT_DB_SUPERPASS = os.environ.get('DOCUMENT_DB_SUPERPASS', '')
 
     # Notifications
     GOV_NOTIFY_API_KEY = os.environ.get('GOV_NOTIFY_API_KEY')
