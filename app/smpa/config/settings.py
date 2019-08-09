@@ -24,7 +24,7 @@ class Config(object):
     # DocumentDB database
     DOCUMENT_DB_USER = None  # Overridden in remote configs
     DOCUMENT_DB_HOST = os.environ.get('DOCUMENT_DB_HOST')
-    DOCUMENT_DB_PORT = os.environ.get('DOCUMENT_DB_PORT')
+    DOCUMENT_DB_PORT = os.environ.get('DOCUMENT_DB_PORT', 27017)
     DOCUMENT_DB_DB = os.environ.get('DOCUMENT_DB_DB')
     DOCUMENT_DB_PASSWORD = os.environ.get('DOCUMENT_DB_PASSWORD', '')
 

@@ -1,4 +1,5 @@
 .env
+.staging.env
 app/smpa.egg-info/**/*
 
 # Hactar's Fabfile

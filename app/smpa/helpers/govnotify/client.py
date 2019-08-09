@@ -9,7 +9,7 @@ from smpa.models.application import Application
 
 
 TEMPLATE_IDS: Dict[str, str] = {
-    'password_reset': 'fda4a110-5ad3-40d8-9185-11a627f70766',
+    'password_reset': 'a5dbad93-8dca-4f60-b275-de0931e1e07b',
     'account_verify': 'd4c144d2-3cb6-400e-bdb6-6b0dd5dbd087',
     'submission_received': '4743ee3d-1858-4497-9256-acce5150594e'
 }

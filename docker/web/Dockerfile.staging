@@ -10,7 +10,7 @@ ARG ENVKEY
 ARG SERVER_ENV
 
 # Run envkey-source to get the env vars into the container
-COPY ./.production.env ./.env
+COPY ./.staging.env ./.env
 RUN eval $(envkey-source)
 
 
@@ -43,7 +43,7 @@ RUN echo -e "\nalias dev='gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999
 ENV SHELL /usr/bin/fish
 
 COPY ./app /usr/srv/app/
-COPY ./.production.env ./.env
+COPY ./.staging.env ./.env
 
 # Expose the dev server
 EXPOSE 5000

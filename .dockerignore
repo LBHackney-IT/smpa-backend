@@ -1,0 +1,7 @@
+./docker/**/*
+./docs/**/*
+./.git/**/*
+./.gitignore
+./.codacy.yaml
+./README.md
+./SmPA.paw

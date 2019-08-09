@@ -11,7 +11,6 @@ from smpa.helpers.console import console
 class S3:
 
     _CHUNK_SIZE_BYTES = 4096
-    _BUCKET_NAME = 'smpa-documents'
 
     def __init__(self):
         if os.environ.get('AWS_S3_ENDPOINT_URL', None) is not None:
@@ -28,10 +27,12 @@ class S3:
                 aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
                 region_name=os.environ.get('AWS_REGION_NAME')
             )
-        self.bucket = self.client.create_bucket(Bucket=self._BUCKET_NAME)
 
     @property
     def bucket_name(self):
+        self._BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
+        if not hasattr(self, 'bucket'):
+            self.bucket = self.client.create_bucket(Bucket=self._BUCKET_NAME)
         return self._BUCKET_NAME
 
     def save(self, file_obj, path):
@@ -48,7 +49,7 @@ class S3:
         try:
             self.client.upload_fileobj(
                 buffer,
-                'smpa-documents',
+                self.bucket_name,
                 path,
                 ExtraArgs={
                     "ACL": 'private',
