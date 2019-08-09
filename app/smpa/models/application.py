@@ -16,7 +16,7 @@ from schematics.types import (  # NOQA
 )
 
 from .user import User
-from .meta import Declaration, OwnershipType
+from .meta import Declaration, OwnershipType, DeclarationDetail
 # from .address import SiteAddress
 
 
@@ -54,6 +54,7 @@ class Application(BaseModel, metaclass=ORMMeta):
     # This is Ana's Application state
     proposalFlow: str = StringType()
 
+    declaration_detail: Type[DeclarationDetail] = ModelType(DeclarationDetail)
     declaration_id = RelType(
         UUIDType(),
         to_field='declaration',

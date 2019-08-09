@@ -17,9 +17,17 @@ class Declaration(BaseModel, metaclass=ORMMeta):
     """Various declarations of a conflict of interest
 
     Attributes:
-        name (TYPE): The name of the declaration
+        name (str): The name of the declaration
     """
     name: str = StringType(max_length=255, required=True)
+
+
+class DeclarationDetail(BaseModel, metaclass=ORMMeta):
+    """Free text entry to provide details for a declaration
+    """
+    name: str = StringType(max_length=255, required=True)
+    role: str = StringType(required=True)
+    details: str = StringType(required=True)
 
 
 class OwnershipType(BaseModel, metaclass=ORMMeta):
@@ -27,6 +35,6 @@ class OwnershipType(BaseModel, metaclass=ORMMeta):
     """Various types of ownership
 
     Attributes:
-        name (TYPE): The name of the type
+        name (str): The name of the type
     """
     name: str = StringType(max_length=255, required=True)

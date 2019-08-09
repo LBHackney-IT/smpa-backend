@@ -12,6 +12,18 @@
         "declaration_id": "e0bbf434-9c28-4fe8-b4ae-892b3e359479"
     }
 
+To update a declaration with the hidden fields filled too...
+
+    {
+        "declaration_id": "746b41c8-54b3-4cd6-89d7-2d41d1c55fbe",
+        "declaration_detail": {
+            "name": "Sido Jombati",
+            "role": "Defender",
+            "details": "Everyone's favourite defender"
+        }
+    }
+
+
 ## Update Ownership
 
 ![](/static/screen35.png)

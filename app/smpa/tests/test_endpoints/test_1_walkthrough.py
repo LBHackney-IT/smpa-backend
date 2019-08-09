@@ -1311,6 +1311,32 @@ def test_application_update_declaration(session_client):
     assert j['declaration']['name'] == "None of the above"
 
 
+def test_application_update_declaration_with_details(session_client):
+    body = """
+        {
+            "declaration_id": "746b41c8-54b3-4cd6-89d7-2d41d1c55fbe",
+            "declaration_detail": {
+                "name": "Sido Jombati",
+                "role": "Defender",
+                "details": "Everyone's favourite defender"
+            }
+        }
+    """
+    rv = session_client.patch(
+        f'/api/v1/applications/{APPLICATION_ID}',
+        body,
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert j['declaration_id'] == "746b41c8-54b3-4cd6-89d7-2d41d1c55fbe"
+    assert j['declaration'] is not None
+    assert j['declaration']['name'] == "You are a Hackney Council member of staff"
+    assert j['declaration_detail']['name'] == 'Sido Jombati'
+    assert j['declaration_detail']['role'] == 'Defender'
+    assert j['declaration_detail']['details'] == "Everyone's favourite defender"
+
+
 def test_application_update_ownership(session_client):
     body = """
         {
