@@ -1,4 +1,5 @@
 import os
+import envkey  # NOQA
 from smpa.helpers.console import console
 
 
