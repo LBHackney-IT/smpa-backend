@@ -5,6 +5,10 @@ app/smpa.egg-info/**/*
 # Hactar's Fabfile
 fabfile/**/*
 
+# Hactar devops
+devops/**/*
+config.toml
+
 # Misc files
 *.scssc
 *.pyc
