@@ -39,6 +39,7 @@ streaming_form_data = "^1.4"
 notifications-python-client = "^5.3"
 pymongo = "^3.8"
 responses = "^0.10.6"
+aws_secretsmanager = "^0.1.0"
 
 
 [tool.poetry.dev-dependencies]
