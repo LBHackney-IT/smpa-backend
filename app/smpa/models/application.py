@@ -24,6 +24,11 @@ class ApplicationStatus(BaseModel, metaclass=ORMMeta):
     name = StringType(max_length=255)
 
 
+class ApplicationReference(BaseModel, metaclass=ORMMeta):
+    counter: int = IntType()
+    year: int = IntType()
+
+
 class Application(BaseModel, metaclass=ORMMeta):
 
     _uniques: list = ['reference', ]

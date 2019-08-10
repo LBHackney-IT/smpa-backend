@@ -6,7 +6,7 @@
     Planning Application services.
 """
 import arrow
-from ..models.application import Application, ApplicationStatus
+from ..models.application import Application, ApplicationStatus, ApplicationReference
 
 from smpa.helpers.console import console
 from .mongo import DService
@@ -17,6 +17,28 @@ class ApplicationStatusService(DService):
 
 
 _application_statuses = ApplicationStatusService()
+
+
+class ApplicationReferenceService(DService):
+    __model__ = ApplicationReference
+
+    def next(self):
+        y = arrow.now().year
+        obj = self.get_or_create(year=y)
+        if obj.counter is None:
+            obj.counter = 5010
+            obj = self.save(obj)
+        else:
+            obj = self._increment(str(obj.id))
+
+        return f"{y}/{obj.counter}"
+
+    def _increment(self, id: str):
+        self.q.update_one({'id': id}, {'$inc': {'counter': 1}})
+        return self.get(id)
+
+
+_application_references = ApplicationReferenceService()
 
 
 class ApplicationService(DService):
@@ -53,7 +75,7 @@ class ApplicationService(DService):
         application.status = status
         application.submitted_at = arrow.now().datetime
         if 'DRAFT' in application.reference:
-            application.reference = self.next_reference()
+            application.reference = _application_references.next()
 
         rv = _applications.save(application)
         # Send a notification to the planning team
@@ -64,12 +86,6 @@ class ApplicationService(DService):
             console.error('Failed to send email')
             console.error(e)
         return rv
-
-    def next_reference(self):
-        yyyy = arrow.now().year
-        nnnn = 5000 + _applications.count(status_id="5aa415fa-9b25-4828-ac06-cb1ab9b000ea")
-        ref = f"{yyyy}/{nnnn}"
-        return ref
 
 
 _applications = ApplicationService()
