@@ -1371,6 +1371,72 @@ def test_application_update_ownership_declaration(session_client):
     assert j['ownership_declaration'] is True
 
 
+def test_add_agent(session_client):
+    body = json.dumps(
+        {
+            "agent": {
+                "full_name": "Mr Secret Agent",
+                "company": "CIA",
+                "address_line_1": "1 Some Street",
+                "address_line_2": "",
+                "town_city": "London",
+                "postcode": "N1 1NN",
+                "phone": "01234567890",
+                "email": "agent@example.com"
+            }
+        }
+    )
+    rv = session_client.patch(
+        f'/api/v1/applications/{APPLICATION_ID}',
+        body,
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert j['agent'] is not None
+    assert j['agent']["full_name"] == "Mr Secret Agent"
+    assert j['agent']["company"] == "CIA"
+    assert j['agent']["address_line_1"] == "1 Some Street"
+    assert j['agent']["address_line_2"] == ""
+    assert j['agent']["town_city"] == "London"
+    assert j['agent']["postcode"] == "N1 1NN"
+    assert j['agent']["phone"] == "01234567890"
+    assert j['agent']["email"] == "agent@example.com"
+
+
+def test_add_applicant(session_client):
+    body = json.dumps(
+        {
+            "applicant": {
+                "full_name": "Mr A Plicant",
+                "company": "Hactar",
+                "address_line_1": "1 Some Street",
+                "address_line_2": "",
+                "town_city": "London",
+                "postcode": "N1 1NN",
+                "phone": "01234567890",
+                "email": "applicant@example.com"
+            }
+        }
+    )
+    rv = session_client.patch(
+        f'/api/v1/applications/{APPLICATION_ID}',
+        body,
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert j['applicant'] is not None
+    assert j['applicant']["full_name"] == "Mr A Plicant"
+    assert j['applicant']["company"] == "Hactar"
+    assert j['applicant']["address_line_1"] == "1 Some Street"
+    assert j['applicant']["address_line_2"] == ""
+    assert j['applicant']["town_city"] == "London"
+    assert j['applicant']["postcode"] == "N1 1NN"
+    assert j['applicant']["phone"] == "01234567890"
+    assert j['applicant']["email"] == "applicant@example.com"
+
+
 def test_application_update_reduction_eligible(session_client):
     body = json.dumps(
         {

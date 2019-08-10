@@ -15,7 +15,7 @@ from schematics.types import (  # NOQA
     FloatType, ModelType, DateType
 )
 
-from .user import User
+from .user import User, Agent, Applicant
 from .meta import Declaration, OwnershipType, DeclarationDetail
 # from .address import SiteAddress
 
@@ -50,6 +50,10 @@ class Application(BaseModel, metaclass=ORMMeta):
     free_text_description: str = StringType()
     ownership_declaration = BooleanType(default=False)
     reduction_eligible = BooleanType(default=False)
+
+    # Agent and Applicant
+    agent: Type[Agent] = ModelType(Agent)
+    applicant: Type[Applicant] = ModelType(Applicant)
 
     # This is Ana's Application state
     proposalFlow: str = StringType()

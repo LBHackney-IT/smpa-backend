@@ -14,8 +14,9 @@ from pymongo import MongoClient
 class DocumentDB:
 
     def __init__(self, config):
-        self._user = quote_plus(config.DOCUMENT_DB_USER)
-        self._password = quote_plus(config.DOCUMENT_DB_PASSWORD)
+        if config.DOCUMENT_DB_USER is not None:
+            self._user = quote_plus(config.DOCUMENT_DB_USER)
+            self._password = quote_plus(config.DOCUMENT_DB_PASSWORD)
 
         if config.DOCUMENT_DB_USER is not None:
             host = "{}:{}".format('127.0.0.1', int(config.DOCUMENT_DB_PORT))
@@ -27,5 +28,6 @@ class DocumentDB:
         self.db = self.client[config.DOCUMENT_DB_DB]
 
     def init(self):
-        self.db.authenticate(self._user, self._password)
+        if hasattr(self, '_user'):
+            self.db.authenticate(self._user, self._password)
         return self.db

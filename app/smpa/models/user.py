@@ -154,12 +154,26 @@ class BasePerson(BaseModel):
     email_addresses_ids = ListType(UUIDType)
 
 
-class Applicant(BasePerson, metaclass=ORMMeta):
-    pass
+class Applicant(BaseModel, metaclass=ORMMeta):
+    full_name: str = StringType(max_length=255, required=True)
+    company: str = StringType(max_length=255)
+    address_line_1: str = StringType(max_length=255)
+    address_line_2: str = StringType(max_length=255)
+    town_city: str = StringType(max_length=255)
+    postcode: str = StringType(max_length=10)
+    phone: str = StringType(max_length=255)
+    email: str = StringType(max_length=255)
 
 
-class Agent(BasePerson, metaclass=ORMMeta):
-    pass
+class Agent(BaseModel, metaclass=ORMMeta):
+    full_name: str = StringType(max_length=255, required=True)
+    company: str = StringType(max_length=255)
+    address_line_1: str = StringType(max_length=255)
+    address_line_2: str = StringType(max_length=255)
+    town_city: str = StringType(max_length=255)
+    postcode: str = StringType(max_length=10)
+    phone: str = StringType(max_length=255)
+    email: str = StringType(max_length=255)
 
 
 class User(BaseModel, metaclass=ORMMeta):
