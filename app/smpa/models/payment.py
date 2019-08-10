@@ -97,6 +97,7 @@ class PaymentCardDetails(BaseModel, metaclass=ORMMeta):
     expiry_date: str = StringType()
     billing_address: Type[PaymentBillingAddress] = ModelType(PaymentBillingAddress)
     card_brand: str = StringType()
+    card_type: str = StringType()
 
 
 class Payment(BaseModel, metaclass=ORMMeta):
