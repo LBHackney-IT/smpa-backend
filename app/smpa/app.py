@@ -63,7 +63,8 @@ auth_middleware = FalconAuthMiddleware(
 # Setup CORS
 cors = CORS(
     allow_origins_list=[
-        'http://localhost:8081'
+        'http://localhost:8080',
+        'http://smpa-frontend-staging.s3-website.eu-west-2.amazonaws.com'
     ], allow_all_headers=True,
     allow_all_methods=True
 )
