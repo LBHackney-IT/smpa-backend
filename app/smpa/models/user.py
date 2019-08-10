@@ -227,6 +227,8 @@ class User(BaseModel, metaclass=ORMMeta):
     @property
     def is_admin(self):
         self.export()
+        if self.role is None:
+            return False
         if 'Admin' in self.role.name:
             return True
         return False
