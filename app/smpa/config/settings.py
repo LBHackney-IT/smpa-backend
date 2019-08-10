@@ -67,6 +67,7 @@ class ConfigDevelopment(Config):
 
 class ConfigStaging(Config):
     base = 'stage'
+    BASE_URL = 'http://smpa-frontend-staging.s3-website.eu-west-2.amazonaws.com'
     DOCUMENT_DB_USER = os.environ.get('DOCUMENT_DB_USER')
     NOTIFICATIONS_REPLY_TO = 'planning@hackney.gov.uk'
     NOTIFICATIONS_NOTIFY = 'planning@hackney.gov.uk'
