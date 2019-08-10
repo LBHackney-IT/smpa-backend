@@ -32,7 +32,15 @@ class S3:
     def bucket_name(self):
         self._BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
         if not hasattr(self, 'bucket'):
-            self.bucket = self.client.create_bucket(Bucket=self._BUCKET_NAME)
+            try:
+                self.bucket = self.client.create_bucket(
+                    Bucket=self._BUCKET_NAME,
+                    CreateBucketConfiguration={
+                        'LocationConstraint': os.environ.get('AWS_REGION_NAME')
+                    }
+                )
+            except Exception:
+                pass
         return self._BUCKET_NAME
 
     def save(self, file_obj, path):
