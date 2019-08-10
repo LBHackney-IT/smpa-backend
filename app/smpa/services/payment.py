@@ -62,8 +62,11 @@ class PaymentService(DService):
 
         """
         from smpa.app import config, govpay
-        from .application import _applications
-        ref = _applications.next_reference()
+        from .application import _applications, _application_references
+        ref = _application_references.next()
+        application = _applications.get(application_id)
+        application.reference = ref
+        _applications.save(application)
         amount = config.PAYMENT_AMOUNT
         description = config.PAYMENT_DESCRIPTION
         user = req.context['user']
