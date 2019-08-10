@@ -44,7 +44,7 @@ class ApplicationSubmitResource(Resource):
             if application.submitted_at is not None:
                 raise falcon.HTTPError(falcon.HTTP_422, "Application is already submitted")
 
-        application = self._service.submit(id)
+        application = self._service.submit(str(id))
         resp.status = falcon.HTTP_200
         resp.body = self._json_or_404(application)
 

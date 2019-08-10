@@ -8,6 +8,7 @@
 import arrow
 from ..models.application import Application, ApplicationStatus
 
+from smpa.helpers.console import console
 from .mongo import DService
 
 
@@ -47,7 +48,11 @@ class ApplicationService(DService):
         rv = _applications.save(application)
         # Send a notification to the planning team
         from smpa.app import govnotify
-        govnotify.send_submission_received(rv)
+        try:
+            govnotify.send_submission_received(rv)
+        except Exception as e:
+            console.error('Failed to send email')
+            console.error(e)
         return rv
 
     def next_reference(self):
