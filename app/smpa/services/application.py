@@ -12,6 +12,13 @@ from smpa.helpers.console import console
 from .mongo import DService
 
 
+class ApplicationStatusService(DService):
+    __model__ = ApplicationStatus
+
+
+_application_statuses = ApplicationStatusService()
+
+
 class ApplicationService(DService):
     __model__ = Application
 
@@ -41,10 +48,13 @@ class ApplicationService(DService):
             id (str): The id of the application we want to submit
         """
         application = self.get(id)
+        status = _application_statuses.get("5aa415fa-9b25-4828-ac06-cb1ab9b000ea")
         application.status_id = "5aa415fa-9b25-4828-ac06-cb1ab9b000ea"
+        application.status = status
         application.submitted_at = arrow.now().datetime
         if 'DRAFT' in application.reference:
             application.reference = self.next_reference()
+
         rv = _applications.save(application)
         # Send a notification to the planning team
         from smpa.app import govnotify
@@ -63,10 +73,3 @@ class ApplicationService(DService):
 
 
 _applications = ApplicationService()
-
-
-class ApplicationStatusService(DService):
-    __model__ = ApplicationStatus
-
-
-_application_statuses = ApplicationStatusService()
