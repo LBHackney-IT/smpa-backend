@@ -14,6 +14,7 @@ from pymongo import MongoClient
 class DocumentDB:
 
     def __init__(self, config):
+        import ipdb; ipdb.set_trace()
         env = os.environ.get('SERVER_ENV')
         if env == 'staging':
             self._user = quote_plus(config.DOCUMENT_DB_SUPERUSER)
