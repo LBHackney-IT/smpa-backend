@@ -195,7 +195,7 @@ class DService(object):
             try:
                 self.__model__(_)
             except Exception:
-                rv.append(_.id)
+                rv.append(_['id'])
 
         return rv
 
