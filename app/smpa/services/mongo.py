@@ -167,6 +167,38 @@ class DService(object):
         rv = [self.__model__(obj) for obj in query]
         return rv
 
+    def valid(self, order_by: Optional[str] = None, limit: Optional[int] = None) -> list:
+        query = self.q.find({})
+        rv = []
+        if order_by is not None:
+            query = self._order_by(query, order_by)
+        if limit:
+            query = query.limit(limit)
+        for _ in query:
+            try:
+                obj = self.__model__(_)
+            except Exception as e:
+                console.error(e)
+            else:
+                rv.append(obj)
+
+        return rv
+
+    def invalid(self, order_by: Optional[str] = None, limit: Optional[int] = None) -> list:
+        query = self.q.find({})
+        rv = []
+        if order_by is not None:
+            query = self._order_by(query, order_by)
+        if limit:
+            query = query.limit(limit)
+        for _ in query:
+            try:
+                self.__model__(_)
+            except Exception:
+                rv.append(_.id)
+
+        return rv
+
     def find(self, order_by: Optional[str] = None, limit: Optional[int] = None, **kwargs):
         """
         Find all items that matches your kwargs.
