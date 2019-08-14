@@ -72,7 +72,7 @@ class DService(object):
             rv = self.q.find_one({'id': str(id)})
 
         if rv is not None:
-            return self.__model__(rv)
+            return self._model_out(rv)
         return None
 
     def get_or_404(self, id: str):
@@ -97,7 +97,7 @@ class DService(object):
         kwargs = self._preprocess(**kwargs)
         rv = self.q.find(kwargs).sort("created_at", pymongo.ASCENDING).limit(1)
         try:
-            return self.__model__(rv[0])
+            return self._model_out(rv[0])
         except Exception:
             return None
 
@@ -110,7 +110,7 @@ class DService(object):
 
     def last(self, **kwargs):
         rv = self.q.find(kwargs).sort("created_at", pymongo.DESCENDING).limit(1)
-        return self.__model__(rv[0])
+        return self._model_out(rv[0])
 
     def create(self, **kwargs):
         """Creates one or more records from the json data. You can pass json directly to
@@ -164,7 +164,7 @@ class DService(object):
             query = self._order_by(query, order_by)
         if limit:
             query = query.limit(limit)
-        rv = [self.__model__(obj) for obj in query]
+        rv = [self._model_out(obj) for obj in query]
         return rv
 
     def valid(self, order_by: Optional[str] = None, limit: Optional[int] = None) -> list:
@@ -176,7 +176,7 @@ class DService(object):
             query = query.limit(limit)
         for _ in query:
             try:
-                obj = self.__model__(_)
+                obj = self._model_out(_)
             except Exception as e:
                 console.error(e)
             else:
@@ -214,7 +214,7 @@ class DService(object):
         if limit is not None:
             query = query.limit(limit)
 
-        rv = [self.__model__(obj) for obj in query]
+        rv = [self._model_out(obj) for obj in query]
         return rv
 
     def get_or_create(self, **kwargs):
@@ -274,6 +274,9 @@ class DService(object):
     ################################################################################################
     # PRIVATE METHODS
     ################################################################################################
+
+    def _model_out(self, data):
+        return self.__model__(data, strict=False)
 
     def _order_by(self, query, order_by):
         sort_order = pymongo.ASCENDING

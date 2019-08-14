@@ -106,7 +106,7 @@ class ApplicationResourcePost(ListResource):
         """
         user = req.context['user']
         user.export()
-        if 'Admin' not in user.role.name:
+        if not user.is_admin:
             rv = self._service.find(owner_id=str(user.id))
             resp.body = self._json_or_404(rv)
         else:
