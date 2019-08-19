@@ -37,7 +37,8 @@ class Application(BaseModel, metaclass=ORMMeta):
     status_id = RelType(
         UUIDType(default="68e32fcc-5898-4bd1-bfad-d2f14c1d6306"),
         to_field='status',
-        service='ApplicationStatusService'
+        service='ApplicationStatusService',
+        required=False
     )
     reference: str = StringType()
 
@@ -67,14 +68,16 @@ class Application(BaseModel, metaclass=ORMMeta):
     declaration_id = RelType(
         UUIDType(),
         to_field='declaration',
-        service='DeclarationService'
+        service='DeclarationService',
+        required=False
     )
     declaration: Type[Declaration] = ModelType(Declaration)
 
     ownership_type_id = RelType(
         UUIDType(),
         to_field='ownership_type',
-        service='OwnershipTypeService'
+        service='OwnershipTypeService',
+        required=False
     )
     ownership_type: Type[OwnershipType] = ModelType(OwnershipType)
 

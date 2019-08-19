@@ -57,9 +57,11 @@ class RelType(BaseType):
     """Provide a mechanism for getting an fk related object.
     """
     def __init__(self, field, to_field, service, *args, **kwargs):
+        req = kwargs.pop('required', False)
         super().__init__(self, field, *args, **kwargs)
         self._to_field = to_field
         self._service = service
+        self.required = req
 
     @property
     def default(self):
@@ -150,7 +152,8 @@ class ORMMeta(ModelMeta):
 
 class RDBModel(Model):
 
-    _uniques = []
+    _uniques: list = []
+    _uniques_not_none: list = []
 
     id: str = UUIDType()
     created_at: datetime.datetime = DateTimeType()
@@ -160,11 +163,19 @@ class RDBModel(Model):
         console.debug('VALIDATING')
         for field in self._uniques:
             console.debug('Validate that {} is unique'.format(field))
-            if self._data.get(field, None) is None:
+            value = self._data.get(field, None)
+            if value is not None:
+                query = {field: value}
+                _ = self._service.first(**query)
+                if _ is not None and str(_.id) != str(self.id):
+                    raise ValidationError(
+                        'Field `{}` must be unique, found value {}'.format(field, value))
+
+        for field in self._uniques_not_none:
+            value = self._data.get(field, None)
+            if value is None:
                 raise ValidationError('Unique fields cannot be None ({})'.format(field))
-            _ = self.query.get_by(column=field, value=self._data.get(field, None))
-            if _ is not None and _.id != self.id:
-                raise ValidationError('Field `{}` must be unique'.format(field))
+
         return super().validate()
 
     def export(self):

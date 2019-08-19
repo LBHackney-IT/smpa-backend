@@ -5,8 +5,10 @@
 import re
 import os
 import arrow
+import pytest
 import responses
 
+from schematics.exceptions import DataError
 import simplejson as json
 import falcon
 
@@ -14,6 +16,7 @@ from .test_auth import get_token
 from ..util import json_match, reset_test_user
 
 from smpa.services.document import _document_files
+from smpa.services.application import _applications
 from smpa.helpers.console import console
 
 from smpa.config.defaults import (  # NOQA
@@ -226,6 +229,7 @@ DEFAULT_DATA_ENDPOINTS = [
 
 ID_STR = "cbddcfc8-d062-4202-b350-f875c04c6aa0,f1ff39d9-aab3-46e3-8749-dad11c04e3b8"
 APPLICATION_ID = None
+ADMIN_APPLICATION_ID = None
 EXTENSION_PROPOSAL_ID = None
 EQUIPMENT_PROPOSAL_ID = None
 SITE_ADDRESS_ID = None
@@ -312,6 +316,32 @@ def test_application_update(session_client):
     rv = session_client.patch(
         f'/api/v1/applications/{APPLICATION_ID}',
         body,
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert j['works_started'] is True
+    assert j['date_works_started'] == "2018-01-01"
+
+
+def test_application_update_bad_date(session_client):
+    with pytest.raises(DataError):
+        body = """
+            {
+                "works_started": true,
+                "date_works_started": "118-13-01"
+            }
+        """
+        rv = session_client.patch(
+            f'/api/v1/applications/{APPLICATION_ID}',
+            body,
+            headers={"Authorization": f"jwt {TOKEN}"}
+        )
+
+
+def test_bad_date_is_not_saved(session_client):
+    rv = session_client.get(
+        f'/api/v1/applications/{APPLICATION_ID}',
         headers={"Authorization": f"jwt {TOKEN}"}
     )
     assert rv.status == falcon.HTTP_OK
@@ -1661,11 +1691,48 @@ def test_login_with_new_password(session_client):
     assert rv.status == falcon.HTTP_OK
 
 
+def test_create_as_different_user(session_client):
+    global ADMIN_APPLICATION_ID
+    token = get_token(email='systems@hactar.is')
+    rv = session_client.post(
+        '/api/v1/applications',
+        "{}",
+        headers={"Authorization": f"jwt {token}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    ADMIN_APPLICATION_ID = j['id']
+    assert ADMIN_APPLICATION_ID is not None
+    assert j['owner_id'] is not None
+
+
+def test_get_applications_not_admin(session_client):
+    rv = session_client.get(
+        '/api/v1/applications',
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert len(j) == 2
+    assert ADMIN_APPLICATION_ID not in j
+
+
+def test_get_applications_admin(session_client):
+    token = get_token(email='systems@hactar.is')
+    rv = session_client.get(
+        '/api/v1/applications',
+        headers={"Authorization": f"jwt {token}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert len(j) == 3
+    assert ADMIN_APPLICATION_ID not in j
+
 #
 
-##########################################################################
-# Leave this one till last as it outputs our completed application if you pytest -s
-##########################################################################
+#####################################################################################
+# Leave this one till last as it outputs our completed application if you pytest -s #
+#####################################################################################
 
 #
 
@@ -1680,3 +1747,25 @@ def test_application_get(session_client):
     print(rv.body)
     assert j['works_started'] is True
     assert j['date_works_started'] == "2018-01-01"
+
+
+def test_deleting_an_application_doesnt_give_404s(session_client):
+    init_count = _applications.count()
+    _applications.delete_by_id(ADMIN_APPLICATION_ID)
+    assert _applications.count() == init_count - 1
+    # GET them as an admin user
+    token = get_token(email='systems@hactar.is')
+    rv = session_client.get(
+        '/api/v1/applications',
+        headers={"Authorization": f"jwt {token}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert len(j) == init_count - 1
+    rv = session_client.get(
+        '/api/v1/applications',
+        headers={"Authorization": f"jwt {TOKEN}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert len(j) == init_count - 1

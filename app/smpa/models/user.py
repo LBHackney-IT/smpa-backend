@@ -191,7 +191,7 @@ class User(BaseModel, metaclass=ORMMeta):
         }
 
     email: str = StringType(max_length=200, required=True)
-    password: str = StringType(max_length=100, required=True)
+    password: str = StringType(max_length=100)
     profile_id = RelType(
         UUIDType(),
         to_field='profile',

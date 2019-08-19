@@ -37,6 +37,9 @@ class DService(object):
 
     __model__ = BaseModel
 
+    def __init__(self):
+        self.__model__._service = self
+
     @property
     def q(self):
         """
@@ -247,7 +250,17 @@ class DService(object):
         if isinstance(id, uuid.UUID):
             id = str(id)
 
-        rv = self.q.update_one({'id': id}, {"$set": j})
+        # First validate that the data should be going in by passing it
+        # into a schematics model loaded with existing data
+        try:
+            tmodel = self.get(id)
+            for k, v in j.items():
+                setattr(tmodel, k, v)
+            tmodel.validate()
+        except Exception:
+            raise
+
+        self.q.update_one({'id': id}, {"$set": j})
         return self.get(id)
 
     def delete(self, instance: BaseModel):

@@ -27,8 +27,10 @@ SEND_VERIFICATION_EMAIL_RESPONSE = {
 }
 
 
-def get_token(user=None):
-    if not user:
+def get_token(user=None, email=None):
+    if user is None and email is not None:
+        user = _users.first(email=email)
+    elif user is None and email is None:
         reset_test_user()
         user = _users.first(email='test@example.com')
     token = _users.gen_token(user)
