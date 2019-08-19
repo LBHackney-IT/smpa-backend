@@ -122,10 +122,17 @@ class DService(object):
         kwargs = self._preprocess(**kwargs)
         j = self._jsonify(kwargs)
         j = self._set_id(j)
+        rv = False
         if isinstance(j, list):
-            rv = self._insert_some(j)
+            all_valid = True
+            for item in j:
+                if not self._validate(item):
+                    all_valid = False
+            if all_valid:
+                rv = self._insert_some(j)
         else:
-            rv = self._insert_one(j)
+            if self._validate(j):
+                rv = self._insert_one(j)
 
         return rv
 
@@ -150,7 +157,8 @@ class DService(object):
             obj = self.get(instance.id)
             return obj
         try:
-            rv = self.q.insert_one(j)
+            if self._validate(j):
+                rv = self.q.insert_one(j)
         except Exception as e:
             console.error(e)
         else:
@@ -253,10 +261,8 @@ class DService(object):
         # First validate that the data should be going in by passing it
         # into a schematics model loaded with existing data
         try:
-            tmodel = self.get(id)
-            for k, v in j.items():
-                setattr(tmodel, k, v)
-            tmodel.validate()
+            temp_model = self.get(id)
+            self._validate(j, temp_model)
         except Exception:
             raise
 
@@ -287,6 +293,19 @@ class DService(object):
     ################################################################################################
     # PRIVATE METHODS
     ################################################################################################
+
+    def _validate(self, data, temp_model=None):
+        if temp_model is None:
+            temp_model = self.__model__()
+
+        for k, v in data.items():
+            setattr(temp_model, k, v)
+        try:
+            temp_model.validate()
+        except Exception:
+            raise
+        else:
+            return True
 
     def _model_out(self, data):
         return self.__model__(data, strict=False)

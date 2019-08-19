@@ -160,9 +160,9 @@ class RDBModel(Model):
     updated_at: datetime.datetime = DateTimeType()
 
     def validate(self):
-        console.debug('VALIDATING')
+        # console.debug('VALIDATING')
         for field in self._uniques:
-            console.debug('Validate that {} is unique'.format(field))
+            # console.debug('Validate that {} is unique'.format(field))
             value = self._data.get(field, None)
             if value is not None:
                 query = {field: value}

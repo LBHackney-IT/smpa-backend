@@ -126,6 +126,8 @@ class Startup:
         from ..services.application import _applications
         from ..services.address import _site_addresses
         user_role = _roles.first(name='User')
+        if user_role is None:
+            import ipdb; ipdb.set_trace()
         u = _users.get_or_create(
             id="b7d623db-5b4a-43df-b3f1-2bfca845d657",
             email="test@example.com",
