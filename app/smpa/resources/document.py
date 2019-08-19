@@ -17,6 +17,7 @@ class DocumentFileDownloadResource(Resource):
         f = _document_files.get_or_404(str(id))
         resp.content_type = mimetypes.guess_type(f.original_name)[0]
         resp.stream = _document_files.fetch(f)
+        resp.downloadable_as = f.original_name
         # resp.content_length = self._image_store.open(name)
 
 
