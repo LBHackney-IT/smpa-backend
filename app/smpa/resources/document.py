@@ -16,7 +16,7 @@ class DocumentFileDownloadResource(Resource):
     def on_get(self, req: falcon.Request, resp: falcon.Response, id: str):
         f = _document_files.get_or_404(str(id))
         resp.content_type = mimetypes.guess_type(f.original_name)[0]
-        resp.stream = _document_files.fetch(id)
+        resp.stream = _document_files.fetch(f)
         # resp.content_length = self._image_store.open(name)
 
 
