@@ -1,12 +1,23 @@
-import os
+
 import falcon
-import tempfile
+import mimetypes
 
 from typing import Optional
 
 from smpa.resources.core import Resource, ListResource
 from smpa.services.document import _document_sizes, _document_files, _document_types
 from smpa.schemas.document import document_upload_schema
+
+
+class DocumentFileDownloadResource(Resource):
+
+    _service = _document_files
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response, id: str):
+        f = _document_files.get_or_404(str(id))
+        resp.content_type = mimetypes.guess_type(f.original_name)[0]
+        resp.stream = _document_files.fetch(id)
+        # resp.content_length = self._image_store.open(name)
 
 
 class DocumentFileDeleteResource(Resource):

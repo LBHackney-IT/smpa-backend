@@ -43,6 +43,12 @@ class S3:
                 pass
         return self._BUCKET_NAME
 
+    def fetch(self, path):
+        buffer = BytesIO()
+        self.client.download_fileobj(self.bucket_name, path, buffer)
+        buffer.seek(0)
+        return buffer
+
     def save(self, file_obj, path):
 
         buffer = BytesIO()

@@ -56,6 +56,9 @@ class DocumentFileService(DService):
         _document_files.save(d)
         return d
 
+    def fetch(self, document_file: DocumentFile):
+        return s3.fetch(document_file.storage_path)
+
     def _decode_str_list(self, value: Optional[str]) -> List[str]:
         """takes a str which is a comma separated list of ids and returns as
         a list of str ids.

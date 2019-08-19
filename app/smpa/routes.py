@@ -41,6 +41,7 @@ from .resources import (  # NOQA
     # Document resources
     DocumentSizeResource, DocumentFilePostResource, DocumentTypePostResource,
     DocumentTypePatchResource, DocumentFileApplicationResource, DocumentFileDeleteResource,
+    DocumentFileDownloadResource,
     # Application resources
     ApplicationResourcePost, ApplicationResourcePatch, ApplicationStatusListResource,
     ApplicationSubmitResource,
@@ -125,6 +126,7 @@ def init_routes(api, config):
     document_file_application = DocumentFileApplicationResource()
     document_type_post = DocumentTypePostResource()
     document_type_patch = DocumentTypePatchResource()
+    document_download = DocumentFileDownloadResource()
     declarations_list = DeclarationListResource()
     ownership_types_list = OwnershipTypeListResource()
     payment_post = PaymentPostResource()
@@ -234,6 +236,7 @@ def init_routes(api, config):
     add_route(api, '/payments/{id}/check', payment_check)
     add_route(api, '/documents', document_file_post)
     add_route(api, '/documents/{id}', document_file_delete)
+    add_route(api, '/documents/{id}/download', document_download)
     add_route(api, '/declarations', declarations_list)
     add_route(api, '/ownership-types', ownership_types_list)
 
@@ -322,6 +325,7 @@ def init_routes(api, config):
         document_type_patch,
         document_file_application,
         document_file_delete,
+        document_download,
         declarations_list,
         ownership_types_list,
         payment_post,
