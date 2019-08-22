@@ -212,5 +212,10 @@ SUPERADMIN_USERS = [
         "id": "d485c8d2-e116-4573-acf8-ddccc4dff129",
         "email": "systems@hactar.is",
         "password": os.environ.get('HACTAR_PASSWORD')
+    },
+    {
+        "id": "bf4707fd-8f09-4dbb-ade0-53f5e69cf8c0",
+        "email": "planning@hackney.gov.uk",
+        "password": os.environ.get('HACKNEY_PASSWORD')
     }
 ]
