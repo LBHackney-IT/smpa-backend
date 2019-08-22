@@ -25,9 +25,9 @@ class Declaration(BaseModel, metaclass=ORMMeta):
 class DeclarationDetail(BaseModel, metaclass=ORMMeta):
     """Free text entry to provide details for a declaration
     """
-    name: str = StringType(max_length=255, required=True)
-    role: str = StringType(required=True)
-    details: str = StringType(required=True)
+    name: str = StringType(max_length=255)
+    role: str = StringType()
+    details: str = StringType()
 
 
 class OwnershipType(BaseModel, metaclass=ORMMeta):
