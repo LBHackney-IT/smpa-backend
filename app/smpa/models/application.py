@@ -45,6 +45,8 @@ class Application(BaseModel, metaclass=ORMMeta):
     # Set by the service.submit method
     status: Type[ApplicationStatus] = ModelType(ApplicationStatus)
     submitted_at: datetime = ArrowDTType()
+    submitted_by: str = StringType()
+    contact_applicant: bool = BooleanType(default=False)
 
     # First screen when starting a new application
     works_started: bool = BooleanType(default=False)
