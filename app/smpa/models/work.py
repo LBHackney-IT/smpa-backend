@@ -293,9 +293,9 @@ class WorkExtensionMeansOfAccess(Work):
     access_works_scope_id = RelType(
         UUIDType(),
         to_field='access_works_scope',
-        service='BorderWorksTypeService'
+        service='AccessWorksScopeService'
     )
-    access_works_scope = ModelType(BorderWorksType)
+    access_works_scope = ModelType(AccessWorksScope)
 
     access_works_sub_type_ids = ListRelType(
         UUIDType(),
