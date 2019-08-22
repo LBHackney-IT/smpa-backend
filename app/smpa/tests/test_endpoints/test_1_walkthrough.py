@@ -1069,9 +1069,9 @@ def test_extension_proposal_trees(session_client):
     body = """
         {
             "trees": {
-                "inside_boundry": true,
+                "inside_boundary": true,
                 "removed_or_pruned": true,
-                "outside_boundry": true
+                "outside_boundary": true
             }
         }
     """
@@ -1082,9 +1082,9 @@ def test_extension_proposal_trees(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     result = json.loads(rv.body)
-    assert result['trees']['inside_boundry'] is True
+    assert result['trees']['inside_boundary'] is True
     assert result['trees']['removed_or_pruned'] is True
-    assert result['trees']['outside_boundry'] is True
+    assert result['trees']['outside_boundary'] is True
 
 
 def test_extension_proposal_materials_details(session_client):

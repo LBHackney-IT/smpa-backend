@@ -47,6 +47,7 @@ class Application(BaseModel, metaclass=ORMMeta):
     submitted_at: datetime = ArrowDTType()
     submitted_by: str = StringType()
     contact_applicant: bool = BooleanType(default=False)
+    location_plan_confirmed: bool = BooleanType(default=False)
 
     # First screen when starting a new application
     works_started: bool = BooleanType(default=False)

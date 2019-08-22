@@ -393,6 +393,6 @@ class WorkEquipment(BaseModel, metaclass=ORMMeta):
 
 
 class WorkTrees(BaseModel, metaclass=ORMMeta):
-    inside_boundry = BooleanType(default=False)
+    inside_boundary = BooleanType(default=False)
     removed_or_pruned = BooleanType(default=False)
-    outside_boundry = BooleanType(default=False)
+    outside_boundary = BooleanType(default=False)
