@@ -108,6 +108,26 @@ class Resource(object):
                 'Could not decode the request body. The JSON was incorrect.'
             )
 
+    def on_delete(self, req, resp, id=None):
+        """Handles DELETE requests.
+
+        Deletes the specified object
+
+        Args:
+            req (falcon.request.Request): A request
+            resp (falcon.response.Response): A response
+            id (str): A resource ID
+        """
+        if id:
+            rv = self._service.delete_by_id(id)
+            resp.body = rv
+        else:
+            raise falcon.HTTPError(
+                falcon.HTTP_404,
+                'No ID specified',
+                'Cannot delete a resource without an ID'
+            )
+
     def on_post(self, req, resp):
         """Handles POST requests.
 

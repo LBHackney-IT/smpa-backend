@@ -978,6 +978,16 @@ def test_equipment_proposal_update_scope(session_client):
         result['equipment']['equipment_conservation_type_ids']
 
 
+# def test_delete_equipment_proposal(session_client):
+#     rv = session_client.delete(
+#         f'/api/v1/equipment-proposals/{EQUIPMENT_PROPOSAL_ID}',
+#         headers={"Authorization": f"jwt {TOKEN}"}
+#     )
+#     from smpa.services.proposal import _proposals_equipment
+#     p = _proposals_equipment.get(EQUIPMENT_PROPOSAL_ID)
+#     assert p is None
+
+
 def test_equipment_proposal_update_scope_anas_payload(session_client):
     body = json.dumps(
         {
