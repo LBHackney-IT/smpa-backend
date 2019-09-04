@@ -85,6 +85,12 @@ class ApplicationService(DService):
         except Exception as e:
             console.error('Failed to send email')
             console.error(e)
+
+        try:
+            govnotify.send_submitted(rv)
+        except Exception as e:
+            console.error('Failed to send email')
+            console.error(e)
         return rv
 
 

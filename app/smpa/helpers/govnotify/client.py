@@ -11,6 +11,7 @@ from smpa.models.application import Application
 TEMPLATE_IDS: Dict[str, str] = {
     'password_reset': 'a5dbad93-8dca-4f60-b275-de0931e1e07b',
     'account_verify': 'd4c144d2-3cb6-400e-bdb6-6b0dd5dbd087',
+    'submitted': 'e0936b6c-c938-4fa1-a48a-2cd8ae470540',
     'submission_received': '4743ee3d-1858-4497-9256-acce5150594e'
 }
 
@@ -35,6 +36,24 @@ class GovNotifyClient:
             'view_link': config.get_view_application_url(str(application.id))
         }
         template = TEMPLATE_IDS['submission_received']
+        rv = self._send_email(email, template, data)
+        return rv
+
+    def send_submitted(self, application: Application):
+        from smpa.app import config
+        application.export()  # We do this to populate the relationships
+        email = application.owner.email
+        try:
+            name = application.owner.profile.name
+        except Exception:
+            name = ''
+        data = {
+            'name': name,
+            'reference_number': application.reference,
+            'address': application.short_address,
+            'link': config.get_view_application_url(str(application.id))
+        }
+        template = TEMPLATE_IDS['submitted']
         rv = self._send_email(email, template, data)
         return rv
 
