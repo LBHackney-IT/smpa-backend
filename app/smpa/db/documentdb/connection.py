@@ -36,7 +36,6 @@ class DocumentDB:
 
             if not self._ensure_cert_exists():
                 console.warn('Cert not found')
-                return False
 
             try:
                 connection_string = self.get_connection_str()
