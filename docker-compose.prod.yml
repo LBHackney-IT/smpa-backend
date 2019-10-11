@@ -1,0 +1,78 @@
+version: '3.3'
+
+volumes:
+  media: {}
+  localstack-data: {}
+
+services:
+
+  # S3
+  localstack-s3:
+    image: localstack/localstack:latest
+    container_name: smpa_s3
+    environment:
+     - SERVICES=s3:5002
+     - DEFAULT_REGION=eu-west-2
+     - DATA_DIR=/tmp/localstack/data
+    ports:
+     - "5002:5002"
+     - "9999:8080"
+    volumes:
+      - ./docker/localstack-data:/tmp/localstack
+
+  # MongoDB (for AWS DocumentDB compatibility)
+  mongo:
+    image: mvertes/alpine-mongo:3.6.5-0
+    container_name: smpa_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./docker/mongo/:/data/db
+
+  # Redis
+  redis:
+    restart: always
+    image: sameersbn/redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./docker/redis:/var/lib/redis
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+
+  # Application
+  web:
+    image: smpa:latest
+    environment:
+      - SERVER_ENV=production
+      - ENVKEY=${ENVKEY}
+      - INDOCKER=1
+      # Service fails if we don't do this, see: https://github.com/localstack/localstack/issues/528
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_DEFAULT_REGION=eu-west-2
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    restart: always
+    build:
+      context: ./
+      dockerfile: ./docker/web/Dockerfile.production
+      args:
+        - SERVER_ENV=production
+        - ENVKEY=${ENVKEY}
+    volumes:
+      - ./app:/usr/srv/app:Z
+    ports:
+      - "8000:8000"
+      - "5000:5000"
+    links:
+      - redis
+      - mongo
+      - localstack-s3
+    depends_on:
+      - redis
+      - mongo
+      - localstack-s3
+
+    # command: sleep 100000000
+    # This is now in the Dockerfile
+    # command: [ "python", "-m", "wsgi.py" ]
+
