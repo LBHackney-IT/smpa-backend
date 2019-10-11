@@ -11,7 +11,7 @@
     ``gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999``
 """
 
-__version__ = "0.2.2"
+__version__ = "0.2.9"
 
 import os
 
@@ -23,7 +23,6 @@ from falcon_cors import CORS
 from .config.settings import init_settings
 from .helpers.swagger import init_swagger
 from .helpers.startup import Startup
-from .helpers.console import console
 from .helpers.govpay.client import GovPayClient
 from .helpers.govnotify.client import GovNotifyClient
 from .config.settings import Config
@@ -120,4 +119,5 @@ def create_app():
 
 create_app()
 spec = init_swagger(api, config)
+from .helpers.console import console
 console.success('READY')

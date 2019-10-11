@@ -1,5 +1,8 @@
 FROM quay.io/hactar/python-base:latest AS builder
 
+# Create our working directory
+RUN mkdir -p /usr/srv/app/
+WORKDIR /usr/srv/app/
 
 ####################################################################################################
 # ENVKEY STUFF
@@ -10,16 +13,15 @@ ARG ENVKEY
 ARG SERVER_ENV
 
 # Run envkey-source to get the env vars into the container
-COPY ./.production.env ./.env
+COPY ./.env.prod ./.env
 RUN eval $(envkey-source)
 
 
 ####################################################################################################
 # PROJECT STUFF
 ####################################################################################################
-RUN addgroup -S smpagroup
-RUN adduser -S -D -h /usr/app/src smpa smpagroup
-
+# RUN addgroup -S smpagroup
+# RUN adduser -S -D -h /usr/app/src smpa smpagroup
 
 ENV PYTHONUNBUFFERED 1
 ENV PIPENV_VENV_IN_PROJECT 1
@@ -27,9 +29,9 @@ ENV LANG en_GB.utf8
 
 # Create our working directory
 RUN mkdir -p /usr/srv/app/
+WORKDIR /usr/srv/app/
 
 # Poetry install
-WORKDIR /usr/srv/app/
 COPY ./app/config.toml /usr/srv/app/config.toml
 COPY ./app/pyproject.toml /usr/srv/app/pyproject.toml
 COPY ./app/poetry.lock /usr/srv/app/poetry.lock
@@ -37,16 +39,26 @@ RUN source $HOME/.poetry/env && \
     poetry self:update && \
     poetry install
 
-RUN echo -e "\nalias dev='gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999'\n" >> ~/.zshrc
-RUN echo -e "\nalias dev='gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999'\nfunction fish_greeting\n\techo \"🐟 use \`dev\` to run the server\"\n\t echo ""\nend" >> ~/.config/fish/config.fish
-
 ENV SHELL /usr/bin/fish
 
 COPY ./app /usr/srv/app/
-COPY ./.production.env ./.env
+COPY ./.env.prod ./.env
 
 # Expose the dev server
 EXPOSE 5000
 
-CMD ["python", "wsgi.py"]
-# CMD ["sleep", "1000000"]
+RUN apk add --update --no-cache ca-certificates openssl \
+    && mkdir -p /usr/local/share/ca-certificates/ \
+    && curl "https://s3.amazonaws.com/rds-downloads/rds-ca-2019-root.pem" --output /tmp/rds-ca-2019-root.pem \
+    && curl "https://s3.amazonaws.com/rds-downloads/rds-ca-2019-eu-west-2.pem" --output /tmp/rds-ca-2019-eu-west-2.pem \
+    && curl "https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem" --output /tmp/rds-combined-ca-bundle.pem \
+    && openssl x509 -in /tmp/rds-ca-2019-root.pem -inform PEM -out /usr/local/share/ca-certificates/rds-ca-2019-root.crt \
+    && openssl x509 -in /tmp/rds-ca-2019-eu-west-2.pem -inform PEM -out /usr/local/share/ca-certificates/rds-ca-2019-eu-west-2.crt \
+    && openssl x509 -in /tmp/rds-combined-ca-bundle.pem -inform PEM -out /usr/local/share/ca-certificates/rds-combined-ca-bundle.crt \
+    && update-ca-certificates
+
+RUN apk add --update --no-cache openssh
+
+# USER smpa
+
+CMD ["python", "-m", "wsgi.py"]

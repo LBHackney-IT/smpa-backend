@@ -6,7 +6,7 @@
     Model registry for DocumentDB
 """
 
-
+import bugsnag
 import pymongo
 from smpa.helpers.console import console
 
@@ -18,9 +18,12 @@ class RegistryError(Exception):
 class ModelRegistry(object):
 
     def __init__(self):
+        from smpa.app import __version__
+        self.__version__ = __version__
         self._models = {}
         self._tables = []
         self._initialsed = False
+        # self._session = None
 
     def get_models(self):
         """Generator that yields the dict of models that we have registered.
@@ -83,6 +86,8 @@ class ModelRegistry(object):
 
     def init(self):
         if not self._initialsed:
+            from smpa.app import db
+            # self._session = db.client.start_session()
             total = len(self._models)
             count = 0
             for name, model in self._models.items():
@@ -92,13 +97,15 @@ class ModelRegistry(object):
                 self._init_model(name, model)
             self._initialsed = True
             console.reset()
+            # self._session.end_session()
 
     def _init_model(self, name, model):
         from smpa.app import db
-        model._model = model
-        setattr(model, '_db', db)
-        self._create_table(name, model)
-        self._add_indexes(name, model)
+        if db is not None:
+            model._model = model
+            setattr(model, '_db', db)
+            self._create_table(name, model)
+            self._add_indexes(name, model)
 
     def _create_table(self, name, model):
         pass
@@ -106,9 +113,38 @@ class ModelRegistry(object):
     def _add_indexes(self, name, model):
         if model._uniques:
             for key in model._uniques:
-                model._db[model._table].create_index(key, background=True, sparse=True, unique=True)
+                try:
+                    model._db[model._table].create_index(
+                        key, sparse=True, unique=True
+                    )
+                except Exception as e:
+                    bugsnag.notify(
+                        e,
+                        extra_data={
+                            'version': self.__version__,
+                            'background': False,
+                            'model': model,
+                            'db': model._db,
+                            'table': model._table,
+                            'key': key
+                        }, severity='warn'
+                    )
 
-        model._db[model._table].create_index('id', background=True, sparse=True, unique=True)
+        try:
+            model._db[model._table].create_index(
+                'id', sparse=True, unique=True
+            )
+        except Exception as e:
+            bugsnag.notify(
+                e,
+                extra_data={
+                    'version': self.__version__,
+                    'background': False,
+                    'model': model,
+                    'db': model._db,
+                    'table': model._table
+                }, severity='warn'
+            )
 
 
 model_registry = ModelRegistry()

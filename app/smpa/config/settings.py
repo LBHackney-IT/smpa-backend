@@ -6,7 +6,8 @@ from smpa.helpers.console import console
 class Config(object):
     resources: list = []
     base: str = 'config'
-    debug = False
+    debug = True
+    DEBUG = True
 
     BASE_URL = 'http://localhost:8080'
 
@@ -23,7 +24,7 @@ class Config(object):
     RDB_PASSWORD = os.environ.get('RDB_PASSWORD')
 
     # DocumentDB database
-    DOCUMENT_DB_USER = None  # Overridden in remote configs
+    DOCUMENT_DB_USER = os.environ.get('DOCUMENT_DB_USER')
     DOCUMENT_DB_HOST = os.environ.get('DOCUMENT_DB_HOST')
     DOCUMENT_DB_PORT = os.environ.get('DOCUMENT_DB_PORT', 27017)
     DOCUMENT_DB_DB = os.environ.get('DOCUMENT_DB_DB')
@@ -49,6 +50,14 @@ class Config(object):
     def get_password_reset_url(self, token: str) -> str:
         return f"{self.BASE_URL}/accounts/reset-password/{token}"
 
+    def to_dict(self):
+        keys = [a for a in dir(self) if not a.startswith('__') and not callable(getattr(self, a))]
+        rv = {}
+        for key in keys:
+            if key != 'resources':
+                rv[key] = getattr(self, key)
+        return rv
+
 
 class ConfigTest(Config):
 
@@ -56,6 +65,7 @@ class ConfigTest(Config):
     """
     base = "test"
     debug = True
+    DEBUG = True
 
     RDB_DB = 'test_' + str(os.environ.get('RDB_DB'))
     DOCUMENT_DB_DB = 'test_' + str(os.environ.get('DOCUMENT_DB_DB'))
@@ -63,10 +73,12 @@ class ConfigTest(Config):
 
 class ConfigDevelopment(Config):
     base: str = 'development'
+    DOCUMENT_DB_USER = None  # Trigger basic connection for localstack
 
 
 class ConfigStaging(Config):
     base = 'stage'
+    DEBUG = True
     BASE_URL = 'http://smpa-frontend-staging.s3-website.eu-west-2.amazonaws.com'
     DOCUMENT_DB_USER = os.environ.get('DOCUMENT_DB_USER')
     NOTIFICATIONS_REPLY_TO = 'planning@hackney.gov.uk'
@@ -75,6 +87,8 @@ class ConfigStaging(Config):
 
 class ConfigProduction(Config):
     base = 'production'
+    DEBUG = True
+    BASE_URL = 'http://smpa-frontend.s3-website.eu-west-2.amazonaws.com'
     DOCUMENT_DB_USER = os.environ.get('DOCUMENT_DB_USER')
     NOTIFICATIONS_REPLY_TO = 'planning@hackney.gov.uk'
     NOTIFICATIONS_NOTIFY = 'planning@hackney.gov.uk'
@@ -90,7 +104,11 @@ CONF_MAP = {
 
 def init_settings():
     env = os.environ.get('SERVER_ENV')
-    klass = CONF_MAP[env]
+    print(env)
+    try:
+        klass = CONF_MAP[env]
+    except KeyError:
+        klass = ConfigProduction
     settings = klass()
 
     return settings

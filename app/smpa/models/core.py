@@ -139,7 +139,7 @@ class ORMMeta(ModelMeta):
         # console.info('ORMMeta {}'.format(name))
         if name != "BaseModel":
             # We have a model class
-            cls._table = tableize(name)
+            cls._table = tableize(name)[:56]
             super_new = super(ORMMeta, cls).__new__
             new_class = super_new(cls, name, bases, dct)
             cls._model = new_class

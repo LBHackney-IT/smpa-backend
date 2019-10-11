@@ -40,8 +40,21 @@ RUN echo -e "\nalias dev='gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999
 RUN echo -e "\nalias dev='gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999'\nfunction fish_greeting\n\techo \"🐟 use \`dev\` to run the server\"\n\t echo ""\nend" >> ~/.config/fish/config.fish
 
 
+# COPY ./rds-combined-ca-bundle.pem /usr/srv/rds-combined-ca-bundle.pem
+RUN apk add --update --no-cache ca-certificates openssl \
+    && mkdir -p /usr/local/share/ca-certificates/ \
+    && curl "https://s3.amazonaws.com/rds-downloads/rds-ca-2019-root.pem" --output /tmp/rds-ca-2019-root.pem \
+    && curl "https://s3.amazonaws.com/rds-downloads/rds-ca-2019-eu-west-2.pem" --output /tmp/rds-ca-2019-eu-west-2.pem \
+    && curl "https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem" --output /tmp/rds-combined-ca-bundle.pem \
+    && openssl x509 -in /tmp/rds-ca-2019-root.pem -inform PEM -out /usr/local/share/ca-certificates/rds-ca-2019-root.crt \
+    && openssl x509 -in /tmp/rds-ca-2019-eu-west-2.pem -inform PEM -out /usr/local/share/ca-certificates/rds-ca-2019-eu-west-2.crt \
+    && openssl x509 -in /tmp/rds-combined-ca-bundle.pem -inform PEM -out /usr/local/share/ca-certificates/rds-combined-ca-bundle.crt \
+    && update-ca-certificates
+
 
 ENV SHELL /bin/zsh
+
+RUN apk add --update --no-cache openssh
 
 # Expose the dev server
 EXPOSE 5000
