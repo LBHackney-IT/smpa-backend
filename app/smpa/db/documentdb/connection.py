@@ -136,16 +136,20 @@ class DocumentDB:
 
     def init(self):
         if not self._authenticated:
-            self._authenticate(self._user, self._super_password)
+            if hasattr(self, '_user') and hasattr(self, '_super_password'):
+                self._authenticate(self._user, self._super_password)
 
         if not self._authenticated:
-            self._authenticate(self._super_user, self._super_password)
+            if hasattr(self, '_super_user') and hasattr(self, '_super_password'):
+                self._authenticate(self._super_user, self._super_password)
 
         if not self._authenticated:
-            self._authenticate(self._user, self._password)
+            if hasattr(self, '_user') and hasattr(self, '_password'):
+                self._authenticate(self._user, self._password)
 
         if not self._authenticated:
-            self._authenticate(self._super_user, self._password)
+            if hasattr(self, '_super_user') and hasattr(self, '_password'):
+                self._authenticate(self._super_user, self._password)
 
         # Try a basic insert and retrieve
         try:
@@ -167,6 +171,8 @@ class DocumentDB:
                 }, severity='error'
             )
         else:
+            if not hasattr(self, 'connection_string'):
+                self.connection_string = "NONE"
             bugsnag.notify(
                 Exception("Test transactions succeeded"),
                 context="Passed test transactions",
