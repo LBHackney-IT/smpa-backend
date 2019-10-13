@@ -25,7 +25,7 @@ class DocumentDB:
         self._authenticated = False
         from smpa.app import __version__
         self.__version__ = __version__
-        if config.DOCUMENT_DB_USER is not None:
+        if config.DOCUMENT_DB_USER is not None and os.environ.get('SERVER_ENV') != 'staging':
             self._config = config
             self._user = quote_plus(config.DOCUMENT_DB_USER)
             self._password = quote_plus(config.DOCUMENT_DB_PASSWORD)
