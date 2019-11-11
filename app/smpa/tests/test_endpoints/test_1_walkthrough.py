@@ -1738,6 +1738,20 @@ def test_get_applications_admin(session_client):
     assert len(j) == 3
     assert ADMIN_APPLICATION_ID not in j
 
+
+def test_get_submitted_applications_admin(session_client):
+    token = get_token(email='systems@hactar.is')
+    rv = session_client.get(
+        '/api/v1/applications/submitted',
+        headers={"Authorization": f"jwt {token}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert len(j) == 3
+    for item in j:
+        assert item['submitted_at'] is not None
+    assert ADMIN_APPLICATION_ID not in j
+
 #
 
 #####################################################################################

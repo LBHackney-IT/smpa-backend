@@ -18,8 +18,6 @@ class RegistryError(Exception):
 class ModelRegistry(object):
 
     def __init__(self):
-        from smpa.app import __version__
-        self.__version__ = __version__
         self._models = {}
         self._tables = []
         self._initialsed = False
@@ -121,7 +119,6 @@ class ModelRegistry(object):
                     bugsnag.notify(
                         e,
                         extra_data={
-                            'version': self.__version__,
                             'background': False,
                             'model': model,
                             'db': model._db,
@@ -138,7 +135,6 @@ class ModelRegistry(object):
             bugsnag.notify(
                 e,
                 extra_data={
-                    'version': self.__version__,
                     'background': False,
                     'model': model,
                     'db': model._db,

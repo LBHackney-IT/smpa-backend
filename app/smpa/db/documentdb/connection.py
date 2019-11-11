@@ -23,8 +23,6 @@ class DocumentDB:
         self._config = config
         self._hostname = socket.gethostname()
         self._authenticated = False
-        from smpa.app import __version__
-        self.__version__ = __version__
         if config.DOCUMENT_DB_USER is not None:
             self._config = config
             self._user = quote_plus(config.DOCUMENT_DB_USER)
@@ -60,7 +58,6 @@ class DocumentDB:
             bugsnag.notify(
                 "DocumentDB basic connection",
                 extra_data={
-                    'version': self.__version__,
                     'hostname': self._hostname,
                     'config': config.to_dict(),
                     'DOCUMENT_DB_HOST': config.DOCUMENT_DB_HOST,
@@ -115,7 +112,6 @@ class DocumentDB:
                 extra_data={
                     'error': e,
                     'connection_string': self.connection_string,
-                    'version': self.__version__,
                     'user': user,
                     'pass': password,
                     'config': self._config.to_dict(),
@@ -123,10 +119,9 @@ class DocumentDB:
             )
         else:
             bugsnag.notify(
-                Exception(f"Auth SUCCEEDED for {user} {passw} / {self.__version__}"),
+                Exception(f"Auth SUCCEEDED for {user} {passw}"),
                 extra_data={
                     'connection_string': self.connection_string,
-                    'version': self.__version__,
                     'user': user,
                     'pass': password,
                     'config': self._config.to_dict(),
@@ -166,7 +161,6 @@ class DocumentDB:
                 context="Failed test transactions",
                 extra_data={
                     'connection_string': self.connection_string,
-                    'version': self.__version__,
                     'hostname': self._hostname,
                     'config': self._config.to_dict(),
                 }, severity='error'
@@ -178,7 +172,6 @@ class DocumentDB:
                     context="Passed test transactions",
                     extra_data={
                         'connection_string': self.connection_string,
-                        'version': self.__version__,
                         'hostname': self._hostname,
                         'rv': rv,
                     }, severity='info'
