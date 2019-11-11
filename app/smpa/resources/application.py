@@ -3,9 +3,40 @@ import falcon
 
 from typing import Optional
 
-from smpa.helpers.auth import owner
+from smpa.helpers.auth import owner, admin
 from .core import Resource, ListResource
 from ..services.application import _applications, _application_statuses
+
+
+class ApplicationSubmittedList(ListResource):
+    _service = _applications
+
+    @admin
+    def on_get(
+            self, req: falcon.Request, resp: falcon.Response, since: Optional[str] = None) -> None:
+        """
+        For an admin user, this endpoint returns all applications, for a user it
+        returns all of the applications they own.
+        ---
+        summary: Get all Applications from the DB
+        tags:
+            - Application
+        parameters:
+            - in: query
+              schema: CoreListSchema
+        produces:
+            - application/json
+        responses:
+            200:
+                description: All submitted Applications
+                schema:
+                    type: array
+                    items: Application
+            401:
+                description: Unauthorized
+        """
+        rv = self._service.submitted(since=since)
+        resp.body = self._json_or_404(rv)
 
 
 class ApplicationSubmitResource(Resource):
