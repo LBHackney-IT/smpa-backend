@@ -69,6 +69,7 @@ class ConfigTest(Config):
 
     RDB_DB = 'test_' + str(os.environ.get('RDB_DB'))
     DOCUMENT_DB_DB = 'test_' + str(os.environ.get('DOCUMENT_DB_DB'))
+    DOCUMENT_DB_USER = None  # Trigger basic connection for localstack
 
 
 class ConfigDevelopment(Config):

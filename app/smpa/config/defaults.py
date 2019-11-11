@@ -219,3 +219,17 @@ SUPERADMIN_USERS = [
         "password": os.environ.get('HACKNEY_PASSWORD')
     }
 ]
+
+
+STAGING_ADMIN_USERS = [
+    {
+        "id": "eafa395c-0855-4a85-982a-0083c6fcfcb7",
+        "email": "igor.fontana@unboxedconsulting.com",
+        "password": os.environ.get('UNBOXED_PASSWORD')
+    },
+    {
+        "id": "a0f6fb12-2d0a-47df-95c8-df23bed966c2",
+        "email": "rod.mcbride@tascomi.com",
+        "password": os.environ.get('TASCOMI_PASSWORD')
+    }
+]

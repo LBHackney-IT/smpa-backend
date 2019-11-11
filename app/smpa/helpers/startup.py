@@ -5,6 +5,7 @@
     ~~~~~~~~~~~~~~~
     Stuff for handling application start.
 """
+import os
 import arrow
 from .console import console
 from ..config.defaults import (
@@ -12,7 +13,8 @@ from ..config.defaults import (
     BASEMENT_WORKS_TYPES, MATERIALS_ROOF, MATERIALS_WALL, MATERIALS_WINDOW, MATERIALS_DOOR,
     ROOF_WORKS_TYPES, BORDER_WORKS_TYPES, ACCESS_WORKS_TYPES, ACCESS_WORKS_SCOPES,
     PARKING_WORKS_SCOPES, EQUIPMENT_WORKS_TYPES, EQUIPMENT_WORKS_CONSERVATION_TYPES,
-    GATES_FENCES_WALLS_TYPES, DOCUMENT_TYPES, DECLARATIONS, OWNERSHIP_TYPES, APPLICATION_STATUSES
+    GATES_FENCES_WALLS_TYPES, DOCUMENT_TYPES, DECLARATIONS, OWNERSHIP_TYPES, APPLICATION_STATUSES,
+    STAGING_ADMIN_USERS
 )
 from ..services.application import _application_statuses
 from ..services.unit import _area_units, _linear_units
@@ -118,6 +120,17 @@ class Startup:
             )
             u.verified_at = arrow.utcnow().datetime
             _users.save(u)
+
+        if os.environ.get('SERVER_ENV') == 'staging':
+            for _ in STAGING_ADMIN_USERS:
+                u = _users.get_or_create(
+                    id=_['id'],
+                    email=_['email'],
+                    password=_['password'],
+                    role_id=role_id
+                )
+                u.verified_at = arrow.now().datetime
+                _users.save(u)
 
         console.log('Added admin users')
 

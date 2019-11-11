@@ -23,7 +23,7 @@ class DocumentDB:
         self._config = config
         self._hostname = socket.gethostname()
         self._authenticated = False
-        if config.DOCUMENT_DB_USER is not None:
+        if config.DOCUMENT_DB_USER is not None and os.environ.get('SERVER_ENV') != 'staging':
             self._config = config
             self._user = quote_plus(config.DOCUMENT_DB_USER)
             self._password = quote_plus(config.DOCUMENT_DB_PASSWORD)
@@ -34,7 +34,6 @@ class DocumentDB:
 
             if not self._ensure_cert_exists():
                 console.warn('Cert not found')
-                return False
 
             try:
                 connection_string = self.get_connection_str()
@@ -45,7 +44,6 @@ class DocumentDB:
                 bugsnag.notify(
                     e,
                     extra_data={
-                        'version': self.__version__,
                         'hostname': self._hostname,
                         'server_env': os.environ.get('SERVER_ENV'),
                         'connection_string': connection_string,
@@ -136,7 +134,7 @@ class DocumentDB:
                 self._authenticate(self._user, self._super_password)
 
         if not self._authenticated:
-            if hasattr('self', '_super_user') and hasattr('self', '_super_password'):
+            if hasattr(self, '_super_user') and hasattr(self, '_super_password'):
                 self._authenticate(self._super_user, self._super_password)
 
         if not self._authenticated:
@@ -144,7 +142,7 @@ class DocumentDB:
                 self._authenticate(self._user, self._password)
 
         if not self._authenticated:
-            if hasattr('self', '_super_user') and hasattr('self', '_password'):
+            if hasattr(self, '_super_user') and hasattr(self, '_password'):
                 self._authenticate(self._super_user, self._password)
 
         # Try a basic insert and retrieve

@@ -1740,6 +1740,10 @@ def test_get_applications_admin(session_client):
 
 
 def test_get_submitted_applications_admin(session_client):
+    # Set the first application as submitted
+    a = _applications.first()
+    a.submitted_at = arrow.get('2019-01-01').datetime
+    _applications.save(a)
     token = get_token(email='systems@hactar.is')
     rv = session_client.get(
         '/api/v1/applications/submitted',
@@ -1747,10 +1751,57 @@ def test_get_submitted_applications_admin(session_client):
     )
     assert rv.status == falcon.HTTP_OK
     j = json.loads(rv.body)
-    assert len(j) == 3
+    assert len(j) == 2
     for item in j:
         assert item['submitted_at'] is not None
     assert ADMIN_APPLICATION_ID not in j
+
+
+def test_get_submitted_applications_since_admin(session_client):
+    token = get_token(email='systems@hactar.is')
+    rv = session_client.get(
+        '/api/v1/applications/submitted/2019-01-02',
+        headers={"Authorization": f"jwt {token}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert len(j) == 1
+    for item in j:
+        assert item['submitted_at'] is not None
+    assert ADMIN_APPLICATION_ID not in j
+
+
+def test_get_submitted_applications_since_admin_again(session_client):
+    token = get_token(email='systems@hactar.is')
+    rv = session_client.get(
+        '/api/v1/applications/submitted/2018-01-02',
+        headers={"Authorization": f"jwt {token}"}
+    )
+    assert rv.status == falcon.HTTP_OK
+    j = json.loads(rv.body)
+    assert len(j) == 2
+    for item in j:
+        assert item['submitted_at'] is not None
+    assert ADMIN_APPLICATION_ID not in j
+
+
+def test_get_submitted_applications_NOT_admin(session_client):
+    token = get_token()
+    rv = session_client.get(
+        '/api/v1/applications/submitted',
+        headers={"Authorization": f"jwt {token}"}
+    )
+    assert rv.status == falcon.HTTP_401
+
+
+def test_get_submitted_applications_since_NOT_admin(session_client):
+    token = get_token()
+    rv = session_client.get(
+        '/api/v1/applications/submitted/2019-01-02',
+        headers={"Authorization": f"jwt {token}"}
+    )
+    assert rv.status == falcon.HTTP_401
+
 
 #
 
