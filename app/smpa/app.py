@@ -63,7 +63,8 @@ auth_middleware = FalconAuthMiddleware(
 cors = CORS(
     allow_origins_list=[
         'http://localhost:8080',
-        'http://smpa-frontend-staging.s3-website.eu-west-2.amazonaws.com'
+        'http://smpa-frontend-staging.s3-website.eu-west-2.amazonaws.com',
+        'https://planningapplication.hackney.gov.uk'
     ], allow_all_headers=True,
     allow_all_methods=True
 )
