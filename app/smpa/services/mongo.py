@@ -148,8 +148,8 @@ class DService(object):
         data = instance.to_primitive()
         j = self._jsonify(data)
         if j.get('created_at', None) is None:
-            j['created_at'] = arrow.now().datetime
-        j['updated_at'] = arrow.now().datetime
+            j['created_at'] = arrow.utcnow().datetime
+        j['updated_at'] = arrow.utcnow().datetime
         j = self._set_id(j)
         if updating:
             j.pop('_id', None)
@@ -319,7 +319,7 @@ class DService(object):
         return query
 
     def _insert_one(self, data):
-        data['created_at'] = arrow.now().datetime
+        data['created_at'] = arrow.utcnow().datetime
         try:
             rv = self.q.insert_one(data)
         except Exception as e:
@@ -330,7 +330,7 @@ class DService(object):
 
     def _insert_some(self, data):
         for item in data:
-            item['created_at'] = arrow.now().datetime
+            item['created_at'] = arrow.utcnow().datetime
         try:
             rv = self.q.insert_many(data)
         except Exception as e:

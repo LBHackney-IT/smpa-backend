@@ -44,7 +44,7 @@ class UserService(DService):
             raise falcon.HTTPError(falcon.HTTP_400, "Invalid verification token")
         elif u.verified is True:
             raise falcon.HTTPError(falcon.HTTP_400, "Account already verified")
-        u.verified_at = arrow.now().datetime
+        u.verified_at = arrow.utcnow().datetime
         u = self.save(u)
         return u
 

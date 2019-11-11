@@ -6,6 +6,7 @@
     Planning Application services.
 """
 import arrow
+from typing import Optional
 from ..models.application import Application, ApplicationStatus, ApplicationReference
 
 from smpa.helpers.console import console
@@ -63,6 +64,21 @@ class ApplicationService(DService):
 
         return rv
 
+    def submitted(self, since: Optional[str] = None, *args, **kwargs):
+        """Get only submitted applications. If passed a since, only retrieve applications
+        that have a submitted_at > since.
+
+        Args:
+            since (Optional[str], optional): The date you want applications since. ie: '2019-09-01'
+        """
+        if since is None:
+            query = self.q.find({'submitted_at': {'$ne': None}})
+        else:
+            query = self.q.find({'submitted_at': {'$gt': since}})
+
+        rv = [self._model_out(obj) for obj in query]
+        return rv
+
     def submit(self, id: str) -> Application:
         """Submit an application to the planning department.
 
@@ -73,7 +89,7 @@ class ApplicationService(DService):
         status = _application_statuses.get("5aa415fa-9b25-4828-ac06-cb1ab9b000ea")
         application.status_id = "5aa415fa-9b25-4828-ac06-cb1ab9b000ea"
         application.status = status
-        application.submitted_at = arrow.now().datetime
+        application.submitted_at = arrow.utcnow().datetime
         if 'DRAFT' in application.reference:
             application.reference = _application_references.next()
 

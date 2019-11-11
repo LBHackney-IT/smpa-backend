@@ -116,7 +116,7 @@ class Startup:
                 password=_['password'],
                 role_id=role_id
             )
-            u.verified_at = arrow.now().datetime
+            u.verified_at = arrow.utcnow().datetime
             _users.save(u)
 
         console.log('Added admin users')
@@ -133,7 +133,7 @@ class Startup:
             email="test@example.com",
             password="secretpassword",
             role_id=str(user_role.id),
-            verified_at=arrow.now().datetime
+            verified_at=arrow.utcnow().datetime
         )
         a = _applications.get_or_create(
             id='9e7cf43a-6860-4061-b585-65b4fb778a30'
