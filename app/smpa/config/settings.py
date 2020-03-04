@@ -31,6 +31,7 @@ class Config(object):
     DOCUMENT_DB_PASSWORD = os.environ.get('DOCUMENT_DB_PASSWORD', '')
     DOCUMENT_DB_SUPERUSER = os.environ.get('DOCUMENT_DB_SUPERUSER', '')
     DOCUMENT_DB_SUPERPASS = os.environ.get('DOCUMENT_DB_SUPERPASS', '')
+    DOCUMENT_DB_CONNECT_TIMEOUT = 30000  # In miliseconds
 
     # Notifications
     GOV_NOTIFY_API_KEY = os.environ.get('GOV_NOTIFY_API_KEY')
