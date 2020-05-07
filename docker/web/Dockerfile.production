@@ -36,7 +36,6 @@ COPY ./app/config.toml /usr/srv/app/config.toml
 COPY ./app/pyproject.toml /usr/srv/app/pyproject.toml
 COPY ./app/poetry.lock /usr/srv/app/poetry.lock
 RUN source $HOME/.poetry/env && \
-    poetry self:update && \
     poetry install
 
 ENV SHELL /usr/bin/fish
