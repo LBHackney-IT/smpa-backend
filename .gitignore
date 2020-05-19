@@ -1,4 +1,5 @@
 .env
+.env.dev
 .env.stage
 .env.prod
 app/smpa.egg-info/**/*

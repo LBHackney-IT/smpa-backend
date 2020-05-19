@@ -52,6 +52,9 @@ class UserService(DService):
         email = data.get('email', None)
         password = data.get('password', None)
         user = _users.first(email=email)
+        if not user:
+            raise falcon.HTTPError(falcon.HTTP_401, "Email or password incorrect")
+
         # Check if this user's account is verified
         if user.verified is False:
             raise falcon.HTTPError(falcon.HTTP_401, "Account is not yet verified")

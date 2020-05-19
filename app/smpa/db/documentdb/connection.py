@@ -27,7 +27,7 @@ class DocumentDB:
         self._config = config
         self._hostname = socket.gethostname()
         self._authenticated = False
-        if config.DOCUMENT_DB_USER is not None and os.environ.get('SERVER_ENV') != 'staging':
+        if config.DOCUMENT_DB_USER is not None:
             self._production_connect()
         else:
             self._staging_connect()

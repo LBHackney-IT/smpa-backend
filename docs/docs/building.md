@@ -25,6 +25,8 @@ With Bash / Zsh etc:
 Build:
 
     docker-compose -f docker-compose.prod.yml up --build -d
+    # or...
+    docker-compose -f docker-compose.stage.yml up --build -d
     docker-compose down
 
 Tag:

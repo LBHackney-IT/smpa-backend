@@ -7,6 +7,7 @@
 """
 import os
 import arrow
+import bugsnag
 from .console import console
 from ..config.defaults import (
     AREA_UNITS, LINEAR_UNITS, DOCUMENT_SIZES, ROLES, SUPERADMIN_USERS, WORKS_LOCATIONS,
@@ -112,25 +113,63 @@ class Startup:
         super_admin = _roles.first(name='SuperAdmin')
         role_id = str(super_admin.id)
         for _ in SUPERADMIN_USERS:
-            u = _users.get_or_create(
-                id=_['id'],
-                email=_['email'],
-                password=_['password'],
-                role_id=role_id
-            )
-            u.verified_at = arrow.utcnow().datetime
-            _users.save(u)
-
-        if os.environ.get('SERVER_ENV') == 'staging':
-            for _ in STAGING_ADMIN_USERS:
+            try:
                 u = _users.get_or_create(
                     id=_['id'],
                     email=_['email'],
                     password=_['password'],
                     role_id=role_id
                 )
-                u.verified_at = arrow.now().datetime
+                u.verified_at = arrow.utcnow().datetime
                 _users.save(u)
+            except Exception as e:
+                bugsnag.notify(
+                    e,
+                    extra_data={
+                        'id': _['id'],
+                        'email': _['email'],
+                        'user': u,
+                    }, severity='warn'
+                )
+            else:
+                bugsnag.notify(
+                    Exception('SUPERADMIN CREATED'),
+                    extra_data={
+                        'id': _['id'],
+                        'email': _['email'],
+                        'user': u,
+                    }, severity='info'
+                )
+
+        if os.environ.get('SERVER_ENV') == 'staging':
+            for _ in STAGING_ADMIN_USERS:
+                try:
+                    u = _users.get_or_create(
+                        id=_['id'],
+                        email=_['email'],
+                        password=_['password'],
+                        role_id=role_id
+                    )
+                    u.verified_at = arrow.now().datetime
+                    _users.save(u)
+                except Exception as e:
+                    bugsnag.notify(
+                        e,
+                        extra_data={
+                            'id': _['id'],
+                            'email': _['email'],
+                            'user': u,
+                        }, severity='warn'
+                    )
+                else:
+                    bugsnag.notify(
+                        Exception('STAGING USER CREATED'),
+                        extra_data={
+                            'id': _['id'],
+                            'email': _['email'],
+                            'user': u,
+                        }, severity='info'
+                    )
 
         console.log('Added admin users')
 

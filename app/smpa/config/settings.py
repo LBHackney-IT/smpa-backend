@@ -1,4 +1,5 @@
 import os
+import bugsnag
 import envkey  # NOQA
 from smpa.helpers.console import console
 
@@ -81,7 +82,7 @@ class ConfigDevelopment(Config):
 class ConfigStaging(Config):
     base = 'stage'
     DEBUG = True
-    BASE_URL = 'http://smpa-frontend-staging.s3-website.eu-west-2.amazonaws.com'
+    BASE_URL = 'https://planningapplication-staging.hackney.gov.uk'
     DOCUMENT_DB_USER = os.environ.get('DOCUMENT_DB_USER')
     NOTIFICATIONS_REPLY_TO = 'planning@hackney.gov.uk'
     NOTIFICATIONS_NOTIFY = 'planning@hackney.gov.uk'
@@ -106,11 +107,19 @@ CONF_MAP = {
 
 def init_settings():
     env = os.environ.get('SERVER_ENV')
-    print(env)
     try:
         klass = CONF_MAP[env]
     except KeyError:
         klass = ConfigProduction
+
+    bugsnag.notify(
+        "CONFIG CLASS",
+        extra_data={
+            'env': env,
+            'klass': klass,
+        }, severity='info'
+    )
+
     settings = klass()
 
     return settings
