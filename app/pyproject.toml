@@ -25,7 +25,7 @@ simplejson = "^3.16"
 slugify = "^0.0.1"
 ujson = "^1.35"
 uWSGI = "^2.0"
-waitress = "^1.4.2"
+waitress = "1.4.4"
 wsgicors = "^0.7.0"
 passlib = {version = "^1.7",extras = ["bcrypt"]}
 falcon-auth = {version = "^1.1",extras = ["backend-hawk", "backend-jwt"]}
@@ -42,6 +42,7 @@ aws_secretsmanager = "^0.1.0"
 bugsnag = "^3.6"
 pymongo = {version = "3.9.0", extras = ["tls"]}
 dnspython = "^1.16"
+apispec = "1.3.3"
 
 
 [tool.poetry.dev-dependencies]

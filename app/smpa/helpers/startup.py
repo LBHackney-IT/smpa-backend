@@ -141,7 +141,8 @@ class Startup:
                     }, severity='info'
                 )
 
-        if os.environ.get('SERVER_ENV') == 'staging':
+        server_env = os.environ.get('SERVER_ENV')
+        if server_env == 'staging' or server_env == 'production':
             for _ in STAGING_ADMIN_USERS:
                 try:
                     u = _users.get_or_create(

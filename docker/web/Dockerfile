@@ -33,7 +33,6 @@ COPY ./config.toml /usr/srv/app/config.toml
 COPY ./pyproject.toml /usr/srv/app/pyproject.toml
 COPY ./poetry.lock /usr/srv/app/poetry.lock
 RUN source $HOME/.poetry/env && \
-    poetry self:update && \
     poetry install
 
 RUN echo -e "\nalias dev='gunicorn --reload smpa.app -b 0.0.0.0:5000 -t 99999999'\n" >> ~/.zshrc

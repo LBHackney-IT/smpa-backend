@@ -1,8 +1,6 @@
 import os
-import uuid
 import boto3
 import envkey  # NOQA
-import mimetypes
 from io import BytesIO
 
 from smpa.helpers.console import console
@@ -13,7 +11,12 @@ class S3:
     _CHUNK_SIZE_BYTES = 4096
 
     def __init__(self):
-        if os.environ.get('AWS_S3_ENDPOINT_URL', None) is not None:
+        if os.environ.get('AWS_REGION_NAME', None) is None:
+            self.mode = 'local'
+        else:
+            self.mode = 'remote'
+
+        if self.mode == 'local':
             self.client = boto3.client(
                 's3',
                 aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
@@ -32,15 +35,23 @@ class S3:
     def bucket_name(self):
         self._BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
         if not hasattr(self, 'bucket'):
-            try:
-                self.bucket = self.client.create_bucket(
-                    Bucket=self._BUCKET_NAME,
-                    CreateBucketConfiguration={
-                        'LocationConstraint': os.environ.get('AWS_REGION_NAME')
-                    }
-                )
-            except Exception:
-                pass
+            if self.mode == 'remote':
+                try:
+                    self.bucket = self.client.create_bucket(
+                        Bucket=self._BUCKET_NAME,
+                        CreateBucketConfiguration={
+                            'LocationConstraint': os.environ.get('AWS_REGION_NAME')
+                        }
+                    )
+                except Exception:
+                    pass
+            else:
+                try:
+                    self.bucket = self.client.create_bucket(
+                        Bucket=self._BUCKET_NAME
+                    )
+                except Exception:
+                    pass
         return self._BUCKET_NAME
 
     def fetch(self, path):

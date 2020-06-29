@@ -27,6 +27,7 @@ app/coverage/**/*
 
 # Docs & Guide
 docs/build/**/*
+docs/docs/.obsidian/**/*
 
 # Redis data folder
 docker/redis/**/*
