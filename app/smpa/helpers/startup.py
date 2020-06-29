@@ -141,36 +141,36 @@ class Startup:
                     }, severity='info'
                 )
 
-        server_env = os.environ.get('SERVER_ENV')
-        if server_env == 'staging' or server_env == 'production':
-            for _ in STAGING_ADMIN_USERS:
-                try:
-                    u = _users.get_or_create(
-                        id=_['id'],
-                        email=_['email'],
-                        password=_['password'],
-                        role_id=role_id
-                    )
-                    u.verified_at = arrow.now().datetime
-                    _users.save(u)
-                except Exception as e:
-                    bugsnag.notify(
-                        e,
-                        extra_data={
-                            'id': _['id'],
-                            'email': _['email'],
-                            'user': u,
-                        }, severity='warn'
-                    )
-                else:
-                    bugsnag.notify(
-                        Exception('STAGING USER CREATED'),
-                        extra_data={
-                            'id': _['id'],
-                            'email': _['email'],
-                            'user': u,
-                        }, severity='info'
-                    )
+        admin = _roles.first(name='Admin')
+        role_id = str(admin.id)
+        for _ in STAGING_ADMIN_USERS:
+            try:
+                u = _users.get_or_create(
+                    id=_['id'],
+                    email=_['email'],
+                    password=_['password'],
+                    role_id=role_id
+                )
+                u.verified_at = arrow.now().datetime
+                _users.save(u)
+            except Exception as e:
+                bugsnag.notify(
+                    e,
+                    extra_data={
+                        'id': _['id'],
+                        'email': _['email'],
+                        'user': u,
+                    }, severity='warn'
+                )
+            else:
+                bugsnag.notify(
+                    Exception('STAGING USER CREATED'),
+                    extra_data={
+                        'id': _['id'],
+                        'email': _['email'],
+                        'user': u,
+                    }, severity='info'
+                )
 
         console.log('Added admin users')
 

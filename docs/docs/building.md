@@ -8,6 +8,8 @@ There are separate Dockerfiles for remote servers that don't rely on other compo
 Run these like so...
 
     docker run --env SERVER_ENV=staging --name=smpa_staging -i -t smpa:staging
+	
+	docker run --env SERVER_ENV=production --name=smpa_production -i -t smpa:production
 
 
 ## Deploying

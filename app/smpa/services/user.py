@@ -104,12 +104,14 @@ class UserService(DService):
         # Create an unvierified account with a verification_token which is used
         # in the account verification step
         from smpa.app import govnotify, config
+        user_role = _roles.first(name='User')
         vtoken = uuid.uuid4()
         rv = self.create(
             email=email,
             password=password,
             verified_at=None,
-            verification_token=vtoken
+            verification_token=vtoken,
+            role_id=user_role.id
         )
         vlink = config.get_verification_url(str(vtoken))
         govnotify.send_verify_account(email, vlink)

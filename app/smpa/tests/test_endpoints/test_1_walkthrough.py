@@ -240,6 +240,37 @@ PAYMENT_ID = None
 reset_test_user()
 
 
+def test_register_user(session_client):
+    from smpa.services.user import _users
+    hactar = _users.first(email='systems@hactar.is').export()
+    assert hactar['role']['name'] == 'SuperAdmin'
+    rv = session_client.post(
+        '/api/v1/users/create',
+        {
+            "email": "test123@example.com",
+            "password": "test-registration-password",
+            "password_confirm": "test-registration-password"
+        }
+    )
+    assert rv.status_code == 201
+    u = _users.first(email='test123@example.com')
+    assert u.verified is False
+    u_data = u.export()
+    assert u_data['role']['name'] == 'User'
+    hactar = _users.first(email='systems@hactar.is').export()
+    assert hactar['role']['name'] == 'SuperAdmin'
+    # Now we're going to verify the user
+    token = u.verification_token
+    rv = session_client.get(f'/api/v1/users/verify/{token}')
+    assert rv.status_code == 200
+    u = _users.first(email='test123@example.com')
+    assert u.verified is True
+    u_data = u.export()
+    assert u_data['role']['name'] == 'User'
+    hactar = _users.first(email='systems@hactar.is').export()
+    assert hactar['role']['name'] == 'SuperAdmin'
+
+
 def test_get_default_data(session_client):
     for url in DEFAULT_DATA_ENDPOINTS:
         rv = session_client.get(url)

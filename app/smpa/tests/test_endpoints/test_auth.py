@@ -94,6 +94,7 @@ def test_register_service(session_client):
     assert rv.verified_at is None
     assert rv.verified is False
     assert rv.verification_token is not None
+    assert 'SuperUser' not in rv
 
 
 def test_log_in_fails_for_unverified_account(app, session_client):

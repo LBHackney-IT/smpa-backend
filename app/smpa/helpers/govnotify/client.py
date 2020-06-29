@@ -70,8 +70,11 @@ class GovNotifyClient:
             'link': verify_link
         }
         template = TEMPLATE_IDS['account_verify']
-        rv = self._send_email(email, template, data)
-        return rv
+        if os.environ.get('SERVER_ENV') != 'test':
+            rv = self._send_email(email, template, data)
+            return rv
+        else:
+            return verify_link
 
     def _send_email(self, email: str, template: str, data: dict):
         """Send an email via Gov.UK Notify
