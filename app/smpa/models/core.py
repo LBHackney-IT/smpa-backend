@@ -207,28 +207,30 @@ class RDBModel(Model):
         return service
 
     def _get_backrefs(self):
-        for d in self.backrefs:
-            field, service_name = d[0], d[1]
-            try:
-                service = self._get_service_instance(service_name)
-                query = {field: str(self.id)}
-                related = service.first(**query)
-                prop = underscore(service.__model__.__name__)
-                # console.log(f'Setting {prop} on {self} to {related}')
-                setattr(self, prop, related)
-            except Exception as e:
-                console.warn(e)
+        if hasattr(self, 'backrefs'):
+            for d in self.backrefs:
+                field, service_name = d[0], d[1]
+                try:
+                    service = self._get_service_instance(service_name)
+                    query = {field: str(self.id)}
+                    related = service.first(**query)
+                    prop = underscore(service.__model__.__name__)
+                    # console.log(f'Setting {prop} on {self} to {related}')
+                    setattr(self, prop, related)
+                except Exception as e:
+                    console.warn(e)
 
     def _get_list_backrefs(self):
-        for d in self.list_backrefs:
-            field, service_name, prop = d[0], d[1], d[2]
-            try:
-                service = self._get_service_instance(service_name)
-                query = {field: str(self.id)}
-                related = service.find(**query)
-                setattr(self, prop, related)
-            except Exception as e:
-                console.warn(e)
+        if hasattr(self, 'list_backrefs'):
+            for d in self.list_backrefs:
+                field, service_name, prop = d[0], d[1], d[2]
+                try:
+                    service = self._get_service_instance(service_name)
+                    query = {field: str(self.id)}
+                    related = service.find(**query)
+                    setattr(self, prop, related)
+                except Exception as e:
+                    console.warn(e)
 
     def __repr__(self):
         if hasattr(self, 'email'):

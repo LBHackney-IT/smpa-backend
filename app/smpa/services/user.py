@@ -132,9 +132,11 @@ class UserService(DService):
             return existing_user
 
         # try getting by id
-        existing_user = self.get(kwargs['id'])
-        if existing_user is not None:
-            return existing_user
+        passed_id = kwargs.get('id', None)
+        if passed_id is not None:
+            existing_user = self.get(passed_id)
+            if existing_user is not None:
+                return existing_user
 
         user = self.create(**kwargs)
         return user

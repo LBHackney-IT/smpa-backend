@@ -3,6 +3,7 @@ from smpa.helpers.console import console
 from smpa.tests.fixtures.address import *  # NOQA
 from smpa.tests.fixtures.app import *  # NOQA
 from smpa.tests.fixtures.auth import *  # NOQA
+from smpa.tests.fixtures.user import *  # NOQA
 
 
 # @pytest.yield_fixture(scope='session', autouse=True)

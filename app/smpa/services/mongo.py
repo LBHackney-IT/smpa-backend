@@ -308,7 +308,9 @@ class DService(object):
             return True
 
     def _model_out(self, data):
-        return self.__model__(data, strict=False)
+        m = self.__model__(data, strict=False)
+        m.export()
+        return m
 
     def _order_by(self, query, order_by):
         sort_order = pymongo.ASCENDING

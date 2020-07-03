@@ -190,6 +190,13 @@ class User(BaseModel, metaclass=ORMMeta):
             'default': blacklist('password', 'verification_token')
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.role_id is not None:
+            self.role = Role._service.first(id=self.role_id)
+        if self.profile_id is not None:
+            self.profile = UserProfile._service.first(id=self.profile_id)
+
     email: str = StringType(max_length=200, required=True)
     password: str = StringType(max_length=100)
     profile_id = RelType(

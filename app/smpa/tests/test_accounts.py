@@ -28,3 +28,10 @@ def test_verify_account_service_method():
     assert verified is not None
     assert verified.verified_at is not None
     assert u.email == verified.email
+
+
+def test_user_roles(user_user, user_admin, user_superadmin):
+    assert _users.count() == 4
+    assert user_user.role.name == 'User'
+    assert user_admin.role.name == 'Admin'
+    assert user_superadmin.role.name == 'SuperAdmin'
